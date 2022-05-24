@@ -3,6 +3,7 @@ using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -55,10 +56,10 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return new UserAddResponse(true, "Success");
         }
-/*        [HttpGet]
+        [HttpGet]
         public List<UserGetAllResponse> GetAll()
         {
-            return _dbContext.Users.Include(x => x.FavouriteListings).Select(x => new UserGetAllResponse()
+            var users = _dbContext.Users.Include(x => x.FavouriteListings).Select(x => new UserGetAllResponse()
             {
                 FirstName = x.FirstName,
                 LastName = x.LastName,
@@ -66,10 +67,38 @@ namespace Eclipse_Market.Controllers
                 Email = x.Email,
                 Password = x.Password,
                 PhoneNumber = x.PhoneNumber,
-                FavouriteListings = x.FavouriteListings.
-                CurrentListings = x.CurrentListings
             }).ToList();
-        }*/
+            foreach (var user in users)
+            {
+                user.FavouriteListings = _dbContext.ListingUsers
+                                        .Where(x => x.UserId == user.Id)
+                                        .Select(x => new ListingGetAllResponse()
+                                        {
+                                            Id = x.ListingId,
+                                            Author = x.Listing.Author,
+                                            Description = x.Listing.Description,
+                                            Location = x.Listing.Location,
+                                            Price = x.Listing.Price,
+                                            TimesBookmarked = x.Listing.TimesBookmarked,
+                                            Title = x.Listing.Title,
+                                            Views = x.Listing.Views,
+                                        });
+                user.CurrentListings = _dbContext.Listings
+                    .Where(x => x.Id == user.Id)
+                    .Select(x => new ListingGetAllResponse()
+                    {
+                        Id = x.Id,
+                        Author = x.Author,
+                        Description = x.Description,
+                        Location = x.Location,
+                        Price = x.Price,
+                        TimesBookmarked = x.TimesBookmarked,
+                        Title = x.Title,
+                        Views = x.Views,
+                    });
+            }
+            return users;
+        }
 
         private string ComputeSha256Hash(string rawData)
         {
