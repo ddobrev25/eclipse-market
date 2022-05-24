@@ -17,7 +17,7 @@ namespace Eclipse_Market.Models.DB
         public string Password { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
-        public List<UserListing> FavouriteListings { get; set; }
-        public List<Listing> CurrentListings { get; set; }
+        public ICollection<Listing> Listings { get; set; }
+
     }
 }

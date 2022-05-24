@@ -9,27 +9,21 @@ namespace Eclipse_Market
         public DbSet<User> Users { get; set; }
         public DbSet<Listing> Listings { get; set; }
         public DbSet<ListingCategory> ListingCategories { get; set; }
-        public DbSet<UserListing> UserListings { get; set; }
+        //public DbSet<UserListing> UserListings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //User - Listing many to many
+/*            modelBuilder.Entity<UserListing>()
+                .HasKey(ul => new { ul.UserId, ul.ListingId });
             modelBuilder.Entity<UserListing>()
-                .HasKey(bc => new { bc.UserId, bc.ListingId });
-
+                .HasOne(ul => ul.User)
+                .WithMany(u => u.UserListings)
+                .HasForeignKey(ul => ul.UserId);
             modelBuilder.Entity<UserListing>()
-                .HasOne(bc => bc.User)
-                .WithMany(b => b.FavouriteListings)
-                .HasForeignKey(bc => bc.UserId);
-
-            modelBuilder.Entity<UserListing>()
-                .HasOne(bc => bc.Listing)
-                .WithMany(b => b.UserListings)
-                .HasForeignKey(bc => bc.ListingId);
-
-            modelBuilder.Entity<Listing>()
-               .HasOne<User>(s => s.Author)
-               .WithMany(g => g.CurrentListings)
-               .HasForeignKey(s => s.AuthorId);
+                .HasOne(ul => ul.Listing)
+                .WithMany(l => l.UserListings)
+                .HasForeignKey(ul => ul.ListingId);*/
         }
     }
 

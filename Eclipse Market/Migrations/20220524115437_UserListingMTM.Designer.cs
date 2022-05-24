@@ -3,6 +3,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220524115437_UserListingMTM")]
+    partial class UserListingMTM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +30,6 @@ namespace Eclipse_Market.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -57,8 +56,6 @@ namespace Eclipse_Market.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
 
                     b.HasIndex("ListingCategoryId");
 
@@ -119,31 +116,48 @@ namespace Eclipse_Market.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ListingUser", b =>
+                {
+                    b.Property<int>("ListingsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ListingsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ListingUser");
+                });
+
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
                 {
-                    b.HasOne("Eclipse_Market.Models.DB.User", "Author")
-                        .WithMany("Listings")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Eclipse_Market.Models.DB.ListingCategory", "ListingCategory")
                         .WithMany("Listings")
                         .HasForeignKey("ListingCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
-
                     b.Navigation("ListingCategory");
                 });
 
-            modelBuilder.Entity("Eclipse_Market.Models.DB.ListingCategory", b =>
+            modelBuilder.Entity("ListingUser", b =>
                 {
-                    b.Navigation("Listings");
+                    b.HasOne("Eclipse_Market.Models.DB.Listing", null)
+                        .WithMany()
+                        .HasForeignKey("ListingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Eclipse_Market.Models.DB.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Eclipse_Market.Models.DB.User", b =>
+            modelBuilder.Entity("Eclipse_Market.Models.DB.ListingCategory", b =>
                 {
                     b.Navigation("Listings");
                 });
