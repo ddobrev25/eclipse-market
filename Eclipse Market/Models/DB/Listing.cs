@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Eclipse_Market.Models.DB
 {
@@ -14,11 +15,10 @@ namespace Eclipse_Market.Models.DB
         [Required]
         public string Location { get; set; }
         [Required]
-        public int AuthorId { get; set; }
-        [Required]
         public User Author { get; set; }
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }
+        public ICollection<ListingUser> UsersBookmarked { get; set; }
 
 
 

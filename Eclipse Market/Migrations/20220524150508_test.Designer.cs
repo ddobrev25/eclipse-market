@@ -3,6 +3,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220524150508_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +30,6 @@ namespace Eclipse_Market.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -57,8 +56,6 @@ namespace Eclipse_Market.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
 
                     b.HasIndex("ListingCategoryId");
 
@@ -136,19 +133,11 @@ namespace Eclipse_Market.Migrations
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
                 {
-                    b.HasOne("Eclipse_Market.Models.DB.User", "Author")
-                        .WithMany("CurrentListings")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Eclipse_Market.Models.DB.ListingCategory", "ListingCategory")
                         .WithMany("Listings")
                         .HasForeignKey("ListingCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Author");
 
                     b.Navigation("ListingCategory");
                 });
@@ -184,8 +173,6 @@ namespace Eclipse_Market.Migrations
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.User", b =>
                 {
-                    b.Navigation("CurrentListings");
-
                     b.Navigation("FavouriteListings");
                 });
 #pragma warning restore 612, 618
