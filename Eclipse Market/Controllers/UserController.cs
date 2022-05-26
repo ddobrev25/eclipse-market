@@ -61,6 +61,7 @@ namespace Eclipse_Market.Controllers
         {
             var users = _dbContext.Users.Include(x => x.FavouriteListings).Select(x => new UserGetAllResponse()
             {
+                Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Username = x.Username,
@@ -71,18 +72,18 @@ namespace Eclipse_Market.Controllers
             foreach (var user in users)
             {
                 user.FavouriteListings = _dbContext.ListingUsers
-                                        .Where(x => x.UserId == user.Id)
-                                        .Select(x => new ListingGetAllResponse()
-                                        {
-                                            Id = x.ListingId,
-                                            Author = x.Listing.Author,
-                                            Description = x.Listing.Description,
-                                            Location = x.Listing.Location,
-                                            Price = x.Listing.Price,
-                                            TimesBookmarked = x.Listing.TimesBookmarked,
-                                            Title = x.Listing.Title,
-                                            Views = x.Listing.Views,
-                                        });
+                    .Where(x => x.UserId == user.Id)
+                    .Select(x => new ListingGetAllResponse()
+                    {
+                        Id = x.ListingId,
+                        Author = x.Listing.Author,
+                        Description = x.Listing.Description,
+                        Location = x.Listing.Location,
+                        Price = x.Listing.Price,
+                        TimesBookmarked = x.Listing.TimesBookmarked,
+                        Title = x.Listing.Title,
+                        Views = x.Listing.Views,
+                    });
                 user.CurrentListings = _dbContext.Listings
                     .Where(x => x.Id == user.Id)
                     .Select(x => new ListingGetAllResponse()
@@ -100,6 +101,57 @@ namespace Eclipse_Market.Controllers
             return users;
         }
 
+        [HttpPost]
+        public UserGetByIdResponse GetById(UserGetByIdRequest request)
+        {
+            //Find the user in the database with the given id
+            User user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+            if (user != null)
+            {
+                //Setting up the response object
+                UserGetByIdResponse response = new UserGetByIdResponse()
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Password = user.Password,
+                    PhoneNumber = user.PhoneNumber,
+                    Username = user.Username
+                };
+                response.FavouriteListings = _dbContext.ListingUsers
+                    .Where(x => x.UserId == user.Id)
+                    .Select(x => new ListingGetAllResponse()
+                    {
+                        Id = x.ListingId,
+                        Author = x.Listing.Author,
+                        Description = x.Listing.Description,
+                        Location = x.Listing.Location,
+                        Price = x.Listing.Price,
+                        TimesBookmarked = x.Listing.TimesBookmarked,
+                        Title = x.Listing.Title,
+                        Views = x.Listing.Views,
+                    });
+                response.CurrentListings = _dbContext.Listings
+                    .Where(x => x.Id == user.Id)
+                    .Select(x => new ListingGetAllResponse()
+                    {
+                        Id = x.Id,
+                        Author = x.Author,
+                        Description = x.Description,
+                        Location = x.Location,
+                        Price = x.Price,
+                        TimesBookmarked = x.TimesBookmarked,
+                        Title = x.Title,
+                        Views = x.Views,
+                    });
+                return response;
+            }
+            else
+            {
+                //Thorwing an excepption if the user with the specified id does not exist
+                throw new Exception();
+            }
+        }
         private string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
