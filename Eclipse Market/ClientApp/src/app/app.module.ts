@@ -14,6 +14,7 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormErrorsComponent } from './form-errors/form-errors.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { FormErrorsComponent } from './form-errors/form-errors.component';
     ListingsComponent,
     HomeComponent,
     AccountsComponent,
-    FormErrorsComponent
+    FormErrorsComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
