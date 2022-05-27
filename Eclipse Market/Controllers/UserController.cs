@@ -166,10 +166,22 @@ namespace Eclipse_Market.Controllers
 
             if(request.UserName != string.Empty)
             {
+                if (_dbContext.Users.Any(x => x.UserName == request.UserName))
+                {
+                    return new UserUpdateResponse(false, "Username already taken.");
+                }
+                if (request.UserName.Length > 100 || request.UserName.Length < 3)
+                {
+                    return new UserUpdateResponse(false, "A username can not be shorter that 3 symbols or longer than 100 symbols.");
+                }
                 user.UserName = request.UserName;
             }
             if (request.Password != string.Empty)
             {
+                if (request.Password.Length < 8)
+                {
+                    return new UserUpdateResponse(false, "Password must be longer than 8 symbols.");
+                }
                 user.Password = ComputeSha256Hash(request.Password);
             }
             if (request.FirstName != string.Empty)
@@ -182,6 +194,10 @@ namespace Eclipse_Market.Controllers
             }
             if (request.Email != string.Empty)
             {
+                if (_dbContext.Users.Any(x => x.Email == request.Email))
+                {
+                    return new UserUpdateResponse(false, "Email already taken.");
+                }
                 user.Email = request.Email;
             }
             if (request.PhoneNumber != string.Empty)
