@@ -4,6 +4,9 @@ using Eclipse_Market.Models.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -202,6 +205,36 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return new UserDeleteResponse(true, "Success");
         }
+        [HttpPost]
+        public UserLoginResponse Login(UserLoginRequest request)
+        {
+            var user = _dbContext.Users
+                .Where(x => x.UserName == request.UserName && x.Password == ComputeSha256Hash(request.Password))
+                .FirstOrDefault();
+
+            if(user == null)
+            {
+                return new UserLoginResponse(false, "Incorrect credentials", "");
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:secret"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                      new Claim(ClaimTypes.Name, user.Id.ToString()),
+                }),
+                IssuedAt = DateTime.UtcNow,
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = "Issuer",
+                Audience = "Audience"
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return new UserLoginResponse(true, "Success", tokenHandler.WriteToken(token));
+        }
+
         private string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
