@@ -7,8 +7,7 @@
     <input type="text"
            name="firstName"
            class="form-control"
-           formControlName="firstName"
-           placeholder="Име">
+           formControlName="firstName">
            <app-form-errors [control]="$any(registerForm).get('firstName')" 
            [max]="'50'" [min]="'2'"
            [controlName]="'First name'"></app-form-errors>
@@ -17,8 +16,7 @@
     <input type="text"
            name="lastName"
            class="form-control"
-           formControlName="lastName"
-           placeholder="Фамилия">
+           formControlName="lastName">
            <app-form-errors [control]="$any(registerForm).get('lastName')" 
            [max]="'50'" [min]="'2'"
            [controlName]="'Last name'"></app-form-errors>
@@ -27,8 +25,7 @@
     <input type="text"
            name="userName"
            class="form-control"
-           formControlName="userName"
-           placeholder="Потребителско име">
+           formControlName="userName">
            <app-form-errors [control]="$any(registerForm).get('userName')" 
            [max]="'50'" [min]="'2'"
            [controlName]="'Username'"></app-form-errors>
@@ -37,16 +34,14 @@
     <input type="text"
             name="email"
             class="form-control"
-            formControlName="email"
-            placeholder="Имейл адрес">
+            formControlName="email">
             <app-form-errors [control]="$any(registerForm).get('email')" [controlName]="'Email'"></app-form-errors>
     <hr>
     <label for="password" >Парола</label>
     <input type="text"
             name="password"
             class="form-control"
-            formControlName="password"
-            placeholder="Парола">
+            formControlName="password">
             <app-form-errors [control]="$any(registerForm).get('password')" 
             [max]="'50'" [min]="'6'"
             [controlName]="'Password'"></app-form-errors>
@@ -55,8 +50,7 @@
     <input type="text"
             name="confirmPassword"
             class="form-control"
-            formControlName="confirmPassword"
-            placeholder="Потвърди парола">
+            formControlName="confirmPassword">
             <span *ngIf="registerForm.errors?.['notmatched'] && registerForm.touched" class="text-danger">Password mismatch</span>
             <app-form-errors [control]="$any(registerForm).get('confirmPassword')" 
             [max]="'50'" [min]="'6'"
@@ -66,8 +60,7 @@
     <input type="text"
             name="phoneNumber"
             class="form-control"
-            formControlName="phoneNumber"
-            placeholder="Телефонен номер">
+            formControlName="phoneNumber">
             <app-form-errors [control]="$any(registerForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
             <hr>
     <button type="submit" class="btn btn-primary mt-3 me-3" [disabled]="!registerForm.valid">Потвърди</button>
@@ -85,8 +78,7 @@
     <input type="text"
            name="userName"
            class="form-control"
-           formControlName="userName"
-           placeholder="Потребителско име">
+           formControlName="userName">
            <app-form-errors [control]="$any(loginForm).get('userName')" 
            [max]="'50'" [min]="'2'"
            [controlName]="'Username'"></app-form-errors>
@@ -95,8 +87,7 @@
     <input type="text"
             name="password"
             class="form-control"
-            formControlName="password"
-            placeholder="Парола">
+            formControlName="password">
             <app-form-errors [control]="$any(loginForm).get('password')" 
             [max]="'50'" [min]="'6'"
             [controlName]="'Password'"></app-form-errors>
