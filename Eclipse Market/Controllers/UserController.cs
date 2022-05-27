@@ -24,12 +24,12 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public UserAddResponse Add(UserAddRequest request)
         {
-            if (request.Username.Length > 100 || request.Username.Length < 3)
+            if (request.UserName.Length > 100 || request.UserName.Length < 3)
             {
                 return new UserAddResponse(false, "A username can not be shorter that 3 symbols or longer than 100 symbols.");
             }
 
-            if (_dbContext.Users.Any(x => x.Username == request.Username))
+            if (_dbContext.Users.Any(x => x.UserName == request.UserName))
             {
                 return new UserAddResponse(false, "Username already taken.");
             }
@@ -47,7 +47,7 @@ namespace Eclipse_Market.Controllers
             {
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Username = request.Username,
+                UserName = request.UserName,
                 Email = request.Email,
                 Password = ComputeSha256Hash(request.Password),
                 PhoneNumber = request.PhoneNumber
@@ -64,7 +64,7 @@ namespace Eclipse_Market.Controllers
                 Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                Username = x.Username,
+                UserName = x.UserName,
                 Email = x.Email,
                 Password = x.Password,
                 PhoneNumber = x.PhoneNumber,
@@ -105,52 +105,102 @@ namespace Eclipse_Market.Controllers
         public UserGetByIdResponse GetById(UserGetByIdRequest request)
         {
             //Find the user in the database with the given id
-            User user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
-            if (user != null)
+            var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if (user == null)
             {
-                //Setting up the response object
-                UserGetByIdResponse response = new UserGetByIdResponse()
-                {
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Password = user.Password,
-                    PhoneNumber = user.PhoneNumber,
-                    Username = user.Username
-                };
-                response.FavouriteListings = _dbContext.ListingUsers
-                    .Where(x => x.UserId == user.Id)
-                    .Select(x => new ListingGetAllResponse()
-                    {
-                        Id = x.ListingId,
-                        Author = x.Listing.Author,
-                        Description = x.Listing.Description,
-                        Location = x.Listing.Location,
-                        Price = x.Listing.Price,
-                        TimesBookmarked = x.Listing.TimesBookmarked,
-                        Title = x.Listing.Title,
-                        Views = x.Listing.Views,
-                    });
-                response.CurrentListings = _dbContext.Listings
-                    .Where(x => x.Id == user.Id)
-                    .Select(x => new ListingGetAllResponse()
-                    {
-                        Id = x.Id,
-                        Author = x.Author,
-                        Description = x.Description,
-                        Location = x.Location,
-                        Price = x.Price,
-                        TimesBookmarked = x.TimesBookmarked,
-                        Title = x.Title,
-                        Views = x.Views,
-                    });
-                return response;
-            }
-            else
-            {
-                //Thorwing an excepption if the user with the specified id does not exist
                 throw new Exception();
             }
+
+            //Setting up the response object
+            UserGetByIdResponse response = new UserGetByIdResponse()
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Password = user.Password,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName
+            };
+            response.FavouriteListings = _dbContext.ListingUsers
+                .Where(x => x.UserId == user.Id)
+                .Select(x => new ListingGetAllResponse()
+                {
+                    Id = x.ListingId,
+                    Author = x.Listing.Author,
+                    Description = x.Listing.Description,
+                    Location = x.Listing.Location,
+                    Price = x.Listing.Price,
+                    TimesBookmarked = x.Listing.TimesBookmarked,
+                    Title = x.Listing.Title,
+                    Views = x.Listing.Views,
+                });
+            response.CurrentListings = _dbContext.Listings
+                .Where(x => x.Id == user.Id)
+                .Select(x => new ListingGetAllResponse()
+                {
+                    Id = x.Id,
+                    Author = x.Author,
+                    Description = x.Description,
+                    Location = x.Location,
+                    Price = x.Price,
+                    TimesBookmarked = x.TimesBookmarked,
+                    Title = x.Title,
+                    Views = x.Views,
+                });
+            return response;
+        }
+        [HttpPut]
+        public UserUpdateResponse Update(UserUpdateRequest request)
+        {
+            var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if(user == null)
+            {
+                return new UserUpdateResponse(false, "Invalid id, user with id is a null reference");
+            }
+
+
+            if(request.UserName != string.Empty)
+            {
+                user.UserName = request.UserName;
+            }
+            if (request.Password != string.Empty)
+            {
+                user.Password = ComputeSha256Hash(request.Password);
+            }
+            if (request.FirstName != string.Empty)
+            {
+                user.FirstName = request.FirstName;
+            }
+            if (request.LastName != string.Empty)
+            {
+                user.LastName = request.LastName;
+            }
+            if (request.Email != string.Empty)
+            {
+                user.Email = request.Email;
+            }
+            if (request.PhoneNumber != string.Empty)
+            {
+                user.PhoneNumber = request.PhoneNumber;
+            }
+            _dbContext.SaveChanges();
+            return new UserUpdateResponse(true, "Success");
+        }
+        [HttpDelete]
+        public UserDeleteResponse Delete(UserDeleteRequest request)
+        {
+            var userForDelete = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if (userForDelete == null)
+            {
+                return new UserDeleteResponse(false, "Invalid id, user with id is a null reference");
+            }
+
+            _dbContext.Users.Remove(userForDelete);
+            _dbContext.SaveChanges();
+            return new UserDeleteResponse(true, "Success");
         }
         private string ComputeSha256Hash(string rawData)
         {
