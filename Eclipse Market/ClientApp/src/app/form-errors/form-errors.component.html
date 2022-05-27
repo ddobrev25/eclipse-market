@@ -1,0 +1,8 @@
+<div *ngIf="!control.valid && (control.dirty || control.touched)" class="text-danger">
+    <span *ngIf="control.errors?.['required']">{{controlName}} is required</span>
+    <span *ngIf="control.errors?.['maxlength']">{{controlName}} should be less than {{max}} characters</span>
+    <span *ngIf="control.errors?.['minlength']">{{controlName}} should be more than {{min}} characters</span>
+    <span *ngIf="control.errors?.['pattern']">{{controlName}} should be in correct format</span>
+    <span *ngIf="control.errors?.['min']">{{controlName}} should be at least {{min}}</span>
+    <span *ngIf="control.errors?.['max']">{{controlName}} should be at below {{max}}</span>
+</div>
