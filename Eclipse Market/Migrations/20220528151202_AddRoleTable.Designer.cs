@@ -3,6 +3,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220528151202_AddRoleTable")]
+    partial class AddRoleTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,38 +22,6 @@ namespace Eclipse_Market.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ClaimRole", b =>
-                {
-                    b.Property<int>("ClaimsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ClaimsId", "RolesId");
-
-                    b.HasIndex("RolesId");
-
-                    b.ToTable("ClaimRole");
-                });
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Claim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Claim");
-                });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
                 {
@@ -174,33 +144,13 @@ namespace Eclipse_Market.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ClaimRole", b =>
-                {
-                    b.HasOne("Eclipse_Market.Models.DB.Claim", null)
-                        .WithMany()
-                        .HasForeignKey("ClaimsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eclipse_Market.Models.DB.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
@@ -241,17 +191,6 @@ namespace Eclipse_Market.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Eclipse_Market.Models.DB.User", b =>
-                {
-                    b.HasOne("Eclipse_Market.Models.DB.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
                 {
                     b.Navigation("UsersBookmarked");
@@ -260,11 +199,6 @@ namespace Eclipse_Market.Migrations
             modelBuilder.Entity("Eclipse_Market.Models.DB.ListingCategory", b =>
                 {
                     b.Navigation("Listings");
-                });
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Role", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.User", b =>

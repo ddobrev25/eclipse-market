@@ -241,9 +241,9 @@ namespace Eclipse_Market.Controllers
         }
         private string CreateJwtToken(User user)
         {
-            List<Claim> claims = new List<Claim>
+            List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>
             {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+                new System.Security.Claims.Claim(ClaimTypes.Name, user.Id.ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
 

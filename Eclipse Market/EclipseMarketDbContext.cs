@@ -10,6 +10,7 @@ namespace Eclipse_Market
         public DbSet<Listing> Listings { get; set; }
         public DbSet<ListingCategory> ListingCategories { get; set; }
         public DbSet<ListingUser> ListingUsers { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,7 +18,6 @@ namespace Eclipse_Market
             modelBuilder.Entity<Listing>()
                .HasOne(l => l.Author)
                .WithMany(u => u.CurrentListings);
-
 
             //User - Listing many to many - Many listings can be bookmarked by many users
             modelBuilder.Entity<ListingUser>()
