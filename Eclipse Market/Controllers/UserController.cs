@@ -25,42 +25,6 @@ namespace Eclipse_Market.Controllers
             _dbContext = dbContext;
             Configuration = configuration;
         }
-
-        [HttpPost]
-        public ActionResult Add(UserAddRequest request)
-        {
-            if (request.UserName.Length > 100 || request.UserName.Length < 3)
-            {
-                return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
-            }
-
-            if (_dbContext.Users.Any(x => x.UserName == request.UserName))
-            {
-                return BadRequest("Username already taken.");
-            }
-
-            if (request.Password.Length < 8)
-            {
-                return BadRequest("Password must be longer than 8 symbols.");
-            }
-
-            if (_dbContext.Users.Any(x => x.Email == request.Email))
-            {
-                return BadRequest("There is already a user registered with this email address.");
-            }
-            User userToAdd = new User
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName = request.UserName,
-                Email = request.Email,
-                Password = ComputeSha256Hash(request.Password),
-                PhoneNumber = request.PhoneNumber
-            };
-            _dbContext.Users.Add(userToAdd);
-            _dbContext.SaveChanges();
-            return Ok();
-        }
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<List<UserGetAllResponse>> GetAll()
@@ -107,11 +71,12 @@ namespace Eclipse_Market.Controllers
             return Ok(users);
         }
 
-        [HttpPost]
-        public ActionResult<UserGetByIdResponse> GetById(UserGetByIdRequest request)
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<UserGetByIdResponse> GetById(int id)
         {
             //Find the user in the database with the given id
-            var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+            var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
 
             if (user == null)
             {
@@ -156,7 +121,56 @@ namespace Eclipse_Market.Controllers
                 });
             return Ok(response);
         }
+        [HttpPost]
+        public ActionResult Register(UserRegisterRequest request)
+        {
+            if (request.UserName.Length > 100 || request.UserName.Length < 3)
+            {
+                return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
+            }
+
+            if (_dbContext.Users.Any(x => x.UserName == request.UserName))
+            {
+                return BadRequest("Username already taken.");
+            }
+
+            if (request.Password.Length < 8)
+            {
+                return BadRequest("Password must be longer than 8 symbols.");
+            }
+
+            if (_dbContext.Users.Any(x => x.Email == request.Email))
+            {
+                return BadRequest("There is already a user registered with this email address.");
+            }
+            User userToAdd = new User
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.UserName,
+                Email = request.Email,
+                Password = ComputeSha256Hash(request.Password),
+                PhoneNumber = request.PhoneNumber
+            };
+            _dbContext.Users.Add(userToAdd);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+        [HttpPost]
+        public ActionResult<UserLoginResponse> Login(UserLoginRequest request)
+        {
+            var user = _dbContext.Users
+                .Where(x => x.UserName == request.UserName && x.Password == ComputeSha256Hash(request.Password))
+                .FirstOrDefault();
+
+            if (user == null)
+            {
+                return BadRequest("Incorrect credentials");
+            }
+            return Ok(new UserLoginResponse(CreateJwtToken(request)));
+        }
         [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult Update(UserUpdateRequest request)
         {
             var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
@@ -225,20 +239,7 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-        [HttpPost]
-        public ActionResult<UserLoginResponse> Login(UserLoginRequest request)
-        {
-            var user = _dbContext.Users
-                .Where(x => x.UserName == request.UserName && x.Password == ComputeSha256Hash(request.Password))
-                .FirstOrDefault();
-
-            if(user == null)
-            {
-                return BadRequest("Incorrect credentials");
-            }
-            return Ok(new UserLoginResponse(CreateToken(request)));
-        }
-        private string CreateToken(UserLoginRequest user)
+        private string CreateJwtToken(UserLoginRequest user)
         {
             List<Claim> claims = new List<Claim>
             {

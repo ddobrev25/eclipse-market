@@ -1,6 +1,6 @@
 ﻿namespace Eclipse_Market.Models.Request
 {
-    public class UserAddRequest
+    public class UserRegisterRequest
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
