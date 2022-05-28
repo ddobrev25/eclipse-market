@@ -27,26 +27,26 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public UserAddResponse Add(UserAddRequest request)
+        public ActionResult Add(UserAddRequest request)
         {
             if (request.UserName.Length > 100 || request.UserName.Length < 3)
             {
-                return new UserAddResponse(false, "A username can not be shorter that 3 symbols or longer than 100 symbols.");
+                return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
             }
 
             if (_dbContext.Users.Any(x => x.UserName == request.UserName))
             {
-                return new UserAddResponse(false, "Username already taken.");
+                return BadRequest("Username already taken.");
             }
 
             if (request.Password.Length < 8)
             {
-                return new UserAddResponse(false, "Password must be longer than 8 symbols.");
+                return BadRequest("Password must be longer than 8 symbols.");
             }
 
             if (_dbContext.Users.Any(x => x.Email == request.Email))
             {
-                return new UserAddResponse(false, "There is already a user registered with this email address.");
+                return BadRequest("There is already a user registered with this email address.");
             }
             User userToAdd = new User
             {
@@ -59,11 +59,11 @@ namespace Eclipse_Market.Controllers
             };
             _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();
-            return new UserAddResponse(true, "Success");
+            return Ok();
         }
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public List<UserGetAllResponse> GetAll()
+        public ActionResult<List<UserGetAllResponse>> GetAll()
         {
             var users = _dbContext.Users.Include(x => x.FavouriteListings).Select(x => new UserGetAllResponse()
             {
@@ -104,18 +104,18 @@ namespace Eclipse_Market.Controllers
                         Views = x.Views,
                     });
             }
-            return users;
+            return Ok(users);
         }
 
         [HttpPost]
-        public UserGetByIdResponse GetById(UserGetByIdRequest request)
+        public ActionResult<UserGetByIdResponse> GetById(UserGetByIdRequest request)
         {
             //Find the user in the database with the given id
             var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
 
             if (user == null)
             {
-                throw new Exception();
+                return BadRequest("Invalid id, user object with given id is a null reference");
             }
 
             //Setting up the response object
@@ -154,16 +154,16 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views,
                 });
-            return response;
+            return Ok(response);
         }
         [HttpPut]
-        public UserUpdateResponse Update(UserUpdateRequest request)
+        public ActionResult Update(UserUpdateRequest request)
         {
             var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
 
             if(user == null)
             {
-                return new UserUpdateResponse(false, "Invalid id, user with id is a null reference");
+                return BadRequest("Invalid id, user object with given id is a null reference");
             }
 
 
@@ -171,11 +171,11 @@ namespace Eclipse_Market.Controllers
             {
                 if (_dbContext.Users.Any(x => x.UserName == request.UserName))
                 {
-                    return new UserUpdateResponse(false, "Username already taken.");
+                    return BadRequest("Username already taken.");
                 }
                 if (request.UserName.Length > 100 || request.UserName.Length < 3)
                 {
-                    return new UserUpdateResponse(false, "A username can not be shorter that 3 symbols or longer than 100 symbols.");
+                    return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
                 }
                 user.UserName = request.UserName;
             }
@@ -183,7 +183,7 @@ namespace Eclipse_Market.Controllers
             {
                 if (request.Password.Length < 8)
                 {
-                    return new UserUpdateResponse(false, "Password must be longer than 8 symbols.");
+                    return BadRequest("Password must be longer than 8 symbols.");
                 }
                 user.Password = ComputeSha256Hash(request.Password);
             }
@@ -199,7 +199,7 @@ namespace Eclipse_Market.Controllers
             {
                 if (_dbContext.Users.Any(x => x.Email == request.Email))
                 {
-                    return new UserUpdateResponse(false, "Email already taken.");
+                    return BadRequest("Email already taken.");
                 }
                 user.Email = request.Email;
             }
@@ -208,25 +208,25 @@ namespace Eclipse_Market.Controllers
                 user.PhoneNumber = request.PhoneNumber;
             }
             _dbContext.SaveChanges();
-            return new UserUpdateResponse(true, "Success");
+            return Ok();
         }
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public UserDeleteResponse Delete(UserDeleteRequest request)
+        public ActionResult Delete(UserDeleteRequest request)
         {
             var userForDelete = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
 
             if (userForDelete == null)
             {
-                return new UserDeleteResponse(false, "Invalid id, user with id is a null reference");
+                return BadRequest("Invalid id, user object with given id is a null reference");
             }
 
             _dbContext.Users.Remove(userForDelete);
             _dbContext.SaveChanges();
-            return new UserDeleteResponse(true, "Success");
+            return Ok();
         }
         [HttpPost]
-        public UserLoginResponse Login(UserLoginRequest request)
+        public ActionResult<UserLoginResponse> Login(UserLoginRequest request)
         {
             var user = _dbContext.Users
                 .Where(x => x.UserName == request.UserName && x.Password == ComputeSha256Hash(request.Password))
@@ -234,9 +234,9 @@ namespace Eclipse_Market.Controllers
 
             if(user == null)
             {
-                return new UserLoginResponse(false, "Incorrect credentials", "");
+                return BadRequest("Incorrect credentials");
             }
-            return new UserLoginResponse(true, "Success", CreateToken(request));
+            return Ok(new UserLoginResponse(CreateToken(request)));
         }
         private string CreateToken(UserLoginRequest user)
         {
