@@ -167,7 +167,7 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest("Incorrect credentials");
             }
-            return Ok(new UserLoginResponse(CreateJwtToken(request)));
+            return Ok(new UserLoginResponse(CreateJwtToken(user)));
         }
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -239,11 +239,11 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-        private string CreateJwtToken(UserLoginRequest user)
+        private string CreateJwtToken(User user)
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.Id.ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
 
