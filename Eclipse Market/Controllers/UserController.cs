@@ -1,6 +1,8 @@
 ﻿using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +62,7 @@ namespace Eclipse_Market.Controllers
             return new UserAddResponse(true, "Success");
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public List<UserGetAllResponse> GetAll()
         {
             var users = _dbContext.Users.Include(x => x.FavouriteListings).Select(x => new UserGetAllResponse()
@@ -208,6 +211,7 @@ namespace Eclipse_Market.Controllers
             return new UserUpdateResponse(true, "Success");
         }
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public UserDeleteResponse Delete(UserDeleteRequest request)
         {
             var userForDelete = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
@@ -232,25 +236,28 @@ namespace Eclipse_Market.Controllers
             {
                 return new UserLoginResponse(false, "Incorrect credentials", "");
             }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:secret"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                      new Claim(ClaimTypes.Name, user.Id.ToString()),
-                }),
-                IssuedAt = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Issuer = "Issuer",
-                Audience = "Audience"
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return new UserLoginResponse(true, "Success", tokenHandler.WriteToken(token));
+            return new UserLoginResponse(true, "Success", CreateToken(request));
         }
+        private string CreateToken(UserLoginRequest user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName)
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
 
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                issuer: Configuration["Jwt:Issuer"],
+                audience: Configuration["Jwt:Audience"],
+                expires: DateTime.UtcNow.AddDays(7),
+                signingCredentials: creds);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
+        }
         private string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
