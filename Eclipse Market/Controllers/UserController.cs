@@ -26,7 +26,7 @@ namespace Eclipse_Market.Controllers
             Configuration = configuration;
         }
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult<List<UserGetAllResponse>> GetAll()
         {
             var users = _dbContext.Users.Include(x => x.FavouriteListings).Select(x => new UserGetAllResponse()
@@ -38,6 +38,7 @@ namespace Eclipse_Market.Controllers
                 Email = x.Email,
                 Password = x.Password,
                 PhoneNumber = x.PhoneNumber,
+                RoleId = x.RoleId
             }).ToList();
             foreach (var user in users)
             {
@@ -72,7 +73,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult<UserGetByIdResponse> GetById(int id)
         {
             //Find the user in the database with the given id
@@ -91,7 +92,8 @@ namespace Eclipse_Market.Controllers
                 LastName = user.LastName,
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
-                UserName = user.UserName
+                UserName = user.UserName,
+                RoleId = user.RoleId
             };
             response.FavouriteListings = _dbContext.ListingUsers
                 .Where(x => x.UserId == user.Id)
@@ -168,10 +170,12 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest("Incorrect credentials");
             }
-            return Ok(new UserLoginResponse(CreateJwtToken(user)));
+
+            var token = CreateJwtToken(user);
+            return Ok(new UserLoginResponse(token));
         }
         [HttpPut]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult Update(UserUpdateRequest request)
         {
             var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
@@ -222,11 +226,19 @@ namespace Eclipse_Market.Controllers
             {
                 user.PhoneNumber = request.PhoneNumber;
             }
+            if(request.RoleId != 0)
+            {
+                if(!_dbContext.Roles.Any(x => x.Id == request.RoleId))
+                {
+                    return BadRequest("Role id is invalid.");
+                }
+                user.RoleId = request.RoleId;
+            }
             _dbContext.SaveChanges();
             return Ok();
         }
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult Delete(UserDeleteRequest request)
         {
             var userForDelete = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
@@ -242,16 +254,30 @@ namespace Eclipse_Market.Controllers
         }
         private string CreateJwtToken(User user)
         {
-            List<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>
+            //Claims from System.Security namespace, that will go in the token
+            List<System.Security.Claims.Claim> identityClaims = new List<System.Security.Claims.Claim>();
+
+            //Claim for the user id
+            identityClaims.Add(new System.Security.Claims.Claim(ClaimTypes.Name, user.Id.ToString()));
+
+            //User custom claims
+            var claims = _dbContext.RoleClaims
+               .Where(x => x.RoleId == user.RoleId)
+               .Select(x => x.Claim.Name)
+               .Distinct().ToList();
+
+            foreach (var claim in claims)
             {
-                new System.Security.Claims.Claim(ClaimTypes.Name, user.Id.ToString())
-            };
+                //Adding each custom claim in the token
+                identityClaims.Add(new System.Security.Claims.Claim("RoleClaim", claim.ToString()));
+            }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var token = new JwtSecurityToken(
-                claims: claims,
+                claims: identityClaims,
                 issuer: Configuration["Jwt:Issuer"],
                 audience: Configuration["Jwt:Audience"],
                 expires: DateTime.UtcNow.AddDays(7),

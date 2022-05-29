@@ -12,5 +12,6 @@ namespace Eclipse_Market.Models.Response
         public string PhoneNumber { get; set; }
         public IEnumerable<ListingGetAllResponse> FavouriteListings { get; set; }
         public IEnumerable<ListingGetAllResponse> CurrentListings { get; set; }
+        public int RoleId { get; set; }
     }
 }
