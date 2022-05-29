@@ -11,6 +11,7 @@ namespace Eclipse_Market
         public DbSet<ListingCategory> ListingCategories { get; set; }
         public DbSet<ListingUser> ListingUsers { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Claim> Claims { get; set; }
         public DbSet<RoleClaim> RoleClaims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
