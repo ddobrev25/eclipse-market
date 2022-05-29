@@ -19,7 +19,8 @@ namespace Eclipse_Market.Models.DB
         public string PhoneNumber { get; set; }
         public ICollection<Listing> CurrentListings { get; set; }
         public ICollection<ListingUser> FavouriteListings { get; set; }
-
+        [Required]
+        public int RoleId { get; set; }
         public Role Role { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Eclipse_Market
         public DbSet<ListingCategory> ListingCategories { get; set; }
         public DbSet<ListingUser> ListingUsers { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<RoleClaim> RoleClaims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,18 @@ namespace Eclipse_Market
                 .HasOne(ul => ul.Listing)
                 .WithMany(l => l.UsersBookmarked)
                 .HasForeignKey(ul => ul.ListingId);
+
+            //Role - Claim many to many
+            modelBuilder.Entity<RoleClaim>()
+                .HasKey(rc => new { rc.RoleId, rc.ClaimId });
+            modelBuilder.Entity<RoleClaim>()
+                .HasOne(rc => rc.Claim)
+                .WithMany(c => c.RoleClaims)
+                .HasForeignKey(rc => rc.ClaimId);
+            modelBuilder.Entity<RoleClaim>()
+                .HasOne(rc => rc.Role)
+                .WithMany(r => r.RoleClaims)
+                .HasForeignKey(rc => rc.RoleId);
         }
     }
 

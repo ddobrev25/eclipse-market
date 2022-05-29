@@ -15,6 +15,7 @@ namespace Eclipse_Market.Models.DB
         [Required]
         public string Location { get; set; }
         [Required]
+        public int AuthorId { get; set; }
         public User Author { get; set; }
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }

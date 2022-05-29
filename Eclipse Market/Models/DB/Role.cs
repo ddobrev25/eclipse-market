@@ -9,7 +9,7 @@ namespace Eclipse_Market.Models.DB
         public string Name { get; set; }
 
         public ICollection<User> Users { get; set; }
-        public ICollection<Claim> Claims { get; set; }
+        public ICollection<RoleClaim> RoleClaims { get; set; }
 
     }
 }

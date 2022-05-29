@@ -46,7 +46,7 @@ namespace Eclipse_Market.Controllers
                     .Select(x => new ListingGetAllResponse()
                     {
                         Id = x.ListingId,
-                        Author = x.Listing.Author,
+                        AuthorId = x.Listing.AuthorId,
                         Description = x.Listing.Description,
                         Location = x.Listing.Location,
                         Price = x.Listing.Price,
@@ -59,7 +59,7 @@ namespace Eclipse_Market.Controllers
                     .Select(x => new ListingGetAllResponse()
                     {
                         Id = x.Id,
-                        Author = x.Author,
+                        AuthorId = x.AuthorId,
                         Description = x.Description,
                         Location = x.Location,
                         Price = x.Price,
@@ -98,7 +98,7 @@ namespace Eclipse_Market.Controllers
                 .Select(x => new ListingGetAllResponse()
                 {
                     Id = x.ListingId,
-                    Author = x.Listing.Author,
+                    AuthorId = x.Listing.AuthorId,
                     Description = x.Listing.Description,
                     Location = x.Listing.Location,
                     Price = x.Listing.Price,
@@ -111,7 +111,7 @@ namespace Eclipse_Market.Controllers
                 .Select(x => new ListingGetAllResponse()
                 {
                     Id = x.Id,
-                    Author = x.Author,
+                    AuthorId = x.AuthorId,
                     Description = x.Description,
                     Location = x.Location,
                     Price = x.Price,
@@ -150,7 +150,8 @@ namespace Eclipse_Market.Controllers
                 UserName = request.UserName,
                 Email = request.Email,
                 Password = ComputeSha256Hash(request.Password),
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
+                Role = _dbContext.Roles.First(x => x.Id == request.RoleId)
             };
             _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();
