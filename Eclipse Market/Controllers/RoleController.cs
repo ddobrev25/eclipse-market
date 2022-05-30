@@ -18,14 +18,20 @@ namespace Eclipse_Market.Controllers
             Configuration = configuration;
         }
         [HttpGet]
-        public ActionResult<RoleGetAllResponse> GetAll()
+        public ActionResult<List<RoleGetAllResponse>> GetAll()
         {
-            var result = _dbContext.Roles.Select(x => new RoleGetAllResponse()
+            var roles = _dbContext.Roles.Select(x => new RoleGetAllResponse()
             {
                 Id = x.Id,
                 Name = x.Name
             }).ToList();
-            return Ok(result);
+
+            foreach (var role in roles)
+            {
+                role.Claims = _dbContext.RoleClaims.Where(x => x.ClaimId == role.Id).Select(x => x.Claim.Name);
+            }
+
+            return Ok(roles);
         }
         [HttpPost]
         public ActionResult Add(RoleAddRequest request)
