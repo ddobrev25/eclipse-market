@@ -1,7 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccountsService } from '../_services/accounts.service';
+import { JwtHelperService } from "@auth0/angular-jwt";
+
 
 
 @Component({
@@ -10,17 +13,27 @@ import { AccountsService } from '../_services/accounts.service';
   styleUrls: ['./accounts.component.scss'],
   providers: [AccountsService]
 })
+@Injectable({
+  providedIn: 'root'
+})
 export class AccountsComponent implements OnInit, OnDestroy {
 
-  isLoggedIn: boolean = true;
+  isLoggedIn: boolean = false;
+  loggedUserId: any;
+
   regRedirect: boolean = false;
+
+  helper = new JwtHelperService();
 
   registerSubscription: Subscription | undefined;
 
-  constructor(private accountService: AccountsService ) { }
+  constructor(private accountService: AccountsService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // this.checkToken();
+    this.checkToken();
+
   }
 
   toggle(){
@@ -36,13 +49,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
     }
   }
 
+
   //!Login
   loginForm: FormGroup = new FormGroup({
     userName: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required])
   });
 
-  logIn() {
+  onLogIn() {
     const body = {
       "userName": this.loginForm.get('userName')?.value,
       "password": this.loginForm.get('password')?.value
@@ -52,9 +66,16 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.accountService.logIn(body).subscribe({
       next: token => {
         if (token !== null) {
-          localStorage.setItem('token', JSON.stringify(token));
+          const jwtToken = this.parseObject(token)
+          localStorage.setItem('token', jwtToken);
           this.checkToken();
+          const decodedToken = this.helper.decodeToken(jwtToken);
+          this.loggedUserId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+          this.router.navigate(['../account', this.loggedUserId], { relativeTo: this.route });
+          this.accountService.isLoggedIn= true;
         }
+        
+
       },
       error: err => {
         console.log('ERROR: ', err);
@@ -62,19 +83,12 @@ export class AccountsComponent implements OnInit, OnDestroy {
     });
   }
 
-  logOut() {
+  onLogOut() {
     localStorage.removeItem('token');
     this.checkToken();
   }
 
   //!/Login
-
-
-
-
-
-
-
   //!Register
   registerToggle(){
     this.regRedirect = !this.regRedirect;
@@ -104,12 +118,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
       "UserName": this.registerForm.get('userName')?.value,
       "Email": this.registerForm.get('email')?.value,
       "Password": this.registerForm.get('password')?.value,
-      "PhoneNumber": this.registerForm.get('phoneNumber')?.value
+      "PhoneNumber": this.registerForm.get('phoneNumber')?.value,
+      "RoleId": "1"
     };
 
-    this.registerSubscription = this.accountService.addUser(body).subscribe({
+    this.registerSubscription = this.accountService.register(body).subscribe({
       next: data => {
-        console.log(data);
+        console.log('successful registration!');
+        this.router.navigate(['/home']);
       },
       error: err => {
         console.log(err);
@@ -122,6 +138,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
     console.log(this.registerForm.getRawValue()); 
   }
 
+
+  parseObject(obj: any)
+  {
+     for(var key in obj)
+     {
+        return obj[key];
+     }
+  }
 
   ngOnDestroy(): void {
     this.registerSubscription?.unsubscribe();

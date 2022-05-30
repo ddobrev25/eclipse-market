@@ -15,6 +15,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormErrorsComponent } from './form-errors/form-errors.component';
 import { FooterComponent } from './footer/footer.component';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { AccountDetailComponent } from './accounts/account-detail/account-detail.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { FooterComponent } from './footer/footer.component';
     HomeComponent,
     AccountsComponent,
     FormErrorsComponent,
-    FooterComponent
+    FooterComponent,
+    AccountDetailComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,8 @@ import { FooterComponent } from './footer/footer.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },JwtHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

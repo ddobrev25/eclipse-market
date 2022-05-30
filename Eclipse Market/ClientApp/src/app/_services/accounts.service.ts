@@ -5,9 +5,13 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
     providedIn: 'root'
 })
 export class AccountsService {
+    isLoggedIn: boolean = false;
 
     constructor(private http: HttpClient) {
 
+    }
+    isAuthenticated(){
+        return this.isLoggedIn;
     }
 
     url = "http://localhost:5001";
@@ -19,10 +23,11 @@ export class AccountsService {
         return this.http.post(`${this.url}/User/Login`, body, {headers: headers, responseType: "json"});
     };
     
-    public addUser(body: any) {
+    public register(body: any) {
         var headers = new HttpHeaders({
             'Accept': 'application/json'
         });
-        return this.http.post(`${this.url}/User/Add`, body, {headers: headers, responseType: "json"});
+        return this.http.post(`${this.url}/User/Register`, body, {headers: headers, responseType: "json"});
     };
+    
 }

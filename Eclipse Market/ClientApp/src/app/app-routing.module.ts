@@ -1,14 +1,20 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AccountDetailComponent } from './accounts/account-detail/account-detail.component';
 import { AccountsComponent } from './accounts/accounts.component';
+import { AuthComponent } from './auth/auth.component';
 import { HomeComponent } from './home/home.component';
 import { ListingsComponent } from './listings/listings.component';
+import { AccountGuardService } from './_guards/account.guard.service';
+import { AuthGuardService } from './_guards/auth.guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo:  'home', pathMatch: 'full'},
   { path: 'home', component: HomeComponent },
-  { path: 'listings', component: ListingsComponent },
-  { path: 'account', component: AccountsComponent },
+  { path: 'auth', component: AuthComponent },
+  { path: 'listings', component: ListingsComponent, canActivate: [AuthGuardService] },
+  { path: 'account', component: AccountsComponent, canActivate: [AccountGuardService] },
+  { path: 'account/:id', component: AccountDetailComponent },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 
