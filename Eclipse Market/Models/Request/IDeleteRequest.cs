@@ -1,6 +1,6 @@
 ﻿namespace Eclipse_Market.Models.Request
 {
-    public class UserDeleteRequest : IDeleteRequest
+    public interface IDeleteRequest
     {
         public int Id { get; set; }
     }

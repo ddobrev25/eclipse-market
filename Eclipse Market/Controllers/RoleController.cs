@@ -66,5 +66,19 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
+        [HttpDelete]
+        public ActionResult Delete(RoleDeleteRequest request)
+        {
+            var roleForDelete = _dbContext.Roles.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if(roleForDelete == null)
+            {
+                return BadRequest("Invalid id, role object with given id is a null reference");
+            }
+
+            _dbContext.Roles.Remove(roleForDelete);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
     }
 }
