@@ -180,13 +180,13 @@ namespace Eclipse_Market.Controllers
         {
             var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
 
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest("Invalid id, user object with given id is a null reference");
             }
 
 
-            if(request.UserName != string.Empty)
+            if (request.UserName != string.Empty)
             {
                 if (_dbContext.Users.Any(x => x.UserName == request.UserName))
                 {
@@ -226,9 +226,9 @@ namespace Eclipse_Market.Controllers
             {
                 user.PhoneNumber = request.PhoneNumber;
             }
-            if(request.RoleId != 0)
+            if (request.RoleId != 0)
             {
-                if(!_dbContext.Roles.Any(x => x.Id == request.RoleId))
+                if (!_dbContext.Roles.Any(x => x.Id == request.RoleId))
                 {
                     return BadRequest("Role id is invalid.");
                 }

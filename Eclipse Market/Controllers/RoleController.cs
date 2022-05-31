@@ -36,7 +36,7 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public ActionResult Add(RoleAddRequest request)
         {
-            if(_dbContext.Roles.Any(x => x.Name == request.Name))
+            if (_dbContext.Roles.Any(x => x.Name == request.Name))
             {
                 return BadRequest("A role with the given name already exists.");
             }
@@ -47,9 +47,9 @@ namespace Eclipse_Market.Controllers
             _dbContext.Roles.Add(roleToAdd);
 
             List<Claim> roleClaims = new List<Claim>();
-            foreach(var claim in request.Claims)
+            foreach (var claim in request.Claims)
             {
-                if(_dbContext.Claims.Any(x => x.Name == claim))
+                if (_dbContext.Claims.Any(x => x.Name == claim))
                 {
                     roleClaims.Add(_dbContext.Claims.Where(x => x.Name == claim).First());
                 }
@@ -77,7 +77,7 @@ namespace Eclipse_Market.Controllers
         {
             var roleForDelete = _dbContext.Roles.Where(x => x.Id == request.Id).FirstOrDefault();
 
-            if(roleForDelete == null)
+            if (roleForDelete == null)
             {
                 return BadRequest("Invalid id, role object with given id is a null reference");
             }
