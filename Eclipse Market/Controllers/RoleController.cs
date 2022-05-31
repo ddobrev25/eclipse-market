@@ -41,8 +41,11 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("A role with the given name already exists.");
             }
 
-            var roleToAdd = new Role();
-            roleToAdd.Name = request.Name;
+            var roleToAdd = new Role()
+            {
+                Id = request.Id,
+                Name = request.Name
+            };
 
             _dbContext.Roles.Add(roleToAdd);
 
