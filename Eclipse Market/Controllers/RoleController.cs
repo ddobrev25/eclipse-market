@@ -28,7 +28,7 @@ namespace Eclipse_Market.Controllers
 
             foreach (var role in roles)
             {
-                role.Claims = _dbContext.RoleClaims.Where(x => x.ClaimId == role.Id).Select(x => x.Claim.Name);
+                role.Claims = _dbContext.RoleClaims.Where(x => x.RoleId == role.Id).Select(x => x.Claim.Name);
             }
 
             return Ok(roles);
