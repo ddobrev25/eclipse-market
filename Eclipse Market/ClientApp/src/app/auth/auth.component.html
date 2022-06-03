@@ -1,1 +1,101 @@
-<p>auth works!</p>
+<div class="form" *ngIf="registerMode">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()"
+            class="border border-dark p-3 mx-auto" 
+            style="width: 600px; border-radius: 10px;"
+            id="form">
+    <h3 class="mt-1">Регистрация</h3>
+    <label for="firstName" >Име</label>
+    <input type="text"
+            name="firstName"
+            class="form-control"
+            formControlName="firstName">
+            <app-form-errors [control]="$any(registerForm).get('firstName')" 
+            [max]="'50'" [min]="'2'"
+            [controlName]="'First name'"></app-form-errors>
+    <hr>       
+    <label for="lastName" >Фамилия</label>
+    <input type="text"
+            name="lastName"
+            class="form-control"
+            formControlName="lastName">
+            <app-form-errors [control]="$any(registerForm).get('lastName')" 
+            [max]="'50'" [min]="'2'"
+            [controlName]="'Last name'"></app-form-errors>
+    <hr>
+    <label for="userName" >Потребителско име</label>
+    <input type="text"
+            name="userName"
+            class="form-control"
+            formControlName="userName">
+            <app-form-errors [control]="$any(registerForm).get('userName')" 
+            [max]="'50'" [min]="'2'"
+            [controlName]="'Username'"></app-form-errors>
+    <hr>
+    <label for="email" >Имейл адрес</label>
+    <input type="text"
+            name="email"
+            class="form-control"
+            formControlName="email">
+            <app-form-errors [control]="$any(registerForm).get('email')" [controlName]="'Email'"></app-form-errors>
+    <hr>
+    <label for="password" >Парола</label>
+    <input type="text"
+            name="password"
+            class="form-control"
+            formControlName="password">
+            <app-form-errors [control]="$any(registerForm).get('password')" 
+            [max]="'50'" [min]="'6'"
+            [controlName]="'Password'"></app-form-errors>
+    <hr>
+    <label for="confirmPassword" >Потвърди парола</label>
+    <input type="text"
+            name="confirmPassword"
+            class="form-control"
+            formControlName="confirmPassword">
+            <span *ngIf="registerForm.errors?.['notmatched'] && registerForm.touched" class="text-danger">Password mismatch</span>
+            <app-form-errors [control]="$any(registerForm).get('confirmPassword')" 
+            [max]="'50'" [min]="'6'"
+            [controlName]="'Password'"></app-form-errors>
+    <hr>
+    <label for="email" >Телефонен номер</label>
+    <input type="text"
+            name="phoneNumber"
+            class="form-control"
+            formControlName="phoneNumber">
+            <app-form-errors [control]="$any(registerForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
+            <hr>
+    <button type="submit" class="btn btn-light mt-3 me-3" [disabled]="!registerForm.valid">Потвърди</button>
+    <button type="button" class="btn btn-dark mt-3" (click)="registerToggle()">Назад</button>
+    </form>
+</div>
+<div class="form" *ngIf="!registerMode">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogIn()"
+            class="border border-dark p-3 mx-auto" 
+            style="width: 600px; border-radius: 10px;"
+            id="form">
+    <h3 class="mt-1">Влезте в профила си</h3>
+    <h6 class="regLink">Нямате профил?, регистрирайте се <a (click)="registerToggle()">тук</a> </h6>    
+
+    <hr>
+    <label for="userName" >Потребителско име</label>
+    <input type="text"
+            name="userName"
+            class="form-control"
+            formControlName="userName">
+            <app-form-errors [control]="$any(loginForm).get('userName')" 
+            [max]="'50'" [min]="'2'"
+            [controlName]="'Username'"></app-form-errors>
+    <hr>
+    <label for="password" >Парола</label>
+    <input type="text"
+            name="password"
+            class="form-control"
+            formControlName="password">
+            <app-form-errors [control]="$any(loginForm).get('password')" 
+            [max]="'50'" [min]="'6'"
+            [controlName]="'Password'"></app-form-errors>
+    <hr>
+    <button type="submit" class="btn btn-light mt-3 me-3" [disabled]="!loginForm.valid">Потвърди</button>
+    <button type="button" class="btn btn-dark mt-3" routerLink="/home">Назад</button>
+    </form>
+</div>

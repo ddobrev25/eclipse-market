@@ -16,7 +16,6 @@ export class AccountDetailComponent implements OnInit {
     this.route.params.subscribe(
       (params: Params) => {
         this.userId = +params['id'];
-        console.log(this.userId)
       }
     )
   }
