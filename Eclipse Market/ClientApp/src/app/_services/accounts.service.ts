@@ -5,15 +5,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
     providedIn: 'root'
 })
 export class AccountsService {
-    isLoggedIn: boolean = false;
-
-    constructor(private http: HttpClient) {
-
-    }
-    isAuthenticated(){
-        return this.isLoggedIn;
-    }
-
+    
+    constructor(private http: HttpClient) {}
+    
     url = "http://localhost:5001";
 
     public logIn(body: any) {

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { AccountsComponent } from "../accounts/accounts.component";
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { AccountsService } from "../_services/accounts.service";
 
 @Injectable({
@@ -11,17 +11,18 @@ export class AccountGuardService implements CanActivate {
     constructor(private router:Router, 
                 private accountService: AccountsService,
                 private route: ActivatedRoute,
-                private accComponent: AccountsComponent) {}
+                private jwtHelper: JwtHelperService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        let isLoggedIn = localStorage.getItem('token') ? true : false;
-        console.log(isLoggedIn);
-        if (isLoggedIn){
-            this.router.navigate(['/account/1003']);
+
+        const id = +localStorage.getItem('userId')!;
+        const token = localStorage.getItem('token');
+
+        if (token && !this.jwtHelper.isTokenExpired(token)){
+            this.router.navigate(['/account/', id], {relativeTo: null});
             return false
         }
-        // this.router.navigate(['/auth']);
+        this.router.navigate(['/auth'], {relativeTo: null});
         return true;
-
     }
 }
