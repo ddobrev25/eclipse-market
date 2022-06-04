@@ -57,6 +57,7 @@ namespace Eclipse_Market.Controllers
                         TimesBookmarked = x.Listing.TimesBookmarked,
                         Title = x.Listing.Title,
                         Views = x.Listing.Views,
+                        ListingCategoryId = x.Listing.ListingCategoryId
                     });
                 user.CurrentListings = _dbContext.Listings
                     .Where(x => x.Id == user.Id)
@@ -70,6 +71,7 @@ namespace Eclipse_Market.Controllers
                         TimesBookmarked = x.TimesBookmarked,
                         Title = x.Title,
                         Views = x.Views,
+                        ListingCategoryId = x.ListingCategoryId
                     });
             }
             return Ok(users);
