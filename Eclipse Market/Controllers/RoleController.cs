@@ -49,6 +49,11 @@ namespace Eclipse_Market.Controllers
 
             _dbContext.Roles.Add(roleToAdd);
 
+            if(request.Claims.Count == 0)
+            {
+                return BadRequest("Roles can not have 0 claims. If you intended to have no claims for this role add the \"DefaultClaim\" claim");
+            }
+
             List<Claim> roleClaims = new List<Claim>();
             foreach (var claim in request.Claims)
             {
@@ -75,6 +80,57 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
+        [HttpPut]
+        public ActionResult Update(RoleUpdateRequest request)
+        {
+            var roleToUpdate = _dbContext.Roles.Where(x => x.Id == request.CurrentId).FirstOrDefault();
+
+            if(roleToUpdate == null)
+            {
+                return BadRequest("Invalid id, object with given id is a null reference");
+            }
+
+            if(request.Name != string.Empty)
+            {
+                roleToUpdate.Name = request.Name;
+            }
+            if (request.Claims.Count != 0)
+            {
+                if (request.Claims.Any(x => x == string.Empty))
+                {
+                    return BadRequest("Can not have an empty claim");
+                }
+
+                List<Claim> roleClaims = new List<Claim>();
+                foreach (var claim in request.Claims)
+                {
+                    if (_dbContext.Claims.Any(x => x.Name == claim))
+                    {
+                        roleClaims.Add(_dbContext.Claims.Where(x => x.Name == claim).First());
+                    }
+                    else
+                    {
+                        Claim newClaim = new Claim();
+                        newClaim.Name = claim;
+                        _dbContext.Claims.Add(newClaim);
+                        roleClaims.Add(newClaim);
+                    }
+                }
+
+                var currentRoleClaims = _dbContext.RoleClaims.Where(x => x.RoleId == request.CurrentId);
+                _dbContext.RoleClaims.RemoveRange(currentRoleClaims);
+
+                var newRoleClaims = roleClaims.Distinct()
+                    .Select(x => new RoleClaim()
+                    {
+                        Role = roleToUpdate,
+                        Claim = x
+                    });
+                _dbContext.RoleClaims.AddRange(newRoleClaims);
+            }
+            _dbContext.SaveChanges();
+            return Ok();
+        }
         [HttpDelete]
         public ActionResult Delete(RoleDeleteRequest request)
         {
@@ -82,7 +138,7 @@ namespace Eclipse_Market.Controllers
 
             if (roleForDelete == null)
             {
-                return BadRequest("Invalid id, role object with given id is a null reference");
+                return BadRequest("Invalid id, object with given id is a null reference");
             }
 
             _dbContext.Roles.Remove(roleForDelete);
