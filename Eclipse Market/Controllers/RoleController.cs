@@ -49,6 +49,11 @@ namespace Eclipse_Market.Controllers
 
             _dbContext.Roles.Add(roleToAdd);
 
+            if(request.Claims.Count == 0)
+            {
+                return BadRequest("Roles can not have 0 claims. If you intended to have no claims for this role add the \"DefaultClaim\" claim");
+            }
+
             List<Claim> roleClaims = new List<Claim>();
             foreach (var claim in request.Claims)
             {
@@ -82,7 +87,7 @@ namespace Eclipse_Market.Controllers
 
             if(roleToUpdate == null)
             {
-                return BadRequest("Invalid id, role object with given id is a null reference");
+                return BadRequest("Invalid id, object with given id is a null reference");
             }
 
             if(request.Name != string.Empty)
