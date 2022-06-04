@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AccountsService } from '../_services/accounts.service';
+import { AccountsService } from '../_services/user.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
 
 
@@ -111,7 +111,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.registerSubscription = this.accountService.register(body).subscribe({
       next: data => {
         console.log('successful registration!');
-        this.router.navigate(['/auth']);
+        this.router.navigate(['/home']);
       },
       error: err => {
         console.log(err);

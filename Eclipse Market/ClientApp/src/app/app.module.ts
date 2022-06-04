@@ -12,12 +12,19 @@ import { ListingsComponent } from './listings/listings.component';
 import { HomeComponent } from './home/home.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormErrorsComponent } from './form-errors/form-errors.component';
 import { FooterComponent } from './footer/footer.component';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AccountDetailComponent } from './accounts/account-detail/account-detail.component';
 import { AuthComponent } from './auth/auth.component';
+import { AuthInterceptor } from './_interceptors/auth.interceptor';
+import { NgHttpLoaderModule } from 'ng-http-loader';
+import { SpinnerComponent } from './loader/spinner/spinner.component';
+import { AccountListingsComponent } from './accounts/account-detail/account-listings/account-listings.component';
+import { AccountInfoComponent } from './accounts/account-detail/account-info/account-info.component';
+import { AccountMessagesComponent } from './accounts/account-detail/account-messages/account-messages.component';
+import { AccountSettingsComponent } from './accounts/account-detail/account-settings/account-settings.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +36,12 @@ import { AuthComponent } from './auth/auth.component';
     FormErrorsComponent,
     FooterComponent,
     AccountDetailComponent,
-    AuthComponent
+    AuthComponent,
+    SpinnerComponent,
+    AccountListingsComponent,
+    AccountInfoComponent,
+    AccountMessagesComponent,
+    AccountSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -38,10 +50,13 @@ import { AuthComponent } from './auth/auth.component';
     InputTextModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgHttpLoaderModule.forRoot(),
   ],
   providers: [
-    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },JwtHelperService],
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

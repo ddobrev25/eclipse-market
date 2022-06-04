@@ -1,0 +1,79 @@
+<div class="content">
+    <div class="container-fluid">
+        <div class="col">
+            <form 
+                [formGroup]="updateForm"
+                class="p-3 form"
+                (ngSubmit)="onEditUser()">
+            <div class="d-flex justify-content-center">
+                <h3 class="mt-1">Редакция на профил</h3>
+            </div>    
+            <label for="firstName" >Име</label>
+            <input type="text"
+                    name="firstName"
+                    class="form-control"
+                    formControlName="firstName">
+                    <app-form-errors [control]="$any(updateForm).get('firstName')" 
+                    [max]="'50'" [min]="'2'"
+                    [controlName]="'First name'"></app-form-errors>
+            <hr>       
+            <label for="lastName" >Фамилия</label>
+            <input type="text"
+                    name="lastName"
+                    class="form-control"
+                    formControlName="lastName">
+                    <app-form-errors [control]="$any(updateForm).get('lastName')" 
+                    [max]="'50'" [min]="'2'"
+                    [controlName]="'Last name'"></app-form-errors>
+            <hr>
+            <label for="userName" >Потребителско име</label>
+            <input type="text"
+                    name="userName"
+                    class="form-control"
+                    formControlName="userName">
+                    <app-form-errors [control]="$any(updateForm).get('userName')" 
+                    [max]="'50'" [min]="'2'"
+                    [controlName]="'Username'"></app-form-errors>
+            <hr>
+            <label for="email" >Имейл адрес</label>
+            <input type="text"
+                    name="email"
+                    class="form-control"
+                    formControlName="email">
+                    <app-form-errors [control]="$any(updateForm).get('email')" [controlName]="'Email'"></app-form-errors>
+            <hr>
+            <label for="password" >Парола</label>
+            <input type="text"
+                    name="password"
+                    class="form-control"
+                    formControlName="password">
+                    <app-form-errors [control]="$any(updateForm).get('password')" 
+                    [max]="'50'" [min]="'6'"
+                    [controlName]="'Password'"></app-form-errors>
+            <hr>
+            <label for="confirmPassword" >Потвърди парола</label>
+            <input type="text"
+                    name="confirmPassword"
+                    class="form-control"
+                    formControlName="confirmPassword">
+                    <span *ngIf="updateForm.errors?.['notmatched'] && updateForm.touched" class="text-danger">Password mismatch</span>
+                    <app-form-errors [control]="$any(updateForm).get('confirmPassword')" 
+                    [max]="'50'" [min]="'6'"
+                    [controlName]="'Password'"></app-form-errors>
+            <hr>
+            <label for="email" >Телефонен номер</label>
+            <input type="text"
+                    name="phoneNumber"
+                    class="form-control"
+                    formControlName="phoneNumber">
+                    <app-form-errors [control]="$any(updateForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
+                    <hr>
+                <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-light mt-4" [disabled]="!updateForm.valid">Потвърди</button>
+                        <button type="button" class="btn btn-dark mt-3" >Назад</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

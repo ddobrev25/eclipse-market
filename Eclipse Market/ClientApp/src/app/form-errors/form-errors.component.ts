@@ -12,12 +12,10 @@ export class FormErrorsComponent implements OnInit {
   @Input() max: string = '100';
   @Input() min: string = '3';
 
-  @Output() textWasClicked: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
   ngOnInit(): void {
-    this.textWasClicked.emit('THIS TEXT IS FROM COMPONENT FORM ERRORS');
   }
 
 }

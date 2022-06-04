@@ -1,8 +1,6 @@
-<div class="form" *ngIf="registerMode">
-    <form [formGroup]="registerForm" (ngSubmit)="onRegister()"
-            class="border border-dark p-3 mx-auto" 
-            style="width: 600px; border-radius: 10px;"
-            id="form">
+<div class="bg">
+    <form *ngIf="registerMode" [formGroup]="registerForm" (ngSubmit)="onRegister()"
+            class="p-3 form">
     <h3 class="mt-1">Регистрация</h3>
     <label for="firstName" >Име</label>
     <input type="text"
@@ -64,15 +62,14 @@
             formControlName="phoneNumber">
             <app-form-errors [control]="$any(registerForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
             <hr>
-    <button type="submit" class="btn btn-light mt-3 me-3" [disabled]="!registerForm.valid">Потвърди</button>
-    <button type="button" class="btn btn-dark mt-3" (click)="registerToggle()">Назад</button>
+        <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-light mt-3 me-3" [disabled]="!registerForm.valid">Потвърди</button>
+                <button type="button" class="btn btn-dark mt-3" (click)="registerToggle()">Назад</button>
+        </div>
     </form>
-</div>
-<div class="form" *ngIf="!registerMode">
-    <form [formGroup]="loginForm" (ngSubmit)="onLogIn()"
-            class="border border-dark p-3 mx-auto" 
-            style="width: 600px; border-radius: 10px;"
-            id="form">
+
+    <form *ngIf="!registerMode" [formGroup]="loginForm" (ngSubmit)="onLogIn()"
+            class="p-3 form">
     <h3 class="mt-1">Влезте в профила си</h3>
     <h6 class="regLink">Нямате профил?, регистрирайте се <a (click)="registerToggle()">тук</a> </h6>    
 
@@ -95,7 +92,9 @@
             [max]="'50'" [min]="'6'"
             [controlName]="'Password'"></app-form-errors>
     <hr>
-    <button type="submit" class="btn btn-light mt-3 me-3" [disabled]="!loginForm.valid">Потвърди</button>
-    <button type="button" class="btn btn-dark mt-3" routerLink="/home">Назад</button>
+        <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-light mt-3" [disabled]="!loginForm.valid">Потвърди</button>
+                <button type="button" class="btn btn-dark mt-3" routerLink="/home">Назад</button>
+        </div>
     </form>
 </div>

@@ -1,24 +1,24 @@
 export interface IUser {
-    Id?: string;
-    FirstName: string;
-    LastName: string;
-    UserName: string;
-    Email: string;
-    Password: string;
-    PhoneNumber: string;
-    CurrentListings?: string[];
-    FavouriteListings?: string[];
-    RoleId: number;
-    Role: string;
+    id?: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+    currentListings?: string[];
+    favouriteListings?: string[];
+    roleId: number;
+    role: string;
 }
 export interface IUserResponse {
-    FirstName: string;
-    LastName: string;
-    UserName: string;
-    Email: string;
-    Password: string;
-    PhoneNumber: string;
-    CurrentListings?: string[];
-    FavouriteListings?: string[];
-    RoleId: number;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+    currentListings?: string[];
+    favouriteListings?: string[];
+    roleId: number;
 }

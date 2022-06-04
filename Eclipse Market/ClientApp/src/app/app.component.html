@@ -3,4 +3,8 @@
   <router-outlet></router-outlet>
 </main>
 <app-footer></app-footer>
+<ng-http-loader
+  [entryComponent]="spinnerComponent"
+  [opacity]="'1'"
+  [minDuration]="1500"></ng-http-loader>
 
