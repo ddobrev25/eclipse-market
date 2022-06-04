@@ -148,6 +148,24 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest("There is already a user registered with this email address.");
             }
+            if(!_dbContext.Roles.Any(x => x.Id == request.RoleId) && request.RoleId != 0)
+            {
+                return BadRequest("Role with given id does not exist");
+            }
+
+            //If role id = 0 then set the id to be the id of the default role.
+            if(request.RoleId == 0)
+            {
+                //If default role does not exist, create it.
+                if(!_dbContext.Roles.Any(x => x.Id == 10))
+                {
+                    CreateDefaultRole(10);
+                }
+                //Setting the id to be the default role
+                request.RoleId = 10;
+            }
+
+
             User userToAdd = new User
             {
                 FirstName = request.FirstName,
@@ -288,6 +306,32 @@ namespace Eclipse_Market.Controllers
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
+        }
+        private void CreateDefaultRole(int defaultRoleId)
+        {
+            var role = new Role()
+            {
+                Id = defaultRoleId,
+                Name = "Default",
+            };
+            List<Models.DB.Claim> roleClaims = new List<Models.DB.Claim>();
+            if(_dbContext.Claims.Any(x => x.Name == "DefaultClaim"))
+            {
+                roleClaims.Add(_dbContext.Claims.Where(x => x.Name == "DefaultClaim").First());
+            }
+            else
+            {
+                var defaultClaim = new Models.DB.Claim { Name = "DefaultClaim" };
+                _dbContext.Claims.Add(defaultClaim);
+                roleClaims.Add(defaultClaim);
+            }
+            var newRoleClaims = roleClaims.Select(x => new RoleClaim
+            {
+                Role = role,
+                Claim = x
+            });
+            _dbContext.AddRange(newRoleClaims);
+            _dbContext.SaveChanges();
         }
         private string ComputeSha256Hash(string rawData)
         {
