@@ -29,17 +29,20 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult<List<UserGetAllResponse>> GetAll()
         {
-            var users = _dbContext.Users.Include(x => x.FavouriteListings).Select(x => new UserGetAllResponse()
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                UserName = x.UserName,
-                Email = x.Email,
-                Password = x.Password,
-                PhoneNumber = x.PhoneNumber,
-                RoleId = x.RoleId
-            }).ToList();
+            var users = _dbContext.Users
+                .Include(x => x.FavouriteListings)
+                .Include(x => x.CurrentListings)
+                .Select(x => new UserGetAllResponse()
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    Password = x.Password,
+                    PhoneNumber = x.PhoneNumber,
+                    RoleId = x.RoleId
+                }).ToList();
             foreach (var user in users)
             {
                 user.FavouriteListings = _dbContext.ListingUsers
