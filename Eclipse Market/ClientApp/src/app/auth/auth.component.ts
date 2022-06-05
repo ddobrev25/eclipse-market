@@ -105,7 +105,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       "Email": this.registerForm.get('email')?.value,
       "Password": this.registerForm.get('password')?.value,
       "PhoneNumber": this.registerForm.get('phoneNumber')?.value,
-      "RoleId": "1"
+      "RoleId": "0"
     };
 
     this.registerSubscription = this.accountService.register(body).subscribe({

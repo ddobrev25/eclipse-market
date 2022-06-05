@@ -87,7 +87,7 @@ namespace Eclipse_Market.Controllers
 
             if(roleToUpdate == null)
             {
-                return BadRequest("Invalid id, object with given id is a null reference");
+                return BadRequest(ErrorMessages.InvalidId);
             }
 
             if(request.Name != string.Empty)
@@ -138,7 +138,7 @@ namespace Eclipse_Market.Controllers
 
             if (roleForDelete == null)
             {
-                return BadRequest("Invalid id, object with given id is a null reference");
+                return BadRequest(ErrorMessages.InvalidId);
             }
 
             _dbContext.Roles.Remove(roleForDelete);

@@ -64,5 +64,20 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        public ActionResult Delete(ListingDeleteRequest request)
+        {
+            var listingForDelete = _dbContext.Listings.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if (listingForDelete == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            _dbContext.Listings.Remove(listingForDelete);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+
     }
 }
