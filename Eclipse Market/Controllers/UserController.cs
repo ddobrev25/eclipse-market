@@ -46,7 +46,7 @@ namespace Eclipse_Market.Controllers
             foreach (var user in users)
             {
                 user.FavouriteListings = _dbContext.ListingUsers
-                    .Where(x => x.UserId == user.Id)
+                    .Where(y => y.UserId == user.Id)
                     .Select(x => new ListingGetAllResponse()
                     {
                         Id = x.ListingId,
@@ -60,7 +60,7 @@ namespace Eclipse_Market.Controllers
                         ListingCategoryId = x.Listing.ListingCategoryId
                     });
                 user.CurrentListings = _dbContext.Listings
-                    .Where(x => x.Id == user.Id)
+                    .Where(y => y.AuthorId == user.Id)
                     .Select(x => new ListingGetAllResponse()
                     {
                         Id = x.Id,
@@ -101,7 +101,7 @@ namespace Eclipse_Market.Controllers
                 RoleId = user.RoleId
             };
             response.FavouriteListings = _dbContext.ListingUsers
-                .Where(x => x.UserId == user.Id)
+                .Where(y => y.UserId == user.Id)
                 .Select(x => new ListingGetAllResponse()
                 {
                     Id = x.ListingId,
@@ -114,7 +114,7 @@ namespace Eclipse_Market.Controllers
                     Views = x.Listing.Views,
                 });
             response.CurrentListings = _dbContext.Listings
-                .Where(x => x.Id == user.Id)
+                .Where(y => y.AuthorId == user.Id)
                 .Select(x => new ListingGetAllResponse()
                 {
                     Id = x.Id,

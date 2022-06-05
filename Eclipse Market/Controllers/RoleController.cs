@@ -46,7 +46,6 @@ namespace Eclipse_Market.Controllers
                 Id = request.Id,
                 Name = request.Name
             };
-
             _dbContext.Roles.Add(roleToAdd);
 
             if(request.Claims.Count == 0)
