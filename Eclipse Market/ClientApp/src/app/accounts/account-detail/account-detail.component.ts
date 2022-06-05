@@ -1,4 +1,3 @@
-import { FixedSizeVirtualScrollStrategy } from '@angular/cdk/scrolling';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AccountsService } from 'src/app/_services/user.service';

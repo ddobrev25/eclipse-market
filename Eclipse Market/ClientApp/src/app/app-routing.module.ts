@@ -21,7 +21,7 @@ const routes: Routes = [
     { path: 'listings', component: AccountListingsComponent },
     { path: 'messages', component: AccountMessagesComponent },
     { path: 'settings', component: AccountSettingsComponent },
-    { path: '**', redirectTo: 'listings', pathMatch: 'full' },
+    { path: '**', redirectTo: 'settings', pathMatch: 'full' },
   ]},
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];

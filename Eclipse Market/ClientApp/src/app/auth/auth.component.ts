@@ -63,9 +63,6 @@ export class AuthComponent implements OnInit, OnDestroy {
           localStorage.setItem('userId', this.loggedUserId);
           this.router.navigate(['/account/', this.loggedUserId], {relativeTo: null});
         }
-      },
-      error: err => {
-        this.messageService.add({key: 'tc', severity:'error', summary: 'Error', detail: err.error, life: 5000});
       }
     });
   }
