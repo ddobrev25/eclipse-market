@@ -45,5 +45,8 @@ export class AccountsService {
         return this.http.put(`${this.url}/User/Update`, body, {headers: headers, responseType: "json"});
     }
 
+    delete(id: number) {
+        return this.http.delete(`${this.url}/User/Delete`)
+    }
     
 }

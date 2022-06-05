@@ -22,7 +22,6 @@ import { AuthInterceptor } from './_interceptors/auth.interceptor';
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { SpinnerComponent } from './loader/spinner/spinner.component';
 import { AccountListingsComponent } from './accounts/account-detail/account-listings/account-listings.component';
-import { AccountInfoComponent } from './accounts/account-detail/account-info/account-info.component';
 import { AccountMessagesComponent } from './accounts/account-detail/account-messages/account-messages.component';
 import { AccountSettingsComponent } from './accounts/account-detail/account-settings/account-settings.component';
 
@@ -39,7 +38,6 @@ import { AccountSettingsComponent } from './accounts/account-detail/account-sett
     AuthComponent,
     SpinnerComponent,
     AccountListingsComponent,
-    AccountInfoComponent,
     AccountMessagesComponent,
     AccountSettingsComponent
   ],

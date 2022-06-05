@@ -20,7 +20,7 @@ export class AccountGuardService implements CanActivate {
 
         if (token && !this.jwtHelper.isTokenExpired(token)){
             this.router.navigate(['/account/', id], {relativeTo: null});
-            return false
+            return false;
         }
         this.router.navigate(['/auth'], {relativeTo: null});
         return true;

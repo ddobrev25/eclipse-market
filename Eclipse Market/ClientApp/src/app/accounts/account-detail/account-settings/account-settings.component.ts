@@ -76,6 +76,9 @@ export class AccountSettingsComponent implements OnInit {
         }
       });
   }
+  onDeleteUser() {
+    
+  }
 
   ngOnDestroy() {
     this.updateSubscription?.unsubscribe();

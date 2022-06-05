@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    color: 	#f1f4f8;
 }
 .content {
     background-color: #313d53;
@@ -14,6 +15,22 @@
     cursor: pointer;
 }
 .form {
-    padding: 10rem 3rem !important;
+    padding: 3rem 10rem 3rem !important;
     color: 	#f1f4f8;
+}
+button {
+    color: #313d53;
+    font-weight: 450;
+}
+@media (max-width: 750px) {
+    .form {
+        padding: 48px !important;
+        color: 	#f1f4f8;
+    }
+}
+@media (max-width: 500px) {
+    .form {
+        padding: 24px 0 !important;
+        color: 	#f1f4f8;
+    }
 }
