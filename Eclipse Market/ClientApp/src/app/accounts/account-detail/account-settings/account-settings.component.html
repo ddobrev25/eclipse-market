@@ -69,7 +69,7 @@
                 <app-form-errors [control]="$any(updateForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
                 <hr>
                 <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.touched">Запази промените</button>
-                <button type="submit" class="btn btn-danger mt-4 px-2 py-1" (click)="onDeleteUser()">Изтриване на профил</button>
+                <button type="submit" class="btn btn-danger mt-4 ms-2 px-2 py-1" (click)="onDeleteUser()">Изтриване на профил</button>
 
             </form>
         </div>

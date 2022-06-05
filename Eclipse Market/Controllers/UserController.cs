@@ -86,7 +86,7 @@ namespace Eclipse_Market.Controllers
 
             if (user == null)
             {
-                return BadRequest("Invalid id, object with given id is a null reference");
+                return BadRequest(ErrorMessages.InvalidId);
             }
 
             //Setting up the response object
@@ -205,7 +205,7 @@ namespace Eclipse_Market.Controllers
 
             if (user == null)
             {
-                return BadRequest("Invalid id, object with given id is a null reference");
+                return BadRequest(ErrorMessages.InvalidId);
             }
 
 
@@ -268,7 +268,7 @@ namespace Eclipse_Market.Controllers
 
             if (userForDelete == null)
             {
-                return BadRequest("Invalid id, object with given id is a null reference");
+                return BadRequest(ErrorMessages.InvalidId);
             }
 
             _dbContext.Users.Remove(userForDelete);
