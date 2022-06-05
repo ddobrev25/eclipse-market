@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AccountsService } from 'src/app/_services/user.service';
-import {IUserResponse} from "src/app/_models/user.model";
 import { Subscription } from 'rxjs';
+import { MessageService } from 'primeng/api';
+import { IUserGetOneResponse } from 'src/app/_models/user.model';
 
 @Component({
   selector: 'app-account-settings',
@@ -12,13 +13,14 @@ import { Subscription } from 'rxjs';
 })
 export class AccountSettingsComponent implements OnInit {
   userId = 0;
-  userInfo: IUserResponse | undefined;
+  userInfo: IUserGetOneResponse | undefined;
 
   updateSubscription: Subscription | undefined;
 
   constructor(private accountService: AccountsService,
               private route: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.userId = +localStorage.getItem('userId')!;
@@ -68,8 +70,9 @@ export class AccountSettingsComponent implements OnInit {
   
       this.updateSubscription = this.accountService.update(body).subscribe({
         next: data => {
-          console.log('changes applied!');
-          // this.router.navigate(['/home']);
+          this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: `Changes applied!`, life: 3000});
+          this.updateForm.reset();
+          this.reloadCurrentRoute();
         },
         error: err => {
           console.log(err);
@@ -78,6 +81,13 @@ export class AccountSettingsComponent implements OnInit {
   }
   onDeleteUser() {
     
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
   }
 
   ngOnDestroy() {

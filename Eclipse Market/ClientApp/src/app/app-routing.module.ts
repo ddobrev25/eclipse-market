@@ -15,9 +15,9 @@ const routes: Routes = [
   { path: '', redirectTo:  'home', pathMatch: 'full'},
   { path: 'home', component: HomeComponent },
   { path: 'auth', component: AuthComponent },
-  { path: 'listings', component: ListingsComponent, canActivate: [AuthGuardService] },
+  { path: 'listings', component: ListingsComponent },
   { path: 'account', component: AccountsComponent, canActivate: [AccountGuardService]},
-  { path: 'account/:id', component: AccountDetailComponent, children: [
+  { path: 'account/:id', component: AccountDetailComponent, canActivate: [AuthGuardService], children: [
     { path: 'listings', component: AccountListingsComponent },
     { path: 'messages', component: AccountMessagesComponent },
     { path: 'settings', component: AccountSettingsComponent },

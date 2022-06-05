@@ -1,5 +1,4 @@
-export interface IUser {
-    id?: string;
+export interface IUserGetOneResponse {
     firstName: string;
     lastName: string;
     userName: string;
@@ -9,9 +8,9 @@ export interface IUser {
     currentListings?: string[];
     favouriteListings?: string[];
     roleId: number;
-    role: string;
 }
-export interface IUserResponse {
+export interface IUserGetAllResponse {
+    id: number;
     firstName: string;
     lastName: string;
     userName: string;

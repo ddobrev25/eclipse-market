@@ -45,3 +45,21 @@
 	from {background-position:0 0;}
 	to {background-position: 500px 0;}
 }
+button {
+    min-width: 10rem;
+    margin-right: .5rem;
+}
+
+@media screen and (max-width: 960px) {
+    button {
+        width: 100%;
+        margin-bottom: .5rem;
+    }
+}
+
+// :host ::ng-deep .custom-toast.p-toast {
+// 	.p-toast-message-content {
+// 		color: #0a0a0a;
+// 	}
+// }
+	

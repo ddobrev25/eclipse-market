@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccountsService } from '../_services/user.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
+import {MessageService} from 'primeng/api';
 
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit, OnDestroy {
 
@@ -23,7 +24,8 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   constructor(private accountService: AccountsService,
               private router: Router,
-              private jwtHelper: JwtHelperService) { }
+              private jwtHelper: JwtHelperService,
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.checkToken();
@@ -63,7 +65,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         }
       },
       error: err => {
-        console.log('ERROR: ', err);
+        this.messageService.add({key: 'tc', severity:'error', summary: 'Error', detail: err.error, life: 5000});
       }
     });
   }
@@ -110,11 +112,11 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     this.registerSubscription = this.accountService.register(body).subscribe({
       next: data => {
-        console.log('successful registration!');
+        this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: 'Successful registration!', life: 3000});
         this.router.navigate(['/home']);
       },
       error: err => {
-        console.log(err);
+        this.messageService.add({key: 'tc', severity:'error', summary: 'Error', detail: err.error, life: 5000});
       }
     });
   }

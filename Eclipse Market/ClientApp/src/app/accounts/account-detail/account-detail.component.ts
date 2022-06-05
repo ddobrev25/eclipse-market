@@ -29,7 +29,7 @@ export class AccountDetailComponent implements OnInit {
   onLoadUserInfo() {
     this.accountService.getInfo(this.userId).subscribe({
       next: (response: any) => {
-        console.log(response);
+        // console.log(response);
       },
       error: error => {
         console.log(error.message);

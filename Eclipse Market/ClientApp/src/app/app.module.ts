@@ -24,6 +24,9 @@ import { SpinnerComponent } from './loader/spinner/spinner.component';
 import { AccountListingsComponent } from './accounts/account-detail/account-listings/account-listings.component';
 import { AccountMessagesComponent } from './accounts/account-detail/account-messages/account-messages.component';
 import { AccountSettingsComponent } from './accounts/account-detail/account-settings/account-settings.component';
+import {ToastModule} from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { ErrorInterceptor } from './_interceptors/error-handler.interceptor';
 
 @NgModule({
   declarations: [
@@ -50,10 +53,13 @@ import { AccountSettingsComponent } from './accounts/account-detail/account-sett
     ReactiveFormsModule,
     HttpClientModule,
     NgHttpLoaderModule.forRoot(),
+    ToastModule
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

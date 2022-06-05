@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { IUserResponse } from "../_models/user.model";
+import { IUserGetAllResponse, IUserGetOneResponse } from "../_models/user.model";
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +27,7 @@ export class AccountsService {
     };
     
     getAll() {
-        return this.http.get(`${this.url}/User/GetAll`);
+        return this.http.get<IUserGetAllResponse[]>(`${this.url}/User/GetAll`);
     }
 
     getInfo(id: number) {
@@ -35,7 +35,7 @@ export class AccountsService {
             'Accept': 'application/json',
         });
         let queryParams = new HttpParams().set('id', id)
-        return this.http.get<IUserResponse>(`${this.url}/User/GetById`, {headers: headers, params: queryParams});
+        return this.http.get<IUserGetOneResponse>(`${this.url}/User/GetById`, {headers: headers, params: queryParams});
     }
     
     update(body: any) {
