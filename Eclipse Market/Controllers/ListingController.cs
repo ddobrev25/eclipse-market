@@ -35,6 +35,29 @@ namespace Eclipse_Market.Controllers
             });
             return Ok(listings);
         }
+        [HttpGet]
+        public ActionResult<ListingGetByIdResponse> GetById(int id)
+        {
+            var listing = _dbContext.Listings.Where(x => x.Id == id).FirstOrDefault();
+
+            if(listing == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            var response = new ListingGetByIdResponse
+            {
+                AuthorId = listing.AuthorId,
+                Description = listing.Description,
+                ListingCategoryId = listing.ListingCategoryId,
+                Location = listing.Location,
+                Price = listing.Price,
+                TimesBookmarked = listing.TimesBookmarked,
+                Title = listing.Title,
+                Views = listing.Views
+            };
+            return Ok(response);
+        }
 
         [HttpPost]
         public ActionResult Add(ListingAddRequest request)
@@ -62,6 +85,60 @@ namespace Eclipse_Market.Controllers
             _dbContext.Listings.Add(listingToAdd);
             _dbContext.SaveChanges();
             return Ok();
+        }
+        [HttpPut]
+        public ActionResult Update(ListingUpdateRequest request)
+        {
+            var listingForUpdate = _dbContext.Listings.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if (listingForUpdate == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+
+            if (request.Description != string.Empty)
+            {
+                listingForUpdate.Description = request.Description;
+            }
+            if (request.Location != string.Empty)
+            {
+                listingForUpdate.Location = request.Location;
+            }
+            if (request.Price != 0)
+            {
+                listingForUpdate.Price = request.Price;
+            }
+            if (request.Title != string.Empty)
+            {
+                listingForUpdate.Title = request.Title;
+            }
+            if (request.ListingCategoryId != 0)
+            {
+                if(!_dbContext.ListingCategories.Any(x => x.Id == request.ListingCategoryId))
+                {
+                    return BadRequest("Listing with given id does not exist.");
+                }
+                listingForUpdate.ListingCategoryId = request.ListingCategoryId;
+                listingForUpdate.ListingCategory = _dbContext.ListingCategories.Where(x => x.Id == request.ListingCategoryId).First();
+            }
+
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+        [HttpPut]
+        public ActionResult<int> IncrementViews(int id)
+        {
+            var listingForIncrement = _dbContext.Listings.Where(x => x.Id == id).FirstOrDefault();
+
+            if(listingForIncrement == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            listingForIncrement.Views++;
+            _dbContext.SaveChanges();
+            return Ok(listingForIncrement.Views);
         }
 
         [HttpDelete]
