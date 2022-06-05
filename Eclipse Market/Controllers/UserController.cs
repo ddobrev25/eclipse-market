@@ -210,6 +210,11 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("User does not exist.");
             }
 
+            if (_dbContext.ListingUsers.Any(x => x.UserId == request.UserId && x.ListingId == request.ListingId))
+            {
+                return BadRequest("Listing is already bookmarked by this user.");
+            }
+
             var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First();
             var user = _dbContext.Users.Where(x => x.Id == request.UserId).First();
 
@@ -315,6 +320,11 @@ namespace Eclipse_Market.Controllers
             if (!_dbContext.Users.Any(x => x.Id == request.UserId))
             {
                 return BadRequest("User does not exist.");
+            }
+
+            if (!_dbContext.ListingUsers.Any(x => x.UserId == request.UserId && x.ListingId == request.ListingId))
+            {
+                return BadRequest("Listing is already not bookmarked by this user.");
             }
 
             var listingUserForDelete = _dbContext.ListingUsers
