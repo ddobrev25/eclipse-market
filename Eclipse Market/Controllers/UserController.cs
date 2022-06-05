@@ -26,7 +26,7 @@ namespace Eclipse_Market.Controllers
             Configuration = configuration;
         }
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult<List<UserGetAllResponse>> GetAll()
         {
             var users = _dbContext.Users
@@ -46,7 +46,7 @@ namespace Eclipse_Market.Controllers
             foreach (var user in users)
             {
                 user.FavouriteListings = _dbContext.ListingUsers
-                    .Where(y => y.UserId == user.Id)
+                    .Where(x => x.UserId == user.Id)
                     .Select(x => new ListingGetAllResponse()
                     {
                         Id = x.ListingId,
@@ -60,7 +60,7 @@ namespace Eclipse_Market.Controllers
                         ListingCategoryId = x.Listing.ListingCategoryId
                     });
                 user.CurrentListings = _dbContext.Listings
-                    .Where(y => y.AuthorId == user.Id)
+                    .Where(x => x.AuthorId == user.Id)
                     .Select(x => new ListingGetAllResponse()
                     {
                         Id = x.Id,
@@ -101,7 +101,7 @@ namespace Eclipse_Market.Controllers
                 RoleId = user.RoleId
             };
             response.FavouriteListings = _dbContext.ListingUsers
-                .Where(y => y.UserId == user.Id)
+                .Where(x => x.UserId == user.Id)
                 .Select(x => new ListingGetAllResponse()
                 {
                     Id = x.ListingId,
@@ -114,7 +114,7 @@ namespace Eclipse_Market.Controllers
                     Views = x.Listing.Views,
                 });
             response.CurrentListings = _dbContext.Listings
-                .Where(y => y.AuthorId == user.Id)
+                .Where(x => x.AuthorId == user.Id)
                 .Select(x => new ListingGetAllResponse()
                 {
                     Id = x.Id,
@@ -197,6 +197,35 @@ namespace Eclipse_Market.Controllers
             var token = CreateJwtToken(user);
             return Ok(new UserLoginResponse(token));
         }
+        [HttpPost]
+        public ActionResult BookmarkListing(UserBookmarkListingRequest request)
+        {
+            if(!_dbContext.Listings.Any(x => x.Id == request.ListingId))
+            {
+                return BadRequest("Listing does not exist.");
+            }
+
+            if (!_dbContext.Users.Any(x => x.Id == request.UserId))
+            {
+                return BadRequest("User does not exist.");
+            }
+
+            var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First();
+            var user = _dbContext.Users.Where(x => x.Id == request.UserId).First();
+
+            var listingUserToAdd = new ListingUser
+            {
+                ListingId = request.ListingId,
+                Listing = listing,
+                UserId = request.UserId,
+                User = user
+            };
+
+            _dbContext.ListingUsers.Add(listingUserToAdd);
+            listing.TimesBookmarked++;
+            _dbContext.SaveChanges();
+            return Ok();
+        }
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult Update(UserUpdateRequest request)
@@ -272,6 +301,30 @@ namespace Eclipse_Market.Controllers
             }
 
             _dbContext.Users.Remove(userForDelete);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+        [HttpDelete]
+        public ActionResult UnbookmarkListing(UserBookmarkListingRequest request)
+        {
+            if (!_dbContext.Listings.Any(x => x.Id == request.ListingId))
+            {
+                return BadRequest("Listing does not exist.");
+            }
+
+            if (!_dbContext.Users.Any(x => x.Id == request.UserId))
+            {
+                return BadRequest("User does not exist.");
+            }
+
+            var listingUserForDelete = _dbContext.ListingUsers
+                .Where(x => x.UserId == request.UserId && x.ListingId == request.ListingId)
+                .First();
+            _dbContext.ListingUsers.Remove(listingUserForDelete);
+
+            var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First();
+            listing.TimesBookmarked--;
+
             _dbContext.SaveChanges();
             return Ok();
         }
