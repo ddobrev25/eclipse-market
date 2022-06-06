@@ -1,4 +1,5 @@
 using Eclipse_Market;
+using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -62,6 +63,8 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddCors();
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 

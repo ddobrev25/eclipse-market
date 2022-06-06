@@ -1,6 +1,7 @@
 ﻿using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
+using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,11 +20,13 @@ namespace Eclipse_Market.Controllers
     public class UserController : ControllerBase
     {
         private EclipseMarketDbContext _dbContext;
+        private IEmailService _emailService;
         public IConfiguration Configuration { get; }
-        public UserController(EclipseMarketDbContext dbContext, IConfiguration configuration)
+        public UserController(EclipseMarketDbContext dbContext, IConfiguration configuration, IEmailService emailService)
         {
             _dbContext = dbContext;
             Configuration = configuration;
+            _emailService = emailService;
         }
         [HttpGet]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
@@ -180,6 +183,9 @@ namespace Eclipse_Market.Controllers
             };
             _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();
+
+            _emailService.SendRegistartionEmail("givanov@eclipse.com", userToAdd);
+
             return Ok();
         }
         [HttpPost]
