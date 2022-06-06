@@ -18,7 +18,7 @@ namespace Eclipse_Market.Models.DB
         [Required]
         public string PhoneNumber { get; set; }
         public ICollection<Listing> CurrentListings { get; set; }
-        public ICollection<ListingUser> FavouriteListings { get; set; }
+        public ICollection<ListingUser> BookmarkedListings { get; set; }
         [Required]
         public int RoleId { get; set; }
         public Role Role { get; set; }

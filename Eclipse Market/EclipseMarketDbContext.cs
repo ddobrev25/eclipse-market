@@ -26,7 +26,7 @@ namespace Eclipse_Market
                 .HasKey(ul => new { ul.UserId, ul.ListingId });
             modelBuilder.Entity<ListingUser>()
                 .HasOne(ul => ul.User)
-                .WithMany(u => u.FavouriteListings)
+                .WithMany(u => u.BookmarkedListings)
                 .HasForeignKey(ul => ul.UserId);
             modelBuilder.Entity<ListingUser>()
                 .HasOne(ul => ul.Listing)

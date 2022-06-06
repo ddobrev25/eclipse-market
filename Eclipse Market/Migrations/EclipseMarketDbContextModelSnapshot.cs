@@ -35,7 +35,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Claims");
+                    b.ToTable("Claims", (string)null);
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
@@ -79,7 +79,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ListingCategoryId");
 
-                    b.ToTable("Listings");
+                    b.ToTable("Listings", (string)null);
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.ListingCategory", b =>
@@ -96,7 +96,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ListingCategories");
+                    b.ToTable("ListingCategories", (string)null);
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.ListingUser", b =>
@@ -111,7 +111,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ListingId");
 
-                    b.ToTable("ListingUsers");
+                    b.ToTable("ListingUsers", (string)null);
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Role", b =>
@@ -125,7 +125,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.RoleClaim", b =>
@@ -140,7 +140,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ClaimId");
 
-                    b.ToTable("RoleClaims");
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.User", b =>
@@ -182,7 +182,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>

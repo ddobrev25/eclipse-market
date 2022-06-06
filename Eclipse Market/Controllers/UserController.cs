@@ -30,7 +30,7 @@ namespace Eclipse_Market.Controllers
         public ActionResult<List<UserGetAllResponse>> GetAll()
         {
             var users = _dbContext.Users
-                .Include(x => x.FavouriteListings)
+                .Include(x => x.BookmarkedListings)
                 .Include(x => x.CurrentListings)
                 .Select(x => new UserGetAllResponse()
                 {
@@ -45,7 +45,7 @@ namespace Eclipse_Market.Controllers
                 }).ToList();
             foreach (var user in users)
             {
-                user.FavouriteListings = _dbContext.ListingUsers
+                user.BookmarkedListings = _dbContext.ListingUsers
                     .Where(x => x.UserId == user.Id)
                     .Select(x => new ListingGetAllResponse()
                     {
@@ -100,7 +100,7 @@ namespace Eclipse_Market.Controllers
                 UserName = user.UserName,
                 RoleId = user.RoleId
             };
-            response.FavouriteListings = _dbContext.ListingUsers
+            response.BookmarkedListings = _dbContext.ListingUsers
                 .Where(x => x.UserId == user.Id)
                 .Select(x => new ListingGetAllResponse()
                 {
