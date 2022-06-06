@@ -13,6 +13,7 @@ namespace Eclipse_Market
         public DbSet<Role> Roles { get; set; }
         public DbSet<Claim> Claims { get; set; }
         public DbSet<RoleClaim> RoleClaims { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
