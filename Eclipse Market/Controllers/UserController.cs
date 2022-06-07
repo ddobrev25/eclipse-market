@@ -35,6 +35,7 @@ namespace Eclipse_Market.Controllers
             var users = _dbContext.Users
                 .Include(x => x.BookmarkedListings)
                 .Include(x => x.CurrentListings)
+                .Include(x => x.Messages)
                 .Select(x => new UserGetAllResponse()
                 {
                     Id = x.Id,
@@ -75,6 +76,17 @@ namespace Eclipse_Market.Controllers
                         Title = x.Title,
                         Views = x.Views,
                         ListingCategoryId = x.ListingCategoryId
+                    });
+                user.Messages = _dbContext.Messages
+                    .Where(x => x.RecieverId == user.Id)
+                    .Select(x => new MessageGetAllResponse
+                    {
+                        Id = x.Id,
+                        SenderId = x.SenderId,
+                        RecieverId = x.RecieverId,
+                        ListingId = x.ListingId,
+                        Body = x.Body,
+                        Title = x.Title
                     });
             }
             return Ok(users);
@@ -129,6 +141,17 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views,
                 });
+            response.Messages = _dbContext.Messages
+               .Where(x => x.RecieverId == user.Id)
+               .Select(x => new MessageGetAllResponse
+               {
+                   Id = x.Id,
+                   SenderId = x.SenderId,
+                   RecieverId = x.RecieverId,
+                   ListingId = x.ListingId,
+                   Body = x.Body,
+                   Title = x.Title
+               });
             return Ok(response);
         }
         [HttpPost]
