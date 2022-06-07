@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AccountsService } from 'src/app/_services/user.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/_services/user.service';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { IUserGetOneResponse } from 'src/app/_models/user.model';
@@ -17,7 +17,7 @@ export class AccountSettingsComponent implements OnInit {
 
   updateSubscription: Subscription | undefined;
 
-  constructor(private accountService: AccountsService,
+  constructor(private userService: UserService,
               private route: ActivatedRoute,
               private router: Router,
               private messageService: MessageService) { }
@@ -28,7 +28,7 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   onLoadUserInfo() {
-    this.updateSubscription = this.accountService.getInfo(this.userId).subscribe({
+    this.updateSubscription = this.userService.getInfo(this.userId).subscribe({
       next: (response: any) => {
         this.userInfo = response;
       },
@@ -68,7 +68,7 @@ export class AccountSettingsComponent implements OnInit {
         "RoleId": this.userInfo?.roleId
       };
   
-      this.updateSubscription = this.accountService.update(body).subscribe({
+      this.updateSubscription = this.userService.update(body).subscribe({
         next: data => {
           this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: `Changes applied!`, life: 3000});
           this.updateForm.reset();

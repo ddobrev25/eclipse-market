@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AccountsService } from '../_services/user.service';
+import { UserService } from '../_services/user.service';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import {MessageService} from 'primeng/api';
 
@@ -22,7 +22,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   registerSubscription: Subscription | undefined;
 
-  constructor(private accountService: AccountsService,
+  constructor(private userService: UserService,
               private router: Router,
               private jwtHelper: JwtHelperService,
               private messageService: MessageService) { }
@@ -52,7 +52,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       "userName": this.loginForm.get('userName')?.value,
       "password": this.loginForm.get('password')?.value
     }
-    this.accountService.logIn(body).subscribe({
+    this.userService.logIn(body).subscribe({
       next: token => {
         if (token !== null) {
           const jwtToken = this.parseObject(token)
@@ -107,7 +107,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       "RoleId": "0"
     };
 
-    this.registerSubscription = this.accountService.register(body).subscribe({
+    this.registerSubscription = this.userService.register(body).subscribe({
       next: data => {
         this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: 'Successful registration!', life: 3000});
         this.router.navigate(['/home']);
