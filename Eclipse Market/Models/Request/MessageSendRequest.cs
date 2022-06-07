@@ -1,6 +1,6 @@
 ﻿namespace Eclipse_Market.Models.Request
 {
-    public class MessageSendMessageRequest
+    public class MessageSendRequest
     {
         public int SenderId { get; set; }
         public int RecieverId { get; set; }

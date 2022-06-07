@@ -34,7 +34,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendMessage(MessageSendMessageRequest request)
+        public ActionResult Send(MessageSendRequest request)
         {
             if(!_dbContext.Users.Any(x => x.Id == request.SenderId))
             {
@@ -64,6 +64,20 @@ namespace Eclipse_Market.Controllers
             };
 
             _dbContext.Messages.Add(messageToAdd);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+        [HttpDelete]
+        public ActionResult Delete(MessageDeleteRequest request)
+        {
+            var messageToDelete = _dbContext.Messages.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if(messageToDelete == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            _dbContext.Messages.Remove(messageToDelete);
             _dbContext.SaveChanges();
             return Ok();
         }
