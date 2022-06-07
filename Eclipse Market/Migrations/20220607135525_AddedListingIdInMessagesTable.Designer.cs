@@ -3,6 +3,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220607135525_AddedListingIdInMessagesTable")]
+    partial class AddedListingIdInMessagesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,19 +131,16 @@ namespace Eclipse_Market.Migrations
                     b.Property<int>("ListingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RecieverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("RecieverId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Messages");
                 });
@@ -257,13 +256,13 @@ namespace Eclipse_Market.Migrations
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Message", b =>
                 {
-                    b.HasOne("Eclipse_Market.Models.DB.User", "Reciever")
+                    b.HasOne("Eclipse_Market.Models.DB.User", "User")
                         .WithMany("Messages")
-                        .HasForeignKey("RecieverId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Reciever");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.RoleClaim", b =>
