@@ -27,6 +27,8 @@ import { AccountSettingsComponent } from './accounts/account-detail/account-sett
 import {ToastModule} from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ErrorInterceptor } from './_interceptors/error-handler.interceptor';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { ErrorInterceptor } from './_interceptors/error-handler.interceptor';
     SpinnerComponent,
     AccountListingsComponent,
     AccountMessagesComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    AdminPanelComponent,
+    AdminManageComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,8 @@ import { ErrorInterceptor } from './_interceptors/error-handler.interceptor';
     ReactiveFormsModule,
     HttpClientModule,
     NgHttpLoaderModule.forRoot(),
-    ToastModule
+    ToastModule,
+    TableModule
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,

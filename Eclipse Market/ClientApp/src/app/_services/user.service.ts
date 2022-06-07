@@ -5,7 +5,7 @@ import { IUserGetAllResponse, IUserGetOneResponse } from "../_models/user.model"
 @Injectable({
     providedIn: 'root'
 })
-export class AccountsService {
+export class UserService {
     
     constructor(private http: HttpClient) {}
     
