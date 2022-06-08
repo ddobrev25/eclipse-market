@@ -76,6 +76,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddCors();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 var app = builder.Build();
 

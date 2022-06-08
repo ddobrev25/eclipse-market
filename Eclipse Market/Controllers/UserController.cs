@@ -21,20 +21,21 @@ namespace Eclipse_Market.Controllers
     {
         private EclipseMarketDbContext _dbContext;
         private IEmailService _emailService;
+        private IJwtService _jwtService;
         public IConfiguration Configuration { get; }
-        public UserController(EclipseMarketDbContext dbContext, IConfiguration configuration, IEmailService emailService)
+        public UserController(EclipseMarketDbContext dbContext, IConfiguration configuration, IEmailService emailService, IJwtService jwtService)
         {
             _dbContext = dbContext;
             Configuration = configuration;
             _emailService = emailService;
+            _jwtService = jwtService;
         }
+
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<List<UserGetAllResponse>> GetAll()
         {
-
-            string? userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
-            if (userRoleName == "admin")
+            if (_jwtService.GetUserRoleNameFromToken(User) == "admin")
             {
                 var users = _dbContext.Users
                     .Include(x => x.BookmarkedListings)
@@ -105,11 +106,8 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<UserGetByIdResponse> GetById(int id)
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 
-            string? userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
-
-            if (userRoleName == "admin")
+            if (_jwtService.GetUserRoleNameFromToken(User) == "admin")
             {
                 //Find the user in the database with the given id
                 var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
@@ -178,10 +176,7 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<UserGetByIdResponse> GetInfo()
         {
-            int? userId = int.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
-
-            string? userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
-            var user = _dbContext.Users.Where(x => x.Id == userId).FirstOrDefault();
+            var user = _dbContext.Users.Where(x => x.Id == _jwtService.GetUserIdFromToken(User)).FirstOrDefault();
 
             if(user == null)
             {
@@ -348,11 +343,8 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
         public ActionResult Update(UserUpdateRequest request)
         {
-            string userId = User.FindFirst(ClaimTypes.Name)?.Value;
 
-            string userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
-
-            if (request.Id == int.Parse(userId) || userRoleName == "admin")
+            if (request.Id == _jwtService.GetUserIdFromToken(User) || _jwtService.GetUserRoleNameFromToken(User) == "admin")
             {
 
                 var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
@@ -416,7 +408,7 @@ namespace Eclipse_Market.Controllers
             }
             else
             {
-                return BadRequest();
+                return Forbid();
             }
         }
         [HttpDelete]
