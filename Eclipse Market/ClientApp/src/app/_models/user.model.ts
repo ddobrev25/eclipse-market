@@ -1,23 +1,17 @@
-export interface IUserGetOneResponse {
-    firstName: string;
-    lastName: string;
-    userName: string;
-    email: string;
-    password: string;
-    phoneNumber: string;
-    currentListings?: string[];
-    favouriteListings?: string[];
-    roleId: number;
+
+export interface IUserResponse {
+    Id: number;
+    FirstName: string;
+    LastName: string;
+    UserName: string;
+    Email: string;
+    Password: string;
+    PhoneNumber: string;
+    CurrentListings?: string[];
+    BookmarkedListings?: string[];
+    Messages?: string[];
+    RoleId: number;
 }
-export interface IUserGetAllResponse {
-    id: number;
-    firstName: string;
-    lastName: string;
-    userName: string;
-    email: string;
-    password: string;
-    phoneNumber: string;
-    currentListings?: string[];
-    favouriteListings?: string[];
-    roleId: number;
-}
+
+export type IUser = IUserResponse;
+export type IUsers = IUserResponse[];

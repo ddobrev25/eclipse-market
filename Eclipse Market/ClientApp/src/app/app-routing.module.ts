@@ -12,7 +12,6 @@ import { HomeComponent } from './home/home.component';
 import { ListingsComponent } from './listings/listings.component';
 import { AccountGuardService } from './_guards/account.guard.service';
 import { AdminGuard } from './_guards/admin.guard.service';
-import { AuthGuardService } from './_guards/auth.guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo:  'home', pathMatch: 'full'},
@@ -20,7 +19,7 @@ const routes: Routes = [
   { path: 'auth', component: AuthComponent },
   { path: 'listings', component: ListingsComponent },
   { path: 'account', component: AccountsComponent, canActivate: [AccountGuardService]},
-  { path: 'account/:id', component: AccountDetailComponent, canActivate: [AuthGuardService], children: [
+  { path: 'account', component: AccountDetailComponent, children: [
     { path: 'listings', component: AccountListingsComponent },
     { path: 'messages', component: AccountMessagesComponent },
     { path: 'settings', component: AccountSettingsComponent },
