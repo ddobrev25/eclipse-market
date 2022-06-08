@@ -29,27 +29,108 @@ namespace Eclipse_Market.Controllers
             _emailService = emailService;
         }
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<List<UserGetAllResponse>> GetAll()
         {
-            var users = _dbContext.Users
-                .Include(x => x.BookmarkedListings)
-                .Include(x => x.CurrentListings)
-                .Include(x => x.Messages)
-                .Select(x => new UserGetAllResponse()
-                {
-                    Id = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    UserName = x.UserName,
-                    Email = x.Email,
-                    Password = x.Password,
-                    PhoneNumber = x.PhoneNumber,
-                    RoleId = x.RoleId
-                }).ToList();
-            foreach (var user in users)
+
+            string? userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (userRoleName == "admin")
             {
-                user.BookmarkedListings = _dbContext.ListingUsers
+                var users = _dbContext.Users
+                    .Include(x => x.BookmarkedListings)
+                    .Include(x => x.CurrentListings)
+                    .Include(x => x.Messages)
+                    .Select(x => new UserGetAllResponse()
+                    {
+                        Id = x.Id,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        UserName = x.UserName,
+                        Email = x.Email,
+                        Password = x.Password,
+                        PhoneNumber = x.PhoneNumber,
+                        RoleId = x.RoleId
+                    }).ToList();
+                foreach (var user in users)
+                {
+                    user.BookmarkedListings = _dbContext.ListingUsers
+                        .Where(x => x.UserId == user.Id)
+                        .Select(x => new ListingGetAllResponse()
+                        {
+                            Id = x.ListingId,
+                            AuthorId = x.Listing.AuthorId,
+                            Description = x.Listing.Description,
+                            Location = x.Listing.Location,
+                            Price = x.Listing.Price,
+                            TimesBookmarked = x.Listing.TimesBookmarked,
+                            Title = x.Listing.Title,
+                            Views = x.Listing.Views,
+                            ListingCategoryId = x.Listing.ListingCategoryId
+                        });
+                    user.CurrentListings = _dbContext.Listings
+                        .Where(x => x.AuthorId == user.Id)
+                        .Select(x => new ListingGetAllResponse()
+                        {
+                            Id = x.Id,
+                            AuthorId = x.AuthorId,
+                            Description = x.Description,
+                            Location = x.Location,
+                            Price = x.Price,
+                            TimesBookmarked = x.TimesBookmarked,
+                            Title = x.Title,
+                            Views = x.Views,
+                            ListingCategoryId = x.ListingCategoryId
+                        });
+                    user.Messages = _dbContext.Messages
+                        .Where(x => x.RecieverId == user.Id)
+                        .Select(x => new MessageGetAllResponse
+                        {
+                            Id = x.Id,
+                            SenderId = x.SenderId,
+                            RecieverId = x.RecieverId,
+                            ListingId = x.ListingId,
+                            Body = x.Body,
+                            Title = x.Title
+                        });
+                }
+                return Ok(users);
+            }
+            else
+            {
+                return Forbid();
+            }
+        }
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
+        public ActionResult<UserGetByIdResponse> GetById(int id)
+        {
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
+
+            string? userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userRoleName == "admin")
+            {
+                //Find the user in the database with the given id
+                var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
+
+                if (user == null)
+                {
+                    return BadRequest(ErrorMessages.InvalidId);
+                }
+
+                //Setting up the response object
+                UserGetByIdResponse response = new UserGetByIdResponse()
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Password = user.Password,
+                    PhoneNumber = user.PhoneNumber,
+                    UserName = user.UserName,
+                    RoleId = user.RoleId
+                };
+                response.BookmarkedListings = _dbContext.ListingUsers
                     .Where(x => x.UserId == user.Id)
                     .Select(x => new ListingGetAllResponse()
                     {
@@ -61,9 +142,8 @@ namespace Eclipse_Market.Controllers
                         TimesBookmarked = x.Listing.TimesBookmarked,
                         Title = x.Listing.Title,
                         Views = x.Listing.Views,
-                        ListingCategoryId = x.Listing.ListingCategoryId
                     });
-                user.CurrentListings = _dbContext.Listings
+                response.CurrentListings = _dbContext.Listings
                     .Where(x => x.AuthorId == user.Id)
                     .Select(x => new ListingGetAllResponse()
                     {
@@ -75,36 +155,39 @@ namespace Eclipse_Market.Controllers
                         TimesBookmarked = x.TimesBookmarked,
                         Title = x.Title,
                         Views = x.Views,
-                        ListingCategoryId = x.ListingCategoryId
                     });
-                user.Messages = _dbContext.Messages
-                    .Where(x => x.RecieverId == user.Id)
-                    .Select(x => new MessageGetAllResponse
-                    {
-                        Id = x.Id,
-                        SenderId = x.SenderId,
-                        RecieverId = x.RecieverId,
-                        ListingId = x.ListingId,
-                        Body = x.Body,
-                        Title = x.Title
-                    });
+                response.Messages = _dbContext.Messages
+                   .Where(x => x.RecieverId == user.Id)
+                   .Select(x => new MessageGetAllResponse
+                   {
+                       Id = x.Id,
+                       SenderId = x.SenderId,
+                       RecieverId = x.RecieverId,
+                       ListingId = x.ListingId,
+                       Body = x.Body,
+                       Title = x.Title
+                   });
+                return Ok(response);
             }
-            return Ok(users);
+            else
+            {
+                return Forbid();
+            }
         }
-
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
-        public ActionResult<UserGetByIdResponse> GetById(int id)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
+        public ActionResult<UserGetByIdResponse> GetInfo()
         {
-            //Find the user in the database with the given id
-            var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
+            int? userId = int.Parse(User.FindFirst(ClaimTypes.Name)?.Value);
 
-            if (user == null)
+            string? userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
+            var user = _dbContext.Users.Where(x => x.Id == userId).FirstOrDefault();
+
+            if(user == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
-            //Setting up the response object
             UserGetByIdResponse response = new UserGetByIdResponse()
             {
                 Email = user.Email,
@@ -262,15 +345,15 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPut]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
         public ActionResult Update(UserUpdateRequest request)
         {
-            //string userId = User.FindFirst(ClaimTypes.Name)?.Value;
+            string userId = User.FindFirst(ClaimTypes.Name)?.Value;
 
-            //string userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
+            string userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            //if (request.Id == int.Parse(userId) || userRoleName == "admin")
-            //{
+            if (request.Id == int.Parse(userId) || userRoleName == "admin")
+            {
 
                 var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
 
@@ -331,13 +414,13 @@ namespace Eclipse_Market.Controllers
                 _dbContext.SaveChanges();
                 return Ok();
             }
-/*            else
+            else
             {
                 return BadRequest();
-            }*/
+            }
         }
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserDelete")]
         public ActionResult Delete(UserDeleteRequest request)
         {
             var userForDelete = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();

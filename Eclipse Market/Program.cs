@@ -31,19 +31,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("GetUser", policy =>
-        policy.RequireClaim("RoleClaim", "GetUserClaim"));
-    options.AddPolicy("UpdateUser", policy =>
-        policy.RequireClaim("RoleClaim", "UpdateUserClaim"));
-    options.AddPolicy("DeleteUser", policy =>
-        policy.RequireClaim("RoleClaim", "DeleteUserClaim"));
+    options.AddPolicy("UserGet", policy =>
+        policy.RequireClaim("RoleClaim", "UserGetClaim"));
+    options.AddPolicy("UserUpdate", policy =>
+        policy.RequireClaim("RoleClaim", "UserUpdateClaim"));
+    options.AddPolicy("UserDelete", policy =>
+        policy.RequireClaim("RoleClaim", "UserDeleteClaim"));
 
-    options.AddPolicy("GetListing", policy =>
-        policy.RequireClaim("RoleClaim", "GetListingClaim"));
-    options.AddPolicy("UpdateListing", policy =>
-        policy.RequireClaim("RoleClaim", "UpdateListingClaim"));
-    options.AddPolicy("DeleteListing", policy =>
-        policy.RequireClaim("RoleClaim", "DeleteListingClaim"));
+    options.AddPolicy("ListingGet", policy =>
+        policy.RequireClaim("RoleClaim", "ListingGetClaim"));
+    options.AddPolicy("ListingUpdate", policy =>
+        policy.RequireClaim("RoleClaim", "ListingUpdateClaim"));
+    options.AddPolicy("ListingDelete", policy =>
+        policy.RequireClaim("RoleClaim", "ListingDeleteClaim"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
