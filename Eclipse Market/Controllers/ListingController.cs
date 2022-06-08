@@ -1,6 +1,9 @@
 ﻿using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
+using Eclipse_Market.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eclipse_Market.Controllers
@@ -10,12 +13,14 @@ namespace Eclipse_Market.Controllers
     public class ListingController : ControllerBase
     {
         private EclipseMarketDbContext _dbContext;
+        private IJwtService _jwtService;
         public IConfiguration Configuration { get; }
 
-        public ListingController(EclipseMarketDbContext dbContext, IConfiguration configuration)
+        public ListingController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService)
         {
             _dbContext = dbContext;
             Configuration = configuration;
+            _jwtService = jwtService;
         }
 
         [HttpGet]
@@ -87,6 +92,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingUpdate")]
         public ActionResult Update(ListingUpdateRequest request)
         {
             var listingForUpdate = _dbContext.Listings.Where(x => x.Id == request.Id).FirstOrDefault();
@@ -96,6 +102,11 @@ namespace Eclipse_Market.Controllers
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
+            if(_jwtService.GetUserRoleNameFromToken(User) != "admin" &&
+                _jwtService.GetUserIdFromToken(User) != listingForUpdate.AuthorId)
+            {
+                return Forbid();
+            }
 
             if (request.Description != string.Empty)
             {
@@ -142,6 +153,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingDelete")]
         public ActionResult Delete(ListingDeleteRequest request)
         {
             var listingForDelete = _dbContext.Listings.Where(x => x.Id == request.Id).FirstOrDefault();
@@ -149,6 +161,12 @@ namespace Eclipse_Market.Controllers
             if (listingForDelete == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            if (_jwtService.GetUserRoleNameFromToken(User) != "admin" &&
+                _jwtService.GetUserIdFromToken(User) != listingForDelete.AuthorId)
+            {
+                return Forbid();
             }
 
             _dbContext.Listings.Remove(listingForDelete);
