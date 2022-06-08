@@ -31,8 +31,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("UserControl", policy =>
-        policy.RequireClaim("RoleClaim", "UserControlClaim"));
+    options.AddPolicy("GetUser", policy =>
+        policy.RequireClaim("RoleClaim", "GetUserClaim"));
+    options.AddPolicy("UpdateUser", policy =>
+        policy.RequireClaim("RoleClaim", "UpdateUserClaim"));
+    options.AddPolicy("DeleteUser", policy =>
+        policy.RequireClaim("RoleClaim", "DeleteUserClaim"));
+
+    options.AddPolicy("GetListing", policy =>
+        policy.RequireClaim("RoleClaim", "GetListingClaim"));
+    options.AddPolicy("UpdateListing", policy =>
+        policy.RequireClaim("RoleClaim", "UpdateListingClaim"));
+    options.AddPolicy("DeleteListing", policy =>
+        policy.RequireClaim("RoleClaim", "DeleteListingClaim"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

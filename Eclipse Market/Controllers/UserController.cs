@@ -215,7 +215,8 @@ namespace Eclipse_Market.Controllers
         public ActionResult<UserLoginResponse> Login(UserLoginRequest request)
         {
             var user = _dbContext.Users
-                .Where(x => x.UserName == request.UserName && x.Password == ComputeSha256Hash(request.Password))
+                .Include(x => x.Role)
+                .Where(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName && x.Password == ComputeSha256Hash(request.Password))
                 .FirstOrDefault();
 
             if (user == null)
@@ -264,64 +265,76 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
         public ActionResult Update(UserUpdateRequest request)
         {
-            var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+            //string userId = User.FindFirst(ClaimTypes.Name)?.Value;
 
-            if (user == null)
-            {
-                return BadRequest(ErrorMessages.InvalidId);
-            }
+            //string userRoleName = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            //if (request.Id == int.Parse(userId) || userRoleName == "admin")
+            //{
+
+                var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+
+                if (user == null)
+                {
+                    return BadRequest(ErrorMessages.InvalidId);
+                }
 
 
-            if (request.UserName != string.Empty)
-            {
-                if (_dbContext.Users.Any(x => x.UserName == request.UserName))
+                if (request.UserName != string.Empty)
                 {
-                    return BadRequest("Username already taken.");
+                    if (_dbContext.Users.Any(x => x.UserName == request.UserName))
+                    {
+                        return BadRequest("Username already taken.");
+                    }
+                    if (request.UserName.Length > 100 || request.UserName.Length < 3)
+                    {
+                        return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
+                    }
+                    user.UserName = request.UserName;
                 }
-                if (request.UserName.Length > 100 || request.UserName.Length < 3)
+                if (request.Password != string.Empty)
                 {
-                    return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
+                    if (request.Password.Length < 8)
+                    {
+                        return BadRequest("Password must be longer than 8 symbols.");
+                    }
+                    user.Password = ComputeSha256Hash(request.Password);
                 }
-                user.UserName = request.UserName;
-            }
-            if (request.Password != string.Empty)
-            {
-                if (request.Password.Length < 8)
+                if (request.FirstName != string.Empty)
                 {
-                    return BadRequest("Password must be longer than 8 symbols.");
+                    user.FirstName = request.FirstName;
                 }
-                user.Password = ComputeSha256Hash(request.Password);
-            }
-            if (request.FirstName != string.Empty)
-            {
-                user.FirstName = request.FirstName;
-            }
-            if (request.LastName != string.Empty)
-            {
-                user.LastName = request.LastName;
-            }
-            if (request.Email != string.Empty)
-            {
-                if (_dbContext.Users.Any(x => x.Email == request.Email))
+                if (request.LastName != string.Empty)
                 {
-                    return BadRequest("Email already taken.");
+                    user.LastName = request.LastName;
                 }
-                user.Email = request.Email;
-            }
-            if (request.PhoneNumber != string.Empty)
-            {
-                user.PhoneNumber = request.PhoneNumber;
-            }
-            if (request.RoleId != 0)
-            {
-                if (!_dbContext.Roles.Any(x => x.Id == request.RoleId))
+                if (request.Email != string.Empty)
                 {
-                    return BadRequest("Role id is invalid.");
+                    if (_dbContext.Users.Any(x => x.Email == request.Email))
+                    {
+                        return BadRequest("Email already taken.");
+                    }
+                    user.Email = request.Email;
                 }
-                user.RoleId = request.RoleId;
+                if (request.PhoneNumber != string.Empty)
+                {
+                    user.PhoneNumber = request.PhoneNumber;
+                }
+                if (request.RoleId != 0)
+                {
+                    if (!_dbContext.Roles.Any(x => x.Id == request.RoleId))
+                    {
+                        return BadRequest("Role id is invalid.");
+                    }
+                    user.RoleId = request.RoleId;
+                }
+                _dbContext.SaveChanges();
+                return Ok();
             }
-            _dbContext.SaveChanges();
-            return Ok();
+/*            else
+            {
+                return BadRequest();
+            }*/
         }
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserControl")]
@@ -374,6 +387,7 @@ namespace Eclipse_Market.Controllers
 
             //Claim for the user id
             identityClaims.Add(new System.Security.Claims.Claim(ClaimTypes.Name, user.Id.ToString()));
+            identityClaims.Add(new System.Security.Claims.Claim(ClaimTypes.Role, user.Role.Name));
 
             //User custom claims
             var claims = _dbContext.RoleClaims
