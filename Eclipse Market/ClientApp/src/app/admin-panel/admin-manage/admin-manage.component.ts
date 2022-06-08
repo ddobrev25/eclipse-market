@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IUserGetAllResponse } from 'src/app/_models/user.model';
+import { IUsers } from 'src/app/_models/user.model';
 import { UserService } from 'src/app/_services/user.service';
 
 @Component({
@@ -8,20 +8,20 @@ import { UserService } from 'src/app/_services/user.service';
   styleUrls: ['./admin-manage.component.scss']
 })
 export class AdminManageComponent implements OnInit {
-  userList: IUserGetAllResponse[] = [];
+  userList: IUsers = [];
 
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-     this.userService.getAll().subscribe({
-       next: response => {
-        console.log(response[0])
-        this.userList.push(response[0])
-       },
-       error: err => {
-         console.log(err);
-       }
-      })
+    this.userService.getAll().subscribe({
+      next: (response: IUsers) => {
+        console.log(response)
+        this.userList = response;
+        this.userList.forEach(user => {
+          // user.Role = 'test';
+        });
+      }
+    })
   }
 
 }

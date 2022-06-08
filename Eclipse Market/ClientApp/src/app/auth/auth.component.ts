@@ -16,8 +16,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   isLoggedIn: boolean = false;
 
-  loggedUserId: any;
-
   registerMode: boolean = false;
 
   registerSubscription: Subscription | undefined;
@@ -59,9 +57,8 @@ export class AuthComponent implements OnInit, OnDestroy {
           localStorage.setItem('token', jwtToken);
           this.checkToken();
           const decodedToken = this.jwtHelper.decodeToken(jwtToken);
-          this.loggedUserId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-          localStorage.setItem('userId', this.loggedUserId);
-          this.router.navigate(['/account/', this.loggedUserId], {relativeTo: null});
+          let loggedUserId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+          this.router.navigate(['/account/', loggedUserId], {relativeTo: null});
         }
       }
     });
@@ -69,10 +66,10 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   onLogOut() {
     localStorage.removeItem('token');
-    localStorage.removeItem('userId');
     this.checkToken();
     this.router.navigate(['/home'])
   }
+
   //!/Login
   //!Register
   registerToggle(){
@@ -111,9 +108,6 @@ export class AuthComponent implements OnInit, OnDestroy {
       next: data => {
         this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: 'Successful registration!', life: 3000});
         this.router.navigate(['/home']);
-      },
-      error: err => {
-        this.messageService.add({key: 'tc', severity:'error', summary: 'Error', detail: err.error, life: 5000});
       }
     });
   }

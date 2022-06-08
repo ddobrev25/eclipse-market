@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { IUserGetOneResponse } from 'src/app/_models/user.model';
+import { IUser } from 'src/app/_models/user.model';
 
 @Component({
   selector: 'app-account-settings',
@@ -13,7 +13,7 @@ import { IUserGetOneResponse } from 'src/app/_models/user.model';
 })
 export class AccountSettingsComponent implements OnInit {
   userId = 0;
-  userInfo: IUserGetOneResponse | undefined;
+  userInfo: IUser | undefined;
 
   updateSubscription: Subscription | undefined;
 
@@ -28,12 +28,10 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   onLoadUserInfo() {
-    this.updateSubscription = this.userService.getInfo(this.userId).subscribe({
+    this.updateSubscription = this.userService.getInfo().subscribe({
       next: (response: any) => {
+        console.log(response)
         this.userInfo = response;
-      },
-      error: error => {
-        console.log(error.message);
       }
     });
   }
@@ -65,7 +63,7 @@ export class AccountSettingsComponent implements OnInit {
         "Email": this.updateForm.get('email')?.value,
         "Password": this.updateForm.get('password')?.value,
         "PhoneNumber": this.updateForm.get('phoneNumber')?.value,
-        "RoleId": this.userInfo?.roleId
+        "RoleId": this.userInfo?.RoleId
       };
   
       this.updateSubscription = this.userService.update(body).subscribe({
