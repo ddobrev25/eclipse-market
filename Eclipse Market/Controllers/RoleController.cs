@@ -1,6 +1,9 @@
 ﻿using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
+using Eclipse_Market.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +15,14 @@ namespace Eclipse_Market.Controllers
     {
         private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
+        private IJwtService _jwtService;
         public RoleController(EclipseMarketDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
             Configuration = configuration;
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleGet")]
         public ActionResult<List<RoleGetAllResponse>> GetAll()
         {
             var roles = _dbContext.Roles.Select(x => new RoleGetAllResponse()
@@ -34,6 +39,7 @@ namespace Eclipse_Market.Controllers
             return Ok(roles);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleAdd")]
         public ActionResult Add(RoleAddRequest request)
         {
             if (_dbContext.Roles.Any(x => x.Name == request.Name))
@@ -80,6 +86,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleUpdate")]
         public ActionResult Update(RoleUpdateRequest request)
         {
             var roleToUpdate = _dbContext.Roles.Where(x => x.Id == request.CurrentId).FirstOrDefault();
@@ -131,6 +138,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleDelete")]
         public ActionResult Delete(RoleDeleteRequest request)
         {
             var roleForDelete = _dbContext.Roles.Where(x => x.Id == request.Id).FirstOrDefault();

@@ -1,6 +1,8 @@
 ﻿using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eclipse_Market.Controllers
@@ -18,6 +20,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryGet")]
         public ActionResult<List<ListingCategoryGetAllResponse>> GetAll()
         {
             var listingCategories = _dbContext.ListingCategories.Select(x => new ListingCategoryGetAllResponse
@@ -28,6 +31,7 @@ namespace Eclipse_Market.Controllers
             return Ok(listingCategories);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryAdd")]
         public ActionResult Add(ListingCategoryAddRequest request)
         {
             if(_dbContext.ListingCategories.Any(x => x.Title == request.Title))
@@ -43,6 +47,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryDelete")]
         public ActionResult Delete(ListingCategoryDeleteRequest request)
         {
             var listingCategoryForDelete = _dbContext.ListingCategories.Where(x => x.Id == request.Id).FirstOrDefault();

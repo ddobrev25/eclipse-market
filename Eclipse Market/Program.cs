@@ -53,6 +53,13 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("RoleClaim", "RoleUpdateClaim"));
     options.AddPolicy("RoleDelete", policy =>
         policy.RequireClaim("RoleClaim", "RoleDeleteClaim"));
+
+    options.AddPolicy("ListingCategoryGet", policy =>
+        policy.RequireClaim("RoleClaim", "ListingCategoryGetClaim"));
+    options.AddPolicy("ListingCategoryAdd", policy =>
+        policy.RequireClaim("RoleClaim", "ListingCategoryAddClaim"));
+    options.AddPolicy("ListingCategoryDelete", policy =>
+        policy.RequireClaim("RoleClaim", "ListingCategoryDeleteClaim"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
