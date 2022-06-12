@@ -516,6 +516,51 @@ namespace Eclipse_Market.Controllers
             _dbContext.AddRange(newRoleClaims);
             _dbContext.SaveChanges();
         }
+        private void CreateAdminRole(int adminRoleId)
+        {
+            var role = new Role()
+            {
+                Id = adminRoleId,
+                Name = "admin"
+            };
+            List<string> adminClaims = new List<string>();       
+            adminClaims.Add("UserGetClaim");
+            adminClaims.Add("UserUpdateClaim");
+            adminClaims.Add("UserDeleteClaim");
+            adminClaims.Add("ListingGetClaim");
+            adminClaims.Add("ListingUpdateClaim");
+            adminClaims.Add("ListingDeleteClaim");
+            adminClaims.Add("RoleGetClaim");
+            adminClaims.Add("RoleAddClaim");
+            adminClaims.Add("RoleUpdateClaim");
+            adminClaims.Add("RoleDeleteClaim");
+            adminClaims.Add("ListingCategoryGetClaim");
+            adminClaims.Add("ListingCategoryAddClaim");
+            adminClaims.Add("ListingCategoryDeleteClaim");
+
+            List<Models.DB.Claim> roleClaims = new List<Models.DB.Claim>();
+            foreach (var adminClaim in adminClaims)
+            {
+                if (_dbContext.Claims.Any(x => x.Name == adminClaim))
+                {
+                    roleClaims.Add(_dbContext.Claims.Where(x => x.Name == adminClaim).First());
+                }
+                else
+                {
+                    var claimToAdd = new Models.DB.Claim() { Name = adminClaim };
+                    _dbContext.Claims.Add(claimToAdd);
+                    roleClaims.Add(claimToAdd);
+                }
+            }
+
+            var newRoleClaims = roleClaims.Select(x => new RoleClaim
+            {
+                Role = role,
+                Claim = x
+            });
+            _dbContext.RoleClaims.AddRange(newRoleClaims);
+            _dbContext.SaveChanges();
+        }
         private string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
