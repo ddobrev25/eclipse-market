@@ -29,6 +29,7 @@ import { MessageService } from 'primeng/api';
 import { ErrorInterceptor } from './_interceptors/error-handler.interceptor';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
+import { AccountInfoComponent } from './accounts/account-detail/account-info/account-info.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.co
     AccountMessagesComponent,
     AccountSettingsComponent,
     AdminPanelComponent,
-    AdminManageComponent
+    AdminManageComponent,
+    AccountInfoComponent
   ],
   imports: [
     BrowserModule,

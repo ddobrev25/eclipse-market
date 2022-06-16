@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <h4>Информация за акаунта</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col p-5">
+            <form
+                id="editForm"
+                [formGroup]="editForm"
+                (ngSubmit)="onEditUser()">
+                <label for="firstName" class="my-1">Име</label>
+                <input type="text"
+                        name="firstName"
+                        class="form-control mb-4"
+                        [placeholder]="userInfo?.firstName"
+                        formControlName="firstName">
+                <app-form-errors [control]="$any(editForm).get('firstName')" 
+                [max]="'50'" [min]="'2'"
+                [controlName]="'First name'"></app-form-errors>    
+                <label for="lastName" class="my-1">Фамилия</label>
+                <input type="text"
+                        name="lastName"
+                        [value]="userInfo?.lastName"
+                        class="form-control mb-4"
+                        formControlName="lastName">
+                <app-form-errors [control]="$any(editForm).get('lastName')" 
+                [max]="'50'" [min]="'2'"
+                [controlName]="'Last name'"></app-form-errors>
+                <label for="userName" class="my-1">Потребителско име</label>
+                <input type="text"
+                        name="userName"
+                        [value]="userInfo?.userName"
+                        class="form-control mb-4"
+                        formControlName="userName">
+                <app-form-errors [control]="$any(editForm).get('userName')" 
+                [max]="'50'" [min]="'2'"
+                [controlName]="'Username'"></app-form-errors>
+                <label for="email" class="my-1">Имейл адрес</label>
+                <input type="text"
+                        name="email"
+                        [value]="userInfo?.email"
+                        class="form-control mb-4"
+                        formControlName="email">
+                <app-form-errors [control]="$any(editForm).get('email')" [controlName]="'Email'"></app-form-errors>
+
+                <label for="email" class="my-1">Телефонен номер</label>
+                <input type="text"
+                        name="phoneNumber"
+                        [value]="userInfo?.phoneNumber"
+                        class="form-control"
+                        formControlName="phoneNumber">
+                <app-form-errors [control]="$any(editForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
+                <div class="d-flex justify-content-around">
+                    <button type="submit" class="btn btn-dark mt-4 py-1" [disabled]="!editForm.touched">Запази промените</button>
+                    <button type="submit" class="btn btn-danger mt-4 py-1" (click)="onDeleteUser()">Изтриване на профил</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

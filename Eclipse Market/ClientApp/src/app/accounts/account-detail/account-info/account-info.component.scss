@@ -1,0 +1,10 @@
+#editForm {
+    background-color: var(--grey-dark);
+    color: var(--text-light);
+    padding: 20px;
+}
+#editForm input {
+    background-color: var(--grey-medium);
+    color: var(--text-light);
+    border-color: red
+}

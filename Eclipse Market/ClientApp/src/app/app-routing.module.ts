@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountDetailComponent } from './accounts/account-detail/account-detail.component';
-import { AccountListingsComponent } from './accounts/account-detail/account-listings/account-listings.component';
+import { AccountInfoComponent } from './accounts/account-detail/account-info/account-info.component';
 import { AccountMessagesComponent } from './accounts/account-detail/account-messages/account-messages.component';
 import { AccountSettingsComponent } from './accounts/account-detail/account-settings/account-settings.component';
 import { AccountsComponent } from './accounts/accounts.component';
@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'listings', component: ListingsComponent },
   { path: 'account', component: AccountsComponent, canActivate: [AccountGuardService]},
   { path: 'account', component: AccountDetailComponent, children: [
-    { path: 'listings', component: AccountListingsComponent },
+    { path: 'info', component: AccountInfoComponent },
     { path: 'messages', component: AccountMessagesComponent },
     { path: 'settings', component: AccountSettingsComponent },
     { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard], children: [

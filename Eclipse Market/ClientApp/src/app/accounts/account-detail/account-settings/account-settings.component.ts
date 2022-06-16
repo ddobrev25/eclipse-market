@@ -12,7 +12,6 @@ import { IUser } from 'src/app/_models/user.model';
   styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent implements OnInit {
-  userId = 0;
   userInfo: IUser | undefined;
 
   updateSubscription: Subscription | undefined;
@@ -23,7 +22,6 @@ export class AccountSettingsComponent implements OnInit {
               private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.userId = +localStorage.getItem('userId')!;
     this.onLoadUserInfo();
   }
 
@@ -56,14 +54,14 @@ export class AccountSettingsComponent implements OnInit {
 
   onEditUser() {
       const body = {
-        "Id": this.userId,
+        "Id": this.userInfo?.id,
         "FirstName": this.updateForm.get('firstName')?.value,
         "LastName": this.updateForm.get('lastName')?.value,
         "UserName": this.updateForm.get('userName')?.value,
         "Email": this.updateForm.get('email')?.value,
         "Password": this.updateForm.get('password')?.value,
         "PhoneNumber": this.updateForm.get('phoneNumber')?.value,
-        "RoleId": this.userInfo?.RoleId
+        "RoleId": this.userInfo?.roleId
       };
   
       this.updateSubscription = this.userService.update(body).subscribe({

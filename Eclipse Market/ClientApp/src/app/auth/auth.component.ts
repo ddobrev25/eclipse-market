@@ -56,9 +56,7 @@ export class AuthComponent implements OnInit, OnDestroy {
           const jwtToken = this.parseObject(token)
           localStorage.setItem('token', jwtToken);
           this.checkToken();
-          const decodedToken = this.jwtHelper.decodeToken(jwtToken);
-          let loggedUserId = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-          this.router.navigate(['/account/', loggedUserId], {relativeTo: null});
+          this.router.navigate(['/account/info']);
         }
       }
     });

@@ -14,15 +14,14 @@ export class AccountGuardService implements CanActivate {
                 private jwtHelper: JwtHelperService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
-        const id = +localStorage.getItem('userId')!;
+        
         const token = localStorage.getItem('token');
 
         if (token && !this.jwtHelper.isTokenExpired(token)){
-            this.router.navigate(['/account/', id], {relativeTo: null});
+            this.router.navigate(['/account/info']);
             return false;
         }
-        this.router.navigate(['/auth'], {relativeTo: null});
+        this.router.navigate(['/auth']);
         return true;
     }
 }
