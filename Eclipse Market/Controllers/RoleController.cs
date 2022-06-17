@@ -22,7 +22,7 @@ namespace Eclipse_Market.Controllers
             Configuration = configuration;
         }
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleGet")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleGet")]
         public ActionResult<List<RoleGetAllResponse>> GetAll()
         {
             var roles = _dbContext.Roles.Select(x => new RoleGetAllResponse()
@@ -39,7 +39,7 @@ namespace Eclipse_Market.Controllers
             return Ok(roles);
         }
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleAdd")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleAdd")]
         public ActionResult Add(RoleAddRequest request)
         {
             if (_dbContext.Roles.Any(x => x.Name == request.Name))
@@ -86,7 +86,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPut]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleUpdate")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RoleUpdate")]
         public ActionResult Update(RoleUpdateRequest request)
         {
             var roleToUpdate = _dbContext.Roles.Where(x => x.Id == request.CurrentId).FirstOrDefault();

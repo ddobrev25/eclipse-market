@@ -16,25 +16,27 @@
         </div>
     </div>
 </div> -->
-<div class="container-md bg-light mx-auto">
-    <div class="row">
-        <div class="col-3">
-            <div class="nav-menu">
-                <ul class="list-group list-group-flush">
-                  <li class="d-flex justify-content-center"><h6>Моят акаунт</h6></li>
-                  <li class="links" routerLink="info" routerLinkActive="active-item"><i class="pi pi-user ms-3"></i> Лична Информация</li>
-                  <li class="links" routerLink="admin-panel" routerLinkActive="active-item"><i class="pi pi-lock ms-3"></i> Смяна на парола</li>
-                  <li class="links" routerLink="messages" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Съобщения</li>
-                </ul>
+<div class="content">
+    <div class="container-md mx-auto">
+        <div class="row">
+            <div class="col-sm-3 col-12">
+                <div class="nav-menu">
+                    <ul class="list-group list-group-flush" style="height: 200px;">
+                      <li class="d-flex justify-content-center"><h6>Моят акаунт</h6></li>
+                      <li class="links" routerLink="info" routerLinkActive="active-item"><i class="pi pi-user ms-3"></i> Лична Информация</li>
+                      <li class="links" routerLink="edit" routerLinkActive="active-item"><i class="pi pi-lock ms-3"></i> Смяна на парола</li>
+                      <li class="links" routerLink="messages" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Съобщения</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-9 col-12">
+                <router-outlet></router-outlet>
             </div>
         </div>
-        <div class="col-9">
-            <router-outlet></router-outlet>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            smh else
+        <div class="row">
+            <div class="col">
+                smh else
+            </div>
         </div>
     </div>
 </div>
