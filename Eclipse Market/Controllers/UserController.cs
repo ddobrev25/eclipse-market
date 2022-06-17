@@ -104,75 +104,104 @@ namespace Eclipse_Market.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
-        public ActionResult<UserGetByIdResponse> GetById(int id)
+        public ActionResult<UserGetByIdResponse> GetById(int? id = null)
         {
-
-            if (_jwtService.GetUserRoleNameFromToken(User) == "admin")
+            if(id == null)
             {
-                //Find the user in the database with the given id
-                var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
-
-                if (user == null)
-                {
-                    return BadRequest(ErrorMessages.InvalidId);
-                }
-
-                //Setting up the response object
-                UserGetByIdResponse response = new UserGetByIdResponse()
-                {
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Password = user.Password,
-                    PhoneNumber = user.PhoneNumber,
-                    UserName = user.UserName,
-                    RoleId = user.RoleId
-                };
-                response.BookmarkedListings = _dbContext.ListingUsers
-                    .Where(x => x.UserId == user.Id)
-                    .Select(x => new ListingGetAllResponse()
-                    {
-                        Id = x.ListingId,
-                        AuthorId = x.Listing.AuthorId,
-                        Description = x.Listing.Description,
-                        Location = x.Listing.Location,
-                        Price = x.Listing.Price,
-                        TimesBookmarked = x.Listing.TimesBookmarked,
-                        Title = x.Listing.Title,
-                        Views = x.Listing.Views,
-                    });
-                response.CurrentListings = _dbContext.Listings
-                    .Where(x => x.AuthorId == user.Id)
-                    .Select(x => new ListingGetAllResponse()
-                    {
-                        Id = x.Id,
-                        AuthorId = x.AuthorId,
-                        Description = x.Description,
-                        Location = x.Location,
-                        Price = x.Price,
-                        TimesBookmarked = x.TimesBookmarked,
-                        Title = x.Title,
-                        Views = x.Views,
-                    });
-                response.Messages = _dbContext.Messages
-                   .Where(x => x.RecieverId == user.Id)
-                   .Select(x => new MessageGetAllResponse
-                   {
-                       Id = x.Id,
-                       SenderId = x.SenderId,
-                       RecieverId = x.RecieverId,
-                       ListingId = x.ListingId,
-                       Body = x.Body,
-                       Title = x.Title
-                   });
-                return Ok(response);
+                id = _jwtService.GetUserIdFromToken(User);
             }
-            else
+
+            if(!(_jwtService.GetUserIdFromToken(User) == id || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
             {
                 return Forbid();
             }
+
+            var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
+
+            if(user == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            var response = new UserGetByIdResponse()
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
+            };
+            return Ok(response);
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
+        public ActionResult<UserGetByIdResponse> GetByIdFull(int id)
+        {
+
+            if (!(_jwtService.GetUserIdFromToken(User) == id || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
+            {
+                return Forbid();
+            }
+            //Find the user in the database with the given id
+            var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
+
+            if (user == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            //Setting up the response object
+            UserGetByIdResponse response = new UserGetByIdResponse()
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Password = user.Password,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName,
+                RoleId = user.RoleId
+            };
+            response.BookmarkedListings = _dbContext.ListingUsers
+                .Where(x => x.UserId == user.Id)
+                .Select(x => new ListingGetAllResponse()
+                {
+                    Id = x.ListingId,
+                    AuthorId = x.Listing.AuthorId,
+                    Description = x.Listing.Description,
+                    Location = x.Listing.Location,
+                    Price = x.Listing.Price,
+                    TimesBookmarked = x.Listing.TimesBookmarked,
+                    Title = x.Listing.Title,
+                    Views = x.Listing.Views,
+                });
+            response.CurrentListings = _dbContext.Listings
+                .Where(x => x.AuthorId == user.Id)
+                .Select(x => new ListingGetAllResponse()
+                {
+                    Id = x.Id,
+                    AuthorId = x.AuthorId,
+                    Description = x.Description,
+                    Location = x.Location,
+                    Price = x.Price,
+                    TimesBookmarked = x.TimesBookmarked,
+                    Title = x.Title,
+                    Views = x.Views,
+                });
+            response.Messages = _dbContext.Messages
+               .Where(x => x.RecieverId == user.Id)
+               .Select(x => new MessageGetAllResponse
+               {
+                   Id = x.Id,
+                   SenderId = x.SenderId,
+                   RecieverId = x.RecieverId,
+                   ListingId = x.ListingId,
+                   Body = x.Body,
+                   Title = x.Title
+               });
+            return Ok(response);
+        }
+/*        [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<UserGetByIdResponse> GetInfo()
         {
@@ -231,7 +260,7 @@ namespace Eclipse_Market.Controllers
                    Title = x.Title
                });
             return Ok(response);
-        }
+        }*/
         [HttpPost]
         public ActionResult Register(UserRegisterRequest request)
         {
@@ -344,72 +373,69 @@ namespace Eclipse_Market.Controllers
         public ActionResult Update(UserUpdateRequest request)
         {
 
-            if (request.Id == _jwtService.GetUserIdFromToken(User) || _jwtService.GetUserRoleNameFromToken(User) == "admin")
-            {
-
-                var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
-
-                if (user == null)
-                {
-                    return BadRequest(ErrorMessages.InvalidId);
-                }
-
-
-                if (request.UserName != string.Empty)
-                {
-                    if (_dbContext.Users.Any(x => x.UserName == request.UserName))
-                    {
-                        return BadRequest("Username already taken.");
-                    }
-                    if (request.UserName.Length > 100 || request.UserName.Length < 3)
-                    {
-                        return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
-                    }
-                    user.UserName = request.UserName;
-                }
-                if (request.Password != string.Empty)
-                {
-                    if (request.Password.Length < 8)
-                    {
-                        return BadRequest("Password must be longer than 8 symbols.");
-                    }
-                    user.Password = ComputeSha256Hash(request.Password);
-                }
-                if (request.FirstName != string.Empty)
-                {
-                    user.FirstName = request.FirstName;
-                }
-                if (request.LastName != string.Empty)
-                {
-                    user.LastName = request.LastName;
-                }
-                if (request.Email != string.Empty)
-                {
-                    if (_dbContext.Users.Any(x => x.Email == request.Email))
-                    {
-                        return BadRequest("Email already taken.");
-                    }
-                    user.Email = request.Email;
-                }
-                if (request.PhoneNumber != string.Empty)
-                {
-                    user.PhoneNumber = request.PhoneNumber;
-                }
-                if (request.RoleId != 0)
-                {
-                    if (!_dbContext.Roles.Any(x => x.Id == request.RoleId))
-                    {
-                        return BadRequest("Role id is invalid.");
-                    }
-                    user.RoleId = request.RoleId;
-                }
-                _dbContext.SaveChanges();
-                return Ok();
-            }
-            else
+            if (!(request.Id == _jwtService.GetUserIdFromToken(User) || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
             {
                 return Forbid();
             }
+
+            var user = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
+
+            if (user == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+
+            if (request.UserName != string.Empty)
+            {
+                if (_dbContext.Users.Any(x => x.UserName == request.UserName))
+                {
+                    return BadRequest("Username already taken.");
+                }
+                if (request.UserName.Length > 100 || request.UserName.Length < 3)
+                {
+                    return BadRequest("A username can not be shorter that 3 symbols or longer than 100 symbols.");
+                }
+                user.UserName = request.UserName;
+            }
+            if (request.Password != string.Empty)
+            {
+                if (request.Password.Length < 8)
+                {
+                    return BadRequest("Password must be longer than 8 symbols.");
+                }
+                user.Password = ComputeSha256Hash(request.Password);
+            }
+            if (request.FirstName != string.Empty)
+            {
+                user.FirstName = request.FirstName;
+            }
+            if (request.LastName != string.Empty)
+            {
+                user.LastName = request.LastName;
+            }
+            if (request.Email != string.Empty)
+            {
+                if (_dbContext.Users.Any(x => x.Email == request.Email))
+                {
+                    return BadRequest("Email already taken.");
+                }
+                user.Email = request.Email;
+            }
+            if (request.PhoneNumber != string.Empty)
+            {
+                user.PhoneNumber = request.PhoneNumber;
+            }
+            if (request.RoleId != 0)
+            {
+                if (!_dbContext.Roles.Any(x => x.Id == request.RoleId))
+                {
+                    return BadRequest("Role id is invalid.");
+                }
+                user.RoleId = request.RoleId;
+            }
+            _dbContext.SaveChanges();
+            return Ok();
         }
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserDelete")]

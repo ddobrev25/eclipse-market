@@ -9,13 +9,20 @@ namespace Eclipse_Market.Services
         {
             string? userIdRawValue = user.FindFirst(ClaimTypes.Name)?.Value;
             int userId;
-            if (int.TryParse(userIdRawValue, out userId))
+            if (userIdRawValue != null)
             {
-                return userId;
+                if (int.TryParse(userIdRawValue, out userId))
+                {
+                    return userId;
+                }
+                else
+                {
+                    throw new Exception("Could not parse id value from JWT claim to an integer");
+                }
             }
             else
             {
-                throw new Exception("Could not parse id value from JWT claim to an integer");
+                throw new Exception("Id value is null");
             }
         }
         public string GetUserRoleNameFromToken(ClaimsPrincipal user)
