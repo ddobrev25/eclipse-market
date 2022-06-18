@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'account', component: AccountDetailComponent, children: [
     { path: 'info', component: AccountInfoComponent },
     { path: 'messages', component: AccountMessagesComponent },
-    { path: 'settings', component: AccountSettingsComponent },
+    { path: 'edit', component: AccountSettingsComponent },
     { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard], children: [
       { path: 'manage-users', component: AdminManageComponent },
       { path: '**', redirectTo: 'manage-users', pathMatch: 'full' }

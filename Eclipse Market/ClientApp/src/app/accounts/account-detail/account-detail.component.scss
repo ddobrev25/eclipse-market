@@ -2,6 +2,9 @@ div {
     margin: 0;
     padding: 0;
 }
+.content { 
+    background:linear-gradient(127deg, var(--grey-dark), var(--text-dark));
+}
 // .col-10 {
 //     height: 100%;
 // }
@@ -52,6 +55,7 @@ div {
 //     }
 // }
 // //!/Menu
+
 .active {
     background-color: #455474 !important;
     border:#f1f4f8 solid 1px !important;

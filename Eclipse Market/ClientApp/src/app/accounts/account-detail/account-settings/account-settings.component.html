@@ -6,43 +6,9 @@
                 class="p-0 form"
                 (ngSubmit)="onEditUser()">
                 <div class="d-flex justify-content-center">
-                      <h3 class="mt-1">Редакция на профил</h3>        
+                      <h3 class="mt-1">Смяна на паролата</h3>        
                 </div>
-                <label for="firstName" class="my-1">Име</label>
-                <input type="text"
-                        name="firstName"
-                        class="form-control"
-                        formControlName="firstName">
-                <app-form-errors [control]="$any(updateForm).get('firstName')" 
-                [max]="'50'" [min]="'2'"
-                [controlName]="'First name'"></app-form-errors>
-                <hr>       
-                <label for="lastName" class="my-1">Фамилия</label>
-                <input type="text"
-                        name="lastName"
-                        class="form-control"
-                        formControlName="lastName">
-                <app-form-errors [control]="$any(updateForm).get('lastName')" 
-                [max]="'50'" [min]="'2'"
-                [controlName]="'Last name'"></app-form-errors>
-                <hr>
-                <label for="userName" class="my-1">Потребителско име</label>
-                <input type="text"
-                        name="userName"
-                        class="form-control"
-                        formControlName="userName">
-                <app-form-errors [control]="$any(updateForm).get('userName')" 
-                [max]="'50'" [min]="'2'"
-                [controlName]="'Username'"></app-form-errors>
-                <hr>
-                <label for="email" class="my-1">Имейл адрес</label>
-                <input type="text"
-                        name="email"
-                        class="form-control"
-                        formControlName="email">
-                <app-form-errors [control]="$any(updateForm).get('email')" [controlName]="'Email'"></app-form-errors>
-                <hr>
-                <label for="password" class="my-1">Парола</label>
+                <label for="password" class="my-1">Стара парола</label>
                 <input type="password"
                         name="password"
                         class="form-control"
@@ -51,7 +17,7 @@
                 [max]="'50'" [min]="'6'"
                 [controlName]="'Password'"></app-form-errors>
                 <hr>
-                <label for="confirmPassword" class="my-1">Потвърди парола</label>
+                <label for="confirmPassword" class="my-1">Нова парола</label>
                 <input type="password"
                         name="confirmPassword"
                         class="form-control"
@@ -60,17 +26,11 @@
                 <app-form-errors [control]="$any(updateForm).get('confirmPassword')" 
                 [max]="'50'" [min]="'6'"
                 [controlName]="'Password'"></app-form-errors>
-                <hr>
-                <label for="email" class="my-1">Телефонен номер</label>
-                <input type="text"
-                        name="phoneNumber"
-                        class="form-control"
-                        formControlName="phoneNumber">
-                <app-form-errors [control]="$any(updateForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
-                <hr>
-                <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.touched">Запази промените</button>
-                <button type="submit" class="btn btn-danger mt-4 ms-2 px-2 py-1" (click)="onDeleteUser()">Изтриване на профил</button>
-
+                <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.touched">Запази промените</button>
+                        <button type="submit" class="btn btn-danger mt-4 ms-2 px-2 py-1" (click)="onDeleteUser()">Изтриване на профил</button>
+                </div>
+                
             </form>
         </div>
     </div>
