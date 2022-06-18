@@ -332,7 +332,19 @@ namespace Eclipse_Market.Controllers
             }
 
             var token = CreateJwtToken(user);
-            return Ok(new UserLoginResponse(token));
+
+            var claims = _dbContext.RoleClaims
+                .Include(x => x.Claim)
+                .Where(x => x.RoleId == user.RoleId)
+                .Select(x => x.Claim.Name)
+                .ToList();
+
+            var response = new UserLoginResponse
+            {
+                Token = token,
+                Claims = claims
+            };
+            return Ok(response);
         }
         [HttpPost]
         public ActionResult BookmarkListing(UserBookmarkListingRequest request)
@@ -372,7 +384,6 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
         public ActionResult Update(UserUpdateRequest request)
         {
-
             if (!(request.Id == _jwtService.GetUserIdFromToken(User) || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
             {
                 return Forbid();
