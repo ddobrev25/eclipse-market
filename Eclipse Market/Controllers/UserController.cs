@@ -448,6 +448,32 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
+
+        [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
+        public ActionResult ChangePassword(UserChangePasswordRequest request)
+        {
+            var user = _dbContext.Users.Where(x => x.Id == _jwtService.GetUserIdFromToken(User)).First();
+
+            if(request.CurrentPassword == string.Empty || request.NewPassword == string.Empty)
+            {
+                return BadRequest();
+            }
+
+            if(ComputeSha256Hash(request.CurrentPassword) != user.Password)
+            {
+                return BadRequest("Password is not correct");
+            }
+
+            if (request.NewPassword.Length < 8)
+            {
+                return BadRequest("New password must be longer than 8 symbols.");
+            }
+
+            user.Password = ComputeSha256Hash(request.NewPassword);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserDelete")]
         public ActionResult Delete(UserDeleteRequest request)
