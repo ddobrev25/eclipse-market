@@ -1,35 +1,21 @@
-<!-- <div class="container-fluid">
-    <div class="row">
-        <div class="col-2">
-            <ul class="menu-list">
-                <li class="menu-item" routerLink="listings" routerLinkActive="active"><i class="pi pi-list"></i>  Обяви</li>
-                <li class="menu-item" routerLink="messages" routerLinkActive="active"><i class="pi pi-envelope"></i> Съобщения</li>
-                <li class="menu-item" routerLink="settings" routerLinkActive="active"><i class="pi pi-cog"></i> Настройки</li>
-                <li class="menu-item" routerLink="admin-panel" routerLinkActive="active"><i class="pi pi-users"></i> Admin</li>
-                <li class="menu-item bg-danger mt-5" id="logoutButton" (click)="onLogOut()"><i class="pi pi-sign-out"></i> Изход</li>
-            </ul>
-        </div>
-        <div class="col-10">
-            <div class="section">
-                <router-outlet></router-outlet>
-            </div>
-        </div>
-    </div>
-</div> -->
 <div class="content">
     <div class="container-md mx-auto">
         <div class="row">
             <div class="col-sm-3 col-12">
                 <div class="nav-menu">
-                    <ul class="list-group list-group-flush" style="height: 200px;">
+                    <ul class="list-group list-group-flush" id="menu">
                       <li class="d-flex justify-content-center"><h6>Моят акаунт</h6></li>
                       <li class="links" routerLink="info" routerLinkActive="active-item"><i class="pi pi-user ms-3"></i> Лична Информация</li>
                       <li class="links" routerLink="edit" routerLinkActive="active-item"><i class="pi pi-lock ms-3"></i> Смяна на парола</li>
                       <li class="links" routerLink="messages" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Съобщения</li>
+                      <li class="links" routerLink="listings" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Моите обяви</li>
+                      <li class="links" routerLink="admin-panel" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Admin panel</li>
+
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-9 col-12">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-8 col-12">
                 <router-outlet></router-outlet>
             </div>
         </div>

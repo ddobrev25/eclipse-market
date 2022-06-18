@@ -11,6 +11,7 @@ export interface IUserResponse {
     bookmarkedListings?: string[];
     messages?: string[];
     roleId: number;
+    role?: string;
 }
 
 export type IUser = IUserResponse;

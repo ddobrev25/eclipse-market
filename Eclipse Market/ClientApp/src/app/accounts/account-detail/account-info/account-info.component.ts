@@ -15,4 +15,5 @@ export class AccountInfoComponent implements OnInit {
   ngOnInit(): void {
     this.userInfo = this.accService.accountInfo;
   }
+
 }

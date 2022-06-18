@@ -1,37 +1,39 @@
 <div class="content">
     <div class="container-fluid">
-        <div class="col">
-                <form 
-                [formGroup]="updateForm"
-                class="p-0 form"
-                (ngSubmit)="onEditUser()">
-                <div class="d-flex justify-content-center">
-                      <h3 class="mt-1">Смяна на паролата</h3>        
+        <div class="row">
+                <div class="col p-0">
+                        <form 
+                        [formGroup]="updateForm"
+                        class="p-0 form"
+                        (ngSubmit)="onEditUser()">
+                        <div class="d-flex justify-content-center">
+                                <h4>Смяна на паролата</h4>        
+                        </div>
+                        <div class="info-container">
+                                <label for="password" class="my-1 ps-3">Стара парола</label>
+                                <input type="password"
+                                        name="password"
+                                        class="form-control mb-4"
+                                        formControlName="password">
+                                <app-form-errors [control]="$any(updateForm).get('password')" 
+                                [max]="'50'" [min]="'6'"
+                                [controlName]="'Password'"></app-form-errors>
+                                <label for="confirmPassword" class="my-1 ps-3">Нова парола</label>
+                                <input type="password"
+                                        name="confirmPassword"
+                                        class="form-control mb-4"
+                                        formControlName="confirmPassword">
+                                <span *ngIf="updateForm.errors?.['notmatched'] && updateForm.touched" class="text-danger">Password mismatch</span>
+                                <app-form-errors [control]="$any(updateForm).get('confirmPassword')" 
+                                [max]="'50'" [min]="'6'"
+                                [controlName]="'Password'"></app-form-errors>
+                                <div class="d-flex justify-content-around flex-sm-nowrap" id="buttons">
+                                        <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.touched">Запази промените</button>
+                                        <button type="submit" class="btn btn-danger mt-4 ms-4 px-2 py-1" id="" (click)="onDeleteUser()">Изтриване на профил</button>
+                                </div>
+                        </div>  
+                        </form>
                 </div>
-                <label for="password" class="my-1">Стара парола</label>
-                <input type="password"
-                        name="password"
-                        class="form-control"
-                        formControlName="password">
-                <app-form-errors [control]="$any(updateForm).get('password')" 
-                [max]="'50'" [min]="'6'"
-                [controlName]="'Password'"></app-form-errors>
-                <hr>
-                <label for="confirmPassword" class="my-1">Нова парола</label>
-                <input type="password"
-                        name="confirmPassword"
-                        class="form-control"
-                        formControlName="confirmPassword">
-                <span *ngIf="updateForm.errors?.['notmatched'] && updateForm.touched" class="text-danger">Password mismatch</span>
-                <app-form-errors [control]="$any(updateForm).get('confirmPassword')" 
-                [max]="'50'" [min]="'6'"
-                [controlName]="'Password'"></app-form-errors>
-                <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.touched">Запази промените</button>
-                        <button type="submit" class="btn btn-danger mt-4 ms-2 px-2 py-1" (click)="onDeleteUser()">Изтриване на профил</button>
-                </div>
-                
-            </form>
         </div>
     </div>
 </div>

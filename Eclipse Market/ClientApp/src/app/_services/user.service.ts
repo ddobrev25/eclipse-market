@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { IUsers } from "../_models/user.model";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +12,7 @@ export class UserService {
     
     url = "http://localhost:5001";
 
-    logIn(body: any) {
+    logIn(body: any): Observable<any> {
         var headers = new HttpHeaders({
             'Accept': 'application/json'
         });

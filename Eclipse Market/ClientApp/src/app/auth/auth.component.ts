@@ -51,10 +51,10 @@ export class AuthComponent implements OnInit, OnDestroy {
       "password": this.loginForm.get('password')?.value
     }
     this.userService.logIn(body).subscribe({
-      next: token => {
-        if (token !== null) {
-          const jwtToken = this.parseObject(token)
-          localStorage.setItem('token', jwtToken);
+      next: resp => {
+        if (resp.token !== null) {
+          console.log(resp.token)
+          localStorage.setItem('token', resp.token);
           this.checkToken();
           this.router.navigate(['/account/info']);
         }
@@ -110,14 +110,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     });
   }
   //!/Register
-
-  parseObject(obj: any)
-  {
-     for(var key in obj)
-     {
-        return obj[key];
-     }
-  }
 
   ngOnDestroy(): void {
     this.registerSubscription?.unsubscribe();
