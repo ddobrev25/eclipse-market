@@ -6,5 +6,6 @@ namespace Eclipse_Market.Services
     {
         int GetUserIdFromToken(ClaimsPrincipal user);
         string GetUserRoleNameFromToken(ClaimsPrincipal user);
+        List<string> GetUserClaimsFromToken(ClaimsPrincipal user);
     }
 }

@@ -3,9 +3,6 @@
     public class UserLoginResponse
     {
         public string Token { get; set; }
-        public UserLoginResponse(string token)
-        {
-            Token = token;
-        }
+        public List<string> Claims { get; set; }
     }
 }

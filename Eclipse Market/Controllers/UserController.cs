@@ -35,71 +35,68 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<List<UserGetAllResponse>> GetAll()
         {
-            if (_jwtService.GetUserRoleNameFromToken(User) == "admin")
-            {
-                var users = _dbContext.Users
-                    .Include(x => x.BookmarkedListings)
-                    .Include(x => x.CurrentListings)
-                    .Include(x => x.Messages)
-                    .Select(x => new UserGetAllResponse()
-                    {
-                        Id = x.Id,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                        UserName = x.UserName,
-                        Email = x.Email,
-                        Password = x.Password,
-                        PhoneNumber = x.PhoneNumber,
-                        RoleId = x.RoleId
-                    }).ToList();
-                foreach (var user in users)
-                {
-                    user.BookmarkedListings = _dbContext.ListingUsers
-                        .Where(x => x.UserId == user.Id)
-                        .Select(x => new ListingGetAllResponse()
-                        {
-                            Id = x.ListingId,
-                            AuthorId = x.Listing.AuthorId,
-                            Description = x.Listing.Description,
-                            Location = x.Listing.Location,
-                            Price = x.Listing.Price,
-                            TimesBookmarked = x.Listing.TimesBookmarked,
-                            Title = x.Listing.Title,
-                            Views = x.Listing.Views,
-                            ListingCategoryId = x.Listing.ListingCategoryId
-                        });
-                    user.CurrentListings = _dbContext.Listings
-                        .Where(x => x.AuthorId == user.Id)
-                        .Select(x => new ListingGetAllResponse()
-                        {
-                            Id = x.Id,
-                            AuthorId = x.AuthorId,
-                            Description = x.Description,
-                            Location = x.Location,
-                            Price = x.Price,
-                            TimesBookmarked = x.TimesBookmarked,
-                            Title = x.Title,
-                            Views = x.Views,
-                            ListingCategoryId = x.ListingCategoryId
-                        });
-                    user.Messages = _dbContext.Messages
-                        .Where(x => x.RecieverId == user.Id)
-                        .Select(x => new MessageGetAllResponse
-                        {
-                            Id = x.Id,
-                            SenderId = x.SenderId,
-                            RecieverId = x.RecieverId,
-                            ListingId = x.ListingId,
-                            Body = x.Body,
-                            Title = x.Title
-                        });
-                }
-                return Ok(users);
-            }
-            else
+            if (_jwtService.GetUserRoleNameFromToken(User) != "admin")
             {
                 return Forbid();
             }
+            var users = _dbContext.Users
+                .Include(x => x.BookmarkedListings)
+                .Include(x => x.CurrentListings)
+                .Include(x => x.Messages)
+                .Select(x => new UserGetAllResponse()
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    Password = x.Password,
+                    PhoneNumber = x.PhoneNumber,
+                    RoleId = x.RoleId
+                }).ToList();
+            foreach (var user in users)
+            {
+                user.BookmarkedListings = _dbContext.ListingUsers
+                    .Where(x => x.UserId == user.Id)
+                    .Select(x => new ListingGetAllResponse()
+                    {
+                        Id = x.ListingId,
+                        AuthorId = x.Listing.AuthorId,
+                        Description = x.Listing.Description,
+                        Location = x.Listing.Location,
+                        Price = x.Listing.Price,
+                        TimesBookmarked = x.Listing.TimesBookmarked,
+                        Title = x.Listing.Title,
+                        Views = x.Listing.Views,
+                        ListingCategoryId = x.Listing.ListingCategoryId
+                    });
+                user.CurrentListings = _dbContext.Listings
+                    .Where(x => x.AuthorId == user.Id)
+                    .Select(x => new ListingGetAllResponse()
+                    {
+                        Id = x.Id,
+                        AuthorId = x.AuthorId,
+                        Description = x.Description,
+                        Location = x.Location,
+                        Price = x.Price,
+                        TimesBookmarked = x.TimesBookmarked,
+                        Title = x.Title,
+                        Views = x.Views,
+                        ListingCategoryId = x.ListingCategoryId
+                    });
+                user.Messages = _dbContext.Messages
+                    .Where(x => x.RecieverId == user.Id)
+                    .Select(x => new MessageGetAllResponse
+                    {
+                        Id = x.Id,
+                        SenderId = x.SenderId,
+                        RecieverId = x.RecieverId,
+                        ListingId = x.ListingId,
+                        Body = x.Body,
+                        Title = x.Title
+                    });
+            }
+            return Ok(users);
         }
 
         [HttpGet]
@@ -128,6 +125,7 @@ namespace Eclipse_Market.Controllers
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Password = user.Password,
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber
@@ -136,8 +134,12 @@ namespace Eclipse_Market.Controllers
         }
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
-        public ActionResult<UserGetByIdResponse> GetByIdFull(int id)
+        public ActionResult<UserGetByIdFullResponse> GetByIdFull(int? id = null)
         {
+            if(id == null)
+            {
+                id = _jwtService.GetUserIdFromToken(User);
+            }
 
             if (!(_jwtService.GetUserIdFromToken(User) == id || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
             {
@@ -152,8 +154,9 @@ namespace Eclipse_Market.Controllers
             }
 
             //Setting up the response object
-            UserGetByIdResponse response = new UserGetByIdResponse()
+            UserGetByIdFullResponse response = new UserGetByIdFullResponse()
             {
+                Id = user.Id,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -201,66 +204,6 @@ namespace Eclipse_Market.Controllers
                });
             return Ok(response);
         }
-/*        [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
-        public ActionResult<UserGetByIdResponse> GetInfo()
-        {
-            var user = _dbContext.Users.Where(x => x.Id == _jwtService.GetUserIdFromToken(User)).FirstOrDefault();
-
-            if(user == null)
-            {
-                return BadRequest(ErrorMessages.InvalidId);
-            }
-
-            UserGetByIdResponse response = new UserGetByIdResponse()
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Password = user.Password,
-                PhoneNumber = user.PhoneNumber,
-                UserName = user.UserName,
-                RoleId = user.RoleId
-            };
-            response.BookmarkedListings = _dbContext.ListingUsers
-                .Where(x => x.UserId == user.Id)
-                .Select(x => new ListingGetAllResponse()
-                {
-                    Id = x.ListingId,
-                    AuthorId = x.Listing.AuthorId,
-                    Description = x.Listing.Description,
-                    Location = x.Listing.Location,
-                    Price = x.Listing.Price,
-                    TimesBookmarked = x.Listing.TimesBookmarked,
-                    Title = x.Listing.Title,
-                    Views = x.Listing.Views,
-                });
-            response.CurrentListings = _dbContext.Listings
-                .Where(x => x.AuthorId == user.Id)
-                .Select(x => new ListingGetAllResponse()
-                {
-                    Id = x.Id,
-                    AuthorId = x.AuthorId,
-                    Description = x.Description,
-                    Location = x.Location,
-                    Price = x.Price,
-                    TimesBookmarked = x.TimesBookmarked,
-                    Title = x.Title,
-                    Views = x.Views,
-                });
-            response.Messages = _dbContext.Messages
-               .Where(x => x.RecieverId == user.Id)
-               .Select(x => new MessageGetAllResponse
-               {
-                   Id = x.Id,
-                   SenderId = x.SenderId,
-                   RecieverId = x.RecieverId,
-                   ListingId = x.ListingId,
-                   Body = x.Body,
-                   Title = x.Title
-               });
-            return Ok(response);
-        }*/
         [HttpPost]
         public ActionResult Register(UserRegisterRequest request)
         {
@@ -332,7 +275,19 @@ namespace Eclipse_Market.Controllers
             }
 
             var token = CreateJwtToken(user);
-            return Ok(new UserLoginResponse(token));
+
+            var claims = _dbContext.RoleClaims
+                .Include(x => x.Claim)
+                .Where(x => x.RoleId == user.RoleId)
+                .Select(x => x.Claim.Name)
+                .ToList();
+
+            var response = new UserLoginResponse
+            {
+                Token = token,
+                Claims = claims
+            };
+            return Ok(response);
         }
         [HttpPost]
         public ActionResult BookmarkListing(UserBookmarkListingRequest request)
@@ -342,24 +297,21 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("Listing does not exist.");
             }
 
-            if (!_dbContext.Users.Any(x => x.Id == request.UserId))
-            {
-                return BadRequest("User does not exist.");
-            }
+            int userId = _jwtService.GetUserIdFromToken(User);
 
-            if (_dbContext.ListingUsers.Any(x => x.UserId == request.UserId && x.ListingId == request.ListingId))
+            if (_dbContext.ListingUsers.Any(x => x.UserId == userId && x.ListingId == request.ListingId))
             {
                 return BadRequest("Listing is already bookmarked by this user.");
             }
 
             var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First();
-            var user = _dbContext.Users.Where(x => x.Id == request.UserId).First();
+            var user = _dbContext.Users.Where(x => x.Id == userId).First();
 
             var listingUserToAdd = new ListingUser
             {
                 ListingId = request.ListingId,
                 Listing = listing,
-                UserId = request.UserId,
+                UserId = userId,
                 User = user
             };
 
@@ -372,6 +324,11 @@ namespace Eclipse_Market.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
         public ActionResult Update(UserUpdateRequest request)
         {
+
+            if(request.Id == 0)
+            {
+                request.Id = _jwtService.GetUserIdFromToken(User);
+            }
 
             if (!(request.Id == _jwtService.GetUserIdFromToken(User) || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
             {
@@ -437,10 +394,47 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
+
+        [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
+        public ActionResult ChangePassword(UserChangePasswordRequest request)
+        {
+            var user = _dbContext.Users.Where(x => x.Id == _jwtService.GetUserIdFromToken(User)).First();
+
+            if(request.CurrentPassword == string.Empty || request.NewPassword == string.Empty)
+            {
+                return BadRequest();
+            }
+
+            if(ComputeSha256Hash(request.CurrentPassword) != user.Password)
+            {
+                return BadRequest("Password is not correct");
+            }
+
+            if (request.NewPassword.Length < 8)
+            {
+                return BadRequest("New password must be longer than 8 symbols.");
+            }
+
+            user.Password = ComputeSha256Hash(request.NewPassword);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserDelete")]
         public ActionResult Delete(UserDeleteRequest request)
         {
+
+            if(request.Id == 0)
+            {
+                request.Id = _jwtService.GetUserIdFromToken(User);
+            }
+
+            if (!(request.Id == _jwtService.GetUserIdFromToken(User) || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
+            {
+                return Forbid();
+            }
+
             var userForDelete = _dbContext.Users.Where(x => x.Id == request.Id).FirstOrDefault();
 
             if (userForDelete == null)
@@ -460,18 +454,15 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("Listing does not exist.");
             }
 
-            if (!_dbContext.Users.Any(x => x.Id == request.UserId))
-            {
-                return BadRequest("User does not exist.");
-            }
+            int userId = _jwtService.GetUserIdFromToken(User);
 
-            if (!_dbContext.ListingUsers.Any(x => x.UserId == request.UserId && x.ListingId == request.ListingId))
+            if (!_dbContext.ListingUsers.Any(x => x.UserId == userId && x.ListingId == request.ListingId))
             {
                 return BadRequest("Listing is already not bookmarked by this user.");
             }
 
             var listingUserForDelete = _dbContext.ListingUsers
-                .Where(x => x.UserId == request.UserId && x.ListingId == request.ListingId)
+                .Where(x => x.UserId == userId && x.ListingId == request.ListingId)
                 .First();
             _dbContext.ListingUsers.Remove(listingUserForDelete);
 

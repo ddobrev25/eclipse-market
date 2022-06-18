@@ -30,9 +30,20 @@ namespace Eclipse_Market.Services
             string? userRoleName = user.FindFirst(ClaimTypes.Role)?.Value;
             if (userRoleName == null)
             {
-                throw new Exception("Could not extract user role name from jwt token");
+                throw new Exception("Could not extract user role name from JWT token");
             }
             return userRoleName;
+        }
+
+        public List<string> GetUserClaimsFromToken(ClaimsPrincipal user)
+        {
+            var claims = user.FindAll("RoleClaim")?.ToList();
+            if(claims == null)
+            {
+                throw new Exception("Could not extract user claims from JWT token");
+            }
+
+            return claims.Select(x => x.Value).ToList();
         }
     }
 }
