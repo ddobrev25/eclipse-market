@@ -52,11 +52,12 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
     this.userService.logIn(body).subscribe({
       next: resp => {
-        if (resp.token !== null) {
+        if (resp && resp.token !== null) {
           console.log(resp.token)
-          localStorage.setItem('token', resp.token);
+          localStorage.setItem('token', JSON.stringify(resp.token));
+          localStorage.setItem('claims', JSON.stringify(resp.claims));
           this.checkToken();
-          this.router.navigate(['/account/info']);
+          this.router.navigate(['/home']);
         }
       }
     });

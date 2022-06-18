@@ -16,13 +16,12 @@ export class ClaimAccessDirective {
   updateView(searchedClaim: string) {
     let hasRights = false;
     let userClaims = JSON.parse(localStorage.getItem('claims')!);
+    console.log(`Searched Claim ${searchedClaim}`)
 
     if(searchedClaim && userClaims && userClaims.length){
       userClaims.forEach((claim: string) => {
         if(claim === searchedClaim) {
           hasRights = true;
-        } else {
-          hasRights = false
         }
       });
     } else if (!searchedClaim) {
@@ -31,9 +30,11 @@ export class ClaimAccessDirective {
       this.viewContainer.clear();
     }
 
-    if(hasRights) {
+    if (hasRights) {
+      this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();
     }
+
   }
 }

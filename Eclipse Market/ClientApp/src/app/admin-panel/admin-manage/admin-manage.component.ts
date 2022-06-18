@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IUsers } from 'src/app/_models/user.model';
-import { AdminService } from 'src/app/_services/admin.service';
+import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-admin-manage',
@@ -10,11 +10,21 @@ import { AdminService } from 'src/app/_services/admin.service';
 export class AdminManageComponent implements OnInit {
   accounts?: IUsers;
 
-  constructor(private adminService: AdminService) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-    setTimeout(() => {}, 4000)
-    this.accounts = this.adminService.accounts;
+    this.userService.getAll().subscribe({
+      next: (resp) => {
+        this.accounts = resp;
+        this.accounts.forEach(account => {
+          if(account.roleId === 5) {
+            account.role = 'Admin'
+          } else if(account.roleId === 10) {
+            account.role = 'User'
+          }
+        });
+      }
+    })
   }
 
 }

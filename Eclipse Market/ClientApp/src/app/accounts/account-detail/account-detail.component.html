@@ -9,7 +9,7 @@
                       <li class="links" routerLink="edit" routerLinkActive="active-item"><i class="pi pi-lock ms-3"></i> Смяна на парола</li>
                       <li class="links" routerLink="messages" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Съобщения</li>
                       <li class="links" routerLink="listings" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Моите обяви</li>
-                      <li class="links" routerLink="admin-panel" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Admin panel</li>
+                      <li *appClaimAccess="'RoleGetClaim'" class="links" routerLink="admin-panel" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Admin panel</li>
 
                     </ul>
                 </div>

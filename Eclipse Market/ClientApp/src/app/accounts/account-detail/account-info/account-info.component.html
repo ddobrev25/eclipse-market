@@ -10,26 +10,26 @@
             <input type="text"
                     name="firstName"
                     class="form-control mb-4"
-                    [placeholder]="userInfo?.firstName">  
+                    [placeholder]="userInfo?.firstName !== null ? userInfo?.firstName : ''">  
             <label for="lastName" class="my-1 ps-3">Фамилия</label>
             <input type="text"
                     name="lastName"
-                    [placeholder]="userInfo?.lastName"
+                    [placeholder]="userInfo?.lastName !== null ? userInfo?.lastName : ''"
                     class="form-control mb-4">
             <label for="userName" class="my-1 ps-3">Потребителско име</label>
             <input type="text"
                     name="userName"
-                    [placeholder]="userInfo?.userName"
+                    [placeholder]="userInfo?.userName !== null ? userInfo?.userName : ''"
                     class="form-control mb-4">
             <label for="email" class="my-1 ps-3">Имейл адрес</label>
             <input type="text"
                     name="email"
-                    [placeholder]="userInfo?.email"
+                    [placeholder]="userInfo?.email !== null ? userInfo?.email : ''"
                     class="form-control mb-4">
             <label for="email" class="my-1 ps-3">Телефонен номер</label>
             <input type="text"
                     name="phoneNumber"
-                    [placeholder]="userInfo?.phoneNumber"
+                    [placeholder]="userInfo?.phoneNumber !== null ? userInfo?.phoneNumber : ''"
                     class="form-control">
         </div>
     </div>

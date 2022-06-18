@@ -1,29 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { AdminService } from '../_services/admin.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
   styleUrls: ['./admin-panel.component.scss']
 })
-export class AdminPanelComponent implements OnInit, OnDestroy {
-  accountSubscription: Subscription | undefined;
+export class AdminPanelComponent implements OnInit {
 
-  constructor(private adminService: AdminService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.adminService.getAccounts();
-    this.accountSubscription = this.adminService.accountsObs.subscribe(
-      resp => {
-        this.adminService.accounts = resp;
-      }
-    );
+
   }
 
-  ngOnDestroy() {
-    this.accountSubscription?.unsubscribe();
-  }
 
 
 }

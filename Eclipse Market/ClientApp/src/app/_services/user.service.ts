@@ -1,17 +1,18 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { IUsers } from "../_models/user.model";
+import { HttpBackend, HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { IUser, IUsers } from "../_models/user.model";
 import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
+    private httpWithoutInterceptor: HttpClient;
+    private url = "http://localhost:5001";
     
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient,
+                private httpBackend: HttpBackend) { this.httpWithoutInterceptor = new HttpClient(httpBackend) }
     
-    url = "http://localhost:5001";
-
     logIn(body: any): Observable<any> {
         var headers = new HttpHeaders({
             'Accept': 'application/json'
@@ -28,23 +29,28 @@ export class UserService {
     };
     
     getAll() {
-        return this.http.get<IUsers>(`${this.url}/User/GetAll`);
+        var headers = new HttpHeaders({
+            'SkipLoader': ``
+        });
+        return this.http.get<IUsers>(`${this.url}/User/GetAll`, {headers: headers});
     }
 
-    getInfo() {
+    getInfo() { 
         var headers = new HttpHeaders({
             'Accept': 'application/json',
+            'SkipLoader': ``
         });
-        return this.http.get(`${this.url}/User/GetById`, {headers: headers});
+        return this.http.get<IUser>(`${this.url}/User/GetById`, {headers: headers});
     }
 
-    getById(id: number) {
-        var headers = new HttpHeaders({
-            'Accept': 'application/json',
-        });
-        let queryParams = new HttpParams().set('id', id)
-        return this.http.get(`${this.url}/User/GetInfo`, {headers: headers, params: queryParams});
-    }
+    // getById(id: number) {
+    //     var headers = new HttpHeaders({
+    //         'Accept': 'application/json',
+    //         'Skip': ``
+    //     });
+    //     let queryParams = new HttpParams().set('id', id)
+    //     return this.http.get(`${this.url}/User/GetInfo`, {headers: headers, params: queryParams});
+    // }
     
     update(body: any) {
         var headers = new HttpHeaders({

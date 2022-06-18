@@ -31,7 +31,6 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
 import { AccountInfoComponent } from './accounts/account-detail/account-info/account-info.component';
 import { ClaimAccessDirective } from './_directives/claim-access.directive';
-import { AdminHomeComponent } from './admin-panel/admin-home/admin-home.component';
 
 @NgModule({
   declarations: [
@@ -51,8 +50,7 @@ import { AdminHomeComponent } from './admin-panel/admin-home/admin-home.componen
     AdminPanelComponent,
     AdminManageComponent,
     AccountInfoComponent,
-    ClaimAccessDirective,
-    AdminHomeComponent
+    ClaimAccessDirective
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,6 @@ import { UserService } from 'src/app/_services/user.service';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { IUser } from 'src/app/_models/user.model';
-import { AccountService } from 'src/app/_services/account.service';
 
 @Component({
   selector: 'app-account-settings',
@@ -16,14 +15,14 @@ export class AccountSettingsComponent implements OnInit {
   userInfo: IUser | undefined;
 
   updateSubscription: Subscription | undefined;
+  loadUserSubs: Subscription | undefined;
 
   constructor(private userService: UserService,
               private router: Router,
-              private messageService: MessageService,
-              private accService: AccountService) { }
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.userInfo = this.accService.accountInfo;
+    this.loadUserInfo();
   }
 
   passwordMatchingValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -72,8 +71,17 @@ export class AccountSettingsComponent implements OnInit {
     });
   }
 
+  loadUserInfo() {
+    this.loadUserSubs = this.userService.getInfo().subscribe({
+      next: (resp: IUser) => {
+        this.userInfo = resp;
+      }
+    })
+  }
+
   ngOnDestroy() {
     this.updateSubscription?.unsubscribe();
+    this.loadUserSubs?.unsubscribe();
   }
 
 }

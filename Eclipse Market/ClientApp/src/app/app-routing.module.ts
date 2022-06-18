@@ -6,7 +6,6 @@ import { AccountListingsComponent } from './accounts/account-detail/account-list
 import { AccountMessagesComponent } from './accounts/account-detail/account-messages/account-messages.component';
 import { AccountSettingsComponent } from './accounts/account-detail/account-settings/account-settings.component';
 import { AccountsComponent } from './accounts/accounts.component';
-import { AdminHomeComponent } from './admin-panel/admin-home/admin-home.component';
 import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AuthComponent } from './auth/auth.component';
@@ -27,7 +26,6 @@ const routes: Routes = [
     { path: 'edit', component: AccountSettingsComponent },
     { path: 'listings', component: AccountListingsComponent },
     { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard], children: [
-      { path: 'home', component: AdminHomeComponent },
       { path: 'manage-users', component: AdminManageComponent },
       { path: '**', redirectTo: 'manage-users', pathMatch: 'full' }
     ]},
