@@ -34,7 +34,7 @@ export class UserService {
         var headers = new HttpHeaders({
             'Accept': 'application/json',
         });
-        return this.http.get(`${this.url}/User/GetInfo`, {headers: headers});
+        return this.http.get(`${this.url}/User/GetById`, {headers: headers});
     }
 
     getById(id: number) {
