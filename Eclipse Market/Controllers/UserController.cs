@@ -297,24 +297,21 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("Listing does not exist.");
             }
 
-            if (!_dbContext.Users.Any(x => x.Id == request.UserId))
-            {
-                return BadRequest("User does not exist.");
-            }
+            int userId = _jwtService.GetUserIdFromToken(User);
 
-            if (_dbContext.ListingUsers.Any(x => x.UserId == request.UserId && x.ListingId == request.ListingId))
+            if (_dbContext.ListingUsers.Any(x => x.UserId == userId && x.ListingId == request.ListingId))
             {
                 return BadRequest("Listing is already bookmarked by this user.");
             }
 
             var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First();
-            var user = _dbContext.Users.Where(x => x.Id == request.UserId).First();
+            var user = _dbContext.Users.Where(x => x.Id == userId).First();
 
             var listingUserToAdd = new ListingUser
             {
                 ListingId = request.ListingId,
                 Listing = listing,
-                UserId = request.UserId,
+                UserId = userId,
                 User = user
             };
 
@@ -457,18 +454,15 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("Listing does not exist.");
             }
 
-            if (!_dbContext.Users.Any(x => x.Id == request.UserId))
-            {
-                return BadRequest("User does not exist.");
-            }
+            int userId = _jwtService.GetUserIdFromToken(User);
 
-            if (!_dbContext.ListingUsers.Any(x => x.UserId == request.UserId && x.ListingId == request.ListingId))
+            if (!_dbContext.ListingUsers.Any(x => x.UserId == userId && x.ListingId == request.ListingId))
             {
                 return BadRequest("Listing is already not bookmarked by this user.");
             }
 
             var listingUserForDelete = _dbContext.ListingUsers
-                .Where(x => x.UserId == request.UserId && x.ListingId == request.ListingId)
+                .Where(x => x.UserId == userId && x.ListingId == request.ListingId)
                 .First();
             _dbContext.ListingUsers.Remove(listingUserForDelete);
 
