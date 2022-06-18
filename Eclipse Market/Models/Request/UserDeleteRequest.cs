@@ -2,6 +2,6 @@
 {
     public class UserDeleteRequest : IDeleteRequest
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
     }
 }
