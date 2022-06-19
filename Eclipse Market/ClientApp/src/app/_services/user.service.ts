@@ -43,14 +43,14 @@ export class UserService {
         return this.http.get<IUser>(`${this.url}/User/GetById`, {headers: headers});
     }
 
-    // getById(id: number) {
-    //     var headers = new HttpHeaders({
-    //         'Accept': 'application/json',
-    //         'Skip': ``
-    //     });
-    //     let queryParams = new HttpParams().set('id', id)
-    //     return this.http.get(`${this.url}/User/GetInfo`, {headers: headers, params: queryParams});
-    // }
+    getById(id: number) {
+        var headers = new HttpHeaders({
+            'Accept': 'application/json',
+            'SkipLoader': ``
+        });
+        let queryParams = new HttpParams().set('id', id)
+        return this.http.get(`${this.url}/User/GetById`, {headers: headers, params: queryParams});
+    }
     
     update(body: any) {
         var headers = new HttpHeaders({
@@ -58,8 +58,20 @@ export class UserService {
         });
         return this.http.put(`${this.url}/User/Update`, body, {headers: headers, responseType: "json"});
     }
-    delete(id: number) {
-        return this.http.delete(`${this.url}/User/Delete`)
+
+    changePassword(body: any) {
+        var headers = new HttpHeaders({
+            'Accept': 'application/json',
+        });
+        return this.http.put(`${this.url}/User/ChangePassword`, body, {headers: headers})
+    }
+
+    delete(body: any) {
+        var headers = new HttpHeaders({
+            'Content-type': 'application/json',
+            'SkipLoader': ``
+        });
+        return this.http.delete(`${this.url}/User/Delete`, {headers: headers, body: body})
     }
     
 }

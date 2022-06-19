@@ -16,7 +16,6 @@ export class ClaimAccessDirective {
   updateView(searchedClaim: string) {
     let hasRights = false;
     let userClaims = JSON.parse(localStorage.getItem('claims')!);
-    console.log(`Searched Claim ${searchedClaim}`)
 
     if(searchedClaim && userClaims && userClaims.length){
       userClaims.forEach((claim: string) => {

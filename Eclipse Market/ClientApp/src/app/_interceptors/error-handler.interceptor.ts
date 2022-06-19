@@ -25,8 +25,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                         this.messageService.add({key: 'tc', severity:'error', summary: 'Error', detail: `You don't have access to this page`, life: 3000}); 
                         this.router.navigate(['/home']);
                     } else if (error.status === 404) {
-                        this.messageService.add({key: 'tc', severity:'error', summary: 'Error', detail: `Not Found`, life: 3000});
-                        this.router.navigate(['/home']);
+                        this.router.navigate(['/404']);
                     } else if (error.status === 400) {
                         this.messageService.add({key: 'tc', severity:'error', summary: 'Error', detail: error.error, life: 3000});
                     } else if (error.status === 500) {

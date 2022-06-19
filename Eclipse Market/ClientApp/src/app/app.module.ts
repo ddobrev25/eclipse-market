@@ -25,12 +25,16 @@ import { AccountListingsComponent } from './accounts/account-detail/account-list
 import { AccountMessagesComponent } from './accounts/account-detail/account-messages/account-messages.component';
 import { AccountSettingsComponent } from './accounts/account-detail/account-settings/account-settings.component';
 import {ToastModule} from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, SharedModule } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ErrorInterceptor } from './_interceptors/error-handler.interceptor';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
 import { AccountInfoComponent } from './accounts/account-detail/account-info/account-info.component';
 import { ClaimAccessDirective } from './_directives/claim-access.directive';
+import { DialogModule } from 'primeng/dialog';
+import {CascadeSelectModule} from 'primeng/cascadeselect';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +54,8 @@ import { ClaimAccessDirective } from './_directives/claim-access.directive';
     AdminPanelComponent,
     AdminManageComponent,
     AccountInfoComponent,
-    ClaimAccessDirective
+    ClaimAccessDirective,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
@@ -62,13 +67,18 @@ import { ClaimAccessDirective } from './_directives/claim-access.directive';
     HttpClientModule,
     NgHttpLoaderModule.forRoot(),
     ToastModule,
-    TableModule
+    TableModule,
+    ConfirmDialogModule,
+    SharedModule,
+    DialogModule,
+    CascadeSelectModule
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    MessageService
+    MessageService,
+    ConfirmationService
   ],
   bootstrap: [AppComponent]
 })

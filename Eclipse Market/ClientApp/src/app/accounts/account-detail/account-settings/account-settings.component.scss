@@ -15,15 +15,15 @@ button {
 }
 .info-container {
     background-color: var(--grey-dark);
-    padding: 20px;
+    padding: 48px;
     border-radius: 15px;
     border: 2px #455474 solid;
 }
 .info-container input {
     background-color: var(--grey-medium);
+    color: 	var(--text-light);
     border-radius: 50px;
     padding: 12px 14px;
-    pointer-events:none;
     border: 2px #455474 solid;
 }
 @media (max-width: 336px) {
@@ -33,7 +33,7 @@ button {
     #buttons button {
         width: 100%;
     }
-    #deleteBtn {
+    .ms-4 {
         margin-left: 0 !important;
     }
 }

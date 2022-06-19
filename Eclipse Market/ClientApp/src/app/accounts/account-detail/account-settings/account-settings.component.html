@@ -10,25 +10,25 @@
                                 <h4>Смяна на паролата</h4>        
                         </div>
                         <div class="info-container">
-                                <label for="password" class="my-1 ps-3">Стара парола</label>
+                                <label for="currentPassword" class="my-1 ps-3">Стара парола</label>
                                 <input type="password"
-                                        name="password"
+                                        name="currentPassword"
                                         class="form-control mb-4"
-                                        formControlName="password">
-                                <app-form-errors [control]="$any(updateForm).get('password')" 
+                                        formControlName="currentPassword">
+                                <app-form-errors [control]="$any(updateForm).get('currentPassword')" 
                                 [max]="'50'" [min]="'6'"
                                 [controlName]="'Password'"></app-form-errors>
-                                <label for="confirmPassword" class="my-1 ps-3">Нова парола</label>
+                                <label for="newPassword" class="my-1 ps-3">Нова парола</label>
                                 <input type="password"
                                         name="confirmPassword"
                                         class="form-control mb-4"
-                                        formControlName="confirmPassword">
+                                        formControlName="newPassword">
                                 <span *ngIf="updateForm.errors?.['notmatched'] && updateForm.touched" class="text-danger">Password mismatch</span>
-                                <app-form-errors [control]="$any(updateForm).get('confirmPassword')" 
+                                <app-form-errors [control]="$any(updateForm).get('newPassword')" 
                                 [max]="'50'" [min]="'6'"
                                 [controlName]="'Password'"></app-form-errors>
                                 <div class="d-flex justify-content-around flex-sm-nowrap" id="buttons">
-                                        <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.touched">Запази промените</button>
+                                        <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.valid">Запази промените</button>
                                         <button type="submit" class="btn btn-danger mt-4 ms-4 px-2 py-1" id="" (click)="onDeleteUser()">Изтриване на профил</button>
                                 </div>
                         </div>  

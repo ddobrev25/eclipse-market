@@ -9,6 +9,7 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AuthComponent } from './auth/auth.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 import { HomeComponent } from './home/home.component';
 import { ListingsComponent } from './listings/listings.component';
 import { AccountGuardService } from './_guards/account.guard.service';
@@ -31,6 +32,7 @@ const routes: Routes = [
     ]},
     { path: '**', redirectTo: 'settings', pathMatch: 'full' },
   ]},
+  { path: '404', component: ErrorPageComponent },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 

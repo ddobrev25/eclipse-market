@@ -4,18 +4,16 @@
             class="p-3 form">
     <h3 class="mt-1">Регистрация</h3>
     <div class="form-floating">
-    <input type="text"
-            name="firstName"
-            class="form-control"
-            placeholder="Ime"
-            formControlName="firstName">
-    <label for="firstName" >Име</label>
+        <input type="text"
+                name="firstName"
+                class="form-control"
+                placeholder="Ime"
+                formControlName="firstName">
+        <label for="firstName" >Име</label>
+        <app-form-errors [control]="$any(registerForm).get('firstName')" 
+        [max]="'50'" [min]="'2'"
+        [controlName]="'First name'"></app-form-errors>
     </div>
-
-            <app-form-errors [control]="$any(registerForm).get('firstName')" 
-            [max]="'50'" [min]="'2'"
-            [controlName]="'First name'"></app-form-errors>
-
     <hr> 
     <div class="form-floating">      
     <input type="text"

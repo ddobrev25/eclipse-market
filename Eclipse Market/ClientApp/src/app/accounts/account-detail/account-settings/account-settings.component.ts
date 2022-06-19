@@ -25,31 +25,19 @@ export class AccountSettingsComponent implements OnInit {
     this.loadUserInfo();
   }
 
-  passwordMatchingValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-    return password?.value === confirmPassword?.value ? null : { notmatched: true };
-  };
-
   updateForm: FormGroup = new FormGroup({
-    password: new FormControl('', [Validators.maxLength(50), Validators.minLength(6),Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$')]),
-    confirmPassword: new FormControl('', [Validators.maxLength(50), Validators.minLength(6),Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$')]),
-  }, { validators: this.passwordMatchingValidator });
+    currentPassword: new FormControl('', [Validators.required ,Validators.maxLength(50), Validators.minLength(6),Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$')]),
+    newPassword: new FormControl('', [Validators.required ,Validators.maxLength(50), Validators.minLength(6),Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$')]),
+  });
 
 
   onEditUser() {
     const body = {
-      "Id": this.userInfo?.id,
-      "FirstName": '',
-      "LastName": '',
-      "UserName": '',
-      "Email": '',
-      "Password": this.updateForm.get('password')?.value,
-      "PhoneNumber": '',
-      "RoleId": this.userInfo?.roleId
+      "CurrentPassword": this.updateForm.get('currentPassword')?.value,
+      "NewPassword": this.updateForm.get('newPassword')?.value,
     };
 
-    this.updateSubscription = this.userService.update(body).subscribe({
+    this.updateSubscription = this.userService.changePassword(body).subscribe({
       next: data => {
         this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: `Changes applied!`, life: 3000});
         this.updateForm.reset();
