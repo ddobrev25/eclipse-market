@@ -1,0 +1,10 @@
+:host ::ng-deep {
+    ::-webkit-scrollbar {
+        height: 8px !important;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--blue-gray)
+    }
+}
+
+

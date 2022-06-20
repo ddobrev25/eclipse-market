@@ -8,6 +8,7 @@ import { AccountSettingsComponent } from './accounts/account-detail/account-sett
 import { AccountsComponent } from './accounts/accounts.component';
 import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { AdminRolesComponent } from './admin-panel/admin-roles/admin-roles.component';
 import { AuthComponent } from './auth/auth.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { HomeComponent } from './home/home.component';
@@ -27,8 +28,9 @@ const routes: Routes = [
     { path: 'edit', component: AccountSettingsComponent },
     { path: 'listings', component: AccountListingsComponent },
     { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard], children: [
-      { path: 'manage-users', component: AdminManageComponent },
-      { path: '**', redirectTo: 'manage-users', pathMatch: 'full' }
+      { path: 'manage-accounts', component: AdminManageComponent },
+      { path: 'manage-roles', component: AdminRolesComponent },
+      { path: '**', redirectTo: 'manage-accounts', pathMatch: 'full' }
     ]},
     { path: '**', redirectTo: 'settings', pathMatch: 'full' },
   ]},

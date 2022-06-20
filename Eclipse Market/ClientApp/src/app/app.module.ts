@@ -35,6 +35,9 @@ import { ClaimAccessDirective } from './_directives/claim-access.directive';
 import { DialogModule } from 'primeng/dialog';
 import {CascadeSelectModule} from 'primeng/cascadeselect';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { AdminRolesComponent } from './admin-panel/admin-roles/admin-roles.component';
+import {BreadcrumbModule} from 'primeng/breadcrumb';
+import {DropdownModule} from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -55,7 +58,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     AdminManageComponent,
     AccountInfoComponent,
     ClaimAccessDirective,
-    ErrorPageComponent
+    ErrorPageComponent,
+    AdminRolesComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +75,9 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     ConfirmDialogModule,
     SharedModule,
     DialogModule,
-    CascadeSelectModule
+    CascadeSelectModule,
+    BreadcrumbModule,
+    DropdownModule
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,

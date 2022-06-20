@@ -15,7 +15,7 @@
             <th pColumn="email">Email</th>
             <th pColumn="phoneNumber">PhoneNumber</th>
             <th pColumn="role">Role</th>
-            <th></th>
+            <th pColumn="action">Action</th>
 
         </tr>
     </ng-template>
@@ -39,7 +39,7 @@
 
 <p-dialog [(visible)]="accountDialog" [style]="{width: '600px'}" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="header">
-        Редакция на профил
+        <h4>Редакция на профил</h4>
     </ng-template>
 
     <ng-template pTemplate="content">
