@@ -9,6 +9,7 @@ namespace Eclipse_Market.Models.DB
 
         public DateTime ExpireTime { get; set; }
         public double StartingPrice { get; set; }
+        public double BidIncrement { get; set; }
         public double BuyoutPrice { get; set; }
         public Listing Listing { get; set; }
     }

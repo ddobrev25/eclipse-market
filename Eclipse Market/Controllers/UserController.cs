@@ -30,7 +30,6 @@ namespace Eclipse_Market.Controllers
             _emailService = emailService;
             _jwtService = jwtService;
         }
-
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<List<UserGetAllResponse>> GetAll()
