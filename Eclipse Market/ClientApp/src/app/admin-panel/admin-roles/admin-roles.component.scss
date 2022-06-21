@@ -5,6 +5,47 @@
     ::-webkit-scrollbar-thumb {
         background: var(--blue-gray)
     }
+    select option {
+        background: var(--blue-gray-dark);
+        color: var(--text-light);
+    }
+    select {
+        background: var(--blue-gray-dark);
+        color: var(--text-light);
+        border: none;
+        padding: 8px;
+        border-radius: 5px;
+    }
+    td.action-btn button {
+        text-align: center;
+        width: 40px !important;
+        margin: 0;
+    }
+    p-table.p-element td {
+        background: var(--blue-gray-medium); 
+        color: var(--text-light);
+        border: none;
+
+    }
+    p-table.p-element th {
+        background: var(--blue-gray-dark); 
+        color: var(--text-light);
+        border-bottom: 2px #455474 solid;
+
+
+    }
+    div.p-datatable-wrapper {
+        border: 2px #455474 solid;
+    }
+    .wrapper {
+        background: var(--blue-gray-dark); 
+        padding: 8px;
+        border-radius: 5px;
+    }
+    .p-paginator {
+        border: 2px #455474 solid;
+        border-top: none;
+    }
 }
 
 
