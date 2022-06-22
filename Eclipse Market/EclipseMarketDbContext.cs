@@ -46,13 +46,6 @@ namespace Eclipse_Market
                 .HasOne(rc => rc.Role)
                 .WithMany(r => r.RoleClaims)
                 .HasForeignKey(rc => rc.RoleId);
-
-
-            //Auction bid increment value will always be 10% higher than starting price value
-            //NOT TESTED
-            modelBuilder.Entity<Auction>()
-                .Property(p => p.BidIncrement)
-                .HasComputedColumnSql("[StartingValue] * 0.1");
         }
     }
 

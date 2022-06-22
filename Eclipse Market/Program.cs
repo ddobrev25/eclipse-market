@@ -3,6 +3,7 @@ using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
@@ -86,6 +87,12 @@ builder.Services.AddSwaggerGen(options =>
                       new string[] { }
                     }
                   });
+    options.MapType<TimeSpan>(
+        () => new OpenApiSchema
+        {
+            Type = "string",
+            Example = new OpenApiString("00:00:00")
+        });
 });
 
 

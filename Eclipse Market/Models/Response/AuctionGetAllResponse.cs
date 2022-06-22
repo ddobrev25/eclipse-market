@@ -1,17 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Eclipse_Market.Models.DB
+﻿namespace Eclipse_Market.Models.Response
 {
-    public class Auction
+    public class AuctionGetAllResponse
     {
-        [ForeignKey("Listing")]
         public int Id { get; set; }
-
         public DateTime ExpireTime { get; set; }
         public double StartingPrice { get; set; }
         public double BidIncrement { get; set; }
         public double BuyoutPrice { get; set; }
         public int ListingId { get; set; }
-        public Listing Listing { get; set; }
     }
 }
