@@ -1,6 +1,15 @@
-<div class="container-fluid bg-light">
+<div class="container-fluid">
     <div class="row">
         <div class="col px-0">
+            <p-toast></p-toast>
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    <div class="button-group">
+                        <button class="btn mr-2" (click)="onToggleRoleAddDialog()">Add role</button>
+                    </div>
+                </div>
+            </p-toolbar>
+
             <p-table [value]="roleList" 
                     [paginator]="true" 
                     [rows]="10"
@@ -28,14 +37,75 @@
                         </td>
                         <td>
                             <div class="d-flex action-btn">
-                                <button class="btn btn-light"><i class="pi pi-pencil"></i></button>
-                                <button class="btn btn-danger ms-2"><i class="pi pi-trash"></i></button>
+                                <button class="btn btn-light" (click)="onToggleRoleEditDialog(role)"><i class="pi pi-pencil"></i></button>
+                                <button class="btn btn-danger ms-2" (click)="onDeleteRole(role)"><i class="pi pi-trash"></i></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
 
+            <p-dialog [(visible)]="roleAddDialog" [style]="{width: '600px'}" [modal]="true" styleClass="p-fluid" [draggable]="false">
+                <ng-template pTemplate="header">
+                    <h4>Добавяне на роля</h4>
+                </ng-template>
+            
+                <ng-template pTemplate="content">
+                    <form [formGroup]="roleForm">
+                        <label for="id" >ID</label>
+                        <input type="text"
+                                name="id"
+                                class="form-control"
+                                formControlName="id">
+                        <label for="name" >Name</label>
+                        <input type="text"
+                                name="name"
+                                class="form-control"
+                                formControlName="name">
+                        <label for="claims">Claims</label>
+                        <input type="text"
+                                name="claims"
+                                class="form-control"
+                                formControlName="claims">
+                    </form>
+                </ng-template>
+            
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Назад" icon="pi pi-times" class="p-button-text" (click)="onDiscard()"></button>
+                    <button pButton pRipple label="Запази" icon="pi pi-check" class="p-button-text" [disabled]="!roleForm.valid" (click)="onAddRole()"></button>
+                </ng-template>
+            </p-dialog>
+            <p-dialog [(visible)]="roleEditDialog" [style]="{width: '600px'}" [modal]="true" styleClass="p-fluid" [draggable]="false">
+                <ng-template pTemplate="header">
+                    <h4>Редакция на роля</h4>
+                </ng-template>
+            
+                <ng-template pTemplate="content">
+                    <form [formGroup]="roleForm">
+                        <label for="id" >ID</label>
+                        <input type="text"
+                                name="id"
+                                class="form-control"
+                                formControlName="id">
+                        <label for="name" >Name</label>
+                        <input type="text"
+                                name="name"
+                                class="form-control"
+                                formControlName="name">
+                        <label for="claims">Claims</label>
+                        <input type="text"
+                                name="claims"
+                                class="form-control"
+                                formControlName="claims">
+                    </form>
+                </ng-template>
+            
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Назад" icon="pi pi-times" class="p-button-text" (click)="onDiscard()"></button>
+                    <button pButton pRipple label="Запази" icon="pi pi-check" class="p-button-text" [disabled]="!roleForm.valid" (click)="onEditRole()"></button>
+                </ng-template>
+            </p-dialog>
+            <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
         </div>
     </div>
 </div>

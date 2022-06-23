@@ -19,6 +19,28 @@ export class RoleService {
     });
     return this.http.get<IRoles>(`${this.url}/Role/GetAll`, {headers: headers})
   }
+  add(body: any) {
+    var headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'SkipLoader': ``
+    });
+    return this.http.post(`${this.url}/Role/Add`, body, {headers: headers})
+  }
+  update(body: any) {
+    var headers = new HttpHeaders({
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+        'SkipLoader': ``
+    });
+    return this.http.put(`${this.url}/Role/Update`, body, {headers: headers});
+  }
+  delete(body: any) {
+    var headers = new HttpHeaders({
+        'Content-type': 'application/json',
+        'SkipLoader': ``
+    });
+    return this.http.delete(`${this.url}/Role/Delete`, {headers: headers, body: body})
+  }
 
 }
 

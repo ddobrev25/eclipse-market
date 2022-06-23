@@ -4,8 +4,7 @@
                 <div class="col p-0">
                         <form 
                         [formGroup]="updateForm"
-                        class="p-0 form"
-                        (ngSubmit)="onEditUser()">
+                        class="p-0 form">
                         <div class="d-flex justify-content-center">
                                 <h4>Смяна на паролата</h4>        
                         </div>
@@ -28,7 +27,7 @@
                                 [max]="'50'" [min]="'6'"
                                 [controlName]="'Password'"></app-form-errors>
                                 <div class="d-flex justify-content-around flex-sm-nowrap" id="buttons">
-                                        <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.valid">Запази промените</button>
+                                        <button type="submit" class="btn btn-light mt-4 px-2 py-1" [disabled]="!updateForm.valid" (click)="onEditUser()">Запази промените</button>
                                         <button type="submit" class="btn btn-danger mt-4 ms-4 px-2 py-1" id="" (click)="onDeleteUser()">Изтриване на профил</button>
                                 </div>
                         </div>  

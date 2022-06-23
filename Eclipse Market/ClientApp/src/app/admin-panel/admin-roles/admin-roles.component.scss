@@ -46,6 +46,19 @@
         border: 2px #455474 solid;
         border-top: none;
     }
+    .button-group button {
+        background-color: var(--blue-bg);
+        border: 1px solid var(--gray-blue-border);
+        color: var(--text-dark);
+    }
+    .button-group {
+        background: transparent;
+    }
+    .p-toolbar.p-component {
+        background: var(--gray-blue-dark);
+        border-radius: 0;
+        border: var(--gray-blue-border);
+    }
 }
 
 

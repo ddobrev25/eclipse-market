@@ -26,7 +26,7 @@
             <td>{{user.userName}}</td>
             <td>{{user.email}}</td>
             <td>{{user.phoneNumber}}</td>
-            <td>{{user.role}}</td>
+            <td>{{user.roleName}}</td>
             <td class="action-btn d-flex flex-nowrap">
                 <button class="btn btn-light" (click)="onSelectAccount(user)"><i class="pi pi-pencil"></i></button>
                 <button class="btn btn-danger ms-2" (click)="onDeleteUser(user)"><i class="pi pi-trash"></i></button>
@@ -85,7 +85,7 @@
                 <option 
                     *ngFor="let role of roleList" 
                     value="{{ role.id }}"
-                    [selected]="role.id === accountForEdit?.roleId">
+                    [selected]="role.name === accountForEdit?.roleName">
                     {{role.name}}
                 </option>
             </select>

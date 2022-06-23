@@ -38,6 +38,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { AdminRolesComponent } from './admin-panel/admin-roles/admin-roles.component';
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {DropdownModule} from 'primeng/dropdown';
+import {ToolbarModule} from 'primeng/toolbar';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import {DropdownModule} from 'primeng/dropdown';
     DialogModule,
     CascadeSelectModule,
     BreadcrumbModule,
-    DropdownModule
+    DropdownModule,
+    ToolbarModule
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
