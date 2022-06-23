@@ -42,6 +42,7 @@ namespace Eclipse_Market.Controllers
                 .Include(x => x.BookmarkedListings)
                 .Include(x => x.CurrentListings)
                 .Include(x => x.Messages)
+                .Include(x => x.Role)
                 .Select(x => new UserGetAllResponse()
                 {
                     Id = x.Id,
@@ -51,7 +52,7 @@ namespace Eclipse_Market.Controllers
                     Email = x.Email,
                     Password = x.Password,
                     PhoneNumber = x.PhoneNumber,
-                    RoleId = x.RoleId
+                    RoleName = x.Role.Name
                 }).ToList();
             foreach (var user in users)
             {
@@ -145,7 +146,12 @@ namespace Eclipse_Market.Controllers
                 return Forbid();
             }
             //Find the user in the database with the given id
-            var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
+            var user = _dbContext.Users
+                .Include(x => x.BookmarkedListings)
+                .Include(x => x.CurrentListings)
+                .Include(x => x.Messages)
+                .Include(x => x.Role)
+                .Where(x => x.Id == id).FirstOrDefault();
 
             if (user == null)
             {
@@ -162,7 +168,7 @@ namespace Eclipse_Market.Controllers
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
                 UserName = user.UserName,
-                RoleId = user.RoleId
+                RoleName = user.Role.Name
             };
             response.BookmarkedListings = _dbContext.ListingUsers
                 .Where(x => x.UserId == user.Id)
