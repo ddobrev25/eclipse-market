@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
 import { Subscription } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { IUser } from 'src/app/_models/user.model';
 
 @Component({
@@ -20,7 +20,8 @@ export class AccountSettingsComponent implements OnInit {
 
   constructor(private userService: UserService,
               private router: Router,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.loadUserInfo();
@@ -53,13 +54,22 @@ export class AccountSettingsComponent implements OnInit {
     const body = {
       id: 0
     }
-    this.deleteUserSubs = this.userService.delete(body).subscribe({
-      complete: () => {
-        localStorage.clear()
-        this.messageService.add({key: 'tc', severity:'success', detail: `Успешно изтрихте акаунта си!`, life: 3000});
-        this.router.navigate(['/home']);
+    this.confirmationService.confirm({
+      message: `Сигурнили сте, че искате да изтриете своят акаунт ?`,
+      header: 'Потвърди',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Да',
+      rejectLabel: 'Не',
+      accept: () => {
+        this.deleteUserSubs = this.userService.delete(body).subscribe({
+            complete: () => {
+              localStorage.clear()
+              this.messageService.add({key: 'tc', severity:'success', detail: `Успешно изтрихте акаунта си!`, life: 3000});
+              this.router.navigate(['/home']);
+            }
+          })
       }
-    })
+    });
   }
 
   reloadCurrentRoute() {

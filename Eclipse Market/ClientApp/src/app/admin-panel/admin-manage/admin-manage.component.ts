@@ -55,7 +55,6 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   FetchAccounts() {
     this.accountSubs = this.userService.getAll().subscribe({
       next: (resp: IUsers) => {
-        console.log(resp)
         this.accounts = resp;
         this.accounts.forEach(account => {
         });

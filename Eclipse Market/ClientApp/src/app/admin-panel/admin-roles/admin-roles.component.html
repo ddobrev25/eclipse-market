@@ -71,8 +71,8 @@
                 </ng-template>
             
                 <ng-template pTemplate="footer">
-                    <button pButton pRipple label="Назад" icon="pi pi-times" class="p-button-text" (click)="onDiscard()"></button>
-                    <button pButton pRipple label="Запази" icon="pi pi-check" class="p-button-text" [disabled]="!roleForm.valid" (click)="onAddRole()"></button>
+                    <button pButton pRipple label="Назад" icon="pi pi-times" (click)="onDiscard()"></button>
+                    <button pButton pRipple label="Запази" icon="pi pi-check" [disabled]="!roleForm.valid" (click)="onAddRole()"></button>
                 </ng-template>
             </p-dialog>
             <p-dialog [(visible)]="roleEditDialog" [style]="{width: '600px'}" [modal]="true" styleClass="p-fluid" [draggable]="false">
@@ -101,8 +101,8 @@
                 </ng-template>
             
                 <ng-template pTemplate="footer">
-                    <button pButton pRipple label="Назад" icon="pi pi-times" class="p-button-text" (click)="onDiscard()"></button>
-                    <button pButton pRipple label="Запази" icon="pi pi-check" class="p-button-text" [disabled]="!roleForm.valid" (click)="onEditRole()"></button>
+                    <button pButton pRipple label="Назад" icon="pi pi-times" (click)="onDiscard()"></button>
+                    <button pButton pRipple label="Запази" icon="pi pi-check" [disabled]="!roleForm.valid" (click)="onEditRole()"></button>
                 </ng-template>
             </p-dialog>
             <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -7,7 +7,10 @@ import { Observable } from "rxjs";
 })
 export class AdminGuard implements CanActivate{
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-        
-        return true
+        let userClaims: string[] = JSON.parse(localStorage.getItem('claims')!);
+        if(userClaims && userClaims.length) {
+
+        }
+        return true;
     }
 }

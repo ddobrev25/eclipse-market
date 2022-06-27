@@ -2,19 +2,19 @@
     color: var(--text-light);
 }
 .info-container {
-    background-color: var(--grey-dark);
+    background-color: var(--gray-blue-dark);
     color: var(--text-light);
     padding: 20px;
     border-radius: 15px;
-    border: 2px #455474 solid;
+    border: 2px var(--gray-blue-border) solid;
 }
 .info-container input {
-    background-color: var(--grey-medium);
+    background: var(--gray-blue);
     color: var(--text-light);
     border-radius: 50px;
     padding: 12px 14px;
     pointer-events:none;
-    border: 2px #455474 solid;
+    border: 2px var(--gray-blue-border) solid;
 }
 input::placeholder {
     color: var(--text-light);

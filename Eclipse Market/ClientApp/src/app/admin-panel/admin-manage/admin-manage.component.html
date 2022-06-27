@@ -1,5 +1,13 @@
 <p-toast></p-toast>
-<p-table #at [value]="accounts!" responsiveLayout="scroll" styleClass="p-datatable-striped"
+<p-table 
+        #at 
+        [value]="accounts!" 
+        responsiveLayout="scroll" 
+        [resizableColumns]="true" 
+        columnResizeMode="fit"
+        [paginator]="true" 
+        [rows]="10"
+        [showCurrentPageReport]="true" 
         [globalFilterFields]="['firstName', 'lastName', 'userName', 'email', 'phoneNumber', 'role']">
     <ng-template pTemplate="caption">
         <div style="text-align: leftt">        
@@ -32,12 +40,17 @@
                 <button class="btn btn-danger ms-2" (click)="onDeleteUser(user)"><i class="pi pi-trash"></i></button>
             </td>
         </tr>
-        <hr>
+
     </ng-template>
 </p-table>
 
 
-<p-dialog [(visible)]="accountDialog" [style]="{width: '600px'}" [modal]="true" styleClass="p-fluid">
+<p-dialog 
+        [(visible)]="accountDialog" 
+        [style]="{width: '600px'}" 
+        [modal]="true" 
+        styleClass="p-fluid" 
+        [draggable]="false">
     <ng-template pTemplate="header">
         <h4>Редакция на профил</h4>
     </ng-template>
@@ -93,8 +106,8 @@
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <button pButton pRipple label="Назад" icon="pi pi-times" class="p-button-text" (click)="onDiscard()"></button>
-        <button pButton pRipple label="Запази" icon="pi pi-check" class="p-button-text" (click)="onEditAccount()"></button>
+        <button pButton pRipple label="Назад" icon="pi pi-times" (click)="onDiscard()"></button>
+        <button pButton pRipple label="Запази" icon="pi pi-check" (click)="onEditAccount()"></button>
     </ng-template>
 </p-dialog>
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

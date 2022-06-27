@@ -21,8 +21,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'listings', component: ListingsComponent },
-  { path: 'account', component: AccountsComponent, canActivate: [AccountGuardService]},
-  { path: 'account', component: AccountDetailComponent, children: [
+  { path: 'accounts', component: AccountsComponent, canActivate: [AccountGuardService]},
+  { path: 'account', component: AccountDetailComponent, canActivate: [], children: [
     { path: 'info', component: AccountInfoComponent },
     { path: 'messages', component: AccountMessagesComponent },
     { path: 'edit', component: AccountSettingsComponent },
@@ -32,7 +32,7 @@ const routes: Routes = [
       { path: 'manage-roles', component: AdminRolesComponent },
       { path: '**', redirectTo: 'manage-accounts', pathMatch: 'full' }
     ]},
-    { path: '**', redirectTo: 'settings', pathMatch: 'full' },
+    { path: '**', redirectTo: 'info', pathMatch: 'full' },
   ]},
   { path: '404', component: ErrorPageComponent },
   { path: '**', redirectTo: 'home', pathMatch: 'full' }
