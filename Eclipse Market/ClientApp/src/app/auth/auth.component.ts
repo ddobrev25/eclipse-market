@@ -53,7 +53,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.userService.logIn(body).subscribe({
       next: resp => {
         if (resp && resp.token !== null) {
-          console.log(resp.token)
           localStorage.setItem('token', JSON.stringify(resp.token));
           localStorage.setItem('claims', JSON.stringify(resp.claims));
           this.checkToken();
@@ -105,7 +104,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     this.registerSubscription = this.userService.register(body).subscribe({
       next: data => {
-        this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: 'Successful registration!', life: 3000});
+        this.messageService.add({key: 'tc', severity:'success', detail: 'Успешна регистрация!', life: 3000});
         this.router.navigate(['/home']);
       }
     });

@@ -9,19 +9,16 @@ import { UserService } from "../_services/user.service";
 export class AccountGuardService implements CanActivate {
 
     constructor(private router:Router, 
-                private userService: UserService,
-                private route: ActivatedRoute,
                 private jwtHelper: JwtHelperService) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        
         const token = localStorage.getItem('token');
 
         if (token && !this.jwtHelper.isTokenExpired(token)){
-            this.router.navigate(['/account/info']);
-            return false;
+            return true;
         }
+        
         this.router.navigate(['/auth']);
-        return true;
+        return false;
     }
 }

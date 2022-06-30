@@ -3,33 +3,11 @@ div {
     padding: 0;
 }
 .content { 
-    background:linear-gradient(127deg, var(--grey-dark), var(--text-dark));
+    background:linear-gradient(190deg, var(--gray-blue-medium), var(--gray-blue));
     min-height: 1000px;
 }
-// //!Menu
 #menu {
-    height: 300px;
-}
-@media (max-width: 992px) {
-    #menu {
-        height: 236px;
-    }
-}
-@media (max-width: 670px) {
-    #menu {
-        height: 254px;
-    }
-}
-@media (max-width: 576px) {
-    #menu {
-        height: 184px;
-    }
-}
-// //!/Menu
-
-.active {
-    background-color: #455474 !important;
-    border:#f1f4f8 solid 1px !important;
+    height: auto;
 }
 .row {
     padding: 30px;
@@ -37,10 +15,10 @@ div {
 .nav-menu {
     width: 100%;
     border-radius: 15px;
-    border: 2px #455474 solid;
+    border: 2px var(--gray-blue-border) solid;
     overflow: hidden;
     padding: 10px 0;
-    background-color: var(--grey-dark);
+    background-color: var(--gray-blue-dark);
     color: var(--text-light);
     
 }
@@ -59,9 +37,9 @@ div {
     border-image: 
       linear-gradient(
         to bottom, 
-        #4884EE,
-        #06BCFB
+        #102338,
+        #455474
       ) 0 0 0 1;
-    background-color: #2f344196;
+    background-color: var(--gray-blue-hover);
     transition: linear .1s;
 }

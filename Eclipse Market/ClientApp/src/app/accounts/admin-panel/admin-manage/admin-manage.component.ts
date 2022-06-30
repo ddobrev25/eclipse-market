@@ -54,14 +54,9 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   }
   FetchAccounts() {
     this.accountSubs = this.userService.getAll().subscribe({
-      next: (resp) => {
+      next: (resp: IUsers) => {
         this.accounts = resp;
         this.accounts.forEach(account => {
-          if(account.roleId === 1) {
-            account.role = 'admin'
-          } else if(account.roleId === 10) {
-            account.role = 'Default'
-          }
         });
       }
     })
@@ -107,7 +102,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
       complete: () => {
         this.FetchAccounts();
         this.accountDialog = false;
-        this.messageService.add({severity:'success', summary: 'Successful', detail: 'Акаунтът е обновен успешно!', life: 3000});
+        this.messageService.add({severity:'success', detail: 'Промените са запазени!', life: 3000});
       }
     });
   }
@@ -128,7 +123,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
                 console.log(err)
               },
               complete: () => {
-                this.messageService.add({severity:'success', summary: 'Successful', detail: 'Акаунтът е изтрит успешно!', life: 3000});
+                this.messageService.add({severity:'success', detail: 'Акаунтът е изтрит успешно!', life: 3000});
                 this.FetchAccounts();
               }
             })

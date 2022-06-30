@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
 import { Subscription } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { IUser } from 'src/app/_models/user.model';
 
 @Component({
@@ -14,12 +14,14 @@ import { IUser } from 'src/app/_models/user.model';
 export class AccountSettingsComponent implements OnInit {
   userInfo: IUser | undefined;
 
-  updateSubscription: Subscription | undefined;
+  updateUserSubs: Subscription | undefined;
+  deleteUserSubs: Subscription | undefined;
   loadUserSubs: Subscription | undefined;
 
   constructor(private userService: UserService,
               private router: Router,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.loadUserInfo();
@@ -37,9 +39,9 @@ export class AccountSettingsComponent implements OnInit {
       "NewPassword": this.updateForm.get('newPassword')?.value,
     };
 
-    this.updateSubscription = this.userService.changePassword(body).subscribe({
-      next: data => {
-        this.messageService.add({key: 'tc', severity:'success', summary: 'Success', detail: `Changes applied!`, life: 3000});
+    this.updateUserSubs = this.userService.changePassword(body).subscribe({
+      complete: () => {
+        this.messageService.add({key: 'tc', severity:'success', detail: `Промените са запазени!`, life: 3000});
         this.updateForm.reset();
         this.reloadCurrentRoute();
       },
@@ -49,7 +51,25 @@ export class AccountSettingsComponent implements OnInit {
     });
   }
   onDeleteUser() {
-    
+    const body = {
+      id: 0
+    }
+    this.confirmationService.confirm({
+      message: `Сигурнили сте, че искате да изтриете своят акаунт ?`,
+      header: 'Потвърди',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Да',
+      rejectLabel: 'Не',
+      accept: () => {
+        this.deleteUserSubs = this.userService.delete(body).subscribe({
+            complete: () => {
+              localStorage.clear()
+              this.messageService.add({key: 'tc', severity:'success', detail: `Успешно изтрихте акаунта си!`, life: 3000});
+              this.router.navigate(['/home']);
+            }
+          })
+      }
+    });
   }
 
   reloadCurrentRoute() {
@@ -68,7 +88,8 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.updateSubscription?.unsubscribe();
+    this.updateUserSubs?.unsubscribe();
+    this.deleteUserSubs?.unsubscribe();
     this.loadUserSubs?.unsubscribe();
   }
 

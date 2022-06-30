@@ -22,7 +22,7 @@
         margin: 0;
     }
     p-table.p-element td {
-        background: var(--blue-gray-medium); 
+        background: var(--gray-blue-medium); 
         color: var(--text-light);
         border: none;
 
@@ -30,12 +30,10 @@
     p-table.p-element th {
         background: var(--blue-gray-dark); 
         color: var(--text-light);
-        border-bottom: 2px #455474 solid;
-
-
+        border-bottom: 2px var(--gray-blue-border) solid;
     }
     div.p-datatable-wrapper {
-        border: 2px #455474 solid;
+        border: 2px var(--gray-blue-border) solid;
     }
     .wrapper {
         background: var(--blue-gray-dark); 
@@ -43,8 +41,32 @@
         border-radius: 5px;
     }
     .p-paginator {
-        border: 2px #455474 solid;
+        border: 2px var(--gray-blue-border) solid;
         border-top: none;
+    }
+    .button-group button {
+        background-color: var(--blue-bg);
+        border: 2px var(--gray-blue-border) solid;
+        color: var(--text-dark);
+    }
+    .button-group {
+        background: transparent;
+    }
+    .p-toolbar.p-component {
+        background: var(--gray-blue-dark);
+        border-radius: 0;
+        border: var(--gray-blue-border) 2px solid;
+        border-bottom: none;
+    }
+    input { 
+        background-color: var(--gray-blue-hover);
+        color: var(--text-light);
+        padding: 12px 14px;
+        border: 2px var(--gray-blue-border) solid;
+    }
+    input:focus {
+        background: var(--gray-blue-medium);
+        color: var(--text-light);
     }
 }
 

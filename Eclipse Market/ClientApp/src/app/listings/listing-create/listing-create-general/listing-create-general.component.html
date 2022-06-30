@@ -1,0 +1,19 @@
+
+<h4 class="text-center my-5">Създаване на обява</h4>
+<form
+    [formGroup]="createListingForm"
+    (ngSubmit)="onCreateListing()">
+    <div class="form-floating">
+        <input type="text"
+                name="title"
+                placeholder="Заглавие"
+                class="form-control"
+                formControlName="title">
+        <label for="title" >Заглавие</label>
+        <app-form-errors 
+            [control]="$any(createListingForm).get('title')"
+            [controlName]="'Title'">
+        </app-form-errors>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="nextPage()">Next</button>
+</form>

@@ -4,14 +4,21 @@
             <div class="col-sm-3 col-12">
                 <div class="nav-menu">
                     <ul class="list-group list-group-flush" id="menu">
-                      <li class="d-flex justify-content-center"><h6>Моят акаунт</h6></li>
-                      <li class="links" routerLink="info" routerLinkActive="active-item"><i class="pi pi-user ms-3"></i> Лична Информация</li>
-                      <li class="links" routerLink="edit" routerLinkActive="active-item"><i class="pi pi-lock ms-3"></i> Смяна на парола</li>
-                      <li class="links" routerLink="messages" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Съобщения</li>
-                      <li class="links" routerLink="listings" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Моите обяви</li>
-                      <li *appClaimAccess="'RoleGetClaim'" class="links" routerLink="admin-panel" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Admin panel</li>
-
+                        <li class="d-flex justify-content-center">
+                            <h6>Моят акаунт</h6>
+                        </li>
+                        <li class="links" routerLink="info" routerLinkActive="active-item"><i class="pi pi-user ms-3"></i> Лична Информация</li>
+                        <li class="links" routerLink="edit" routerLinkActive="active-item"><i class="pi pi-lock ms-3"></i> Смяна на парола</li>
+                        <li class="links" routerLink="messages" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Съобщения</li>
+                        <li class="links" routerLink="listings" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Моите обяви</li>
+                        <li *appClaimAccess="'RoleGetClaim'" class="links" routerLink="admin-panel" routerLinkActive="active-item"><i class="pi pi-envelope ms-3"></i> Admin panel</li>
+                        <li class="links">
+                            <div id="logoutBtn" class="d-flex justify-content-end">
+                                <button class="btn btn-danger me-2" (click)="onLogOut()">Изход</button>
+                            </div>
+                        </li>
                     </ul>
+
                 </div>
             </div>
             <div class="col-sm-1"></div>
