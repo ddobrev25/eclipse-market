@@ -46,7 +46,7 @@ namespace Eclipse_Market.Controllers
                 BuyoutPrice = request.BuyoutPrice,
                 ListingId = request.ListingId,
                 Listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First(),
-                ExpireTime = DateTime.Now.Add(request.DurationActive),
+                ExpireTime = DateTime.Now.Add(request.DurationActive.ToTimeSpan()),
             };
             _dbContext.Auctions.Add(auctionToAdd);
             _dbContext.SaveChanges();
