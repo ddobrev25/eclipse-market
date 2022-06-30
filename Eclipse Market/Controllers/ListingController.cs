@@ -67,7 +67,8 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public ActionResult Add(ListingAddRequest request)
         {
-            if(!_dbContext.Users.Any(x => x.Id == request.AuthorId))
+            var userId = _jwtService.GetUserIdFromToken(User);
+            if(!_dbContext.Users.Any(x => x.Id == userId))
             {
                 return BadRequest("Invalid author");
             }
@@ -76,11 +77,12 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest("Invalid listing category");
             }
+
             Listing listingToAdd = new Listing
             {
                 Description = request.Description,
-                AuthorId = request.AuthorId,
-                Author = _dbContext.Users.Where(x => x.Id == request.AuthorId).First(),
+                AuthorId = userId,
+                Author = _dbContext.Users.Where(x => x.Id == userId).First(),
                 ListingCategoryId = request.ListingCategoryId,
                 ListingCategory = _dbContext.ListingCategories.Where(x => x.Id == request.ListingCategoryId).First(),
                 Title = request.Title,
