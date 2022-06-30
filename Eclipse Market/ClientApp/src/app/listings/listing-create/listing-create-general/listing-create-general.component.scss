@@ -1,0 +1,49 @@
+#descTextArea {
+    resize: none;
+    min-height: 24px;
+    overflow:hidden;
+    transition: 0.3s;
+
+}
+#descTextArea:focus {
+    height: 200px;
+}
+#priceInput::-webkit-inner-spin-button, #priceInput::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+h4 {
+    color: var(--text-light);
+}
+
+
+:host::ng-deep {
+    input.form-control,
+    textarea,
+    textarea:focus,
+    select { 
+        background-color: var(--gray-blue-hover);
+        border: 2px var(--gray-blue-border) solid;
+        color: var(--text-light);
+        font-size: 14px;
+    }
+    input:-webkit-autofill,
+    input:-webkit-autofill:focus {
+      transition: background-color 600000s 0s, color 600000s 0s;
+    }
+    .form-floating > label {
+        line-height: 8px;
+    }
+    .form-floating > label,
+    .form-floating select {
+        font-size: 20px;
+        // line-height: 8px;
+        color: var(--text-light);
+        height: auto;
+    }
+    .form-floating>.form-control-plaintext~label, .form-floating>.form-control:focus~label, .form-floating>.form-control:not(:placeholder-shown)~label, .form-floating>.form-select~label {
+        opacity: 1 !important;
+    }
+
+
+}

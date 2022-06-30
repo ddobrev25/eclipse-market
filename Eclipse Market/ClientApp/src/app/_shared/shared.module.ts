@@ -13,6 +13,7 @@ import { ToolbarModule } from "primeng/toolbar";
 import { FormErrorsComponent } from "../form-errors/form-errors.component";
 import { ClaimAccessDirective } from "../_directives/claim-access.directive";
 import { StepsModule } from 'primeng/steps';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { StepsModule } from 'primeng/steps';
         DropdownModule,
         ToolbarModule,
         StepsModule,
+        CardModule
     ],
     exports: [
         CommonModule,
@@ -50,6 +52,7 @@ import { StepsModule } from 'primeng/steps';
         FormErrorsComponent,
         ClaimAccessDirective,
         StepsModule,
+        CardModule
     ]
 })
 export class SharedModule {}

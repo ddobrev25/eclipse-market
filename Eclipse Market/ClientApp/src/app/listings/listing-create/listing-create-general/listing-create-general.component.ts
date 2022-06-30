@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
+import { ListingCreateCommunicationService } from 'src/app/_services/listing-create.service';
 
 @Component({
   selector: 'app-listing-create-general',
@@ -9,6 +9,7 @@ import { MenuItem } from 'primeng/api';
   styleUrls: ['./listing-create-general.component.scss']
 })
 export class ListingCreateGeneralComponent implements OnInit {
+
   createListingForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
@@ -18,10 +19,7 @@ export class ListingCreateGeneralComponent implements OnInit {
   })
 
   constructor(private router: Router,
-              private route: ActivatedRoute) { }
-
-
-
+              private listingComService: ListingCreateCommunicationService) { }
 
   ngOnInit() {
 
@@ -30,8 +28,8 @@ export class ListingCreateGeneralComponent implements OnInit {
 
   }
   nextPage() {
+    this.listingComService.sendListingData(this.createListingForm.value);
     this.router.navigate(['/listings/create/preview']);
-    console.log(this.route.url)
   }
 
 }

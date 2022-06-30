@@ -1,1 +1,22 @@
-<p>listing-create-preview works!</p>
+<div class="d-flex justify-content-center">
+    <p-card [style]="{width: '360px'}" styleClass="p-card-shadow">
+        <ng-template pTemplate="header">
+            <img alt="Card" src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png">
+        </ng-template>
+        <ng-template pTemplate="body">
+            {{ listingForm.value.title }}
+        </ng-template>
+        <ng-template pTemplate="footer">
+
+        </ng-template>
+    </p-card>    
+    <div class="d-flex justify-content-between">
+        <button 
+            pButton 
+            pRipple 
+            label="Добави обява" 
+            class="p-button-primary p-2 my-sm-4 my-0"
+            (click)="onCreateListing()">
+        </button>
+    </div>
+</div>
