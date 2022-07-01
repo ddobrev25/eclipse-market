@@ -16,14 +16,18 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadUserInfo();
+    this.userInfo = this.userService.loggedUser;
   }
 
   loadUserInfo() {
-    this.loadUserSubs = this.userService.getInfo().subscribe({
-      next: (resp: IUser) => {
-        this.userInfo = resp;
-      }
-    })
+    if(!this.userService.loggedUser) {
+      this.loadUserSubs = this.userService.getInfo().subscribe({
+        next: (resp: IUser) => {
+          this.userService.loggedUser = resp;
+          this.userInfo = resp;
+        }
+      })
+    }
   }
 
   ngOnDestroy() {

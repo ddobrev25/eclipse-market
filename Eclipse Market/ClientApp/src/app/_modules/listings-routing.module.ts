@@ -11,6 +11,7 @@ const routes: Routes = [
             { path: '', redirectTo: 'general', pathMatch: 'full'  },
             { path: 'general', component: ListingCreateGeneralComponent },
             { path: 'preview', component: ListingCreatePreviewComponent }
+
         ] }
     ]},
     

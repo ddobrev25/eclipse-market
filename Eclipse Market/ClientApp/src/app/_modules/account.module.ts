@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { AccountDetailComponent } from "../accounts/account-detail/account-detail.component";
 import { AccountInfoComponent } from "../accounts/account-detail/account-info/account-info.component";
+import { AccountListingPreviewComponent } from "../accounts/account-detail/account-listings/account-listing-preview/account-listing-preview.component";
 import { AccountListingsComponent } from "../accounts/account-detail/account-listings/account-listings.component";
 import { AccountMessagesComponent } from "../accounts/account-detail/account-messages/account-messages.component";
 import { AccountSettingsComponent } from "../accounts/account-detail/account-settings/account-settings.component";
@@ -21,7 +22,7 @@ import { AccountRoutingModule } from "./account-routing.module";
         AdminPanelComponent,
         AdminManageComponent,
         AdminRolesComponent,
-
+        AccountListingPreviewComponent,
     ],
     imports: [
         SharedModule,
@@ -39,7 +40,7 @@ import { AccountRoutingModule } from "./account-routing.module";
         AdminPanelComponent,
         AdminManageComponent,
         AdminRolesComponent,
-
+        AccountListingPreviewComponent,
     ]
 })
 export class AccountModule {}

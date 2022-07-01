@@ -10,6 +10,7 @@ export class AccountMessagesComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

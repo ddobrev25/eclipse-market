@@ -5,6 +5,7 @@ import { Table } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { IRoles } from 'src/app/_models/role.model';
 import { IUser, IUsers } from 'src/app/_models/user.model';
+import { AdminService } from 'src/app/_services/admin.service';
 import { RoleService } from 'src/app/_services/role.service';
 import { UserService } from 'src/app/_services/user.service';
 
@@ -18,6 +19,8 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   accounts: IUsers = [];
   roleList: IRoles = [];
 
+  accountsChanged: boolean = false;
+
   deleteSubs : Subscription | undefined;
   editSubs : Subscription | undefined;
   accountSubs : Subscription | undefined;
@@ -29,7 +32,8 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
-              private roleService: RoleService) { }
+              private roleService: RoleService,
+              private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.FetchAccounts();
@@ -53,27 +57,39 @@ export class AdminManageComponent implements OnInit, OnDestroy {
     this.accountsTable.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
   FetchAccounts() {
-    this.accountSubs = this.userService.getAll().subscribe({
-      next: (resp: IUsers) => {
-        this.accounts = resp;
-        this.accounts.forEach(account => {
-        });
-      }
-    })
+    if(!this.adminService.accounts || this.accountsChanged) {
+      this.accountSubs = this.userService.getAll().subscribe({
+        next: (resp: IUsers) => {
+          this.adminService.accounts = resp;
+          this.accounts = resp;
+          this.accountsChanged = false;
+        }
+      })
+    } else {
+      this.accounts = this.adminService.accounts;
+    }
+
   }
   FetchRoles() {
-    this.roleSubs = this.roleService.getAll().subscribe({
-      next: (resp: IRoles) => {
-        this.roleList = resp;
-      },
-      error: err => { 
-        console.log(err);
-      }
-    })
+    if(!this.adminService.roles) {
+      this.roleSubs = this.roleService.getAll().subscribe({
+        next: (resp: IRoles) => {
+          this.adminService.roles = resp;
+          this.roleList = resp;
+        },
+        error: err => { 
+          console.log(err);
+        }
+      })
+    } else {
+      this.roleList = this.adminService.roles;
+    }
+
   }
 
   onSelectAccount(user: IUser) {
     this.accountDialog = true;
+    this.accountsChanged = true;
     this.FetchRoles();
     this.accountForEdit = user;
   }
@@ -100,6 +116,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
         console.log(err)
       },
       complete: () => {
+        this.accountsChanged = true;
         this.FetchAccounts();
         this.accountDialog = false;
         this.messageService.add({severity:'success', detail: 'Промените са запазени!', life: 3000});
@@ -123,6 +140,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
                 console.log(err)
               },
               complete: () => {
+                this.accountsChanged = true;  
                 this.messageService.add({severity:'success', detail: 'Акаунтът е изтрит успешно!', life: 3000});
                 this.FetchAccounts();
               }

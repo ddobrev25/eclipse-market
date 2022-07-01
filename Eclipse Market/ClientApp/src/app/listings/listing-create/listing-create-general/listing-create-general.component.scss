@@ -26,6 +26,9 @@ h4 {
         border: 2px var(--gray-blue-border) solid;
         color: var(--text-light);
         font-size: 14px;
+        width: 100%;
+        transition: 0.3s;
+
     }
     input:-webkit-autofill,
     input:-webkit-autofill:focus {
@@ -43,6 +46,10 @@ h4 {
     }
     .form-floating>.form-control-plaintext~label, .form-floating>.form-control:focus~label, .form-floating>.form-control:not(:placeholder-shown)~label, .form-floating>.form-select~label {
         opacity: 1 !important;
+    }
+    #charLeft {
+        color: var(--text-light);
+        float: right;
     }
 
 

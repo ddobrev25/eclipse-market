@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { IListingAddRequest } from 'src/app/_models/listing.model';
 import { ListingCreateCommunicationService } from 'src/app/_services/listing-create.service';
@@ -13,7 +15,6 @@ import { ListingService } from 'src/app/_services/listing.service';
 export class ListingCreatePreviewComponent implements OnInit {
   subs?: Subscription;
   listingAddSubs?: Subscription;
-  listingForCreation: any;
 
   listingForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -24,9 +25,35 @@ export class ListingCreatePreviewComponent implements OnInit {
   })
   
   constructor(private listingComService: ListingCreateCommunicationService,
-              private listingService: ListingService) { }
+              private listingService: ListingService,
+              private messageService: MessageService,
+              private router: Router) { }
 
   ngOnInit(): void {
+    this.fetchFormData();
+  }
+
+  onCreateListing() {
+    const body = {
+      "Title": this.listingForm.get('title')?.value,
+      "Description": this.listingForm.get('description')?.value,
+      "Price": this.listingForm.get('price')?.value,
+      "Location": this.listingForm.get('location')?.value,
+      "ListingCategoryId": this.listingForm.get('listingCategoryId')?.value
+    }
+    this.listingAddSubs = this.listingService.add(body).subscribe({
+      complete: () => {
+        this.messageService.add({ severity:'success', detail: 'Обявате е добавена успешно!', life: 3000});
+        this.router.navigate(['/home'])
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+
+  }
+
+  fetchFormData() {
     this.subs = this.listingComService.listingCreateData.subscribe(
       (resp: IListingAddRequest)  => {
         this.listingForm.patchValue({
@@ -38,33 +65,11 @@ export class ListingCreatePreviewComponent implements OnInit {
         });
       }
     )
-    console.log(this.listingForm);
   }
 
-  transformListing() {
-    return {
-      title: this.listingForm.get('title')?.value
-    }
-  }
-
-  onCreateListing() {
-    const body = {
-      'Title': this.listingForm.get('title')?.value,
-      'Description': this.listingForm.get('description')?.value,
-      'Price': this.listingForm.get('price')?.value,
-      'Location': this.listingForm.get('location')?.value,
-      'ListingCategoryId': 1
-    }
-    console.log(body);
-    this.listingAddSubs = this.listingService.add(body).subscribe({
-      complete: () => {
-        console.log("Listing Added!")
-      },
-      error: err => {
-        console.log(err)
-      }
-    });
-
+  previousPage() {
+    this.listingForm.reset();
+    this.router.navigate(['/listings/create/general']);
   }
 
   ngOnDestroy() {

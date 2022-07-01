@@ -1,11 +1,11 @@
 import { HttpClient, HttpBackend, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingGetResponse } from "../_models/listing.model";
+import { IListingCategories, IListingCategoryResponse } from "../_models/listing-category.model";
 
 @Injectable({
     providedIn: 'root'
 })
-export class ListingService {
+export class ListingCategoryService {
     private httpWithoutInterceptor: HttpClient;
     private url = "http://localhost:5001";
 
@@ -13,12 +13,10 @@ export class ListingService {
                 private httpBackend: HttpBackend) { this.httpWithoutInterceptor = new HttpClient(httpBackend) }
 
     getAll() {
-        return this.http.get<IListingGetResponse>(`${this.url}/Listing/GetAll`);
+        var headers = new HttpHeaders({
+            'SkipLoader': ``
+        })
+        return this.http.get<IListingCategories>(`${this.url}/ListingCategory/GetAll`, {headers: headers});
     }
 
-    add(body: any) {
-        var headers = new HttpHeaders({
-        });
-        return this.http.post(`${this.url}/Listing/Add`, body, { headers: headers})
-    }
 }   

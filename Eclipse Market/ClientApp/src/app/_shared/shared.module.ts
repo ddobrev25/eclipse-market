@@ -14,6 +14,8 @@ import { FormErrorsComponent } from "../form-errors/form-errors.component";
 import { ClaimAccessDirective } from "../_directives/claim-access.directive";
 import { StepsModule } from 'primeng/steps';
 import { CardModule } from 'primeng/card';
+import { TooltipModule } from 'primeng/tooltip';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
     declarations: [
@@ -34,7 +36,9 @@ import { CardModule } from 'primeng/card';
         DropdownModule,
         ToolbarModule,
         StepsModule,
-        CardModule
+        CardModule,
+        TooltipModule,
+        FileUploadModule
     ],
     exports: [
         CommonModule,
@@ -52,7 +56,9 @@ import { CardModule } from 'primeng/card';
         FormErrorsComponent,
         ClaimAccessDirective,
         StepsModule,
-        CardModule
+        CardModule,
+        TooltipModule,
+        FileUploadModule
     ]
 })
 export class SharedModule {}

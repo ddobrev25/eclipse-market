@@ -1,5 +1,5 @@
-
 <h4 class="text-center my-5">Създаване на обява</h4>
+<p-toast position="top-right"></p-toast>
 <form
     [formGroup]="createListingForm">
     <div class="form-floating mb-4">
@@ -16,16 +16,22 @@
     </div>
     <div class="form-floating mb-4">
         <textarea type="text"
+                [(ngModel)]="textAreaValue" 
+                (ngModelChange)="valueChange(textAreaValue)"
                 id="descTextArea"
                 name="description"
                 maxlength="800"
                 placeholder="Описание"
                 class="form-control"
-                formControlName="description"></textarea>
+                formControlName="description"
+                pTooltip="Бъдете ясни. ще пулачаваме по-малко въпроси от купувачи. Включи повече детайли. Бъди честен" 
+                tooltipPosition="bottom"></textarea>
+                <span id="charLeft">Остават ви {{remainingCharacters}} символа</span>
         <label for="description">Описание</label>
         <app-form-errors 
             [control]="$any(createListingForm).get('description')"
-            [controlName]="'Description'">
+            [controlName]="'Description'"
+            [min]="'80'">
         </app-form-errors>
     </div>
     <div class="form-floating mb-4">
@@ -58,9 +64,11 @@
             class="form-select"
             name="listingCategory"
             formControlName="listingCategoryId">
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            <option 
+                *ngFor="let category of listingCategories" 
+                value="{{ category.id }}">
+                {{category.title}}
+        </option>
           </select>
         <label for="listingCategory">Категория</label>
         <app-form-errors 
@@ -72,6 +80,7 @@
     <div class="d-flex flex-row-reverse">
         <button 
             pButton 
+            [disabled]="!createListingForm.valid"
             type="button"
             pRipple 
             label="Продължи" 

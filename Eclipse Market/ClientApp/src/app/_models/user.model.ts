@@ -1,3 +1,4 @@
+import { IListing } from "./listing.model";
 
 export interface IUserResponse {
     id: number;
@@ -7,7 +8,7 @@ export interface IUserResponse {
     email: string;
     password: string;
     phoneNumber: string;
-    currentListings?: string[];
+    currentListings?: IListing[];
     bookmarkedListings?: string[];
     messages?: string[];
     roleId: number;

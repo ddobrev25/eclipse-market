@@ -16,7 +16,6 @@ export class AccountSettingsComponent implements OnInit {
 
   updateUserSubs: Subscription | undefined;
   deleteUserSubs: Subscription | undefined;
-  loadUserSubs: Subscription | undefined;
 
   constructor(private userService: UserService,
               private router: Router,
@@ -80,17 +79,12 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   loadUserInfo() {
-    this.loadUserSubs = this.userService.getInfo().subscribe({
-      next: (resp: IUser) => {
-        this.userInfo = resp;
-      }
-    })
+    this.userInfo = this.userService.loggedUser;
   }
 
   ngOnDestroy() {
     this.updateUserSubs?.unsubscribe();
     this.deleteUserSubs?.unsubscribe();
-    this.loadUserSubs?.unsubscribe();
   }
 
 }

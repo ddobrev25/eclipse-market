@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
 export class UserService {
     private httpWithoutInterceptor: HttpClient;
     private url = "http://localhost:5001";
+    loggedUser?: IUser;
     
     constructor(private http: HttpClient,
                 private httpBackend: HttpBackend) { this.httpWithoutInterceptor = new HttpClient(httpBackend) }
@@ -38,9 +39,8 @@ export class UserService {
     getInfo() { 
         var headers = new HttpHeaders({
             'Accept': 'application/json',
-            'SkipLoader': ``
         });
-        return this.http.get<IUser>(`${this.url}/User/GetById`, {headers: headers});
+        return this.http.get<IUser>(`${this.url}/User/GetByIdFull`, {headers: headers});
     }
 
     getById(id: number) {
@@ -73,5 +73,5 @@ export class UserService {
         });
         return this.http.delete(`${this.url}/User/Delete`, {headers: headers, body: body})
     }
-    
+
 }

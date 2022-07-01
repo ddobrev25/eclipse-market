@@ -3,9 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserService } from '../_services/user.service';
-import { JwtHelperService } from "@auth0/angular-jwt";
 import {MessageService} from 'primeng/api';
-
 
 @Component({
   selector: 'app-auth',
@@ -22,7 +20,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService,
               private router: Router,
-              private jwtHelper: JwtHelperService,
               private messageService: MessageService) { }
 
   ngOnInit(): void {

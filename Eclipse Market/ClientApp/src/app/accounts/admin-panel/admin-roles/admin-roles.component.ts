@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { IRole, IRoles } from 'src/app/_models/role.model';
 import { RoleService } from 'src/app/_services/role.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AdminService } from 'src/app/_services/admin.service';
 
 @Component({
   selector: 'app-admin-roles',
@@ -14,6 +15,8 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   roleList: IRoles = [];
   roleAddDialog?: boolean;
   roleEditDialog?: boolean;
+  rolesChanged: boolean = false;
+
 
   roleGetSubs: Subscription | undefined;
   roleAddSubs: Subscription | undefined;
@@ -22,7 +25,8 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
 
   constructor(private roleService: RoleService,
               private confirmationService: ConfirmationService,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private adminService: AdminService) { }
 
   ngOnInit() {
     this.fetchRoles();
@@ -37,15 +41,20 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   });
 
   fetchRoles() {
-    this.roleGetSubs = this.roleService.getAll().subscribe({
-      next: (resp: IRoles) => {
-        this.roleList = resp;
-        console.log(this.roleList)
-      },
-      error: err => {
-        console.log(err);
-      }
-    })
+    if(!this.adminService.roles || this.rolesChanged) {
+      this.roleGetSubs = this.roleService.getAll().subscribe({
+        next: (resp: IRoles) => {
+          this.adminService.roles = resp;
+          this.roleList = resp;
+          this.rolesChanged = false;
+        },
+        error: err => {
+          console.log(err);
+        }
+      })
+    } else {
+      this.roleList = this.adminService.roles;
+    }
   }
 
 
@@ -67,6 +76,7 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
     console.log(body.Claims)
     this.roleAddSubs = this.roleService.add(body).subscribe({
       complete: ()=> {
+        this.rolesChanged = true;
         this.messageService.add({severity:'success', detail: 'Ролята е добавена успешно!', life: 3000});
         this.fetchRoles();
         this.roleAddDialog = false;
@@ -99,6 +109,7 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
     }
     this.roleEditSubs = this.roleService.update(body).subscribe({
       complete: () => {
+        this.rolesChanged = true;
         this.messageService.add({severity:'success', detail: 'Промените са запазени!', life: 3000});
         this.roleEditDialog = false;
         this.fetchRoles();
@@ -122,6 +133,7 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
       accept: () => {
         this.roleDeleteSubs = this.roleService.delete(body).subscribe({
           complete: () => {
+            this.rolesChanged = true;
             this.messageService.add({severity:'success', detail: 'Ролята е изтрита успешно!', life: 3000});
             this.fetchRoles();
           },
