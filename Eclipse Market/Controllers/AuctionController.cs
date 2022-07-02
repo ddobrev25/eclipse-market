@@ -19,7 +19,7 @@ namespace Eclipse_Market.Controllers
         [HttpGet]
         public ActionResult<List<AuctionGetAllResponse>> GetAll()
         {
-            var auctions = _dbContext.Auctions.Select(x => new AuctionGetAllResponse
+            var response = _dbContext.Auctions.Select(x => new AuctionGetAllResponse
             {
                 StartingPrice = x.StartingPrice,
                 BidIncrement = x.BidIncrement,
@@ -27,8 +27,8 @@ namespace Eclipse_Market.Controllers
                 ExpireTime = x.ExpireTime,
                 Id = x.Id,
                 ListingId = x.ListingId
-            }).ToList();
-            return Ok(auctions);
+            });
+            return Ok(response);
         }
 
         [HttpPost]
@@ -39,16 +39,16 @@ namespace Eclipse_Market.Controllers
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
-            var auctionToAdd = new Auction
+
+            var auctionToCreate = new Auction
             {
                 StartingPrice = request.StartingPrice,
                 BidIncrement = request.StartingPrice * .1D,
                 BuyoutPrice = request.BuyoutPrice,
-                ListingId = request.ListingId,
                 Listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First(),
-                ExpireTime = DateTime.Now.Add(request.DurationActive.ToTimeSpan()),
+                ListingId = request.ListingId
             };
-            _dbContext.Auctions.Add(auctionToAdd);
+            _dbContext.Auctions.Add(auctionToCreate);
             _dbContext.SaveChanges();
             return Ok();
         }

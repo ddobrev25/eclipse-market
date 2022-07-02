@@ -4,6 +4,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220702110510_ListingAuctionOneToZeroOrOne")]
+    partial class ListingAuctionOneToZeroOrOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace Eclipse_Market.Migrations
 
                     b.Property<DateTime>("ExpireTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("int");
 
                     b.Property<double>("StartingPrice")
                         .HasColumnType("float");
