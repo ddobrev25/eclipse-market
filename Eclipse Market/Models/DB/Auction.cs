@@ -12,6 +12,7 @@ namespace Eclipse_Market.Models.DB
         public double BidIncrement { get; set; }
         public double BuyoutPrice { get; set; }
         public int ListingId { get; set; }
-        public Listing Listing { get; set; }
+
+        public virtual Listing Listing { get; set; }
     }
 }
