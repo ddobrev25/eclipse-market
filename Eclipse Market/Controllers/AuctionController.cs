@@ -9,7 +9,6 @@ namespace Eclipse_Market.Controllers
     [ApiController]
     public class AuctionController : ControllerBase
     {
-        //test commit
         private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
         public AuctionController(EclipseMarketDbContext dbContext, IConfiguration configuration)
