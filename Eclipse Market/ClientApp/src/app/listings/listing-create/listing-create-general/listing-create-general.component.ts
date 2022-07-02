@@ -18,19 +18,19 @@ export class ListingCreateGeneralComponent implements OnInit {
   remainingCharacters: number = 800;
   textAreaValue: string = '';
 
+  auctionMode: boolean = false;
+
 
   createListingForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
     description: new FormControl('', [Validators.required, Validators.maxLength(800), Validators.minLength(80)]),
-    price: new FormControl('', [Validators.required]),
     location: new FormControl('', [Validators.required]),
     listingCategoryId: new FormControl('', [Validators.required])
   })
 
   constructor(private router: Router,
               private listingComService: ListingCreateCommunicationService,
-              private listingCategoryService: ListingCategoryService,
-              private messageService: MessageService) { }
+              private listingCategoryService: ListingCategoryService) { }
 
   ngOnInit() {
     this.fetchCategories();
@@ -49,7 +49,7 @@ export class ListingCreateGeneralComponent implements OnInit {
 
   nextPage() {
     this.listingComService.sendListingData(this.createListingForm.value);
-    this.router.navigate(['/listings/create/preview']);
+    this.router.navigate(['/listings/create/pricing']);
   }
 
   ngOnDestroy() {

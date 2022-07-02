@@ -20,6 +20,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { AccountModule } from './_modules/account.module';
 import { SharedModule } from './_shared/shared.module';
 import { ListingModule } from './_modules/listings.module';
+import { ListingCreatePricingComponent } from './listings/listing-create/listing-create-pricing/listing-create-pricing.component';
+import { ListingCreateGalleryComponent } from './listings/listing-create/listing-create-gallery/listing-create-gallery.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { ListingModule } from './_modules/listings.module';
     AuthComponent,
     SpinnerComponent,
     ErrorPageComponent,
+    ListingCreatePricingComponent,
+    ListingCreateGalleryComponent,
 
   ],
   imports: [

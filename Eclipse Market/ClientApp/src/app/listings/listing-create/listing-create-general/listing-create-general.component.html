@@ -1,91 +1,118 @@
-<h4 class="text-center my-5">Създаване на обява</h4>
 <p-toast position="top-right"></p-toast>
-<form
-    [formGroup]="createListingForm">
-    <div class="form-floating mb-4">
-        <input type="text"
-                name="title"
-                placeholder="Заглавие"
-                class="form-control"
-                formControlName="title">
-        <label for="title" >Заглавие</label>
-        <app-form-errors 
-            [control]="$any(createListingForm).get('title')"
-            [controlName]="'Title'">
-        </app-form-errors>
-    </div>
-    <div class="form-floating mb-4">
-        <textarea type="text"
-                [(ngModel)]="textAreaValue" 
-                (ngModelChange)="valueChange(textAreaValue)"
-                id="descTextArea"
-                name="description"
-                maxlength="800"
-                placeholder="Описание"
-                class="form-control"
-                formControlName="description"
-                pTooltip="Бъдете ясни. ще пулачаваме по-малко въпроси от купувачи. Включи повече детайли. Бъди честен" 
-                tooltipPosition="bottom"></textarea>
-                <span id="charLeft">Остават ви {{remainingCharacters}} символа</span>
-        <label for="description">Описание</label>
-        <app-form-errors 
-            [control]="$any(createListingForm).get('description')"
-            [controlName]="'Description'"
-            [min]="'80'">
-        </app-form-errors>
-    </div>
-    <div class="form-floating mb-4">
-        <input type="number"
-                id="priceInput"
-                name="price"
-                placeholder="Цена"
-                class="form-control"
-                formControlName="price">
-        <label for="price">Цена</label>
-        <app-form-errors 
-            [control]="$any(createListingForm).get('price')"
-            [controlName]="'Price'">
-        </app-form-errors>
-    </div>
-    <div class="form-floating mb-4">
-        <input type="text"
-                name="location"
-                placeholder="Локация"
-                class="form-control"
-                formControlName="location">
-        <label for="location">Локация</label>
-        <app-form-errors 
-            [control]="$any(createListingForm).get('location')"
-            [controlName]="'Location'">
-        </app-form-errors>
-    </div>
-    <div class="form-floating mb-4">
-        <select 
-            class="form-select"
-            name="listingCategory"
-            formControlName="listingCategoryId">
-            <option 
-                *ngFor="let category of listingCategories" 
-                value="{{ category.id }}">
-                {{category.title}}
-        </option>
-          </select>
-        <label for="listingCategory">Категория</label>
-        <app-form-errors 
-            [control]="$any(createListingForm).get('listingCategoryId')"
-            [controlName]="'Category'">
-        </app-form-errors>
-    </div>
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-6 px-5">
+            <div class="listing">
 
-    <div class="d-flex flex-row-reverse">
-        <button 
-            pButton 
-            [disabled]="!createListingForm.valid"
-            type="button"
-            pRipple 
-            label="Продължи" 
-            class="p-button-primary p-2 my-sm-4 my-0"
-            (click)="nextPage()">
-        </button>
+            </div>
+        </div>
+        <div class="col-6 px-5">
+            <div class="auction">
+
+            </div>
+        </div>
     </div>
-</form>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col px-md-5 px-0">
+            <form
+            *ngIf="!auctionMode"
+            [formGroup]="createListingForm">
+            <div class="form-floating mb-4">
+                <input type="text"
+                        name="title"
+                        placeholder="Заглавие"
+                        class="form-control"
+                        formControlName="title">
+                <label for="title" >Заглавие</label>
+                <app-form-errors 
+                    [control]="$any(createListingForm).get('title')"
+                    [controlName]="'Title'">
+                </app-form-errors>
+            </div>
+            <div class="form-floating mb-4">
+                <textarea type="text"
+                        [(ngModel)]="textAreaValue" 
+                        (ngModelChange)="valueChange(textAreaValue)"
+                        id="descTextArea"
+                        name="description"
+                        maxlength="800"
+                        placeholder="Описание"
+                        class="form-control"
+                        formControlName="description"
+                        pTooltip="Бъдете ясни. ще пулачаваме по-малко въпроси от купувачи. Включи повече детайли. Бъди честен" 
+                        tooltipPosition="bottom"></textarea>
+                        <span id="charLeft">Остават ви {{remainingCharacters}} символа</span>
+                <label for="description">Описание</label>
+                <app-form-errors 
+                    [control]="$any(createListingForm).get('description')"
+                    [controlName]="'Description'"
+                    [min]="'80'">
+                </app-form-errors>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="text"
+                        name="location"
+                        placeholder="Локация"
+                        class="form-control"
+                        formControlName="location">
+                <label for="location">Локация</label>
+                <app-form-errors 
+                    [control]="$any(createListingForm).get('location')"
+                    [controlName]="'Location'">
+                </app-form-errors>
+            </div>
+            <div class="form-floating mb-4">
+                <select 
+                    class="form-select"
+                    name="listingCategory"
+                    formControlName="listingCategoryId">
+                    <option 
+                        *ngFor="let category of listingCategories" 
+                        value="{{ category.id }}">
+                        {{category.title}}
+                </option>
+                  </select>
+                <label for="listingCategory">Категория</label>
+                <app-form-errors 
+                    [control]="$any(createListingForm).get('listingCategoryId')"
+                    [controlName]="'Category'">
+                </app-form-errors>
+            </div>
+        
+            <div class="d-flex flex-row-reverse">
+                <button 
+                    pButton 
+                    [disabled]="!createListingForm.valid"
+                    type="button"
+                    pRipple 
+                    label="Продължи" 
+                    class="p-button-primary p-2 my-sm-4 my-0"
+                    (click)="nextPage()">
+                </button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- <div class="form-floating mb-4">
+    <input type="number"
+            id="priceInput"
+            name="price"
+            placeholder="Цена"
+            class="form-control"
+            formControlName="price">
+    <label for="price">Цена</label>
+    <app-form-errors 
+        [control]="$any(createListingForm).get('price')"
+        [controlName]="'Price'">
+    </app-form-errors>
+</div> -->

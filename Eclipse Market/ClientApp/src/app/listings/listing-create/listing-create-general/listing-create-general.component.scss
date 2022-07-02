@@ -25,7 +25,7 @@ h4 {
         background-color: var(--gray-blue-hover);
         border: 2px var(--gray-blue-border) solid;
         color: var(--text-light);
-        font-size: 14px;
+        font-size: 16px;
         width: 100%;
         transition: 0.3s;
 
@@ -51,6 +51,14 @@ h4 {
         color: var(--text-light);
         float: right;
     }
-
+    .auction,
+    .listing {
+        height: 200px;
+        max-width: 80%;
+        background-color: var(--gray-blue);
+        border: 2px solid var(--gray-blue-border);
+        border-radius: 16px;
+        margin: 0;
+    }
 
 }
