@@ -1,45 +1,22 @@
-div {
-    margin: 0;
-    padding: 0;
-}
 .content { 
     background:linear-gradient(190deg, var(--gray-blue-medium), var(--gray-blue));
     min-height: 1000px;
 }
-#menu {
-    height: auto;
-}
-.row {
-    padding: 30px;
-}
-.nav-menu {
-    width: 100%;
-    border-radius: 15px;
-    border: 2px var(--gray-blue-border) solid;
-    overflow: hidden;
-    padding: 10px 0;
-    background-color: var(--gray-blue-dark);
-    color: var(--text-light);
-    
-}
-.nav-menu ul {
-    list-style-type: none;
-}
-.nav-menu li {
-    padding: 10px;
-}
-.links {
-    cursor: pointer;
-}
-.active-item {
-    border-width: 4px;
-    border-style: solid;
-    border-image: 
-      linear-gradient(
-        to bottom, 
-        #102338,
-        #455474
-      ) 0 0 0 1;
-    background-color: var(--gray-blue-hover);
-    transition: linear .1s;
+:host::ng-deep {
+    .p-tabmenu .p-tabmenu-nav {
+        display: flex;
+        flex-grow: 1;
+    }
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
+        width: 100%;
+        text-align: center;
+    }
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+        border-width: 2px 0 0 0;
+        border-radius: 0;
+    }
+    .p-tabmenu-nav-container {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
 }

@@ -1,0 +1,29 @@
+:host::ng-deep {
+    .form-check-input:checked {
+        background-color: var(--blue-bg);
+        border-color: var(--gray-blue-border);
+    }
+    input.form-control { 
+        background-color: var(--gray-blue-hover);
+        border: 2px var(--gray-blue-border) solid;
+        color: var(--text-light);
+
+    }
+    #priceInput::-webkit-inner-spin-button, #priceInput::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input:-webkit-autofill,
+    input:-webkit-autofill:focus {
+      transition: background-color 600000s 0s, color 600000s 0s;
+    }
+
+    .form-floating label {
+        color: var(--text-light);
+    }
+
+    .form-check-label {
+        color: var(--text-inactive);
+
+    }
+}

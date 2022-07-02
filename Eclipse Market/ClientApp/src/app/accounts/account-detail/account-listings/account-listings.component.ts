@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { IListingGetResponse } from 'src/app/_models/listing.model';
+import { ListingPreviewService } from 'src/app/_services/listing-preview.service';
 import { UserService } from 'src/app/_services/user.service';
 
 @Component({
@@ -14,12 +15,9 @@ export class AccountListingsComponent implements OnInit {
 
   constructor(private userService: UserService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private listingPreviewService: ListingPreviewService) { }
 
   ngOnInit(): void {
-    this.fecthUserListings();
-  }
-  ngOnChanges() {
     this.fecthUserListings();
   }
 
@@ -27,8 +25,8 @@ export class AccountListingsComponent implements OnInit {
     this.userListings = this.userService.loggedUser?.currentListings;
   }
 
-  onSelectListing(listing: IListingGetResponse) {
-    console.log("listing was selected!")
+  onSelectListing(id: number) {
+    this.listingPreviewService.sendListingId(id);
     this.listingSelected = true;
     this.router.navigate(['/account/listing/preview'])
   }

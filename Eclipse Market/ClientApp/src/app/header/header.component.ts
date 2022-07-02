@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -7,12 +7,23 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  isLoggedIn: boolean = false;
+  hamburgerMenu: boolean = false;
 
-  constructor(private jwtHelper: JwtHelperService) { }
+  private sub = this.router.events.subscribe(() => {
+    this.hamburgerMenu = false;
+  });
+
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
 
+  }
+
+  onToggleNavbar() {
+    this.hamburgerMenu = !this.hamburgerMenu;
+  }
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
 }

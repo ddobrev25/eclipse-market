@@ -1,3 +1,24 @@
-.content {
+.container-fluid {
     background-color: red;
+    width: 100%;
+    margin: 0;
+}
+:host::ng-deep {
+    .preview-card {
+        min-height: 300px;
+        margin-bottom: 20px;
+        height: auto;
+        background: var(--gray-blue);
+        border: 2px solid var(--gray-blue-border);
+        border-radius: 8px;
+    }
+
+    #listing-img {
+        height: auto;
+        width: 100%;
+        padding: 12px;
+    }
+    .location-label {
+        color: var(--text-inactive);
+    }
 }

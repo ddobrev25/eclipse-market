@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/_models/user.model';
+import { AdminService } from 'src/app/_services/admin.service';
 import { UserService } from 'src/app/_services/user.service';
 
 @Component({
@@ -12,7 +14,9 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   userInfo: IUser | undefined;
   loadUserSubs: Subscription | undefined;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService,
+              private router: Router,
+              private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.loadUserInfo();
@@ -28,6 +32,14 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
         }
       })
     }
+  }
+
+  onLogOut() {
+    localStorage.clear();
+    this.userService.loggedUser = undefined;
+    this.adminService.accounts = undefined;
+    this.adminService.roles = undefined;
+    this.router.navigate(['/home']);
   }
 
   ngOnDestroy() {

@@ -1,4 +1,4 @@
-import { HttpClient, HttpBackend, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpBackend, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IListingGetResponse } from "../_models/listing.model";
 
@@ -14,6 +14,14 @@ export class ListingService {
 
     getAll() {
         return this.http.get<IListingGetResponse>(`${this.url}/Listing/GetAll`);
+    }
+    getById(id: number) {
+        var headers = new HttpHeaders({
+            'Accept': 'application/json',
+            'SkipLoader': ``
+        });
+        let queryParams = new HttpParams().set('id', id)
+        return this.http.get<IListingGetResponse>(`${this.url}/Listing/GetById`, {headers: headers, params: queryParams});
     }
 
     add(body: any) {

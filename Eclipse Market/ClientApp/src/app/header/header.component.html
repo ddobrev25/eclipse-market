@@ -1,8 +1,6 @@
-<nav id="navbar-overwrite" class="navbar navbar-dark bg-dark py-3 justify-content-between flex-nowrap flex-row">
+<!-- <nav id="navbar-overwrite" class="navbar navbar-dark bg-dark py-3 justify-content-between flex-nowrap flex-row">
     <div class="container-xl">
-
       <a class="navbar-brand" routerLink="home">Eclipse Market</a>
-
       <div class="" id="navbarSupportedContent">
         <ul class="nav navbar-nav flex-row float-right">
           <li class="nav-item mx-1">
@@ -39,4 +37,37 @@
         </ul>
       </div>
     </div>
-  </nav>
+  </nav> -->
+<div class="navbar-container">
+  <div class="container-xl d-flex justify-content-between align-items-center flex-sm-nowrap flex-wrap">
+    <div class="logo">
+      <span routerLink="/home">Eclipse Market</span>
+    </div>
+
+    <div class="toggle-button" (click)="onToggleNavbar()">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <div class="nav-tabs" [ngClass]="hamburgerMenu ? 'active' : ''">
+      <ul class="d-flex mb-0 align-items-center flex-sm-nowrap flex-wrap m-0 p-0">
+        <li class="nav-tab">
+          <i class="pi pi-envelope"></i>
+          Съобщения
+        </li>
+        <li class="nav-tab">
+          <i class="pi pi-bookmark"></i>
+          Отметки
+        </li>
+        <li class="nav-tab" routerLink="/account" routerLinkActive="active-nav">
+          <i class="pi pi-user"></i>
+          Моят профил
+        </li>
+        <button pButton pRipple label="Добави обява" id="addBtn" class="p-button-primary ms-2" routerLink="listings/create">
+        </button>
+      </ul>
+    </div>
+
+  </div>
+</div>

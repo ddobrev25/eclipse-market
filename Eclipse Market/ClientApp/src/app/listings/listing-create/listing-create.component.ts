@@ -14,8 +14,7 @@ export class ListingCreateComponent implements OnInit {
   ngOnInit() {
     this.items = [
       {label: 'Обща информация', routerLink: 'general'},
-      {label: 'Цена', routerLink: 'pricing'},
-      {label: 'Снимки', routerLink: 'gallery'},
+      {label: 'Снимки и Цена', routerLink: 'gallery'},
       {label: 'Преглед', routerLink: 'preview'},
   ];
   }

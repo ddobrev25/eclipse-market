@@ -20,13 +20,20 @@ export class ListingCreateGeneralComponent implements OnInit {
 
   auctionMode: boolean = false;
 
-
   createListingForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
     description: new FormControl('', [Validators.required, Validators.maxLength(800), Validators.minLength(80)]),
     location: new FormControl('', [Validators.required]),
     listingCategoryId: new FormControl('', [Validators.required])
   })
+
+  createAuctionForm: FormGroup = new FormGroup({
+    title: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
+    description: new FormControl('', [Validators.required, Validators.maxLength(800), Validators.minLength(80)]),
+    location: new FormControl('', [Validators.required]),
+    listingCategoryId: new FormControl('', [Validators.required])
+  })
+
 
   constructor(private router: Router,
               private listingComService: ListingCreateCommunicationService,
@@ -47,9 +54,17 @@ export class ListingCreateGeneralComponent implements OnInit {
     this.remainingCharacters = 800 - textAreaValue.length;
   }
 
+  onSelectListing() {
+    this.auctionMode = false;
+
+  }
+  onSelectAuction() {
+    this.auctionMode = true;
+  }
+
   nextPage() {
     this.listingComService.sendListingData(this.createListingForm.value);
-    this.router.navigate(['/listings/create/pricing']);
+    this.router.navigate(['/listings/create/gallery']);
   }
 
   ngOnDestroy() {

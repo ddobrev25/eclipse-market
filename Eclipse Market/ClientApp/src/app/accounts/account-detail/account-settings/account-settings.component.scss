@@ -9,10 +9,7 @@ h4 {
     width: 100%;
     height: 100%;
 }
-button {
-    color: (--text-dark);
-    font-weight: 450;
-}
+
 .info-container {
     background-color: var(--gray-blue-dark);
     padding: 48px;
@@ -26,18 +23,16 @@ button {
     padding: 12px 14px;
     border: 2px var(--gray-blue-border) solid;
 }
-@media (max-width: 336px) {
-    #buttons {
-        flex-wrap: wrap;
-    }
-    #buttons button {
+@media (max-width: 545px) {
+    .actionButtons button {
         width: 100%;
-    }
-    .ms-4 {
-        margin-left: 0 !important;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
     }
 }
-#editBtn {
-    background: var(--blue-bg);
-    color: var(--text-dark);
+:host::ng-deep {
+    .actionButtons button {
+        color: var(--text-dark);
+        font-weight: 450;
+    }
 }

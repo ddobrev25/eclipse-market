@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { IListingAddRequest } from 'src/app/_models/listing.model';
 import { ListingCreateCommunicationService } from 'src/app/_services/listing-create.service';
 import { ListingService } from 'src/app/_services/listing.service';
+import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-listing-create-preview',
@@ -27,7 +28,8 @@ export class ListingCreatePreviewComponent implements OnInit {
   constructor(private listingComService: ListingCreateCommunicationService,
               private listingService: ListingService,
               private messageService: MessageService,
-              private router: Router) { }
+              private router: Router,
+              private userService: UserService) { }
 
   ngOnInit(): void {
     this.fetchFormData();
@@ -43,7 +45,8 @@ export class ListingCreatePreviewComponent implements OnInit {
     }
     this.listingAddSubs = this.listingService.add(body).subscribe({
       complete: () => {
-        this.messageService.add({ severity:'success', detail: 'Обявате е добавена успешно!', life: 3000});
+        this.userService.loggedUser = undefined;
+        this.messageService.add({key: 'tc', severity:'success', detail: 'Обявате е добавена успешно!', life: 3000});
         this.router.navigate(['/home'])
       },
       error: err => {

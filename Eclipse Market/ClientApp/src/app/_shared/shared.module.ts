@@ -16,6 +16,8 @@ import { StepsModule } from 'primeng/steps';
 import { CardModule } from 'primeng/card';
 import { TooltipModule } from 'primeng/tooltip';
 import { FileUploadModule } from 'primeng/fileupload';
+import { TabMenuModule } from 'primeng/tabmenu';
+
 
 @NgModule({
     declarations: [
@@ -38,7 +40,8 @@ import { FileUploadModule } from 'primeng/fileupload';
         StepsModule,
         CardModule,
         TooltipModule,
-        FileUploadModule
+        FileUploadModule,
+        TabMenuModule
     ],
     exports: [
         CommonModule,
@@ -58,7 +61,8 @@ import { FileUploadModule } from 'primeng/fileupload';
         StepsModule,
         CardModule,
         TooltipModule,
-        FileUploadModule
+        FileUploadModule,
+        TabMenuModule
     ]
 })
 export class SharedModule {}

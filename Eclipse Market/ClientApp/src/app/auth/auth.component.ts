@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserService } from '../_services/user.service';
 import {MessageService} from 'primeng/api';
+import { IUser } from '../_models/user.model';
 
 @Component({
   selector: 'app-auth',
@@ -17,6 +18,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   registerMode: boolean = false;
 
   registerSubscription: Subscription | undefined;
+  loadUserSubs: Subscription | undefined;
 
   constructor(private userService: UserService,
               private router: Router,
@@ -53,17 +55,26 @@ export class AuthComponent implements OnInit, OnDestroy {
           localStorage.setItem('token', JSON.stringify(resp.token));
           localStorage.setItem('claims', JSON.stringify(resp.claims));
           this.checkToken();
-          this.router.navigate(['/home']);
         }
+      },
+      complete: () => {
+        this.loadUserInfo();
       }
     });
   }
-
-  onLogOut() {
-    localStorage.removeItem('token');
-    this.checkToken();
-    this.router.navigate(['/home'])
+    loadUserInfo() {
+    if(!this.userService.loggedUser) {
+      this.loadUserSubs = this.userService.getInfo().subscribe({
+        next: (resp: IUser) => {
+          this.userService.loggedUser = resp;
+        },
+        complete: () => {
+          this.router.navigate(['/home']);
+        }
+      })
+    }
   }
+
 
   //!/Login
   //!Register
@@ -110,6 +121,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.registerSubscription?.unsubscribe();
+    this.loadUserSubs?.unsubscribe();
   }
 
 }

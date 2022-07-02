@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListingCreateGalleryComponent } from './listing-create-gallery.component';
+import { ListingCreateGalleryComponent } from './listing-create-gallery&pricing.component';
 
 describe('ListingCreateGalleryComponent', () => {
   let component: ListingCreateGalleryComponent;

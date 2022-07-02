@@ -22,6 +22,7 @@
     "@angular/router": "~13.2.0",
     "@auth0/angular-jwt": "^5.0.2",
     "bootstrap": "^5.2.0-beta1",
+    "font-awesome": "^4.7.0",
     "jquery": "^3.6.0",
     "ng-http-loader": "^11.0.1",
     "primeicons": "^5.0.0",

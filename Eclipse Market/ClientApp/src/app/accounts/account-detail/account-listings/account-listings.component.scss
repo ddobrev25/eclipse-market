@@ -26,4 +26,10 @@ h3 {
     .location-label {
         color: var(--text-inactive);
     }
+    p-card.p-element p,
+    .p-card .p-card-title,
+    .p-card .p-card-footer {
+        overflow: hidden;
+        word-break: break-all;
+    }
 }
