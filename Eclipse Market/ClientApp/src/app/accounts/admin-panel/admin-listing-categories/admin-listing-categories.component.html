@@ -1,0 +1,91 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col px-0">
+            <p-toast></p-toast>
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    <div class="button-group">
+                        <button class="btn mr-2" (click)="onToggleCategoryAddDialog()">Добави категория</button>
+                    </div>
+                </div>
+            </p-toolbar>
+
+            <p-table [value]="categoryList" 
+                    [paginator]="true" 
+                    [rows]="10"
+                    [showCurrentPageReport]="true" 
+                    responsiveLayout="scroll">
+                    
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pColumn="id">ID</th>
+                        <th pColumn="title">Име</th>
+                        <th pColumn="action">Действия</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-category>
+                    <tr>
+                        <td>
+                           <div class="wrapper">
+                                {{category.id}}
+                           </div>
+                        </td>
+                        <td>
+                            <div class="wrapper">
+                                {{category.title}}
+                           </div>
+                        </td>
+                        <td>
+                            <div class="d-flex action-btn">
+                                <button class="btn btn-light"><i class="pi pi-pencil"></i></button>
+                                <button class="btn btn-danger ms-2" (click)="onDeleteCategory(category)"><i class="pi pi-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-dialog [(visible)]="categoryAddDialog" [style]="{width: '600px'}" [modal]="true" styleClass="p-fluid" [draggable]="false">
+                <ng-template pTemplate="header">
+                    <h4>Добавяне на категория</h4>
+                </ng-template>
+            
+                <ng-template pTemplate="content">
+                    <form [formGroup]="categoryForm">
+                        <label for="title" >Title</label>
+                        <input type="text"
+                                name="title"
+                                class="form-control"
+                                formControlName="title">
+                    </form>
+                </ng-template>
+            
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Назад" icon="pi pi-times" (click)="onDiscard()"></button>
+                    <button pButton pRipple label="Запази" icon="pi pi-check" [disabled]="!categoryForm.valid" (click)="onAddCategory()"></button>
+                </ng-template>
+            </p-dialog>
+            <p-dialog [(visible)]="categoryEditDialog" [style]="{width: '600px'}" [modal]="true" styleClass="p-fluid" [draggable]="false">
+                <ng-template pTemplate="header">
+                    <h4>Редакция на категория</h4>
+                </ng-template>
+            
+                <ng-template pTemplate="content">
+                    <form [formGroup]="categoryForm">
+                        <label for="title" >Title</label>
+                        <input type="text"
+                                name="title"
+                                class="form-control"
+                                formControlName="title">
+                    </form>
+                </ng-template>
+            
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Назад" icon="pi pi-times"></button>
+                    <button pButton pRipple label="Запази" icon="pi pi-check" [disabled]="!categoryForm.valid"></button>
+                </ng-template>
+            </p-dialog>
+            <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+        </div>
+    </div>
+</div>

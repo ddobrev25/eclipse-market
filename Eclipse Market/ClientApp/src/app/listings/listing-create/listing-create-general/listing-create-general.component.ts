@@ -46,6 +46,7 @@ export class ListingCreateGeneralComponent implements OnInit {
     this.categorySubs = this.listingCategoryService.getAll().subscribe({
       next: (resp: IListingCategories) => {
         this.listingCategories = resp;
+        this.listingCategoryService.categories = resp;
       }
     })
   }

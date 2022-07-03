@@ -5,7 +5,7 @@
             <p-toolbar>
                 <div class="p-toolbar-group-left">
                     <div class="button-group">
-                        <button class="btn mr-2" (click)="onToggleRoleAddDialog()">Add role</button>
+                        <button class="btn mr-2" (click)="onToggleRoleAddDialog()">Добави роля</button>
                     </div>
                 </div>
             </p-toolbar>
@@ -82,11 +82,6 @@
             
                 <ng-template pTemplate="content">
                     <form [formGroup]="roleForm">
-                        <label for="id" >ID</label>
-                        <input type="text"
-                                name="id"
-                                class="form-control"
-                                formControlName="id">
                         <label for="name" >Name</label>
                         <input type="text"
                                 name="name"

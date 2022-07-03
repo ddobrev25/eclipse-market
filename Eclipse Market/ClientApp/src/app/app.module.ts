@@ -21,6 +21,7 @@ import { AccountModule } from './_modules/account.module';
 import { SharedModule } from './_shared/shared.module';
 import { ListingModule } from './_modules/listings.module';
 import { ListingCreateGalleryComponent } from './listings/listing-create/listing-create-gallery&pricing/listing-create-gallery&pricing.component';
+import { AdminListingCategoriesComponent } from './accounts/admin-panel/admin-listing-categories/admin-listing-categories.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ListingCreateGalleryComponent } from './listings/listing-create/listing
     SpinnerComponent,
     ErrorPageComponent,
     ListingCreateGalleryComponent,
+    AdminListingCategoriesComponent,
 
   ],
   imports: [

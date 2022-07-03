@@ -4,9 +4,11 @@
             class="col-12 col-lg-6 col-xxl-4 d-flex justify-content-center"
             *ngFor="let listing of userListings">
             
-            <p-card  [header]="listing.title" styleClass="preview-card" (click)="onSelectListing(listing.id!)">
+            <p-card  [header]="listing.title" styleClass="preview-card">
                 <ng-template pTemplate="header">
-                    <img alt="Card" src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png">
+                    <img 
+                        (click)="onSelectListing(listing.id!)" 
+                        alt="Card" src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png">
                 </ng-template>
                 <ng-template pTemplate="body">
                     <p>

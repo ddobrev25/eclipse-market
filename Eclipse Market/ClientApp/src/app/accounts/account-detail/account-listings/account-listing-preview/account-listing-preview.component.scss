@@ -1,5 +1,8 @@
-.container-fluid {
-    background-color: red;
+#main-container{
+    background: var(--gray-blue-dark);
+    border: 2px var(--gray-blue-border) solid;
+    color: var(--text-light);
+    border-radius: 8px;
     width: 100%;
     margin: 0;
 }
@@ -16,9 +19,81 @@
     #listing-img {
         height: auto;
         width: 100%;
-        padding: 12px;
+        border-radius: 8px;
     }
-    .location-label {
+    .message-container {
+        background: var(--gray-blue);
+        border: 2px var(--gray-blue-border) solid;
+        border-radius: 8px;
+
+    }
+    .author-card {
+        width: 100%;
+        background: var(--gray-blue);
+        margin-top: 20px;
+        border: 2px var(--gray-blue-border) solid;
+        border-radius: 8px;
+    }
+    .info-container {
+        border: 2px var(--gray-blue-border) solid;
+        border-radius: 8px;
+        background: var(--gray-blue);
+        max-height: 600px;
+        height: auto;
+    }
+    .category span {
         color: var(--text-inactive);
+        font-size: 18px;
+        border-bottom: 2px solid var(--blue-bg);
+
+    }
+    .title span {
+        font-size: 28px;
+        word-break: break-all;
+    }
+    .views {
+        font-size: 14px;
+        color: var(--text-inactive);
+        display: block;
+    }
+    .price {
+        border-bottom: 2px solid var(--blue-bg);
+    }
+    .description {
+        word-break: break-all;
+    }
+    #messageTextArea {
+        resize: none;
+        min-height: 48px;
+        overflow:hidden;
+        transition: 0.3s;
+        width: 100%;
+    }
+    #messageTextArea:focus {
+        height: 200px;
+    }
+    textarea,
+    textarea:focus{ 
+        background-color: var(--gray-blue-hover);
+        border: 2px var(--gray-blue-border) solid;
+        color: var(--text-light);
+        font-size: 16px;
+        width: 80%;
+    }
+    .form-floating label {
+        font-size: 20px;
+        height: auto;
+    }
+    #charLeft {
+        float: right;
+    }
+    #profile-img {
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        padding: 10px;
+        border-radius: 50%;
+    }
+    #profile-img {
+        width: 120px;
     }
 }

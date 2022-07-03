@@ -1,0 +1,9 @@
+.container-xl {
+    min-height: 1000px;
+    color: var(--text-light);
+}
+:host::ng-deep {
+    .category-container {
+        background: cyan;
+    }
+}

@@ -14,6 +14,9 @@ export class AccountListingPreviewComponent implements OnInit {
   listingSubs?: Subscription;
   selectedListing?: IListingGetResponse;
 
+  remainingCharacters: number = 200;
+  textAreaValue: string = '';
+
   constructor(private router: Router,
               private listingPreviewService: ListingPreviewService,
               private listingService: ListingService) { }
@@ -32,6 +35,13 @@ export class AccountListingPreviewComponent implements OnInit {
         console.log(err)
       }
     });
+  }
+  fetchCategories() {
+
+  }
+
+  valueChange(textAreaValue: string) {
+    this.remainingCharacters = 200 - textAreaValue.length;
   }
 
   ngOnDestroy() {

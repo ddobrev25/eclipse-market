@@ -13,8 +13,9 @@ export class AdminPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.navs = [
-      {label:'Акаунти', routerLink: ['manage-accounts'],},
-      {label:'Роли', routerLink: ['manage-roles']}
+      {label:'Акаунти', routerLink: ['manage-accounts']},
+      {label:'Роли', routerLink: ['manage-roles']},
+      {label:'Категории', routerLink: ['manage-categories']}
     ]
   }
 

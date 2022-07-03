@@ -26,6 +26,7 @@ export class ListingService {
 
     add(body: any) {
         var headers = new HttpHeaders({
+            
         });
         return this.http.post(`${this.url}/Listing/Add`, body, { headers: headers})
     }
