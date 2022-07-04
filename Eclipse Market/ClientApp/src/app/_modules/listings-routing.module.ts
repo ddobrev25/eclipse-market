@@ -4,6 +4,7 @@ import { ListingCreateGalleryComponent } from "../listings/listing-create/listin
 import { ListingCreateGeneralComponent } from "../listings/listing-create/listing-create-general/listing-create-general.component";
 import { ListingCreatePreviewComponent } from "../listings/listing-create/listing-create-preview/listing-create-preview.component";
 import { ListingCreateComponent } from "../listings/listing-create/listing-create.component";
+import { ListingPreviewComponent } from "../listings/listing-preview/listing-preview.component";
 import { ListingsComponent } from "../listings/listings.component";
 
 const routes: Routes = [
@@ -13,9 +14,10 @@ const routes: Routes = [
             { path: 'general', component: ListingCreateGeneralComponent },
             { path: 'gallery', component: ListingCreateGalleryComponent },
             { path: 'preview', component: ListingCreatePreviewComponent }
-
         ] }
     ]},
+    { path: 'preview', component: ListingPreviewComponent },
+    { path: '**', redirectTo: '', pathMatch: 'full' }
     
     // { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

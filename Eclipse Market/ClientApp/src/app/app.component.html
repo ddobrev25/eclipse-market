@@ -1,12 +1,14 @@
-<app-header></app-header>
-<main>
-  <router-outlet></router-outlet>
-</main>
-<p-toast position="top-center" key="tc"></p-toast>
-<app-footer></app-footer>
-<ng-http-loader
-  [entryComponent]="spinnerComponent"
-  [opacity]="'1'"
-  [minDuration]="1500"
-  [filteredHeaders]="['SkipLoader']"></ng-http-loader>
+<div class="content">
+  <app-header></app-header>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+  <p-toast position="top-center" key="tc"></p-toast>
+  <app-footer></app-footer>
+  <ng-http-loader
+    [entryComponent]="spinnerComponent"
+    [opacity]="'1'"
+    [minDuration]="1500"
+    [filteredHeaders]="['SkipLoader']"></ng-http-loader>
+</div>
 

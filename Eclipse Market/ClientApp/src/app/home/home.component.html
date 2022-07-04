@@ -17,5 +17,47 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="text-center my-5">
+                <span id="heading">Промо обяви</span>
+            </div>
+            <p-dataView 
+                [value]="randomListingList"
+                [paginator]="true" 
+                [rows]="10"
+                [alwaysShowPaginator]="false"
+                [loading]="false">
+                <ng-template let-listing pTemplate="listItem">
+                    <div class="row wrapper-container mx-xl-0 mx-1 py-2">
+                        <div class="col-lg-3 col-md-4 col-12">
+                            <div class="img-container">
+                                <img id="profile-img" alt="Card" src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-5 col-12">
+                            <div class="info-container d-flex flex-column">
+                                <span class="title mb-3 mt-4">{{ listing.title }}</span>
+                                <span class="location mt-3">град {{ listing.location }}</span>
+                                <span class="views">Преглеждания: {{ listing.views }}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-12 d-flex flex-column justify-content-end">
+                            <div class="price-container d-flex flex-column justify-content-center me-3 pb-1">
+                                <span class="price text-end mb-2">Цена: {{ listing.price }}лв</span>
+                                <button
+                                    pButton
+                                    pRipple
+                                    label="Виж повече"
+                                    class="p-button-success infoBtn mb-4"
+                                    (click)="onSelectListing(listing)">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataView>
+        </div>
+    </div>
     
 </div>

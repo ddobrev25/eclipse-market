@@ -6,6 +6,7 @@ import { AccountListingPreviewComponent } from "../accounts/account-detail/accou
 import { AccountListingsComponent } from "../accounts/account-detail/account-listings/account-listings.component";
 import { AccountMessagesComponent } from "../accounts/account-detail/account-messages/account-messages.component";
 import { AccountSettingsComponent } from "../accounts/account-detail/account-settings/account-settings.component";
+import { AdminListingCategoriesComponent } from "../accounts/admin-panel/admin-listing-categories/admin-listing-categories.component";
 import { AdminManageComponent } from "../accounts/admin-panel/admin-manage/admin-manage.component";
 import { AdminPanelComponent } from "../accounts/admin-panel/admin-panel.component";
 import { AdminRolesComponent } from "../accounts/admin-panel/admin-roles/admin-roles.component";
@@ -23,6 +24,7 @@ import { AccountRoutingModule } from "./account-routing.module";
         AdminManageComponent,
         AdminRolesComponent,
         AccountListingPreviewComponent,
+        AdminListingCategoriesComponent
     ],
     imports: [
         SharedModule,
@@ -41,6 +43,8 @@ import { AccountRoutingModule } from "./account-routing.module";
         AdminManageComponent,
         AdminRolesComponent,
         AccountListingPreviewComponent,
+        AdminListingCategoriesComponent
+
     ]
 })
 export class AccountModule {}

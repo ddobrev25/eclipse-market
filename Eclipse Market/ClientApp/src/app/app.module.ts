@@ -20,8 +20,6 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { AccountModule } from './_modules/account.module';
 import { SharedModule } from './_shared/shared.module';
 import { ListingModule } from './_modules/listings.module';
-import { ListingCreateGalleryComponent } from './listings/listing-create/listing-create-gallery&pricing/listing-create-gallery&pricing.component';
-import { AdminListingCategoriesComponent } from './accounts/admin-panel/admin-listing-categories/admin-listing-categories.component';
 
 @NgModule({
   declarations: [
@@ -31,9 +29,7 @@ import { AdminListingCategoriesComponent } from './accounts/admin-panel/admin-li
     FooterComponent,
     AuthComponent,
     SpinnerComponent,
-    ErrorPageComponent,
-    ListingCreateGalleryComponent,
-    AdminListingCategoriesComponent,
+    ErrorPageComponent
 
   ],
   imports: [
