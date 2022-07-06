@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { IRole, IRoles } from 'src/app/_models/role.model';
@@ -12,6 +12,8 @@ import { AdminService } from 'src/app/_services/admin.service';
   styleUrls: ['./admin-roles.component.scss']
 })
 export class AdminRolesComponent implements OnInit, OnDestroy {
+  @ViewChild('rt') rolesTable!: any;
+
   roleList: IRoles = [];
   roleAddDialog?: boolean;
   roleEditDialog?: boolean;
@@ -39,6 +41,10 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
     name: new FormControl('', [Validators.required]),
     claims: new FormControl('', [Validators.required])
   });
+
+  applyFilterGlobal($event: Event, stringVal: any) {
+    this.rolesTable.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
+  }
 
   fetchRoles() {
     if(!this.adminService.roles || this.rolesChanged) {

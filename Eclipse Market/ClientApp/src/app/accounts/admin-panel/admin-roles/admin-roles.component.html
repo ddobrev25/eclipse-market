@@ -2,19 +2,27 @@
     <div class="row">
         <div class="col px-0">
             <p-toast></p-toast>
-            <p-toolbar>
-                <div class="p-toolbar-group-left">
-                    <div class="button-group">
-                        <button class="btn mr-2" (click)="onToggleRoleAddDialog()">Добави роля</button>
-                    </div>
-                </div>
-            </p-toolbar>
 
-            <p-table [value]="roleList" 
+            <p-table 
+                    #rt
+                    [value]="roleList" 
                     [paginator]="true" 
                     [rows]="10"
                     [showCurrentPageReport]="true" 
-                    responsiveLayout="scroll">
+                    responsiveLayout="scroll"
+                    [globalFilterFields]="['name', 'claims']">
+
+                <ng-template pTemplate="caption">
+                    <div class="d-flex justify-content-between">
+                        <div style="text-align: left">        
+                            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+                            <input #searchInput pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Търсене" />
+                        </div>
+                        <div class="button-group">
+                            <button class="btn mr-2 h-100" (click)="onToggleRoleAddDialog()">Добави роля</button>
+                        </div>
+                    </div>
+                </ng-template>
                     
                 <ng-template pTemplate="header">
                     <tr>
@@ -23,6 +31,7 @@
                         <th pColumn="action">Действия</th>
                     </tr>
                 </ng-template>
+
                 <ng-template pTemplate="body" let-role>
                     <tr>
                         <td>

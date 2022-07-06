@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { ListingCategoryService } from 'src/app/_services/listing-category.servi
   styleUrls: ['./admin-listing-categories.component.scss']
 })
 export class AdminListingCategoriesComponent implements OnInit {
+  @ViewChild('ct') categoriesTable!: any;
 
   categoryList: IListingCategories = [];
   categoryAddDialog?: boolean;
@@ -31,6 +32,10 @@ export class AdminListingCategoriesComponent implements OnInit {
     this.fetchCategories();
     this.categoryAddDialog = false;
     this.categoryEditDialog = false;
+  }
+
+  applyFilterGlobal($event: Event, stringVal: any) {
+    this.categoriesTable.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
 
   categoryForm: FormGroup = new FormGroup({

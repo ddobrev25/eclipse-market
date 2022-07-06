@@ -1,0 +1,39 @@
+:host::ng-deep {
+    .message-container {
+        background: var(--gray-blue);
+        color: var(--text-light);
+        min-height: 140px;
+        border: 2px solid var(--gray-blue-border);
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .sender {
+        color: var(--text-inactive);
+    }
+    .title {
+        word-break: break-all;
+    }
+    .description {
+        opacity: 0.5;
+        word-break: break-all;
+    }
+    .noMessage-container {
+        height: 600px;
+        width: 100%;
+        color: var(--text-light);
+        background: var(--gray-blue);
+        border: 2px solid var(--gray-blue-border);
+        border-radius: 8px;
+    }
+    .noMessage-container span {
+        font-size: 24px;
+    }
+    .message-preview-container {
+        height: 600px;
+        width: 100%;
+        color: var(--text-light);
+        background: var(--gray-blue);
+        border: 2px solid var(--gray-blue-border);
+        border-radius: 8px;
+    }
+}

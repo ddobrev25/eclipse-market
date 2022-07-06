@@ -1,4 +1,5 @@
 import { IListing } from "./listing.model";
+import { IMessage } from "./message.model";
 
 export interface IUserResponse {
     id: number;
@@ -10,7 +11,7 @@ export interface IUserResponse {
     phoneNumber: string;
     currentListings?: IListing[];
     bookmarkedListings?: string[];
-    messages?: string[];
+    messages?: IMessage[];
     roleId: number;
     roleName?: string;
 }

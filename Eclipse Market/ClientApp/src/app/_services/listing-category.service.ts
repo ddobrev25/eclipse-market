@@ -25,8 +25,12 @@ export class ListingCategoryService {
         })
         return this.http.post(`${this.url}/ListingCategory/Add`, body, {headers: headers});
     }
+
     delete(body: IListingCategoryDeleteRequest) {
-        return this.http.delete(`${this.url}/ListingCategory/Delete`, {body: body});
+        var headers = new HttpHeaders({
+            'SkipLoader': ``
+        })
+        return this.http.delete(`${this.url}/ListingCategory/Delete`, {body: body, headers: headers});
     }
 
 }   
