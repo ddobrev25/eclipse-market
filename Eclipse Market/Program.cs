@@ -59,6 +59,8 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("RoleClaim", "ListingCategoryGetClaim"));
     options.AddPolicy("ListingCategoryAdd", policy =>
         policy.RequireClaim("RoleClaim", "ListingCategoryAddClaim"));
+    options.AddPolicy("ListingCategoryUpdate", policy =>
+        policy.RequireClaim("RoleClaim", "ListingCategoryUpdateClaim"));
     options.AddPolicy("ListingCategoryDelete", policy =>
         policy.RequireClaim("RoleClaim", "ListingCategoryDeleteClaim"));
 });

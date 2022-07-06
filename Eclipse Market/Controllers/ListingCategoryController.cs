@@ -30,6 +30,25 @@ namespace Eclipse_Market.Controllers
             });
             return Ok(listingCategories);
         }
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryGet")]
+        public ActionResult<ListingCategoryGetByIdResponse> GetById(int id)
+        {
+            if (!_dbContext.ListingCategories.Any(x => x.Id == id))
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            var listingCategory = _dbContext.ListingCategories.Where(x => x.Id == id).First();
+
+            var response = new ListingCategoryGetByIdResponse
+            {
+                Id = listingCategory.Id,
+                Title = listingCategory.Title
+            };
+
+            return Ok(response);
+        }
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryAdd")]
         public ActionResult Add(ListingCategoryAddRequest request)
@@ -44,6 +63,25 @@ namespace Eclipse_Market.Controllers
 
             _dbContext.ListingCategories.Add(listingCategoryToAdd);
             _dbContext.SaveChanges();
+            return Ok();
+        }
+        [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryUpdate")]
+        public ActionResult Update(ListingCategoryUpdateRequest request)
+        { 
+            if(!_dbContext.ListingCategories.Any(x => x.Id == request.Id))
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            var listingForUpdate = _dbContext.ListingCategories.Where(x => x.Id == request.Id).First();
+
+            if (request.Title != string.Empty)
+            {
+                listingForUpdate.Title = request.Title;
+            }
+            _dbContext.SaveChanges();
+
             return Ok();
         }
         [HttpDelete]
