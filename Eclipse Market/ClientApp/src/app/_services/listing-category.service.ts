@@ -1,6 +1,6 @@
 import { HttpClient, HttpBackend, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingCategories, IListingCategoryAddRequest, IListingCategoryDeleteRequest } from "../_models/listing-category.model";
+import { IListingCategories, IListingCategoryAddRequest, IListingCategoryDeleteRequest, IListingCategoryUpdateRequest } from "../_models/listing-category.model";
 
 @Injectable({
     providedIn: 'root'
@@ -25,7 +25,12 @@ export class ListingCategoryService {
         })
         return this.http.post(`${this.url}/ListingCategory/Add`, body, {headers: headers});
     }
-
+    update(body: IListingCategoryUpdateRequest) {
+        var headers = new HttpHeaders({
+            'SkipLoader': ``
+        })
+        return this.http.put(`${this.url}/ListingCategory/Update`, body, {headers: headers});
+    }
     delete(body: IListingCategoryDeleteRequest) {
         var headers = new HttpHeaders({
             'SkipLoader': ``

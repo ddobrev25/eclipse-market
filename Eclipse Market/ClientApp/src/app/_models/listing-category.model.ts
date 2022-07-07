@@ -5,6 +5,10 @@ export interface IListingCategoryResponse {
 export interface IListingCategoryAddRequest {
     Title: string
 }
+export interface IListingCategoryUpdateRequest {
+    id: number,
+    title: string
+}
 export interface IListingCategoryDeleteRequest {
     Id: number
 }
