@@ -39,6 +39,7 @@ export class AdminListingCategoriesComponent implements OnInit {
   }
 
   categoryForm: FormGroup = new FormGroup({
+    id: new FormControl(''),
     title: new FormControl('', [Validators.required])
   });
 
@@ -87,15 +88,30 @@ export class AdminListingCategoriesComponent implements OnInit {
     this.categoryEditDialog = false;
   }
 
-  onToggleCategoryEditDialog() {
+  onToggleCategoryEditDialog(categoryForEdit: IListingCategory) {
     this.categoryEditDialog = true;
     this.categoryForm.patchValue({
-
+      id: categoryForEdit.id,
+      title: categoryForEdit.title
     })
   }
 
   onEditCategory() {
-    
+    const body = {
+      'id': this.categoryForm.get('id')?.value,
+      'title': this.categoryForm.get('title')?.value,
+    }
+    this.categoryEditSubs = this.listingCategoryService.update(body).subscribe({
+      complete: () => {
+        this.messageService.add({severity:'success', detail: 'Промените са запазени!', life: 3000});
+        this.categoryEditDialog = false;
+        this.categoriesChanged = true;
+        this.fetchCategories();
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
   }
 
   onDeleteCategory(categoryForDelete: IListingCategory) {
