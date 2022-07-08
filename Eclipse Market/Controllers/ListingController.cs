@@ -63,7 +63,52 @@ namespace Eclipse_Market.Controllers
             };
             return Ok(response);
         }
+        [HttpGet]
+        public ActionResult<ListingGetRecommendedResponse> GetRecommended(int count)
+        {
+            int[] currentListingIds = _dbContext.Listings
+                .Select(x => x.Id)
+                .ToArray();
+            int listingsCount = currentListingIds.Length;
 
+            if(count > listingsCount)
+            {
+                return BadRequest("Not enough listings in the database.");
+            }
+
+            Random random = new Random();
+
+            ListingGetAllResponse[] listingGetAllResponses = new ListingGetAllResponse[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                int randomId = currentListingIds[random.Next(0, listingsCount)];
+                var randomListing = _dbContext.Listings
+                    .Where(x => x.Id == randomId)
+                    .First();
+
+                if (listingGetAllResponses.All(x => x == null))
+                {
+                    listingGetAllResponses[i] = ParseListingToGetAllResponse(randomListing);
+                }
+                else
+                {
+                    if (!listingGetAllResponses.Any(x => x?.Id == randomId))
+                    {
+                        listingGetAllResponses[i] = ParseListingToGetAllResponse(randomListing);
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                }
+            }
+            var response = new ListingGetRecommendedResponse
+            {
+                Listings = listingGetAllResponses.ToList()
+            };
+            return Ok(response);
+        }
         [HttpPost]
         public ActionResult Add(ListingAddRequest request)
         {
@@ -174,6 +219,22 @@ namespace Eclipse_Market.Controllers
             _dbContext.Listings.Remove(listingForDelete);
             _dbContext.SaveChanges();
             return Ok();
+        }
+
+        private ListingGetAllResponse ParseListingToGetAllResponse(Listing listing)
+        {
+            return new ListingGetAllResponse()
+            {
+                AuthorId = listing.AuthorId,
+                Description = listing.Description,
+                Id = listing.Id,
+                ListingCategoryId = listing.ListingCategoryId,
+                Location = listing.Location,
+                Price = listing.Price,
+                TimesBookmarked = listing.TimesBookmarked,
+                Title = listing.Title,
+                Views = listing.Views
+            };
         }
 
     }
