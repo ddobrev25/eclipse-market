@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IListingCategories } from '../_models/listing-category.model';
-import { IListing, IListingGetResponse } from '../_models/listing.model';
+import { IListing, IListingGetRecommended, IListingGetResponse } from '../_models/listing.model';
 import { ListingCategoryService } from '../_services/listing-category.service';
 import { ListingPreviewService } from '../_services/listing-preview.service';
+import { ListingService } from '../_services/listing.service';
 
 @Component({
   selector: 'app-home',
@@ -16,9 +17,12 @@ export class HomeComponent implements OnInit {
   categoryList: IListingCategories = [];
   categoryGetSubs?: Subscription;
 
-  randomListingList: IListingGetResponse[] = [];
+  randomListingList?: IListingGetRecommended;
+  randomListingGetSubs?: Subscription;
+
 
   constructor(private listingCategoryService: ListingCategoryService,
+              private listingService: ListingService,
               private router: Router) { }
 
   ngOnInit(): void {
@@ -42,20 +46,33 @@ export class HomeComponent implements OnInit {
   }
 
   fetchRandomListings() {
-    this.randomListingList[0] = {
-      title: 'Test',
-      description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis, sit. Repudiandae, doloremque saepe, eaque enim eius recusandae dolore voluptatem perspiciatis labore nisi ab expedita obcaecati consequuntur omnis modi eligendi! Cumque.',
-      price: 30,
-      location: 'Gabrovo',
-      listingCategoryId: 1,
-      authorId: 1,
-      views: 12,
-      timesbookmarked: 3
-    }
+    // this.randomListingList[0] = {
+    //   title: 'Test',
+    //   description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis, sit. Repudiandae, doloremque saepe, eaque enim eius recusandae dolore voluptatem perspiciatis labore nisi ab expedita obcaecati consequuntur omnis modi eligendi! Cumque.',
+    //   price: 30,
+    //   location: 'Gabrovo',
+    //   listingCategoryId: 1,
+    //   authorId: 1,
+    //   views: 12,
+    //   timesbookmarked: 3
+    // }
+    this.randomListingGetSubs = this.listingService.getRecommended(5).subscribe({
+      next: (resp: IListingGetRecommended) => {
+        this.randomListingList = resp;
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
   }
 
   onSelectListing(listingForPreview: IListing) {
-    this.router.navigate(['/listings/preview'], {queryParams: {id: 1}})
+    this.router.navigate(['/listings/preview'], {queryParams: {id: listingForPreview.id}})
+  }
+
+  ngOnDestroy() {
+    this.categoryGetSubs?.unsubscribe();
+    this.randomListingGetSubs?.unsubscribe();
   }
 
 }

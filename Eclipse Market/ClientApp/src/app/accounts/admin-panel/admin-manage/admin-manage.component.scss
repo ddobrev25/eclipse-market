@@ -1,11 +1,7 @@
 :host ::ng-deep {
     .p-datatable-header {
-        background: var(--gray-blue-dark);
-        border-bottom: none;
-        border-top: 2px var(--gray-blue-border) solid;
-        border-left: 2px var(--gray-blue-border) solid;
-        border-right: 2px var(--gray-blue-border) solid;
-        color: var(--text-light);
+        background: var(--gray-blue);
+        border: none;
     }
     .p-inputtext.p-component.p-element {
         border: 2px var(--gray-blue-border) solid;
@@ -16,9 +12,9 @@
         color: #fff
     }
     input,
+    .p-inputtext.p-component.p-element,
     select { 
         background-color: var(--gray-blue-hover);
-        color: var(--text-light);
         padding: 12px 14px;
         border: 2px var(--gray-blue-border) solid;
     }
@@ -69,6 +65,10 @@
     }
     ::-webkit-scrollbar-thumb {
         background: var(--blue-gray)
+    }
+    .p-paginator {
+        border: 2px var(--gray-blue-border) solid;
+        border-top: none;
     }
 }
 

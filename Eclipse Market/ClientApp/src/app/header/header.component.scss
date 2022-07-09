@@ -8,9 +8,11 @@
 }
 .nav-tabs {
     border: none;
+    font-weight: 700;
 }
 .active-nav {
     border-top: 2px solid var(--blue-bg);
+    color: #93C5FD;
 }
 .logo {
     cursor: pointer;

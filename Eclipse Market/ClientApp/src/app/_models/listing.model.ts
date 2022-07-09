@@ -27,3 +27,6 @@ export interface IListingGetResponse {
     timesbookmarked: number,
     listingCategoryId: number
 }
+export interface IListingGetRecommended {
+    listings: IListing[]
+}

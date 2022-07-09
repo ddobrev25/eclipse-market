@@ -1,6 +1,6 @@
 import { HttpClient, HttpBackend, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingGetResponse } from "../_models/listing.model";
+import { IListingGetRecommended, IListingGetResponse } from "../_models/listing.model";
 
 @Injectable({
     providedIn: 'root'
@@ -23,11 +23,16 @@ export class ListingService {
         let queryParams = new HttpParams().set('id', id)
         return this.http.get<IListingGetResponse>(`${this.url}/Listing/GetById`, {headers: headers, params: queryParams});
     }
+    getRecommended(count: number) {
+        var headers = new HttpHeaders({
+            'Accept': 'application/json',
+            'SkipLoader': ``
+        });
+        let queryParams = new HttpParams().set('count', count)
+        return this.http.get<IListingGetRecommended>(`${this.url}/Listing/GetRecommended`, {headers: headers, params: queryParams})
+    }
 
     add(body: any) {
-        var headers = new HttpHeaders({
-            
-        });
-        return this.http.post(`${this.url}/Listing/Add`, body, { headers: headers})
+        return this.http.post(`${this.url}/Listing/Add`, body)
     }
 }   
