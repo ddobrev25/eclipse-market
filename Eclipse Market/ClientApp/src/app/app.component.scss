@@ -2,6 +2,8 @@ main {
    height: 100%;
 }
 .content {
-   background: var(--gray-blue);
-
+   background: linear-gradient(190deg, var(--gray-blue-medium), var(--gray-blue));
+   // background: url(./_images/bg2.png);
+   // background-repeat: no-repeat;
+   // background-size: cover;
 }
