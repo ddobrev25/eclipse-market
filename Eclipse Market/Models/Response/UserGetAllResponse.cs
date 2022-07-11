@@ -12,6 +12,7 @@ namespace Eclipse_Market.Models.Response
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public string RoleName { get; set; }
+        public string DateTimeCreated { get; set; }
         public IEnumerable<ListingGetAllResponse> CurrentListings { get; set; }
         public IEnumerable<ListingGetAllResponse> BookmarkedListings { get; set; }
         public IEnumerable<MessageGetAllResponse> Messages { get; set; }

@@ -52,7 +52,8 @@ namespace Eclipse_Market.Controllers
                     Email = x.Email,
                     Password = x.Password,
                     PhoneNumber = x.PhoneNumber,
-                    RoleName = x.Role.Name
+                    RoleName = x.Role.Name,
+                    DateTimeCreated = x.DateTimeCreated.ToLongDateString(),
                 }).ToList();
             foreach (var user in users)
             {
@@ -168,7 +169,8 @@ namespace Eclipse_Market.Controllers
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
                 UserName = user.UserName,
-                RoleName = user.Role.Name
+                RoleName = user.Role.Name,
+                DateTimeCreated = user.DateTimeCreated.ToLongDateString(),
             };
             response.BookmarkedListings = _dbContext.ListingUsers
                 .Where(x => x.UserId == user.Id)
@@ -257,7 +259,8 @@ namespace Eclipse_Market.Controllers
                 Email = request.Email,
                 Password = ComputeSha256Hash(request.Password),
                 PhoneNumber = request.PhoneNumber,
-                Role = _dbContext.Roles.First(x => x.Id == request.RoleId)
+                Role = _dbContext.Roles.First(x => x.Id == request.RoleId),
+                DateTimeCreated = DateTime.UtcNow
             };
             _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();
