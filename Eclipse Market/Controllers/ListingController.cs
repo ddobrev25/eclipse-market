@@ -45,22 +45,52 @@ namespace Eclipse_Market.Controllers
         {
             var listing = _dbContext.Listings.Where(x => x.Id == id).FirstOrDefault();
 
-            if(listing == null)
+            if (listing == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
+            var author = _dbContext.Users.Where(x => x.Id == listing.AuthorId).First();
+            var authorListings = _dbContext.Listings.Where(x => x.AuthorId == author.Id).ToArray();
+
+            ListingGetWithoutAuthorResponse[] listingResponses = new ListingGetWithoutAuthorResponse[authorListings.Count()];
+            int i = 0;
+            foreach (var authorListing in authorListings)
+            {
+                ListingGetWithoutAuthorResponse listingResponse = new ListingGetWithoutAuthorResponse()
+                {
+                    Description = authorListing.Description,
+                    ListingCategoryId = authorListing.ListingCategoryId,
+                    Location = authorListing.Location,
+                    Price = authorListing.Price,
+                    TimesBookmarked = authorListing.TimesBookmarked,
+                    Title = authorListing.Title,
+                    Views = authorListing.Views
+                };
+                listingResponses[i] = listingResponse;
+                i++;
+            }
+
+            AuthorGetResponse authorResponse = new AuthorGetResponse
+            {
+                DateCreated = author.DateCreated.ToLongDateString(),
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                PhoneNumber = author.PhoneNumber,
+                Listings = listingResponses
+            };
             var response = new ListingGetByIdResponse
             {
-                AuthorId = listing.AuthorId,
                 Description = listing.Description,
                 ListingCategoryId = listing.ListingCategoryId,
                 Location = listing.Location,
                 Price = listing.Price,
                 TimesBookmarked = listing.TimesBookmarked,
                 Title = listing.Title,
-                Views = listing.Views
+                Views = listing.Views,
+                Author = authorResponse
             };
+
             return Ok(response);
         }
         [HttpGet]
