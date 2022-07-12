@@ -4,6 +4,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220712183523_RemoveMessage")]
+    partial class RemoveMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,25 +47,6 @@ namespace Eclipse_Market.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Auctions");
-                });
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Chat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("TimeStarted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TopicListingId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Claim", b =>
@@ -157,36 +140,6 @@ namespace Eclipse_Market.Migrations
                     b.HasIndex("ListingId");
 
                     b.ToTable("ListingUsers");
-                });
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ChatId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeSent")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Role", b =>
@@ -312,21 +265,6 @@ namespace Eclipse_Market.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Message", b =>
-                {
-                    b.HasOne("Eclipse_Market.Models.DB.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eclipse_Market.Models.DB.User", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Chat");
-                });
-
             modelBuilder.Entity("Eclipse_Market.Models.DB.RoleClaim", b =>
                 {
                     b.HasOne("Eclipse_Market.Models.DB.Claim", "Claim")
@@ -355,11 +293,6 @@ namespace Eclipse_Market.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Chat", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Claim", b =>
@@ -392,8 +325,6 @@ namespace Eclipse_Market.Migrations
                     b.Navigation("BookmarkedListings");
 
                     b.Navigation("CurrentListings");
-
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

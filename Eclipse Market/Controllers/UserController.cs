@@ -41,7 +41,7 @@ namespace Eclipse_Market.Controllers
             var users = _dbContext.Users
                 .Include(x => x.BookmarkedListings)
                 .Include(x => x.CurrentListings)
-                .Include(x => x.Messages)
+                //.Include(x => x.Messages)
                 .Include(x => x.Role)
                 .Select(x => new UserGetAllResponse()
                 {
@@ -85,7 +85,7 @@ namespace Eclipse_Market.Controllers
                         Views = x.Views,
                         ListingCategoryId = x.ListingCategoryId
                     });
-                user.Messages = _dbContext.Messages
+/*                user.Messages = _dbContext.Messages
                     .Where(x => x.RecieverId == user.Id)
                     .Select(x => new MessageGetAllResponse
                     {
@@ -95,7 +95,7 @@ namespace Eclipse_Market.Controllers
                         ListingId = x.ListingId,
                         Body = x.Body,
                         Title = x.Title
-                    });
+                    });*/
             }
             return Ok(users);
         }
@@ -198,7 +198,7 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views,
                 });
-            response.Messages = _dbContext.Messages
+/*            response.Messages = _dbContext.Messages
                .Where(x => x.RecieverId == user.Id)
                .Select(x => new MessageGetAllResponse
                {
@@ -208,7 +208,7 @@ namespace Eclipse_Market.Controllers
                    ListingId = x.ListingId,
                    Body = x.Body,
                    Title = x.Title
-               });
+               });*/
             return Ok(response);
         }
         [HttpPost]

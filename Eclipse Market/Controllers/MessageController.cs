@@ -9,7 +9,7 @@ namespace Eclipse_Market.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private EclipseMarketDbContext _dbContext;
+       /* private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
 
         public MessageController(EclipseMarketDbContext dbContext, IConfiguration configuration)
@@ -80,6 +80,6 @@ namespace Eclipse_Market.Controllers
             _dbContext.Messages.Remove(messageToDelete);
             _dbContext.SaveChanges();
             return Ok();
-        }
+        }*/
     }
 }

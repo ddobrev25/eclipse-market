@@ -14,6 +14,7 @@ namespace Eclipse_Market
         public DbSet<Claim> Claims { get; set; }
         public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Chat> Chats { get; set; }
         public DbSet<Auction> Auctions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,6 +23,10 @@ namespace Eclipse_Market
             modelBuilder.Entity<Listing>()
                .HasOne(l => l.Author)
                .WithMany(u => u.CurrentListings);
+
+/*            modelBuilder.Entity<Message>()
+              .HasOne(m => m.Chat)
+              .WithMany(ch => ch.Messages);*/
 
             //User - Listing many to many - Many listings can be bookmarked by many users
             modelBuilder.Entity<ListingUser>()
