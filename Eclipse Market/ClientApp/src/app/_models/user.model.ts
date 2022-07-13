@@ -1,4 +1,4 @@
-import { IListing } from "./listing.model";
+import { IListing, IListingGetWithoutAuthorResponse } from "./listing.model";
 import { IMessage } from "./message.model";
 
 export interface IUserResponse {
@@ -14,6 +14,13 @@ export interface IUserResponse {
     messages?: IMessage[];
     roleId: number;
     roleName?: string;
+}
+export interface AuthorGetResponse {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    dateCreated: string;
+    listings: IListingGetWithoutAuthorResponse
 }
 
 export type IUser = IUserResponse;

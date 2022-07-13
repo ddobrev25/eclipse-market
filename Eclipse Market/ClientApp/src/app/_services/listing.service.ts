@@ -1,6 +1,6 @@
 import { HttpClient, HttpBackend, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingGetRecommended, IListingGetResponse } from "../_models/listing.model";
+import { IListingGetByIdResponse, IListingGetRecommended, IListingGetResponse } from "../_models/listing.model";
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +21,7 @@ export class ListingService {
             'SkipLoader': ``
         });
         let queryParams = new HttpParams().set('id', id)
-        return this.http.get<IListingGetResponse>(`${this.url}/Listing/GetById`, {headers: headers, params: queryParams});
+        return this.http.get<IListingGetByIdResponse>(`${this.url}/Listing/GetById`, {headers: headers, params: queryParams});
     }
     getRecommended(count: number) {
         var headers = new HttpHeaders({

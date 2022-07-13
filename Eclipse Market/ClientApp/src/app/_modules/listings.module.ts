@@ -1,9 +1,9 @@
 import { NgModule } from "@angular/core";
-import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
 import { ListingCreateGalleryComponent } from "../listings/listing-create/listing-create-gallery&pricing/listing-create-gallery&pricing.component";
 import { ListingCreateGeneralComponent } from "../listings/listing-create/listing-create-general/listing-create-general.component";
 import { ListingCreatePreviewComponent } from "../listings/listing-create/listing-create-preview/listing-create-preview.component";
 import { ListingCreateComponent } from "../listings/listing-create/listing-create.component";
+import { UserListingsComponent } from "../listings/listing-preview/user-listings/user-listings.component";
 import { ListingPreviewComponent } from "../listings/listing-preview/listing-preview.component";
 import { ListingsComponent } from "../listings/listings.component";
 import { SharedModule } from "../_shared/shared.module";
@@ -16,7 +16,8 @@ import { ListingRoutingModule } from "./listings-routing.module";
         ListingCreateGeneralComponent,
         ListingCreatePreviewComponent,
         ListingCreateGalleryComponent,
-        ListingPreviewComponent
+        ListingPreviewComponent,
+        UserListingsComponent
     ],
     imports: [
         SharedModule,
@@ -29,7 +30,8 @@ import { ListingRoutingModule } from "./listings-routing.module";
         ListingCreateGeneralComponent,
         ListingCreatePreviewComponent,
         ListingCreateGalleryComponent,
-        ListingPreviewComponent
+        ListingPreviewComponent,
+        UserListingsComponent
     ]
 })
 export class ListingModule {}

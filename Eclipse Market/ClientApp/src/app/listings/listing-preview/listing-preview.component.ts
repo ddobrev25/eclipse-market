@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingGetResponse } from 'src/app/_models/listing.model';
+import { IListingGetByIdResponse, IListingGetResponse } from 'src/app/_models/listing.model';
 import { ListingService } from 'src/app/_services/listing.service';
+import { UserListingsService } from 'src/app/_services/user-listings.service';
 
 @Component({
   selector: 'app-listing-preview',
@@ -10,7 +11,7 @@ import { ListingService } from 'src/app/_services/listing.service';
   styleUrls: ['./listing-preview.component.scss']
 })
 export class ListingPreviewComponent implements OnInit {
-  selectedListing?: IListingGetResponse;
+  selectedListing?: IListingGetByIdResponse;
   selectedListingId: number = 0;
   listingSubs?: Subscription;
   sub?: Subscription;
@@ -20,7 +21,9 @@ export class ListingPreviewComponent implements OnInit {
   textAreaValue: string = '';
 
   constructor(private listingService: ListingService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router,
+              private userListingsService: UserListingsService) { }
 
   ngOnInit(): void {
     this.fetchQueryParams();
@@ -39,9 +42,14 @@ export class ListingPreviewComponent implements OnInit {
     this.sub?.unsubscribe();
   }
 
+  onLoadUserListings() {
+      this.userListingsService.next(this.selectedListing?.author!)
+      this.router.navigate(['/listings/user'])
+  }
+
   fetchListingInfo() {
     this.listingSubs = this.listingService.getById(this.selectedListingId).subscribe({
-      next: (resp: IListingGetResponse) => {
+      next: (resp: IListingGetByIdResponse) => {
         this.selectedListing = resp;
       },
       error: err => {

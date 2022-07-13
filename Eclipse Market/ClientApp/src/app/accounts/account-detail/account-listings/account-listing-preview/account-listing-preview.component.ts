@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingGetResponse } from 'src/app/_models/listing.model';
+import { IListingGetByIdResponse, IListingGetResponse } from 'src/app/_models/listing.model';
 import { ListingPreviewService } from 'src/app/_services/listing-preview.service';
 import { ListingService } from 'src/app/_services/listing.service';
 
@@ -12,7 +12,7 @@ import { ListingService } from 'src/app/_services/listing.service';
 })
 export class AccountListingPreviewComponent implements OnInit {
   listingSubs?: Subscription;
-  selectedListing?: IListingGetResponse;
+  selectedListing?: IListingGetByIdResponse;
 
   remainingCharacters: number = 200;
   textAreaValue: string = '';
@@ -28,7 +28,7 @@ export class AccountListingPreviewComponent implements OnInit {
   fetchListingInfo() {
     const id = this.listingPreviewService.listingPreviewId.getValue();
     this.listingSubs = this.listingService.getById(id).subscribe({
-      next: (resp: IListingGetResponse) => {
+      next: (resp: IListingGetByIdResponse) => {
         this.selectedListing = resp;
       },
       error: err => {

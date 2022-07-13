@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
     //   views: 12,
     //   timesbookmarked: 3
     // }
-    this.randomListingGetSubs = this.listingService.getRecommended(5).subscribe({
+    this.randomListingGetSubs = this.listingService.getRecommended(1).subscribe({
       next: (resp: IListingGetRecommended) => {
         this.randomListingList = resp;
       },
