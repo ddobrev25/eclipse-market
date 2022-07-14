@@ -18,6 +18,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { DataViewModule } from 'primeng/dataview';
+import { ChipModule } from 'primeng/chip';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { DataViewModule } from 'primeng/dataview';
         TooltipModule,
         FileUploadModule,
         TabMenuModule,
-        DataViewModule
+        DataViewModule,
+        ChipModule
     ],
     exports: [
         CommonModule,
@@ -65,7 +67,8 @@ import { DataViewModule } from 'primeng/dataview';
         TooltipModule,
         FileUploadModule,
         TabMenuModule,
-        DataViewModule
+        DataViewModule,
+        ChipModule
     ]
 })
 export class SharedModule {}

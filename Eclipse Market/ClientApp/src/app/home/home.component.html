@@ -9,11 +9,14 @@
     </div>
 
     <div class="row">
-        <div class="col">
-            <div
-                *ngFor="let category of categoryList" 
-                class="category-container">
-                {{ category.title }}
+        <div 
+            class="col p-0 d-flex flex-wrap justify-content-center">
+            <div 
+                class="m-2"
+                *ngFor="let category of categoryList">
+                <p-chip 
+                class="category-container"
+                [label]="category.title"></p-chip>
             </div>
         </div>
     </div>

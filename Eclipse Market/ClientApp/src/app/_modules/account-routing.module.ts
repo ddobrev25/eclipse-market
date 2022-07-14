@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { AccountBookmarksComponent } from "../accounts/account-bookmarks/account-bookmarks.component";
 import { AccountDetailComponent } from "../accounts/account-detail/account-detail.component";
 import { AccountInfoComponent } from "../accounts/account-detail/account-info/account-info.component";
 import { AccountListingPreviewComponent } from "../accounts/account-detail/account-listings/account-listing-preview/account-listing-preview.component";
@@ -29,6 +30,7 @@ const routes: Routes = [
         ]},
         { path: '**', redirectTo: 'info', pathMatch: 'full' },
     ]},
+    { path: 'bookmarks', component: AccountBookmarksComponent }
 ];
   
 @NgModule({

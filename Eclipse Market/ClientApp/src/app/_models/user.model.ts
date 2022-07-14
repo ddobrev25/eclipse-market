@@ -20,7 +20,7 @@ export interface AuthorGetResponse {
     lastName: string;
     phoneNumber: string;
     dateCreated: string;
-    listings: IListingGetWithoutAuthorResponse
+    listings?: IListingGetWithoutAuthorResponse[]
 }
 
 export type IUser = IUserResponse;

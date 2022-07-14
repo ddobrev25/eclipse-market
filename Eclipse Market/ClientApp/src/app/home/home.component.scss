@@ -4,7 +4,16 @@
 }
 :host::ng-deep {
     .category-container {
-        background: cyan;
+        cursor: pointer;
+    }
+    .p-chip {
+        padding: 4px 6px;
+        background: var(--gray-blue-dark);
+        border: 2px solid var(--gray-blue-border);
+        transition: .2s;
+    }
+    .p-chip:hover {
+        border-color: var(--blue-bg);
     }
     #heading {
         border-bottom: 2px solid var(--gray-blue-border);

@@ -1,7 +1,6 @@
 <div class="content">
     <div class="container-md mx-auto">
         <div class="row pt-0">
-
             <div class="col">
                 <p-tabMenu *ngIf="!isAdmin" [model]="itemsDefault!" [scrollable]="true" [activeItem]="activeItem!"></p-tabMenu>
                 <p-tabMenu *ngIf="isAdmin" [model]="itemsAdmin!" [scrollable]="true" [activeItem]="activeItem!"></p-tabMenu>

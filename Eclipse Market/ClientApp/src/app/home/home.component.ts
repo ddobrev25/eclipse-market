@@ -46,16 +46,6 @@ export class HomeComponent implements OnInit {
   }
 
   fetchRandomListings() {
-    // this.randomListingList[0] = {
-    //   title: 'Test',
-    //   description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis, sit. Repudiandae, doloremque saepe, eaque enim eius recusandae dolore voluptatem perspiciatis labore nisi ab expedita obcaecati consequuntur omnis modi eligendi! Cumque.',
-    //   price: 30,
-    //   location: 'Gabrovo',
-    //   listingCategoryId: 1,
-    //   authorId: 1,
-    //   views: 12,
-    //   timesbookmarked: 3
-    // }
     this.randomListingGetSubs = this.listingService.getRecommended(1).subscribe({
       next: (resp: IListingGetRecommended) => {
         this.randomListingList = resp;
