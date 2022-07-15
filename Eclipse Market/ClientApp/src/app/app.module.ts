@@ -20,6 +20,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { AccountModule } from './_modules/account.module';
 import { SharedModule } from './_shared/shared.module';
 import { ListingModule } from './_modules/listings.module';
+
 @NgModule({
   declarations: [
     AppComponent,

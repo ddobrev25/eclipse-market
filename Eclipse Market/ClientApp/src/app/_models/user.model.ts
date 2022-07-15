@@ -10,7 +10,7 @@ export interface IUserResponse {
     password: string;
     phoneNumber: string;
     currentListings?: IListing[];
-    bookmarkedListings?: string[];
+    bookmarkedListings?: IListing[];
     messages?: IMessage[];
     roleId: number;
     roleName?: string;

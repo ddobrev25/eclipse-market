@@ -34,13 +34,15 @@ export class AccountDetailComponent implements OnInit {
       {label: 'Лична Информация', icon: 'pi pi-fw pi-user', routerLink: 'info'},
       {label: 'Смяна на парола', icon: 'pi pi-fw pi-lock', routerLink: 'edit'},
       {label: 'Съобщения', icon: 'pi pi-fw pi-envelope', routerLink: 'messages'},
-      {label: 'Моите обяви', icon: 'pi pi-fw pi-file', routerLink: 'listings'}
+      {label: 'Моите обяви', icon: 'pi pi-fw pi-file', routerLink: 'listings'},
+      {label: 'Отметки', icon: 'pi pi-fw pi-bookmark', routerLink: 'bookmarks' },
     ];
     this.itemsAdmin = [
       {label: 'Лична Информация', icon: 'pi pi-fw pi-user', routerLink: 'info'},
       {label: 'Смяна на парола', icon: 'pi pi-fw pi-lock', routerLink: 'edit'},
       {label: 'Съобщения', icon: 'pi pi-fw pi-envelope', routerLink: 'messages'},
       {label: 'Моите обяви', icon: 'pi pi-fw pi-file', routerLink: 'listings'},
+      {label: 'Отметки', icon: 'pi pi-fw pi-bookmark', routerLink: 'bookmarks' },
       {label: 'Admin panel', icon: 'pi pi-fw pi-cog', routerLink: 'admin-panel'}
     ];
     this.activeItem = this.itemsDefault[0];
