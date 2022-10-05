@@ -15,6 +15,7 @@ namespace Eclipse_Market
         public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Chat> Chats { get; set; }
+        public DbSet<UserChat> UserChats { get; set; }
         public DbSet<Auction> Auctions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,6 +52,18 @@ namespace Eclipse_Market
                 .HasOne(rc => rc.Role)
                 .WithMany(r => r.RoleClaims)
                 .HasForeignKey(rc => rc.RoleId);
+
+            //User - Chat many to many 
+            modelBuilder.Entity<UserChat>()
+                .HasKey(uc => new { uc.UserId, uc.ChatId });
+            modelBuilder.Entity<UserChat>()
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.Chats)
+                .HasForeignKey(uc => uc.UserId);
+            modelBuilder.Entity<UserChat>()
+                .HasOne(uc => uc.Chat)
+                .WithMany(c => c.Participants)
+                .HasForeignKey(uc => uc.ChatId);
         }
     }
 

@@ -24,5 +24,7 @@ namespace Eclipse_Market.Models.DB
         [Required]
         public int RoleId { get; set; }
         public Role Role { get; set; }
+
+        public List<UserChat> Chats { get; set; }
     }
 }

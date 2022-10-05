@@ -8,7 +8,7 @@ namespace Eclipse_Market.Models.DB
         public string Body { get; set; }
         public DateTime TimeSent { get; set; }
         [NotMapped]
-        public User Sender { get; set; }
+        public int SenderId { get; set; }
         public int ChatId { get; set; }
         public Chat Chat { get; set; }
     }
