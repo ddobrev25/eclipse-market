@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IListingGetResponse } from 'src/app/_models/listing.model';
-import { ListingPreviewService } from 'src/app/_services/listing-preview.service';
-import { UserService } from 'src/app/_services/user.service';
+import { IListingGetResponse } from 'src/app/core/models/listing.model';
+import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-account-listings',

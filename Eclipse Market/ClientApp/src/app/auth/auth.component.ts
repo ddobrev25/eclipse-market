@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { UserService } from '../_services/user.service';
 import {MessageService} from 'primeng/api';
-import { IUser } from '../_models/user.model';
+import { IUser } from '../core/models/user.model';
+import { UserService } from '../core/services/user.service';
 
 @Component({
   selector: 'app-auth',

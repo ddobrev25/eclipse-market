@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { IRole, IRoles } from 'src/app/_models/role.model';
-import { RoleService } from 'src/app/_services/role.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { AdminService } from 'src/app/_services/admin.service';
+import { Subscription } from 'rxjs';
+import { IRoles, IRole } from 'src/app/core/models/role.model';
+import { AdminService } from 'src/app/core/services/admin.service';
+import { RoleService } from 'src/app/core/services/role.service';
+
 
 @Component({
   selector: 'app-admin-roles',

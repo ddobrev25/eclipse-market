@@ -1,6 +1,6 @@
 import { HttpClient, HttpBackend, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingGetByIdResponse, IListingGetRecommended, IListingGetResponse } from "../_models/listing.model";
+import { IListingGetByIdResponse, IListingGetRecommended, IListingGetResponse } from "../models/listing.model";
 
 @Injectable({
     providedIn: 'root'

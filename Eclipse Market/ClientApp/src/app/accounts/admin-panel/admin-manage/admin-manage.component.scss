@@ -7,16 +7,17 @@
         border: 2px var(--gray-blue-border) solid;
         background: var(--gray-blue); 
     }
-    input::placeholder,
     option {
         color: #fff
     }
     input,
     .p-inputtext.p-component.p-element,
     select { 
-        background-color: var(--gray-blue-hover);
+        background-color: var(--gray-blue-dark);
         padding: 12px 14px;
         border: 2px var(--gray-blue-border) solid;
+        color: var(--text-light);
+
     }
     input:focus {
         background: var(--gray-blue-medium);
@@ -34,9 +35,6 @@
     p-table.p-element th {
         background: var(--gray-blue);
     }
-    // p-table.p-element tr:nth-of-type(1) {
-    //     border-top: 2px #455474 solid;
-    // }
     td.action-btn button {
         text-align: center;
         width: 40px !important;

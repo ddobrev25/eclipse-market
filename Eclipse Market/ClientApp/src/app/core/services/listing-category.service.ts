@@ -1,6 +1,6 @@
 import { HttpClient, HttpBackend, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingCategories, IListingCategoryAddRequest, IListingCategoryDeleteRequest, IListingCategoryUpdateRequest } from "../_models/listing-category.model";
+import { IListingCategories, IListingCategoryAddRequest, IListingCategoryDeleteRequest, IListingCategoryUpdateRequest } from "../models/listing-category.model";
 
 @Injectable({
     providedIn: 'root'

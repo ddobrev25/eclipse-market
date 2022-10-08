@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { IListing } from 'src/app/_models/listing.model';
-import { AuthorGetResponse } from 'src/app/_models/user.model';
-import { UserListingsService } from 'src/app/_services/user-listings.service';
+import { Subscription, Observable } from 'rxjs';
+import { IListing } from 'src/app/core/models/listing.model';
+import { AuthorGetResponse } from 'src/app/core/models/user.model';
+import { UserListingsService } from 'src/app/core/services/user-listings.service';
+
 
 @Component({
   selector: 'app-user-listings',

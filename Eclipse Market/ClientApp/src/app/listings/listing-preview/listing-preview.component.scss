@@ -67,6 +67,7 @@
         overflow:hidden;
         transition: 0.3s;
         width: 100%;
+        background-color: var(--gray-blue-dark);
     }
     #messageTextArea:focus {
         height: 200px;

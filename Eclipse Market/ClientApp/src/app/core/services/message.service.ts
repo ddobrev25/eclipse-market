@@ -1,7 +1,7 @@
 import { HttpClient, HttpBackend } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IDelete } from "../_models/delete.model";
-import { IMessageRequest, IMessageResponse } from "../_models/message.model";
+import { IDelete } from "../models/delete.model";
+import { IMessageRequest, IMessageResponse } from "../models/message.model";
 
 @Injectable({
     providedIn: 'root'

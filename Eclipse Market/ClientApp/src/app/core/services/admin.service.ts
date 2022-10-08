@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { IRoles } from "../_models/role.model";
-import { IUsers } from "../_models/user.model";
+import { IRoles } from "../models/role.model";
+import { IUsers } from "../models/user.model";
 
 @Injectable({
     providedIn: 'root'

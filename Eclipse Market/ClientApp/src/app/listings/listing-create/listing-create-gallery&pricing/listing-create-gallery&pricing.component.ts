@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingAddRequest } from 'src/app/_models/listing.model';
-import { ListingCreateCommunicationService } from 'src/app/_services/listing-create.service';
+import { IListingAddRequest } from 'src/app/core/models/listing.model';
+import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
 
 @Component({
   selector: 'app-listing-create-gallery&pricing',

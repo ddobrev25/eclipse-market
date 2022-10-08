@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingGetByIdResponse, IListingGetResponse } from 'src/app/_models/listing.model';
-import { ListingPreviewService } from 'src/app/_services/listing-preview.service';
-import { ListingService } from 'src/app/_services/listing.service';
+import { IListingGetByIdResponse } from 'src/app/core/models/listing.model';
+import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
+import { ListingService } from 'src/app/core/services/listing.service';
 
 @Component({
   selector: 'app-account-listing-preview',

@@ -3,11 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Subscription } from 'rxjs';
-import { IRoles } from 'src/app/_models/role.model';
-import { IUser, IUsers } from 'src/app/_models/user.model';
-import { AdminService } from 'src/app/_services/admin.service';
-import { RoleService } from 'src/app/_services/role.service';
-import { UserService } from 'src/app/_services/user.service';
+import { IRoles } from 'src/app/core/models/role.model';
+import { IUsers, IUser } from 'src/app/core/models/user.model';
+import { AdminService } from 'src/app/core/services/admin.service';
+import { RoleService } from 'src/app/core/services/role.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-admin-manage',

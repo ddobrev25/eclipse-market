@@ -1,12 +1,11 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingCategories } from '../_models/listing-category.model';
-import { IListing, IListingGetRecommended, IListingGetResponse } from '../_models/listing.model';
-import { ListingCategoryService } from '../_services/listing-category.service';
-import { ListingPreviewService } from '../_services/listing-preview.service';
-import { ListingService } from '../_services/listing.service';
+import { IListingCategories } from '../core/models/listing-category.model';
+import { IListingGetRecommended, IListing } from '../core/models/listing.model';
+import { ListingCategoryService } from '../core/services/listing-category.service';
+import { ListingService } from '../core/services/listing.service';
+
 
 @Component({
   selector: 'app-home',

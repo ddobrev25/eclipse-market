@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IUser } from 'src/app/_models/user.model';
-import { AdminService } from 'src/app/_services/admin.service';
-import { UserService } from 'src/app/_services/user.service';
+import { IUser } from 'src/app/core/models/user.model';
+import { AdminService } from 'src/app/core/services/admin.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-account-info',

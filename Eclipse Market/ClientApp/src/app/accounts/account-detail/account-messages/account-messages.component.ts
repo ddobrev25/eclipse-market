@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IMessage, IMessageResponse } from 'src/app/_models/message.model';
-import { UserService } from 'src/app/_services/user.service';
+import { IMessageResponse, IMessage } from 'src/app/core/models/message.model';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-account-messages',

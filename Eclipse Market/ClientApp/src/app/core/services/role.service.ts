@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpBackend, HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { IRoles } from '../_models/role.model';
+import { IRoles } from '../models/role.model';
 
 @Injectable({
   providedIn: 'root'

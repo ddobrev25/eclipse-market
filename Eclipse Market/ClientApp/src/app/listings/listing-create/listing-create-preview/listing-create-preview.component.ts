@@ -3,10 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IListingAddRequest } from 'src/app/_models/listing.model';
-import { ListingCreateCommunicationService } from 'src/app/_services/listing-create.service';
-import { ListingService } from 'src/app/_services/listing.service';
-import { UserService } from 'src/app/_services/user.service';
+import { IListingAddRequest } from 'src/app/core/models/listing.model';
+import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
+import { ListingService } from 'src/app/core/services/listing.service';
+import { UserService } from 'src/app/core/services/user.service';
+
 
 @Component({
   selector: 'app-listing-create-preview',

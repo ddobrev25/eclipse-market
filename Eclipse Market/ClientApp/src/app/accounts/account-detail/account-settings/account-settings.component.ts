@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/_services/user.service';
 import { Subscription } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { IUser } from 'src/app/_models/user.model';
+import { IUser } from 'src/app/core/models/user.model';
+import { UserService } from 'src/app/core/services/user.service';
+
 
 @Component({
   selector: 'app-account-settings',

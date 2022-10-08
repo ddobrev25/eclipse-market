@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { IListingAddRequest } from "../_models/listing.model";
+import { IListingAddRequest } from "../models/listing.model";
 
 @Injectable({
     providedIn: 'root'

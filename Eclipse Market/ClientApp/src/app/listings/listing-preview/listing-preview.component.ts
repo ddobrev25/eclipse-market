@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingGetByIdResponse, IListingGetResponse } from 'src/app/_models/listing.model';
-import { ListingService } from 'src/app/_services/listing.service';
-import { UserListingsService } from 'src/app/_services/user-listings.service';
+import { IListingGetByIdResponse } from 'src/app/core/models/listing.model';
+import { ListingService } from 'src/app/core/services/listing.service';
+import { UserListingsService } from 'src/app/core/services/user-listings.service';
+
 
 @Component({
   selector: 'app-listing-preview',
