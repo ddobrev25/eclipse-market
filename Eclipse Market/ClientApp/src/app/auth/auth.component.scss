@@ -1,65 +1,67 @@
 .regLink a {
-    color: rgb(85, 176, 236);
-    cursor: pointer;
+  color: rgb(85, 176, 236);
+  cursor: pointer;
 }
 .form {
-    padding: 10rem 3rem !important;
-    background-color: #384c74;
-    color: 	#f1f4f8;
-    border-radius: 10px;
-}
-.form label {
-	color: rgb(44, 44, 44);
-	font-weight:500
+  padding: 20px 10px;
+  background-color: var(--gray-blue-dark);
+  color: var(--text-light);
+  border-radius: 10px;
 }
 .bg {
-    padding: 150px 250px;
-    background: #2980b9  url('https://static.tumblr.com/03fbbc566b081016810402488936fbae/pqpk3dn/MRSmlzpj3/tumblr_static_bg3.png') repeat 0 0;
-	-webkit-animation: 10s linear 0s normal none infinite animate;
-	-moz-animation: 10s linear 0s normal none infinite animate;
-	-ms-animation: 10s linear 0s normal none infinite animate;
-	-o-animation: 10s linear 0s normal none infinite animate;
-	animation: 10s linear 0s normal none infinite animate;
+  padding: 150px 250px;
+  // background: #2980b9  url('https://static.tumblr.com/03fbbc566b081016810402488936fbae/pqpk3dn/MRSmlzpj3/tumblr_static_bg3.png') repeat 0 0;
+  // -webkit-animation: 10s linear 0s normal none infinite animate;
+  // -moz-animation: 10s linear 0s normal none infinite animate;
+  // -ms-animation: 10s linear 0s normal none infinite animate;
+  // -o-animation: 10s linear 0s normal none infinite animate;
+  // animation: 10s linear 0s normal none infinite animate;
+  background: linear-gradient(
+    190deg,
+    var(--gray-blue-medium),
+    var(--gray-blue)
+  );
 }
-@-webkit-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
-}
- 
-@-moz-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
-}
- 
-@-ms-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
-}
- 
-@-o-keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
-}
- 
-@keyframes animate {
-	from {background-position:0 0;}
-	to {background-position: 500px 0;}
-}
-button {
-    min-width: 10rem;
-    margin-right: .5rem;
-}
-
-@media screen and (max-width: 960px) {
-    button {
-        width: 100%;
-        margin-bottom: .5rem;
-    }
-}
-
-// :host ::ng-deep .custom-toast.p-toast {
-// 	.p-toast-message-content {
-// 		color: #0a0a0a;
-// 	}
+// @-webkit-keyframes animate {
+// 	from {background-position:0 0;}
+// 	to {background-position: 500px 0;}
 // }
-	
+
+// @-moz-keyframes animate {
+// 	from {background-position:0 0;}
+// 	to {background-position: 500px 0;}
+// }
+
+// @-ms-keyframes animate {
+// 	from {background-position:0 0;}
+// 	to {background-position: 500px 0;}
+// }
+
+// @-o-keyframes animate {
+// 	from {background-position:0 0;}
+// 	to {background-position: 500px 0;}
+// }
+
+// @keyframes animate {
+// 	from {background-position:0 0;}
+// 	to {background-position: 500px 0;}
+// }
+// button {
+//     min-width: 10rem;
+//     margin-right: .5rem;
+// }
+
+// @media screen and (max-width: 960px) {
+//     button {
+//         width: 100%;
+//         margin-bottom: .5rem;
+//     }
+// }
+
+:host::ng-deep {
+  .p-password,
+  .p-inputtext {
+    width: 100%;
+    background-color: var(--gray-blue);
+  }
+}

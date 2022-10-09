@@ -14,6 +14,7 @@ import { AdminRolesComponent } from "./admin-panel/admin-roles/admin-roles.compo
 import { AccountListingsGuardService } from "../core/guards/account-listing.guard.service";
 import { AccountGuardService } from "../core/guards/account.guard.service";
 import { AdminGuard } from "../core/guards/admin.guard.service";
+import { AccountListingUpdateComponent } from "./account-detail/account-listings/account-listing-update/account-listing-update.component";
 
 const routes: Routes = [
     { path: '', component: AccountDetailComponent, canActivate: [AccountGuardService], children: [
@@ -22,6 +23,7 @@ const routes: Routes = [
         { path: 'edit', component: AccountSettingsComponent },
         { path: 'listings', component: AccountListingsComponent, canActivate: [AccountListingsGuardService] },
         { path: 'listing/preview', component: AccountListingPreviewComponent, canActivate: [AccountListingsGuardService] },
+        { path: 'listing/update', component: AccountListingUpdateComponent},
         { path: 'bookmarks', component: AccountBookmarksComponent },
         { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard], children: [
             { path: 'manage-accounts', component: AdminManageComponent },

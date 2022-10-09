@@ -1,8 +1,8 @@
 <div *ngIf="!control.valid && (control.dirty || control.touched)" class="text-danger">
-    <span *ngIf="control.errors?.['required']">{{controlName}} is required</span>
-    <span *ngIf="control.errors?.['maxlength']">{{controlName}} should be less than {{max}} characters</span>
-    <span *ngIf="control.errors?.['minlength']">{{controlName}} should be more than {{min}} characters</span>
-    <span *ngIf="control.errors?.['pattern']">{{controlName}} should be in correct format</span>
-    <span *ngIf="control.errors?.['min']">{{controlName}} should be at least {{min}}</span>
-    <span *ngIf="control.errors?.['max']">{{controlName}} should be at below {{max}}</span>
+    <div *ngIf="control.errors?.['required']">Полето {{controlName}} е задължително!</div>
+    <div *ngIf="control.errors?.['maxlength']">Полето {{controlName}} трябва да бъде по-малко от {{max}} знака!</div>
+    <div *ngIf="control.errors?.['minlength']">Полето {{controlName}} трябва да бъде повече от {{min}} знака!</div>
+    <div *ngIf="control.errors?.['pattern']">Полето {{controlName}} трябва да бъде в правилния формат!</div>
+    <div *ngIf="control.errors?.['min']">Полето {{controlName}} трябва да бъде поне {{min}}</div>
+    <div *ngIf="control.errors?.['max']">Полето {{controlName}} трябва да бъде под {{max}}</div>
 </div>

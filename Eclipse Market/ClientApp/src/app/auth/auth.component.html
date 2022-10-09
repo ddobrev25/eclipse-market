@@ -1,138 +1,252 @@
 <div class="bg">
-    <p-toast position="top-center" key="tc" styleClass="custom-toast"></p-toast>
-    <form *ngIf="registerMode" [formGroup]="registerForm" (ngSubmit)="onRegister()"
-            class="p-3 form">
+  <p-toast position="top-center" key="tc" styleClass="custom-toast"></p-toast>
+  <form
+    *ngIf="registerMode"
+    [formGroup]="registerForm"
+    (ngSubmit)="onRegister()"
+    class="p-3 form"
+  >
     <h3 class="mt-1">Регистрация</h3>
-    <div class="form-floating">
-        <input type="text"
-                name="firstName"
-                class="form-control"
-                placeholder="Ime"
-                formControlName="firstName">
-        <label for="firstName" >Име</label>
-        <app-form-errors [control]="$any(registerForm).get('firstName')" 
-        [max]="'50'" [min]="'2'"
-        [controlName]="'First name'"></app-form-errors>
-    </div>
-    <hr> 
-    <div class="form-floating">      
-    <input type="text"
-            name="lastName"
-            class="form-control"
-            placeholder="Ime"
-            formControlName="lastName">
-    <label for="lastName" >Фамилия</label>
-            <app-form-errors [control]="$any(registerForm).get('lastName')" 
-            [max]="'50'" [min]="'2'"
-            [controlName]="'Last name'"></app-form-errors>
+    <div class="mt-4">
+      <span class="p-float-label">
+        <input
+          id="float-input"
+          type="text"
+          pInputText
+          formControlName="firstName"
+        />
+        <label for="float-input">Име</label>
+      </span>
+      <app-form-errors
+        [control]="$any(registerForm).get('firstName')"
+        [max]="'50'"
+        [min]="'2'"
+        [controlName]="'Име'"
+      ></app-form-errors>
     </div>
 
-    <hr>
-    <div class="form-floating">
-    <input type="text"
-            name="userName"
-            class="form-control"
-            placeholder="Ime"
-            formControlName="userName">
-    <label for="userName" >Потребителско име</label>
-            <app-form-errors [control]="$any(registerForm).get('userName')" 
-            [max]="'50'" [min]="'2'"
-            [controlName]="'Username'"></app-form-errors>
+    <div class="mt-4">
+      <span class="p-float-label">
+        <input
+          id="float-input"
+          type="text"
+          pInputText
+          formControlName="lastName"
+        />
+        <label for="float-input">Фамилия</label>
+      </span>
+      <app-form-errors
+        [control]="$any(registerForm).get('lastName')"
+        [max]="'50'"
+        [min]="'2'"
+        [controlName]="'Фамилия'"
+      ></app-form-errors>
     </div>
 
-    <hr>
-    <div class="form-floating">
-    <input type="text"
-            name="email"
-            class="form-control"
-            placeholder="Ime"
-            formControlName="email">
-    <label for="email" >Имейл адрес</label>
-            <app-form-errors [control]="$any(registerForm).get('email')" [controlName]="'Email'"></app-form-errors>
+    <div class="mt-4">
+      <span class="p-float-label">
+        <input
+          id="float-input"
+          type="text"
+          pInputText
+          formControlName="userName"
+        />
+        <label for="float-input">Потребителско име</label>
+      </span>
+      <app-form-errors
+        [control]="$any(registerForm).get('userName')"
+        [max]="'50'"
+        [min]="'2'"
+        [controlName]="'Потребителско име'"
+      ></app-form-errors>
     </div>
 
-    <hr>
-    
-    <div class="form-floating">
-    <input type="password"
-            name="password"
-            class="form-control"
-            placeholder="Password"
-            formControlName="password">
-    <label for="password" >Парола</label>
-
-            <app-form-errors [control]="$any(registerForm).get('password')" 
-            [max]="'50'" [min]="'6'"
-            [controlName]="'Password'"></app-form-errors>
+    <div class="mt-4">
+      <span class="p-float-label">
+        <input
+          id="float-input"
+          type="email"
+          pInputText
+          formControlName="email"
+        />
+        <label for="float-input">Имейл адрес</label>
+      </span>
+      <app-form-errors
+        [control]="$any(registerForm).get('email')"
+        [controlName]="'Имейл адрес'"
+      ></app-form-errors>
     </div>
- 
-    <hr>
-    <div class="form-floating">
-    <input type="text"
-            name="confirmPassword"
-            placeholder="Ime"
-            class="form-control"
-            formControlName="confirmPassword">
-    <label for="confirmPassword" >Потвърди парола</label>
-            <span *ngIf="registerForm.errors?.['notmatched'] && registerForm.touched" class="text-danger">Password mismatch</span>
-            <app-form-errors [control]="$any(registerForm).get('confirmPassword')" 
-            [max]="'50'" [min]="'6'"
-            [controlName]="'Password'"></app-form-errors>
-        </div>
 
-    <hr>
-    <div class="form-floating">
-    <input type="text"
-            name="phoneNumber"
-            class="form-control"
-            placeholder="Ime"
-            formControlName="phoneNumber">
-    <label for="email" >Телефонен номер</label>
-            <app-form-errors [control]="$any(registerForm).get('phoneNumber')" [controlName]="'Phone number'"></app-form-errors>
-        </div>
-        
-            <hr>
-        <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-light mt-3 me-3" [disabled]="!registerForm.valid">Потвърди</button>
-                <button type="button" class="btn btn-dark mt-3" (click)="registerToggle()">Назад</button>
-        </div>
-    </form>
+    <div class="mt-4">
+      <p-password
+        formControlName="password"
+        placeholder="Парола"
+        promptLabel=" "
+        weakLabel="Паролата е слаба"
+        mediumLabel="Паролата е средна"
+        strongLabel="Паролата е силна"
+        strongRegex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$"
+      >
+        <ng-template pTemplate="footer">
+          <p class="mt-2">Паролата трябва да съдържа:</p>
+          <ul class="pl-2 ml-2 mt-0">
+            <li>1 малка буква</li>
+            <li>1 главна буква</li>
+            <li>1 число</li>
+            <li>Минимум 8 знака</li>
+          </ul>
+        </ng-template>
+      </p-password>
 
-    <form *ngIf="!registerMode" [formGroup]="loginForm" (ngSubmit)="onLogIn()"
-            class="p-3 form">
+      <app-form-errors
+        [control]="$any(registerForm).get('password')"
+        [max]="'50'"
+        [min]="'6'"
+        [controlName]="'Парола'"
+      ></app-form-errors>
+    </div>
+
+    <div class="mt-4">
+      <p-password
+        formControlName="confirmPassword"
+        placeholder="Потвърди парола"
+        promptLabel=" "
+        weakLabel="Паролата е слаба"
+        mediumLabel="Паролата е средна"
+        strongLabel="Паролата е силна"
+        strongRegex="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$"
+      >
+        <ng-template pTemplate="footer">
+          <p class="mt-2">Паролата трябва да съдържа:</p>
+          <ul class="pl-2 ml-2 mt-0">
+            <li>1 малка буква</li>
+            <li>1 главна буква</li>
+            <li>1 число</li>
+            <li>Минимум 8 знака</li>
+          </ul>
+        </ng-template>
+      </p-password>
+
+      <span
+        *ngIf="registerForm.errors?.['notmatched'] && registerForm.touched"
+        class="text-danger"
+        >Паролите не съвпадат</span
+      >
+
+      <app-form-errors
+        [control]="$any(registerForm).get('confirmPassword')"
+        [max]="'50'"
+        [min]="'6'"
+        [controlName]="'Потвърди парола'"
+      ></app-form-errors>
+    </div>
+
+    <div class="mt-4">
+      <span class="p-float-label">
+        <input
+          id="float-input"
+          type="text"
+          pInputText
+          formControlName="phoneNumber"
+        />
+        <label for="float-input">Телефонен номер</label>
+      </span>
+
+      <app-form-errors
+        [control]="$any(registerForm).get('phoneNumber')"
+        [controlName]="'Телефонен номер'"
+      ></app-form-errors>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Назад"
+        class="p-button-secondary mt-3 p-1 w-25"
+        (click)="registerToggle()"
+      ></button>
+      <button
+        type="submit"
+        pButton
+        pRipple
+        label="Потвърди"
+        class="p-button-success mt-3 p-1 w-25"
+        [disabled]="!registerForm.valid"
+        (click)="onLogIn()"
+        routerLink="listings/create"
+      ></button>
+    </div>
+  </form>
+
+  <form
+    *ngIf="!registerMode"
+    [formGroup]="loginForm"
+    (ngSubmit)="onLogIn()"
+    class="p-3 form"
+  >
     <h3 class="mt-1">Влезте в профила си</h3>
-    <h6 class="regLink">Нямате профил?, регистрирайте се <a (click)="registerToggle()">тук</a> </h6>    
+    <h6 class="regLink">
+      Нямате профил?, регистрирайте се <a (click)="registerToggle()">тук</a>
+    </h6>
 
-    <hr>
-    <div class="form-floating">
-    <input type="text"
-            name="userName"
-            class="form-control"
-            placeholder="Ime"
-            formControlName="userName">
-    <label for="userName" >Потребителско име</label>
-            <app-form-errors [control]="$any(loginForm).get('userName')" 
-            [max]="'50'" [min]="'2'"
-            [controlName]="'Username'"></app-form-errors>
-        </div>
-
-    <hr>
-    <div class="form-floating">
-        <input type="text"
-                name="password"
-                placeholder="Ime"
-                class="form-control"
-                formControlName="password">
-        <label for="password" >Парола</label>
-                <app-form-errors [control]="$any(loginForm).get('password')" 
-                [max]="'50'" [min]="'6'"
-                [controlName]="'Password'"></app-form-errors>
+    <div class="mt-5">
+      <span class="p-float-label">
+        <input
+          id="float-input"
+          type="text"
+          pInputText
+          formControlName="userName"
+        />
+        <label for="float-input">Потребителско име</label>
+      </span>
+      <app-form-errors
+        [control]="$any(loginForm).get('userName')"
+        [max]="'50'"
+        [min]="'2'"
+        [controlName]="'Потребителско име'"
+      ></app-form-errors>
     </div>
 
-    <hr>
-        <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-light mt-3" [disabled]="!loginForm.valid">Потвърди</button>
-                <button type="button" class="btn btn-dark mt-3" routerLink="/home">Назад</button>
-        </div>
-    </form>
+    <div class="mt-4">
+      <span class="p-float-label">
+        <input
+          id="float-input"
+          type="password"
+          pInputText
+          formControlName="password"
+        />
+        <label for="float-input">Парола</label>
+      </span>
+
+      <app-form-errors
+        [control]="$any(loginForm).get('password')"
+        [max]="'50'"
+        [min]="'6'"
+        [controlName]="'Парола'"
+      ></app-form-errors>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Назад"
+        class="p-button-secondary mt-3 p-1 w-25"
+        routerLink="/home"
+      ></button>
+      <button
+        type="submit"
+        pButton
+        pRipple
+        label="Потвърди"
+        class="p-button-success mt-3 p-1 w-25"
+        [disabled]="!loginForm.valid"
+        (click)="onLogIn()"
+        routerLink="listings/create"
+      ></button>
+    </div>
+  </form>
 </div>

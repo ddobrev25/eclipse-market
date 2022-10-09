@@ -27,11 +27,12 @@ export class UserListingsComponent implements OnInit, OnDestroy {
    this.fetchUserSubs = this.userData$.subscribe(
       (resp: AuthorGetResponse) => {
         this.userInfo = resp;
+        console.log(resp);
       }
     )
   }
   onSelectListing(listingForPreview: IListing) {
-    this.router.navigate(['/listings/preview'], {queryParams: {id: this.userInfo.listings}})
+    this.router.navigate(['/listings/preview'], {queryParams: {id: listingForPreview.id}})
   }
   ngOnDestroy() {
     this.fetchUserSubs?.unsubscribe();

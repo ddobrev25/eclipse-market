@@ -23,12 +23,16 @@ export class AccountListingsComponent implements OnInit {
 
   fecthUserListings() {
     this.userListings = this.userService.loggedUser?.currentListings;
+    console.log(this.userListings);
   }
 
   onSelectListing(id: number) {
     this.listingPreviewService.sendListingId(id);
     this.listingSelected = true;
     this.router.navigate(['/account/listing/preview'])
+  }
+  onEditListing(listingForUpdate: IListingGetResponse) {
+    this.router.navigate(['/account/listing/update'])
   }
 
 }

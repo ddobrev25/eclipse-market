@@ -16,13 +16,18 @@
                     </p>
                 </ng-template>
                 <ng-template pTemplate="footer">
-                        <div class="col d-flex flex-column">
-                            <label class="location-label">
-                                град {{ listing.location }}
-                            </label>
-                            <label class="price-label">
-                                {{ listing.price }} лв
-                            </label>
+                        <div class="d-flex justify-content-between">
+                            <div class="col d-flex flex-column">
+                                <label class="location-label">
+                                    град {{ listing.location }}
+                                </label>
+                                <label class="price-label">
+                                    {{ listing.price }} лв
+                                </label>
+                            </div>
+                            <div class="mt-3">
+                                <i class="pi pi-pencil" (click)="onEditListing(listing)"></i>
+                            </div>
                         </div>
                 </ng-template>
             </p-card>  
