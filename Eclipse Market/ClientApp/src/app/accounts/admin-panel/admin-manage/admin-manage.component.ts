@@ -111,6 +111,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
       "PhoneNumber": this.editForm.get('phoneNumber')?.value,
       "RoleId": roleId
     };
+    this.resetEditForm();
     this.editSubs = this.userService.update(body).subscribe({
       error: err => {
         console.log(err)
@@ -151,6 +152,19 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   
   onDiscard() {
     this.accountDialog = false;
+    this.resetEditForm();
+  }
+
+  resetEditForm() {
+    this.editForm.patchValue({
+      firstName: '',
+      lastName: '',
+      userName: '',
+      email: '',
+      password: '',
+      phoneNumber: '',
+      role: '',
+    })
   }
 
   ngOnDestroy(): void {

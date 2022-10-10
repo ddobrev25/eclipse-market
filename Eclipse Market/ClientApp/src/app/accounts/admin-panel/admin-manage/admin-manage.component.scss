@@ -13,14 +13,14 @@
     input,
     .p-inputtext.p-component.p-element,
     select { 
-        background-color: var(--gray-blue-dark);
+        background-color: var(--gray-blue);
         padding: 12px 14px;
         border: 2px var(--gray-blue-border) solid;
         color: var(--text-light);
 
     }
     input:focus {
-        background: var(--gray-blue-medium);
+        background: var(--gray-blue);
         color: var(--text-light);
     }
     p-table.p-element tr:nth-child(even) {
@@ -53,7 +53,7 @@
     div.p-dialog-header,
     div.p-dialog-content,
     div.p-dialog-footer {
-        background-color: var(--gray-blue);
+        background-color: var(--gray-blue-dark);
     }
     button.p-ripple.p-element.p-button {
         background-color: var(--blue-bg);

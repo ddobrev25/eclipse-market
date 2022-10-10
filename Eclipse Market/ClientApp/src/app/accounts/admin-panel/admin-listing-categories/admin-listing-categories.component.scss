@@ -62,11 +62,16 @@
         color: var(--text-light);
         padding: 12px 14px;
         border: 2px var(--gray-blue-border) solid;
-        background: var(--gray-blue-dark);
+        background: var(--gray-blue);
     }
     input:focus {
-        background: var(--gray-blue-medium);
+        background: var(--gray-blue);
         color: var(--text-light);
+    }
+    div.p-dialog-header,
+    div.p-dialog-content,
+    div.p-dialog-footer {
+        background-color: var(--gray-blue-dark);
     }
     input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
         -webkit-appearance: none !important;

@@ -89,7 +89,7 @@
                 </ng-template>
             
                 <ng-template pTemplate="footer">
-                    <button pButton pRipple label="Назад" icon="pi pi-times"></button>
+                    <button pButton pRipple label="Назад" icon="pi pi-times" (click)="onDiscard()"></button>
                     <button pButton pRipple label="Запази" icon="pi pi-check" [disabled]="!categoryForm.valid" (click)="onEditCategory()"></button>
                 </ng-template>
             </p-dialog>

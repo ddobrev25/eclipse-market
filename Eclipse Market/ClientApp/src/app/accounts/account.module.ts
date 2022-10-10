@@ -13,7 +13,6 @@ import { AdminListingCategoriesComponent } from './admin-panel/admin-listing-cat
 import { AdminManageComponent } from './admin-panel/admin-manage/admin-manage.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { AdminRolesComponent } from './admin-panel/admin-roles/admin-roles.component';
-import { AccountListingUpdateComponent } from './account-detail/account-listings/account-listing-update/account-listing-update.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +28,6 @@ import { AccountListingUpdateComponent } from './account-detail/account-listings
     AdminListingCategoriesComponent,
     AccountBookmarksComponent,
     AccountBookmarksComponent,
-    AccountListingUpdateComponent,
   ],
   imports: [SharedModule, AccountRoutingModule, RouterModule],
   exports: [
@@ -46,7 +44,6 @@ import { AccountListingUpdateComponent } from './account-detail/account-listings
     AccountListingPreviewComponent,
     AdminListingCategoriesComponent,
     AccountBookmarksComponent,
-    AccountListingUpdateComponent,
   ],
 })
 export class AccountModule {}

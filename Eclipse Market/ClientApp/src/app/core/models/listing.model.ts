@@ -51,3 +51,11 @@ export interface IListingGetWithoutAuthorResponse {
 export interface IListingGetRecommended {
     listings: IListing[]
 }
+export interface IListingUpdateRequest {
+    id: number,
+    title: string,
+    description: string,
+    price: number,
+    location: string,
+    listingCategoryId: number
+}

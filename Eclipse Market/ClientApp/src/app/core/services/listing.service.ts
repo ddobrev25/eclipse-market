@@ -1,6 +1,7 @@
 import { HttpClient, HttpBackend, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingGetByIdResponse, IListingGetRecommended, IListingGetResponse } from "../models/listing.model";
+import { IDelete } from "../models/delete.model";
+import { IListingGetByIdResponse, IListingGetRecommended, IListingGetResponse, IListingUpdateRequest } from "../models/listing.model";
 
 @Injectable({
     providedIn: 'root'
@@ -34,5 +35,12 @@ export class ListingService {
 
     add(body: any) {
         return this.http.post(`${this.url}/Listing/Add`, body)
+    }
+
+    update(body: IListingUpdateRequest) {
+        return this.http.put(`${this.url}/Listing/Update`, body)
+    }
+    delete(body: IDelete) {
+        return this.http.delete(`${this.url}/Listing/Delete`, {body: body});
     }
 }   

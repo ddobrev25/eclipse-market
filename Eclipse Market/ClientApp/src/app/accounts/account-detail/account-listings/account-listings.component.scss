@@ -5,6 +5,13 @@ h3 {
     padding: 50px;
     background-color: red;
 }
+#descTextArea {
+    resize: none;
+    min-height: 200px;
+    overflow:hidden;
+    border: 1px solid #0b213f;
+    border-radius: 6px;
+}
 :host::ng-deep {
     .preview-card {
         max-height: 500px;
@@ -54,6 +61,33 @@ h3 {
     }
     i {
         cursor:pointer;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    input[type=number] {
+        -moz-appearance:textfield;
+    }
+    textarea,
+    textarea:focus,
+    input { 
+        background-color: var(--gray-blue);
+        color: var(--text-light);
+        width: 100%;
+    }
+    #charLeft {
+        color: var(--text-light);
+        float: right;
+    }
+    .p-dialog,
+    .p-dialog .p-dialog-header,
+    .p-dialog .p-dialog-content,
+    .p-dialog .p-dialog-footer {
+        background-color: var(--gray-blue-dark);
     }
     
 }

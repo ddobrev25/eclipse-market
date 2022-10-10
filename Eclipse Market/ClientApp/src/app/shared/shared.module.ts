@@ -21,7 +21,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { ChipModule } from 'primeng/chip';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { PasswordModule } from 'primeng/password';
-
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [FormErrorsComponent, ClaimAccessDirective],
@@ -47,7 +47,7 @@ import { PasswordModule } from 'primeng/password';
     ChipModule,
     ProgressBarModule,
     PasswordModule,
-    
+    InputTextareaModule,
   ],
   exports: [
     CommonModule,
@@ -73,6 +73,7 @@ import { PasswordModule } from 'primeng/password';
     ChipModule,
     ProgressBarModule,
     PasswordModule,
+    InputTextareaModule,
   ],
 })
 export class SharedModule {}

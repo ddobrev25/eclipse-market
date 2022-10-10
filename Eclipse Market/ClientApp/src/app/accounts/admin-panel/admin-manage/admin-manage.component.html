@@ -46,6 +46,7 @@
 
 
 <p-dialog 
+        (onHide)="resetEditForm()"
         [(visible)]="accountDialog" 
         [style]="{width: '600px'}" 
         [modal]="true" 

@@ -59,14 +59,19 @@
         border-bottom: none;
     }
     input { 
-        background: var(--gray-blue-dark);
+        background: var(--gray-blue);
         color: var(--text-light);
         padding: 12px 14px;
         border: 2px var(--gray-blue-border) solid;
     }
     input:focus {
-        background: var(--gray-blue-medium);
+        background: var(--gray-blue);
         color: var(--text-light);
+    }
+    div.p-dialog-header,
+    div.p-dialog-content,
+    div.p-dialog-footer {
+        background-color: var(--gray-blue-dark);
     }
 }
 

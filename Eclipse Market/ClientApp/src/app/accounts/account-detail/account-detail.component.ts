@@ -53,7 +53,6 @@ export class AccountDetailComponent implements OnInit {
       this.loadUserSubs = this.userService.getInfo().subscribe({
         next: (resp: IUser) => {
           this.userService.loggedUser = resp;
-          console.log("user fetched succesfully")
         },
         complete: () => {
           this.checkForAdmin();
@@ -64,7 +63,6 @@ export class AccountDetailComponent implements OnInit {
 
   checkForAdmin() {
       let user: IUser = this.userService.loggedUser!;
-      console.log(user);
       if(user?.roleName == 'admin') {
         this.isAdmin = true;
       } else {
