@@ -20,7 +20,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryGet")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryGet")]
         public ActionResult<List<ListingCategoryGetAllResponse>> GetAll()
         {
             var listingCategories = _dbContext.ListingCategories.Select(x => new ListingCategoryGetAllResponse

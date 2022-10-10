@@ -2,11 +2,9 @@
 {
     public class MessageSendRequest
     {
+        public string Body { get; set; }
         public int SenderId { get; set; }
-        public int RecieverId { get; set; }
-        public int ListingId { get; set; }
-        public string MessageTitle { get; set; }
-        public string MessageBody { get; set; }
+        public int ChatId { get; set; }
 
     }
 }

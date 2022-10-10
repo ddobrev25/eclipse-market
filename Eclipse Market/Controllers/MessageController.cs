@@ -9,7 +9,7 @@ namespace Eclipse_Market.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-       /* private EclipseMarketDbContext _dbContext;
+        private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
 
         public MessageController(EclipseMarketDbContext dbContext, IConfiguration configuration)
@@ -18,68 +18,22 @@ namespace Eclipse_Market.Controllers
             Configuration = configuration;
         }
 
-        [HttpGet]
-        public ActionResult<List<MessageGetAllResponse>> GetAll()
-        {
-            var messages = _dbContext.Messages.Select(x => new MessageGetAllResponse
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Body = x.Body,
-                ListingId = x.ListingId,
-                RecieverId = x.RecieverId,
-                SenderId = x.SenderId,
-            });
-            return Ok(messages);
-        }
-
         [HttpPost]
-        public ActionResult Send(MessageSendRequest request)
+        public ActionResult SendMessage(MessageSendRequest request)
         {
-            if(!_dbContext.Users.Any(x => x.Id == request.SenderId))
+            if(request.Body == string.Empty)
             {
-                return BadRequest("Sender id is not valid");
+                return BadRequest("Body string can not be empty.");
             }
-            if (!_dbContext.Users.Any(x => x.Id == request.RecieverId))
-            {
-                return BadRequest("Reciever id is not valid");
-            }
-            if(!_dbContext.Listings.Any(x => x.Id == request.ListingId))
-            {
-                return BadRequest("Listing id is not valid");
-            }
-            if(request.SenderId == request.RecieverId)
-            {
-                return BadRequest("Sender id and reciever id can not be the same.");
-            }
-
             var messageToAdd = new Message
             {
-                Title = request.MessageTitle,
-                Body = request.MessageBody,
+                Body = request.Body,
                 SenderId = request.SenderId,
-                ListingId = request.ListingId,
-                RecieverId = request.RecieverId,
-                Reciever = _dbContext.Users.Where(x => x.Id == request.RecieverId).First(),
+                TimeSent = DateTime.UtcNow.ToString(),
+                ChatId = request.ChatId
             };
-
-            _dbContext.Messages.Add(messageToAdd);
-            _dbContext.SaveChanges();
             return Ok();
         }
-        [HttpDelete]
-        public ActionResult Delete(MessageDeleteRequest request)
-        {
-            var messageToDelete = _dbContext.Messages.Where(x => x.Id == request.Id).FirstOrDefault();
 
-            if(messageToDelete == null)
-            {
-                return BadRequest(ErrorMessages.InvalidId);
-            }
-
-            _dbContext.Messages.Remove(messageToDelete);
-            _dbContext.SaveChanges();
-            return Ok();
-        }*/
     }
 }
