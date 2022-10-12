@@ -40,6 +40,8 @@ namespace Eclipse_Market.Controllers
                 TimeStarted = DateTime.UtcNow.ToString(),
                 TopicListingId = request.TopicListingId
             };
+            _dbContext.Chats.Add(chatToAdd);
+            _dbContext.SaveChanges();
             return Ok();
 
         }
