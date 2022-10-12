@@ -22,6 +22,7 @@ import { ChipModule } from 'primeng/chip';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { PasswordModule } from 'primeng/password';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [FormErrorsComponent, ClaimAccessDirective],
@@ -48,6 +49,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     ProgressBarModule,
     PasswordModule,
     InputTextareaModule,
+    AutoCompleteModule,
   ],
   exports: [
     CommonModule,
@@ -74,6 +76,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     ProgressBarModule,
     PasswordModule,
     InputTextareaModule,
+    AutoCompleteModule,
   ],
 })
 export class SharedModule {}
