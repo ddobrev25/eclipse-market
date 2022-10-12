@@ -16,16 +16,16 @@
                                         formControlName="currentPassword">
                                 <app-form-errors [control]="$any(updateForm).get('currentPassword')" 
                                 [max]="'50'" [min]="'6'"
-                                [controlName]="'Password'"></app-form-errors>
+                                [controlName]="'Стара парола'"></app-form-errors>
                                 <label for="newPassword" class="my-1 ps-3">Нова парола</label>
                                 <input type="password"
                                         name="confirmPassword"
                                         class="form-control mb-4"
                                         formControlName="newPassword">
-                                <span *ngIf="updateForm.errors?.['notmatched'] && updateForm.touched" class="text-danger">Password mismatch</span>
+                                <span *ngIf="updateForm.errors?.['notmatched'] && updateForm.touched" class="text-danger">Паролите не съвпадат</span>
                                 <app-form-errors [control]="$any(updateForm).get('newPassword')" 
                                 [max]="'50'" [min]="'6'"
-                                [controlName]="'Password'"></app-form-errors>
+                                [controlName]="'Нова парола'"></app-form-errors>
                                 <div class="d-flex justify-content-between flex-sm-nowrap flex-wrap mt-5 actionButtons">
                                         <button 
                                                 pButton 
