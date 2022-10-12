@@ -1,11 +1,16 @@
 ﻿using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
+using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Data.Entity;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Eclipse_Market.Controllers
 {
+    [Route("[controller]/[action]")]
+    [ApiController]
     public class ChatController : ControllerBase
     {
         private EclipseMarketDbContext _dbContext;
@@ -17,6 +22,32 @@ namespace Eclipse_Market.Controllers
             Configuration = configuration;
             JwtService = jwtService;
         }
+
+        [HttpGet]
+        public ActionResult<List<ChatGetAllResponse>> GetAll()
+        {
+            var chats = _dbContext.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .Select(x => new ChatGetAllResponse()
+                {
+                    Id = x.Id,
+                    TimeStarted = x.TimeStarted,
+                    TopicListingId = x.TopicListingId
+                }).ToList();
+
+            foreach (var chat in chats)
+            {
+                chat.ParticipantIds = _dbContext.UserChats
+                    .Where(x => x.ChatId == chat.Id).Select(x => x.UserId);
+                chat.MessageIds = _dbContext.Messages
+                    .Where(x => x.ChatId == chat.Id).Select(x => x.Id);
+            }
+
+            return Ok(chats);
+        }
+        
+
 
         [HttpPost]
         public ActionResult CreateChat(ChatCreateRequest request)

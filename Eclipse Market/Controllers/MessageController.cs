@@ -40,7 +40,7 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-        [HttpPost]
+        [HttpPut]
         public ActionResult EditMessage(MessageEditRequest request)
         {
             var messageToEdit = _dbContext.Messages.FirstOrDefault(x => x.Id == request.Id);
@@ -71,7 +71,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpDelete]
         public ActionResult DeleteMessage(int? id)
         {
             var messageToDelete = _dbContext.Messages.FirstOrDefault(x => x.Id == id);
