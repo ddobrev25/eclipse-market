@@ -23,7 +23,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendMessage(MessageSendRequest request)
+        public ActionResult Send(MessageSendRequest request)
         {
             if(request.Body == string.Empty)
             {
@@ -41,7 +41,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPut]
-        public ActionResult EditMessage(MessageEditRequest request)
+        public ActionResult Edit(MessageEditRequest request)
         {
             var messageToEdit = _dbContext.Messages.FirstOrDefault(x => x.Id == request.Id);
 
@@ -72,7 +72,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpDelete]
-        public ActionResult DeleteMessage(int? id)
+        public ActionResult Delete(int? id)
         {
             var messageToDelete = _dbContext.Messages.FirstOrDefault(x => x.Id == id);
 

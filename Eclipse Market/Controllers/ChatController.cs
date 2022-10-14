@@ -46,11 +46,32 @@ namespace Eclipse_Market.Controllers
 
             return Ok(chats);
         }
-        
+        [HttpGet]
+        public ActionResult<ChatGetByIdResponse> GetById(int? id)
+        {
+            var chat = _dbContext.Chats
+                .Include(_ => _.Participants)
+                .Include(_ => _.Messages)
+                .FirstOrDefault(x => x.Id == id);
 
+            if(chat == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            var response = new ChatGetByIdResponse()
+            {
+                TimeStarted = chat.TimeStarted,
+                TopicListingId = chat.TopicListingId,
+                ParticipantIds = chat.Participants.Select(x => x.UserId),
+                MessageIds = chat.Messages.Select(x => x.Id)
+            };
+
+            return Ok(response);
+        }
 
         [HttpPost]
-        public ActionResult CreateChat(ChatCreateRequest request)
+        public ActionResult Create(ChatCreateRequest request)
         {
             var sender = _dbContext.Users.First(x => x.Id == JwtService.GetUserIdFromToken(User));
 
@@ -75,6 +96,22 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
 
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(int? id)
+        {
+            var chat = _dbContext.Chats.FirstOrDefault(x => x.Id == id);
+
+            if(chat == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            _dbContext.Chats.Remove(chat);
+            _dbContext.SaveChanges();
+
+            return Ok();
         }
     }
 }
