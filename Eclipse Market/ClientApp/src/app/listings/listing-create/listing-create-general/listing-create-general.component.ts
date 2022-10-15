@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IListingCategories } from 'src/app/core/models/listing-category.model';
+import { CityService } from 'src/app/core/services/city.service';
 import { ListingCategoryService } from 'src/app/core/services/listing-category.service';
 import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
 
@@ -19,6 +20,7 @@ export class ListingCreateGeneralComponent implements OnInit {
   textAreaValue: string = '';
 
   auctionMode: boolean = false;
+
 
   createListingForm: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
@@ -50,6 +52,7 @@ export class ListingCreateGeneralComponent implements OnInit {
       }
     })
   }
+
 
   valueChange(textAreaValue: string) {
     this.remainingCharacters = 800 - textAreaValue.length;

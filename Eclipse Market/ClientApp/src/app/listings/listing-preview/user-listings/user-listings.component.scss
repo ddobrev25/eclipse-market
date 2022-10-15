@@ -5,6 +5,14 @@
         border: 2px solid var(--gray-blue-border);
         color: var(--text-light);
     }
+    .p-dataview .p-dataview-header,
+    .p-dataview .p-dataview-content {
+        background-color: transparent;
+    }
+    .p-selectbutton .p-button {
+        background-color: var(--gray-blue-dark);
+        border-color: var(--gray-blue-border);
+    }
     #invisible-span {
         opacity: 0;
     }

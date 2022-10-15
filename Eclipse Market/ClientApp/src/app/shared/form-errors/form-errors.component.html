@@ -1,4 +1,4 @@
-<div *ngIf="!control.valid && (control.dirty || control.touched)" class="text-danger">
+<div *ngIf="!control.valid && (control.dirty || control.touched)">
     <div *ngIf="control.errors?.['required']">Полето {{controlName}} е задължително!</div>
     <div *ngIf="control.errors?.['maxlength']">Полето {{controlName}} трябва да бъде по-малко от {{max}} знака!</div>
     <div *ngIf="control.errors?.['minlength']">Полето {{controlName}} трябва да бъде повече от {{min}} знака!</div>

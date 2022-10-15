@@ -3,8 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap');
 * {
     font-family: 'Rubik', sans-serif;
+    color: var(--text-light);
 }
-:root {
+body {
     --text-light: #EEEDF0;
     --text-dark: #1c2127;
     --text-inactive: #adadad;
@@ -17,16 +18,29 @@
     --gray-blue-medium: #0d1d35;
     --border-medium: #455474;
 
-
-
-
-
     --blue: #3456FF;
     --grey-dark: #273247;
     --grey-medium: #2f3441;
     --blue-gray: #102338;
     --blue-gray-dark: #071426;
+}
+body.light-theme {
+    --text-light: #495057;
+    --text-dark: #EEEDF0;
+    --text-inactive: #adadad;
 
+    --blue-bg: #93C5FD;
+    --gray-blue: #dfdfdf;
+    --gray-blue-dark: #f3f3f3;
+    --gray-blue-border: #8ab5f1;
+    --gray-blue-hover: #d5dce2;
+    --gray-blue-medium: #c7deff;
+    --border-medium: #697eac;
 
+    --blue: #bfc8f5;
+    --grey-dark: #86a7e6;
+    --grey-medium: #a5a9b6;
+    --blue-gray: #5e9adf;
+    --blue-gray-dark: #0668f0;
 
 }

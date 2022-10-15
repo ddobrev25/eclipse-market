@@ -1,6 +1,15 @@
 :host ::ng-deep {
-    .p-datatable-header {
+    .p-paginator {
+        border: 2px var(--gray-blue-border) solid;
+        border-top: none;
         background: var(--gray-blue);
+    }
+    .p-paginator .p-paginator-current,
+    .p-paginator .p-paginator-pages .p-paginator-page {
+        color: var(--text-light);
+    }
+    .p-datatable .p-datatable-header {
+        background: var(--gray-blue-medium);
         border: none;
     }
     .p-inputtext.p-component.p-element {
@@ -18,6 +27,10 @@
         border: 2px var(--gray-blue-border) solid;
         color: var(--text-light);
 
+    }
+    .p-datatable .p-datatable-thead > tr > th,
+    input::placeholder {
+        color: var(--text-light);
     }
     input:focus {
         background: var(--gray-blue);

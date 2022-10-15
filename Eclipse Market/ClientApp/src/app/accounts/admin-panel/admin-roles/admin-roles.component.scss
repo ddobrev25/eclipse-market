@@ -1,4 +1,7 @@
 :host ::ng-deep {
+    input::placeholder {
+        color: var(--text-light);
+    }
     ::-webkit-scrollbar {
         height: 8px !important;
     }
@@ -6,11 +9,11 @@
         background: var(--blue-gray)
     }
     select option {
-        background: var(--blue-gray-dark);
+        background: var(--gray-blue);
         color: var(--text-light);
     }
     select {
-        background: var(--blue-gray-dark);
+        background: var(--gray-blue);
         color: var(--text-light);
         border: none;
         padding: 8px;
@@ -28,7 +31,7 @@
 
     }
     p-table.p-element th {
-        background: var(--blue-gray-dark); 
+        background: var(--gray-blue);
         color: var(--text-light);
         border-bottom: 2px var(--gray-blue-border) solid;
     }
@@ -36,13 +39,22 @@
         border: 2px var(--gray-blue-border) solid;
     }
     .wrapper {
-        background: var(--blue-gray-dark); 
+        background: var(--gray-blue); 
         padding: 8px;
         border-radius: 5px;
     }
     .p-paginator {
         border: 2px var(--gray-blue-border) solid;
         border-top: none;
+        background: var(--gray-blue);
+    }
+    .p-paginator .p-paginator-current,
+    .p-paginator .p-paginator-pages .p-paginator-page {
+        color: var(--text-light);
+    }
+    .p-datatable .p-datatable-header {
+        background: var(--gray-blue-medium);
+        border: none;
     }
     .button-group button {
         background-color: var(--blue-bg);
@@ -72,6 +84,7 @@
     div.p-dialog-content,
     div.p-dialog-footer {
         background-color: var(--gray-blue-dark);
+        color: var(--text-light);
     }
 }
 

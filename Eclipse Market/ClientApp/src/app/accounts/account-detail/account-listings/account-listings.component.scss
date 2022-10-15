@@ -79,6 +79,10 @@ h3 {
         color: var(--text-light);
         width: 100%;
     }
+    input::placeholder,
+    textarea::placeholder {
+        color: var(--text-inactive);
+    }
     #charLeft {
         color: var(--text-light);
         float: right;

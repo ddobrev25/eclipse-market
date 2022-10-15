@@ -12,7 +12,10 @@
 }
 .active-nav {
     border-top: 2px solid var(--blue-bg);
-    color: #93C5FD;
+    color: var(--blue-bg)
+}
+.active-nav i {
+    color: var(--blue-bg)
 }
 .logo {
     cursor: pointer;

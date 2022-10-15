@@ -12,5 +12,9 @@
         // height:20px;
         // margin-left:-20px;
     }
+    .p-breadcrumb ul li:last-child .p-menuitem-text,
+    .p-breadcrumb ul li .p-menuitem-link .p-menuitem-text {
+        color: var(--text-light);
+    }
 
 }
