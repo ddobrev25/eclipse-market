@@ -1,28 +1,26 @@
 <div class="container-fluid px-0">
     <div class="row">
         <div class="col-4">
-            search for a message
+            search for a chat
             <div 
-                *ngFor="let message of messageList"
+                *ngFor="let chat of chats"
+                [ngClass]="chatIsSelected ? '' : 'active'"
                 class="message-container w-100 d-flex flex-column p-3 my-3"
-                (click)="onSelectMessage(message)">
-                <span class="sender"> Sender ID {{ message.senderId }}</span>
-                <span class="title">{{ message.title }}</span>
-                <span class="description">{{ message.body | slice:0:70 }}</span>
+                (click)="onSelectChat(chat)">
+                <span>{{ chat.topicListingId }}</span>
             </div>
         </div>
         <div class="col-8">
-            message preview
+            message chat
             <div
-                *ngIf="!messageIsSelected" 
+                *ngIf="!chatIsSelected" 
                 class="noMessage-container d-flex justify-content-center align-items-center my-3">
-                <span>Please select a message!</span>
+                <span>Please select a chat!</span>
             </div>
             <div
-            *ngIf="messageIsSelected" 
+            *ngIf="chatIsSelected" 
             class="message-preview-container d-flex justify-content-center align-items-center my-3">
-            
-                <label>{{ selectedMessage?.title }}</label>
+            chat was selected!chat
             </div>
         </div>
     </div>

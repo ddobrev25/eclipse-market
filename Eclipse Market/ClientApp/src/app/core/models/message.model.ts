@@ -1,23 +1,19 @@
-export interface IMessageRequest {
-    SenderId: number,
-    ReceiverId: number,
-    ListingId: number,
-    MessageTitle: string,
-    MessageBody: string
-}
-export interface IMessageResponse {
-    id: number,
-    title: string,
+import { IChat } from "./chat.model"
+
+export interface IMessageSendRequest {
     body: string,
     senderId: number,
-    receiverId: number,
-    listingId: number
+    chatId: number
+}
+export interface IMessageEditRequest {
+    id: number,
+    newBody: string
 }
 export interface IMessage {
     id: number,
-    title: string,
     body: string,
+    timeSent: string,
     senderId: number,
-    receiverId: number,
-    listingId: number
+    chatId: number,
+    chat: IChat
 }
