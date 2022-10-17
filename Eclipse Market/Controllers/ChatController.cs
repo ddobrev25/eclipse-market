@@ -32,7 +32,7 @@ namespace Eclipse_Market.Controllers
                 .Select(x => new ChatGetAllResponse()
                 {
                     Id = x.Id,
-                    TimeStarted = x.TimeStarted,
+                    TimeStarted = x.TimeStarted.ToString(),
                     TopicListingId = x.TopicListingId
                 }).ToList();
 
@@ -75,14 +75,22 @@ namespace Eclipse_Market.Controllers
         {
             var sender = _dbContext.Users.First(x => x.Id == JwtService.GetUserIdFromToken(User));
 
-            var listingOfSender = _dbContext.Listings.FirstOrDefault(x => x.Id == request.TopicListingId);
+            var listingOfSender = _dbContext.Listings
+                .Include(x => x.AuthorId)
+                .FirstOrDefault(x => x.Id == request.TopicListingId);
 
             if(listingOfSender == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
-            var receiver = listingOfSender.Author;
+            var receiver = _dbContext.Users.First(x => x.Id == listingOfSender.AuthorId);
+
+            if(sender.Id == receiver.Id)
+            {
+                return BadRequest("A user can not start a chat with themself.");
+            }
+
             List<UserChat> participants = new List<UserChat>();
             participants.Add(new UserChat { UserId = sender.Id, User = sender });
             participants.Add(new UserChat { UserId = receiver.Id, User = receiver });
