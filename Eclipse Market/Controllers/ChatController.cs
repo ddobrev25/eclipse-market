@@ -39,13 +39,16 @@ namespace Eclipse_Market.Controllers
             foreach (var chat in chats)
             {
                 chat.ParticipantIds = _dbContext.UserChats
-                    .Where(x => x.ChatId == chat.Id).Select(x => x.UserId);
+                    .Where(x => x.ChatId == chat.Id)
+                    .Select(x => x.UserId);
                 chat.MessageIds = _dbContext.Messages
-                    .Where(x => x.ChatId == chat.Id).Select(x => x.Id);
+                    .Where(x => x.ChatId == chat.Id)
+                    .Select(x => x.Id);
             }
 
             return Ok(chats);
         }
+
         [HttpGet]
         public ActionResult<ChatGetByIdResponse> GetById(int? id)
         {

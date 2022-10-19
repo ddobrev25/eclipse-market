@@ -59,13 +59,14 @@ namespace Eclipse_Market.Controllers
             {
                 ListingGetWithoutAuthorResponse listingResponse = new ListingGetWithoutAuthorResponse()
                 {
+                    Id = authorListing.Id,
                     Description = authorListing.Description,
                     ListingCategoryId = authorListing.ListingCategoryId,
                     Location = authorListing.Location,
                     Price = authorListing.Price,
                     TimesBookmarked = authorListing.TimesBookmarked,
                     Title = authorListing.Title,
-                    Views = authorListing.Views
+                    Views = authorListing.Views,
                 };
                 listingResponses[i] = listingResponse;
                 i++;

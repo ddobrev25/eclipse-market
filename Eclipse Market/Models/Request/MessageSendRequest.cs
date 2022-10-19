@@ -3,7 +3,6 @@
     public class MessageSendRequest
     {
         public string Body { get; set; }
-        public int SenderId { get; set; }
         public int ChatId { get; set; }
 
     }

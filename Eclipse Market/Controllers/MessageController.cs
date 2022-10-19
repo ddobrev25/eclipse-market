@@ -25,14 +25,17 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public ActionResult Send(MessageSendRequest request)
         {
+            var senderId = _jwtService.GetUserIdFromToken(User);
+
             if(request.Body == string.Empty)
             {
                 return BadRequest("Body string can not be empty.");
             }
+
             var messageToAdd = new Message
             {
                 Body = request.Body,
-                SenderId = request.SenderId,
+                SenderId = senderId,
                 TimeSent = DateTime.UtcNow.ToString(),
                 ChatId = request.ChatId
             };
