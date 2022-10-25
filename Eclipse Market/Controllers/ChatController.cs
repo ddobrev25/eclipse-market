@@ -97,6 +97,29 @@ namespace Eclipse_Market.Controllers
             List<UserChat> participants = new List<UserChat>();
             participants.Add(new UserChat { UserId = sender.Id, User = sender });
             participants.Add(new UserChat { UserId = receiver.Id, User = receiver });
+
+            var chatParticipantGroups = _dbContext.Chats.Select(x => x.Participants).ToList();
+
+            foreach (var chatParticipantGroup in chatParticipantGroups)
+            {
+                int[] sortedRequestParticipantIds = participants.Select(x => x.UserId).ToArray();
+                int[] sortedCurrentParticipantGroupIds = chatParticipantGroup.Select(x => x.UserId).ToArray();
+                Array.Sort(sortedRequestParticipantIds);
+                Array.Sort(sortedCurrentParticipantGroupIds);
+
+                bool areEqual = true;
+                if (sortedRequestParticipantIds.Count() == sortedCurrentParticipantGroupIds.Count())
+                {
+                    for (int i = 0; i < sortedRequestParticipantIds.Length; i++)
+                    {
+                        if (sortedRequestParticipantIds[i] != sortedCurrentParticipantGroupIds[i])
+                            areEqual = false;
+                    }
+                }
+                if (areEqual)
+                    return BadRequest("A chat with the same participants already exists");
+            }
+
             var chatToAdd = new Chat
             {
                 Participants = participants,
