@@ -50,6 +50,35 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
+        public ActionResult<List<ChatGetAllResponse>> GetAllByUserId()
+        {
+            int userId = JwtService.GetUserIdFromToken(User);
+
+            var chats = _dbContext.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .Where(x => x.Participants.Any(y => y.UserId == userId))
+                .Select(x => new ChatGetAllResponse()
+                {
+                    Id = x.Id,
+                    TimeStarted = x.TimeStarted.ToString(),
+                    TopicListingId = x.TopicListingId
+                }).ToList();
+
+            foreach (var chat in chats)
+            {
+                chat.ParticipantIds = _dbContext.UserChats
+                    .Where(x => x.ChatId == chat.Id)
+                    .Select(x => x.UserId);
+                chat.MessageIds = _dbContext.Messages
+                    .Where(x => x.ChatId == chat.Id)
+                    .Select(x => x.Id);
+            }
+
+            return Ok(chats);
+        }
+
+        [HttpGet]
         public ActionResult<ChatGetByIdResponse> GetById(int? id)
         {
             var chat = _dbContext.Chats
