@@ -25,6 +25,7 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public ActionResult Send(MessageSendRequest request)
         {
+
             var senderId = _jwtService.GetUserIdFromToken(User);
 
             if(request.Body == string.Empty)

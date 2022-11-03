@@ -103,7 +103,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ChatCreateRequest request)
+        public ActionResult<int> Create(ChatCreateRequest request)
         {
             var sender = _dbContext.Users.First(x => x.Id == JwtService.GetUserIdFromToken(User));
 
@@ -148,7 +148,16 @@ namespace Eclipse_Market.Controllers
                         }
                     }
                     if (areEqual)
-                        return BadRequest("A chat with the same participants and the same topic listing already exists");
+                    {
+                        //find the id of the already existing chat
+
+                        var participantGroupsWithMatchingTopicListingId = _dbContext.Chats
+                            .Include(x => x.Participants)
+                            .Where(x => x.TopicListingId == request.TopicListingId)
+                            .Select(x => x.Participants);
+
+                        return Ok();
+                    }
                 }
             }
 
@@ -160,7 +169,7 @@ namespace Eclipse_Market.Controllers
             };
             _dbContext.Chats.Add(chatToAdd);
             _dbContext.SaveChanges();
-            return Ok();
+            return Ok(chatToAdd.Id);
 
         }
 
