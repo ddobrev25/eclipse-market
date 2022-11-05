@@ -14,10 +14,7 @@ export class ListingCategoryService {
                 private httpBackend: HttpBackend) { this.httpWithoutInterceptor = new HttpClient(httpBackend) }
 
     getAll() {
-        var headers = new HttpHeaders({
-            'SkipLoader': ``
-        })
-        return this.http.get<IListingCategories>(`${this.url}/ListingCategory/GetAll`, {headers: headers});
+        return this.http.get<IListingCategories>(`${this.url}/ListingCategory/GetAll`);
     }
     add(body: IListingCategoryAddRequest) {
         var headers = new HttpHeaders({

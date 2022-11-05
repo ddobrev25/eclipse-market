@@ -40,6 +40,7 @@ export interface IListingGetByIdResponse {
     listingCategoryId: number
 }
 export interface IListingGetWithoutAuthorResponse {
+    id: number,
     title: string,
     description: string,
     price: number,

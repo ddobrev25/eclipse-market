@@ -1,6 +1,6 @@
 import { HttpClient, HttpBackend, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IChatCreateRequest, IChatGetAllResponse, IChatGetByIdResponse } from '../models/chat.model';
+import { IChatCreateRequest, IChatGetAllByUserIdResponse, IChatGetAllResponse, IChatGetByIdResponse } from '../models/chat.model';
 import { IDelete } from '../models/delete.model';
 
 @Injectable({
@@ -16,6 +16,9 @@ export class ChatService {
 
   getAll() {
     return this.http.get<IChatGetAllResponse>(`${this.url}/Chat/GetAll`);
+  }
+  getAllByUserId() {
+    return this.http.get<IChatGetAllByUserIdResponse>(`${this.url}/Chat/GetAllByUserId`);
   }
   getById(id: number) {
     let queryParams = new HttpParams().set('id', id)

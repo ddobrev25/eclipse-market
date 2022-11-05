@@ -8,6 +8,13 @@ export interface IChatGetAllResponse {
     messageIds: number[],
     participantIds: number[]
 }
+export interface IChatGetAllByUserIdResponse {
+    id: number,
+    timeStarted: string,
+    topicListingId: number,
+    messageIds: number[],
+    participantIds: number[]
+}
 export interface IChatGetByIdResponse {
     timeStarted: string,
     topicListingId: number,

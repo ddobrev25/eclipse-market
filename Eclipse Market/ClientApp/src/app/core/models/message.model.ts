@@ -2,7 +2,6 @@ import { IChat } from "./chat.model"
 
 export interface IMessageSendRequest {
     body: string,
-    senderId: number,
     chatId: number
 }
 export interface IMessageEditRequest {
