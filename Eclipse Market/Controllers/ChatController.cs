@@ -133,7 +133,7 @@ namespace Eclipse_Market.Controllers
             {
                 foreach (var chatParticipantGroup in chatParticipantGroups)
                 {
-                    int[] sortedRequestParticipantIds = participants.Select(x => x.UserId).ToArray();
+/*                    int[] sortedRequestParticipantIds = participants.Select(x => x.UserId).ToArray();
                     int[] sortedCurrentParticipantGroupIds = chatParticipantGroup.Select(x => x.UserId).ToArray();
                     Array.Sort(sortedRequestParticipantIds);
                     Array.Sort(sortedCurrentParticipantGroupIds);
@@ -146,17 +146,27 @@ namespace Eclipse_Market.Controllers
                             if (sortedRequestParticipantIds[i] != sortedCurrentParticipantGroupIds[i])
                                 areEqual = false;
                         }
-                    }
-                    if (areEqual)
+                    }*/
+                    if (AreParticipantsMatching(chatParticipantGroup, participants))
                     {
                         //find the id of the already existing chat
 
                         var participantGroupsWithMatchingTopicListingId = _dbContext.Chats
                             .Include(x => x.Participants)
-                            .Where(x => x.TopicListingId == request.TopicListingId)
-                            .Select(x => x.Participants);
+                            .Where(x => x.TopicListingId == request.TopicListingId);
 
-                        return Ok();
+                        foreach (var chat in participantGroupsWithMatchingTopicListingId)
+                        {
+                            var currentParticipants = chat.Participants;
+
+                            if(AreParticipantsMatching(currentParticipants, participants))
+                            {
+                                return Ok(chat.Id);
+                            }
+                        }
+                            
+
+                        return Ok("Error");
                     }
                 }
             }
@@ -171,6 +181,25 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok(chatToAdd.Id);
 
+        }
+        private bool AreParticipantsMatching(ICollection<UserChat> participants1, ICollection<UserChat> participants2)
+        {
+            var sortedIds1 = participants1.Select(x => x.UserId).ToArray();
+            Array.Sort(sortedIds1);
+            var sortedIds2 = participants2.Select(x => x.UserId).ToArray();
+            Array.Sort(sortedIds2);
+            if(sortedIds1.Length != sortedIds2.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < sortedIds1.Length; i++)
+            {
+                if(sortedIds1[i] != sortedIds2[i])
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         [HttpDelete]
