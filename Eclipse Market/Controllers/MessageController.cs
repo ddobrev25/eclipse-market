@@ -74,7 +74,7 @@ namespace Eclipse_Market.Controllers
 
             if (_jwtService.GetUserIdFromToken(User) != messageToEdit.SenderId)
             {
-                return BadRequest("A user can edit only his own message.");
+                return Forbid();
             }
 
             if(request.NewBody == string.Empty)
@@ -105,7 +105,7 @@ namespace Eclipse_Market.Controllers
 
             if (_jwtService.GetUserIdFromToken(User) != messageToDelete.SenderId)
             {
-                return BadRequest("A user can delete only his own message.");
+                return Forbid();
             }
 
             _dbContext.Messages.Remove(messageToDelete);
