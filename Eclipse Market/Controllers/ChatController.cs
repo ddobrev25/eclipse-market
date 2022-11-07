@@ -133,20 +133,6 @@ namespace Eclipse_Market.Controllers
             {
                 foreach (var chatParticipantGroup in chatParticipantGroups)
                 {
-/*                    int[] sortedRequestParticipantIds = participants.Select(x => x.UserId).ToArray();
-                    int[] sortedCurrentParticipantGroupIds = chatParticipantGroup.Select(x => x.UserId).ToArray();
-                    Array.Sort(sortedRequestParticipantIds);
-                    Array.Sort(sortedCurrentParticipantGroupIds);
-
-                    bool areEqual = true;
-                    if (sortedRequestParticipantIds.Count() == sortedCurrentParticipantGroupIds.Count())
-                    {
-                        for (int i = 0; i < sortedRequestParticipantIds.Length; i++)
-                        {
-                            if (sortedRequestParticipantIds[i] != sortedCurrentParticipantGroupIds[i])
-                                areEqual = false;
-                        }
-                    }*/
                     if (AreParticipantsMatching(chatParticipantGroup, participants))
                     {
                         //find the id of the already existing chat

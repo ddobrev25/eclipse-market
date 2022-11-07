@@ -3,6 +3,7 @@ using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Eclipse_Market.Controllers
@@ -31,6 +32,23 @@ namespace Eclipse_Market.Controllers
             if(request.Body == string.Empty)
             {
                 return BadRequest("Body string can not be empty.");
+            }
+
+            var chatToSendTo = _dbContext.Chats
+                .Include(x => x.Participants)
+                .Where(x => x.Id == request.ChatId)
+                .FirstOrDefault();
+
+            if(chatToSendTo == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            var chatParticipantIds = chatToSendTo.Participants.Select(x => x.UserId);
+
+            if (!chatParticipantIds.Contains(senderId))
+            {
+                return Forbid();
             }
 
             var messageToAdd = new Message
