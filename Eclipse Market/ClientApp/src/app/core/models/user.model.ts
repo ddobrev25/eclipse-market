@@ -1,3 +1,4 @@
+import { IChat, IChatGetAllByUserIdResponse, IChatGetAllResponse } from "./chat.model";
 import { IListing, IListingGetWithoutAuthorResponse } from "./listing.model";
 import { IMessage } from "./message.model";
 
@@ -12,6 +13,7 @@ export interface IUserResponse {
     currentListings?: IListing[];
     bookmarkedListings?: IListing[];
     messages?: IMessage[];
+    chats?: IChatGetAllByUserIdResponse[];
     roleId: number;
     roleName?: string;
 }
