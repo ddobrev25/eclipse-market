@@ -23,6 +23,24 @@ namespace Eclipse_Market.Controllers
             _jwtService = jwtService;
         }
 
+        [HttpGet]
+        public ActionResult<List<MessageGetAllResponse>> GetAllByChatId(int id)
+        {
+            if(!_dbContext.Chats.Any(x => x.Id == id))
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            return Ok(_dbContext.Messages.Where(x => x.ChatId == id)
+                .Select(x => new MessageGetAllResponse
+                {
+                    Body = x.Body,
+                    SenderId = x.SenderId,
+                    TimeSent = x.TimeSent
+                }));
+
+        }
+
         [HttpPost]
         public ActionResult Send(MessageSendRequest request)
         {
