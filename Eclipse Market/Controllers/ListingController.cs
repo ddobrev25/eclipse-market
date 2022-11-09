@@ -5,6 +5,8 @@ using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.Entity;
+using System.Reflection;
 
 namespace Eclipse_Market.Controllers
 {
@@ -31,7 +33,7 @@ namespace Eclipse_Market.Controllers
                 Id = x.Id,
                 AuthorId = x.AuthorId,
                 Description = x.Description,
-                ListingCategoryId = x.ListingCategoryId,
+                ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title,
                 Location = x.Location,
                 Price = x.Price,
                 TimesBookmarked = x.TimesBookmarked,
@@ -218,13 +220,20 @@ namespace Eclipse_Market.Controllers
         [HttpPut]
         public ActionResult<int> IncrementViews(int id)
         {
-            var listingForIncrement = _dbContext.Listings.Where(x => x.Id == id).FirstOrDefault();
+            var listingForIncrement = _dbContext.Listings
+                .Include(x => x.AuthorId)
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
 
             if(listingForIncrement == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
+            if(listingForIncrement.AuthorId == _jwtService.GetUserIdFromToken(User))
+            {
+                return Ok();
+            }
             listingForIncrement.Views++;
             _dbContext.SaveChanges();
             return Ok(listingForIncrement.Views);
@@ -259,7 +268,7 @@ namespace Eclipse_Market.Controllers
                 AuthorId = listing.AuthorId,
                 Description = listing.Description,
                 Id = listing.Id,
-                ListingCategoryId = listing.ListingCategoryId,
+                ListingCategory = _dbContext.ListingCategories.Where(x => x.Id == listing.ListingCategoryId).First().Title,
                 Location = listing.Location,
                 Price = listing.Price,
                 TimesBookmarked = listing.TimesBookmarked,

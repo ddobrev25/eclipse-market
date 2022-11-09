@@ -69,8 +69,8 @@ namespace Eclipse_Market.Controllers
                         TimesBookmarked = x.Listing.TimesBookmarked,
                         Title = x.Listing.Title,
                         Views = x.Listing.Views,
-                        ListingCategoryId = x.Listing.ListingCategoryId
-                    });
+                        ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.Listing.ListingCategoryId).First().Title,
+            });
                 user.CurrentListings = _dbContext.Listings
                     .Where(x => x.AuthorId == user.Id)
                     .Select(x => new ListingGetAllResponse()
@@ -83,8 +83,8 @@ namespace Eclipse_Market.Controllers
                         TimesBookmarked = x.TimesBookmarked,
                         Title = x.Title,
                         Views = x.Views,
-                        ListingCategoryId = x.ListingCategoryId
-                    });
+                        ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title
+            });
 /*                user.Messages = _dbContext.Messages
                     .Where(x => x.RecieverId == user.Id)
                     .Select(x => new MessageGetAllResponse
