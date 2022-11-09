@@ -65,7 +65,7 @@ export class ListingCreateGalleryComponent implements OnInit {
           description: resp.description,
           price: this.createListingForm.get('price')?.value,
           location: resp.location,
-          listingCategoryId: resp.listingCategoryId
+          listingCategory: resp.listingCategory
         });
       }
     )

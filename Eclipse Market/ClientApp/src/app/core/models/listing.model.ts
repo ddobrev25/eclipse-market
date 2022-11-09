@@ -9,14 +9,14 @@ export interface IListing {
     authorId: number,
     views: number,
     timesbookmarked: number,
-    listingCategoryId: number
+    listingCategory: string
 }
 export interface IListingAddRequest {
     title: string,
     description: string,
     price: number,
     location: string,
-    listingCategoryId: number
+    listingCategory: string
 }
 export interface IListingGetResponse {
     id?: number,
@@ -27,7 +27,7 @@ export interface IListingGetResponse {
     authorId: number,
     views: number,
     timesbookmarked: number,
-    listingCategoryId: number
+    listingCategory: string
 }
 export interface IListingGetByIdResponse {
     title: string,
@@ -37,7 +37,7 @@ export interface IListingGetByIdResponse {
     author: AuthorGetResponse,
     views: number,
     timesbookmarked: number,
-    listingCategoryId: number
+    listingCategory: string
 }
 export interface IListingGetWithoutAuthorResponse {
     id: number,
@@ -47,7 +47,7 @@ export interface IListingGetWithoutAuthorResponse {
     location: string,
     views: number,
     timesbookmarked: number,
-    listingCategoryId: number
+    listingCategory: string
 }
 export interface IListingGetRecommended {
     listings: IListing[]
@@ -58,5 +58,5 @@ export interface IListingUpdateRequest {
     description: string,
     price: number,
     location: string,
-    listingCategoryId: number
+    listingCategory: string
 }

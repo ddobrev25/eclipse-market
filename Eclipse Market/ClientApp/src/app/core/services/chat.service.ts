@@ -25,7 +25,7 @@ export class ChatService {
     return this.http.get<IChatGetByIdResponse>(`${this.url}/Chat/GetById`, {params: queryParams});
   }
   create(body: IChatCreateRequest) {
-    return this.http.post(`${this.url}/Chat/Add`, body);
+    return this.http.post(`${this.url}/Chat/Create`, body);
   }
   delete(chatId: IDelete) {
     return this.http.delete(`${this.url}/Chat/Delete`);

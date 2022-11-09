@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { IChatCreateRequest } from 'src/app/core/models/chat.model';
 import { IListingGetByIdResponse } from 'src/app/core/models/listing.model';
 import { IMessageSendRequest } from 'src/app/core/models/message.model';
 import { ChatService } from 'src/app/core/services/chat.service';
+import { ListingCategoryService } from 'src/app/core/services/listing-category.service';
 import { ListingService } from 'src/app/core/services/listing.service';
-import { MessageService } from 'src/app/core/services/message.service';
+import { MsgService } from 'src/app/core/services/message.service';
 import { UserListingsService } from 'src/app/core/services/user-listings.service';
 
 @Component({
@@ -21,6 +23,7 @@ export class ListingPreviewComponent implements OnInit {
   sub?: Subscription;
   createChatSubs?: Subscription;
   sendMessageSubs?: Subscription;
+  listingCategorySubs?: Subscription;
 
   remainingCharacters: number = 200;
   textAreaValue: string = '';
@@ -32,6 +35,8 @@ export class ListingPreviewComponent implements OnInit {
     private userListingsService: UserListingsService,
     private chatService: ChatService,
     private messageService: MessageService,
+    private listingCategoryService: ListingCategoryService,
+    private msgService: MsgService
   ) {}
 
   ngOnInit(): void {
@@ -72,8 +77,6 @@ export class ListingPreviewComponent implements OnInit {
     }
     this.createChatSubs = this.chatService.create(body).subscribe({
       next: (resp: any) => {
-        console.log(resp);
-        console.log('Chat created');
         this.sendMessage(resp);
       },
       error: (err: any) => {
@@ -87,10 +90,15 @@ export class ListingPreviewComponent implements OnInit {
       body: this.textAreaValue,
       chatId: chatId,
     }
-    this.sendMessageSubs = this.messageService.send(body).subscribe({
+    this.sendMessageSubs = this.msgService.send(body).subscribe({
       next: (resp: any) => {
-        console.log(resp);
-        console.log('Message Sent');
+        this.messageService.add({
+          key: 'tc',
+          severity: 'success',
+          detail: 'Съобщението е изпратено успешно!',
+          life: 3000,
+        });
+        this.textAreaValue = '';
       },
       error: (err: any) => {
         console.log(err);

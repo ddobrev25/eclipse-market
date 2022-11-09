@@ -1,6 +1,6 @@
-import { HttpClient, HttpBackend, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpBackend, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IListingCategories, IListingCategoryAddRequest, IListingCategoryDeleteRequest, IListingCategoryUpdateRequest } from "../models/listing-category.model";
+import { IListingCategories, IListingCategory, IListingCategoryAddRequest, IListingCategoryDeleteRequest, IListingCategoryUpdateRequest } from "../models/listing-category.model";
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +15,10 @@ export class ListingCategoryService {
 
     getAll() {
         return this.http.get<IListingCategories>(`${this.url}/ListingCategory/GetAll`);
+    }
+    getById(id: number) {
+        let queryParams = new HttpParams().set('id', id)
+        return this.http.get<IListingCategory>(`${this.url}/ListingCategory/GetById`);
     }
     add(body: IListingCategoryAddRequest) {
         var headers = new HttpHeaders({

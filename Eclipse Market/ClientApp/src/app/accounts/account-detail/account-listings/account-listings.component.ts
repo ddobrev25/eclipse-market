@@ -43,7 +43,7 @@ export class AccountListingsComponent implements OnInit {
     description: new FormControl(''),
     price: new FormControl(''),
     location: new FormControl(''),
-    listingCategoryId: new FormControl(0),
+    listingCategory: new FormControl(''),
   });
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class AccountListingsComponent implements OnInit {
       description: this.listingUpdateForm.get('description')?.value,
       price: this.listingUpdateForm.get('price')?.value,
       location: this.listingUpdateForm.get('location')?.value,
-      listingCategoryId: this.listingUpdateForm.get('listingCategoryId')?.value,
+      listingCategory: this.listingUpdateForm.get('listingCategoryId')?.value,
     };
     if (body.price == null) {
       body.price = 0;
