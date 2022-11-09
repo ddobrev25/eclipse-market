@@ -41,7 +41,6 @@ namespace Eclipse_Market.Controllers
             var users = _dbContext.Users
                 .Include(x => x.BookmarkedListings)
                 .Include(x => x.CurrentListings)
-                //.Include(x => x.Messages)
                 .Include(x => x.Role)
                 .Select(x => new UserGetAllResponse()
                 {
@@ -85,17 +84,6 @@ namespace Eclipse_Market.Controllers
                         Views = x.Views,
                         ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title
             });
-/*                user.Messages = _dbContext.Messages
-                    .Where(x => x.RecieverId == user.Id)
-                    .Select(x => new MessageGetAllResponse
-                    {
-                        Id = x.Id,
-                        SenderId = x.SenderId,
-                        RecieverId = x.RecieverId,
-                        ListingId = x.ListingId,
-                        Body = x.Body,
-                        Title = x.Title
-                    });*/
             }
             return Ok(users);
         }
