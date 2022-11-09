@@ -151,18 +151,17 @@ export class AuthComponent implements OnInit, OnDestroy {
       RoleId: '0',
     };
 
-    // this.registerSubscription = this.userService.register(body).subscribe({
-    //   next: (data) => {
-    //     this.messageService.add({
-    //       key: 'tc',
-    //       severity: 'success',
-    //       detail: 'Успешна регистрация!',
-    //       life: 3000,
-    //     });
-    //     this.router.navigate(['/home']);
-    //   },
-    // });
-    console.log(this.registerForm.get('password')?.value);
+    this.registerSubscription = this.userService.register(body).subscribe({
+      next: (data) => {
+        this.messageService.add({
+          key: 'tc',
+          severity: 'success',
+          detail: 'Успешна регистрация!',
+          life: 3000,
+        });
+        this.router.navigate(['/home']);
+      },
+    });
   }
   //!/Register
 

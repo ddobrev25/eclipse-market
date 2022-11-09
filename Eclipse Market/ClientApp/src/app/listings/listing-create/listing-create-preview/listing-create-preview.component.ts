@@ -65,7 +65,7 @@ export class ListingCreatePreviewComponent implements OnInit {
           description: resp.description,
           price: resp.price,
           location: resp.location,
-          listingCategoryId: resp.listingCategoryId
+          listingCategory: resp.listingCategory
         });
       }
     )

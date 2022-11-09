@@ -12,7 +12,7 @@ export class ListingCreateCommunicationService {
             description: '',
             price: 0,
             location: '',
-            listingCategoryId: 0,
+            listingCategory: '',
         }
     );
 
