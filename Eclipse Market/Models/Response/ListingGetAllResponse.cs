@@ -12,6 +12,6 @@ namespace Eclipse_Market.Models.Response
         public int AuthorId { get; set; }
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }
-        public int ListingCategoryId { get; set; }
+        public string ListingCategory { get; set; }
     }
 }
