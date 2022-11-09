@@ -61,7 +61,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = authorListing.Id,
                     Description = authorListing.Description,
-                    ListingCategoryId = authorListing.ListingCategoryId,
+                    ListingCategory = _dbContext.ListingCategories.Where(x => x.Id == authorListing.ListingCategoryId).First().Title,
                     Location = authorListing.Location,
                     Price = authorListing.Price,
                     TimesBookmarked = authorListing.TimesBookmarked,
@@ -83,7 +83,7 @@ namespace Eclipse_Market.Controllers
             var response = new ListingGetByIdResponse
             {
                 Description = listing.Description,
-                ListingCategoryId = listing.ListingCategoryId,
+                ListingCategory = _dbContext.ListingCategories.Where(x => x.Id == listing.ListingCategoryId).First().Title,
                 Location = listing.Location,
                 Price = listing.Price,
                 TimesBookmarked = listing.TimesBookmarked,
