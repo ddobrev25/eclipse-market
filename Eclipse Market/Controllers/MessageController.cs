@@ -3,6 +3,7 @@ using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
 
@@ -34,6 +35,7 @@ namespace Eclipse_Market.Controllers
             return Ok(_dbContext.Messages.Where(x => x.ChatId == id)
                 .Select(x => new MessageGetAllResponse
                 {
+                    Id = x.Id,
                     Body = x.Body,
                     SenderId = x.SenderId,
                     TimeSent = x.TimeSent
