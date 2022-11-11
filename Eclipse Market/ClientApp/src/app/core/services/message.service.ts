@@ -1,7 +1,7 @@
 import { HttpClient, HttpBackend, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { IDelete } from "../models/delete.model";
-import { IMessageEditRequest, IMessageSendRequest } from "../models/message.model";
+import { IMessageEditRequest, IMessageGetAllByChatId, IMessageSendRequest } from "../models/message.model";
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +18,7 @@ export class MsgService {
             'SkipLoader': ``
         });
         let queryParams = new HttpParams().set('id', id);
-        return this.http.get(`${this.url}/Message/GetAllByChatId`, {params: queryParams, headers: headers});
+        return this.http.get<IMessageGetAllByChatId>(`${this.url}/Message/GetAllByChatId`, {params: queryParams, headers: headers});
     }
     send(body: IMessageSendRequest) {
         return this.http.post(`${this.url}/Message/Send`, body)

@@ -3,6 +3,6 @@
     public class MessageGetAllByChatIdResponse
     {
         public ICollection<MessageGetAllResponse> PrimaryMessages { get; set; }
-        public ICollection<MessageGetAllResponse> SecondaryMEssages { get; set; }
+        public ICollection<MessageGetAllResponse> SecondaryMessages { get; set; }
     }
 }

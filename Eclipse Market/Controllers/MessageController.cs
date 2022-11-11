@@ -45,7 +45,7 @@ namespace Eclipse_Market.Controllers
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
-            var secndaryMessages = _dbContext.Messages
+            var secondaryMessages = _dbContext.Messages
                 .Where(x => x.SenderId != userId)
                 .Select(x => new MessageGetAllResponse
                 {
@@ -58,7 +58,7 @@ namespace Eclipse_Market.Controllers
             var response = new MessageGetAllByChatIdResponse
             {
                 PrimaryMessages = primaryMessages,
-                SecondaryMEssages = secndaryMessages
+                SecondaryMessages = secondaryMessages
             };
             return Ok(response);
         }
