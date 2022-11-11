@@ -41,7 +41,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent,
+                    TimeSent = x.TimeSent.ToString(),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
@@ -51,14 +51,22 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent,
+                    TimeSent = x.TimeSent.ToString(),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
             var response = new MessageGetAllByChatIdResponse
             {
                 PrimaryMessages = primaryMessages,
+<<<<<<< Updated upstream
                 SecondaryMessages = secondaryMessages
+=======
+<<<<<<< HEAD
+                SecondaryMessages = secndaryMessages
+=======
+                SecondaryMessages = secondaryMessages
+>>>>>>> d87083f3fa5395268c4cfa0e77198a0d79f4c62f
+>>>>>>> Stashed changes
             };
             return Ok(response);
         }
@@ -95,7 +103,7 @@ namespace Eclipse_Market.Controllers
             {
                 Body = request.Body,
                 SenderId = senderId,
-                TimeSent = DateTime.UtcNow.ToString(),
+                TimeSent = DateTime.UtcNow,
                 ChatId = request.ChatId
             };
             _dbContext.Messages.Add(messageToAdd);
