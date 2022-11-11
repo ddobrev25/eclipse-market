@@ -37,6 +37,7 @@ namespace Eclipse_Market.Controllers
 
             var primaryMessages = _dbContext.Messages
                 .Where(x => x.SenderId == userId)
+                .OrderBy(x => x.TimeSent)
                 .Select(x => new MessageGetAllResponse
                 {
                     Id = x.Id,
@@ -47,6 +48,7 @@ namespace Eclipse_Market.Controllers
 
             var secondaryMessages = _dbContext.Messages
                 .Where(x => x.SenderId != userId)
+                .OrderBy(x => x.TimeSent)
                 .Select(x => new MessageGetAllResponse
                 {
                     Id = x.Id,
