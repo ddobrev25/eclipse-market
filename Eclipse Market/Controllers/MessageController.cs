@@ -37,21 +37,23 @@ namespace Eclipse_Market.Controllers
 
             var primaryMessages = _dbContext.Messages
                 .Where(x => x.SenderId == userId)
+                .OrderBy(x => x.TimeSent)
                 .Select(x => new MessageGetAllResponse
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent,
+                    TimeSent = x.TimeSent.ToString(),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
             var secondaryMessages = _dbContext.Messages
                 .Where(x => x.SenderId != userId)
+                .OrderBy(x => x.TimeSent)
                 .Select(x => new MessageGetAllResponse
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent,
+                    TimeSent = x.TimeSent.ToString(),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
@@ -95,7 +97,7 @@ namespace Eclipse_Market.Controllers
             {
                 Body = request.Body,
                 SenderId = senderId,
-                TimeSent = DateTime.UtcNow.ToString(),
+                TimeSent = DateTime.UtcNow,
                 ChatId = request.ChatId
             };
             _dbContext.Messages.Add(messageToAdd);

@@ -93,7 +93,7 @@ namespace Eclipse_Market.Controllers
 
             var response = new ChatGetByIdResponse()
             {
-                TimeStarted = chat.TimeStarted,
+                TimeStarted = chat.TimeStarted.ToString(),
                 TopicListingId = chat.TopicListingId,
                 ParticipantIds = chat.Participants.Select(x => x.UserId),
                 MessageIds = chat.Messages.Select(x => x.Id)
@@ -160,7 +160,7 @@ namespace Eclipse_Market.Controllers
             var chatToAdd = new Chat
             {
                 Participants = participants,
-                TimeStarted = DateTime.UtcNow.ToString(),
+                TimeStarted = DateTime.UtcNow,
                 TopicListingId = request.TopicListingId
             };
             _dbContext.Chats.Add(chatToAdd);
