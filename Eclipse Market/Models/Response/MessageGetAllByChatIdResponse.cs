@@ -2,7 +2,7 @@
 {
     public class MessageGetAllByChatIdResponse
     {
-        public MessageGetAllResponse PrimaryMessages { get; set; }
-        public MessageGetAllResponse SecondaryMEssages { get; set; }
+        public ICollection<MessageGetAllResponse> PrimaryMessages { get; set; }
+        public ICollection<MessageGetAllResponse> SecondaryMEssages { get; set; }
     }
 }

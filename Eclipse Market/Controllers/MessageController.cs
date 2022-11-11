@@ -25,7 +25,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<MessageGetAllByChatIdResponse>> GetAllByChatId(int id)
+        public ActionResult<MessageGetAllByChatIdResponse> GetAllByChatId(int id)
         {
 
             int userId = _jwtService.GetUserIdFromToken(User);
@@ -42,8 +42,25 @@ namespace Eclipse_Market.Controllers
                     Id = x.Id,
                     Body = x.Body,
                     TimeSent = x.TimeSent,
-                    UserName = _dbContext.Users.Where(x => x.Id == userId).First().UserName
-                });
+                    UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
+                }).ToList();
+
+            var secndaryMessages = _dbContext.Messages
+                .Where(x => x.SenderId != userId)
+                .Select(x => new MessageGetAllResponse
+                {
+                    Id = x.Id,
+                    Body = x.Body,
+                    TimeSent = x.TimeSent,
+                    UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
+                }).ToList();
+
+            var response = new MessageGetAllByChatIdResponse
+            {
+                PrimaryMessages = primaryMessages,
+                SecondaryMEssages = secndaryMessages
+            };
+            return Ok(response);
         }
 
         [HttpPost]
