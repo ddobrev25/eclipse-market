@@ -25,22 +25,25 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<MessageGetAllResponse>> GetAllByChatId(int id)
+        public ActionResult<List<MessageGetAllByChatIdResponse>> GetAllByChatId(int id)
         {
+
+            int userId = _jwtService.GetUserIdFromToken(User);
+
             if(!_dbContext.Chats.Any(x => x.Id == id))
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
-            return Ok(_dbContext.Messages.Where(x => x.ChatId == id)
+            var primaryMessages = _dbContext.Messages
+                .Where(x => x.SenderId == userId)
                 .Select(x => new MessageGetAllResponse
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    SenderId = x.SenderId,
-                    TimeSent = x.TimeSent
-                }));
-
+                    TimeSent = x.TimeSent,
+                    UserName = _dbContext.Users.Where(x => x.Id == userId).First().UserName
+                });
         }
 
         [HttpPost]
