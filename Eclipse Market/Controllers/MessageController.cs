@@ -58,15 +58,7 @@ namespace Eclipse_Market.Controllers
             var response = new MessageGetAllByChatIdResponse
             {
                 PrimaryMessages = primaryMessages,
-<<<<<<< Updated upstream
                 SecondaryMessages = secondaryMessages
-=======
-<<<<<<< HEAD
-                SecondaryMessages = secndaryMessages
-=======
-                SecondaryMessages = secondaryMessages
->>>>>>> d87083f3fa5395268c4cfa0e77198a0d79f4c62f
->>>>>>> Stashed changes
             };
             return Ok(response);
         }
