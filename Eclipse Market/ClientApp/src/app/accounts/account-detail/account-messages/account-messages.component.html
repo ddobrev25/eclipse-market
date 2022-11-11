@@ -1,27 +1,36 @@
 <div class="container-fluid px-0">
-    <div class="row">
-        <div class="col-4">
-            search for a chat
-            <div 
-                *ngFor="let chat of chats"
-                [ngClass]="chatIsSelected ? '' : 'active'"
-                class="message-container w-100 d-flex flex-column p-3 my-3"
-                (click)="onSelectChat(chat)">
-                <span>{{ chat.topicListingId }}</span>
-            </div>
-        </div>
-        <div class="col-8">
-            message chat
-            <div
-                *ngIf="!chatIsSelected" 
-                class="noMessage-container d-flex justify-content-center align-items-center my-3">
-                <span>Please select a chat!</span>
-            </div>
-            <div
-            *ngIf="chatIsSelected" 
-            class="message-preview-container d-flex justify-content-center align-items-center my-3">
-            {{ selectedChat?.topicListingId! }}
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-4">
+      search for a chat
+      <div
+        *ngFor="let chat of chats"
+        [ngClass]="chatIsSelected ? '' : 'active'"
+        class="message-container w-100 d-flex flex-column p-3 my-3"
+        (click)="onSelectChat(chat)"
+      >
+        <span>{{ chat.topicListingId }}</span>
+      </div>
     </div>
+    <div class="col-8">
+      message chat
+      <div
+        *ngIf="!chatIsSelected"
+        class="noMessage-container d-flex justify-content-center align-items-center my-3"
+      >
+        <span>Please select a chat!</span>
+      </div>
+      <ng-container
+        *ngIf="chatIsSelected"
+        class="message-preview-container d-flex justify-content-center align-items-center my-3"
+      >
+        <div class="" *ngFor="let message of combinedMessages">
+            <div [ngClass]="separateMessage(message) ? 'primary' : 'secondary'">
+
+            </div>
+          {{ message.body }}
+        </div>
+
+      </ng-container>
+    </div>
+  </div>
 </div>

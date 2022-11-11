@@ -29,6 +29,7 @@ export class AccountMessagesComponent implements OnInit {
 
   primaryMessages?: IMessageResponse[];
   secondaryMessages?: IMessageResponse[];
+  combinedMessages?: IMessageResponse[];
 
   constructor(
     private userService: UserService,
@@ -55,6 +56,14 @@ export class AccountMessagesComponent implements OnInit {
       },
     });
   }
+
+  separateMessage(message: IMessageResponse): boolean {
+    if(this.primaryMessages?.includes(message)) {
+      return true;
+    }
+    return false;
+  }
+
   onSelectChat(selectedChat: IChatGetAllResponse) {
     this.chatIsSelected = true;
     this.selectedChat = selectedChat;
@@ -64,6 +73,10 @@ export class AccountMessagesComponent implements OnInit {
         next: (resp: IMessageGetAllByChatId) => {
           this.primaryMessages = resp.primaryMessages;
           this.secondaryMessages = resp.secondaryMessages;
+          this.combinedMessages = [...this.primaryMessages, ...this.secondaryMessages];
+          this.combinedMessages.sort(function(a,b) {
+            return a.timeSent.localeCompare(b.timeSent);
+          });
         },
         error: (err: any) => {
           console.log(err);
