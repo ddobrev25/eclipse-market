@@ -21,13 +21,22 @@ export class MsgService {
         return this.http.get<IMessageGetAllByChatId>(`${this.url}/Message/GetAllByChatId`, {params: queryParams, headers: headers});
     }
     send(body: IMessageSendRequest) {
-        return this.http.post(`${this.url}/Message/Send`, body)
+        let headers = new HttpHeaders({
+            'SkipLoader': ``
+        });
+        return this.http.post(`${this.url}/Message/Send`, body, {headers: headers})
     }
     edit(body: IMessageEditRequest) {
-        return this.http.put(`${this.url}/Message/Edit`, body);
+        let headers = new HttpHeaders({
+            'SkipLoader': ``
+        });
+        return this.http.put(`${this.url}/Message/Edit`, body, {headers: headers});
         console.log("metev");
     }
     delete(body: IDelete) {
-        return this.http.delete(`${this.url}/Message/Delete`, {body: body})
+        let headers = new HttpHeaders({
+            'SkipLoader': ``
+        });
+        return this.http.delete(`${this.url}/Message/Delete`, {body: body, headers: headers})
     }
 }

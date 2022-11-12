@@ -1,6 +1,16 @@
-import { HttpClient, HttpBackend, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpBackend,
+  HttpParams,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IChatCreateRequest, IChatGetAllByUserIdResponse, IChatGetAllResponse, IChatGetByIdResponse } from '../models/chat.model';
+import {
+  IChatCreateRequest,
+  IChatGetAllByUserIdResponse,
+  IChatGetAllResponse,
+  IChatGetByIdResponse,
+} from '../models/chat.model';
 import { IDelete } from '../models/delete.model';
 
 @Injectable({
@@ -18,11 +28,19 @@ export class ChatService {
     return this.http.get<IChatGetAllResponse>(`${this.url}/Chat/GetAll`);
   }
   getAllByUserId() {
-    return this.http.get<IChatGetAllByUserIdResponse>(`${this.url}/Chat/GetAllByUserId`);
+    let headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
+    return this.http.get<IChatGetAllByUserIdResponse>(
+      `${this.url}/Chat/GetAllByUserId`,
+      { headers: headers }
+    );
   }
   getById(id: number) {
-    let queryParams = new HttpParams().set('id', id)
-    return this.http.get<IChatGetByIdResponse>(`${this.url}/Chat/GetById`, {params: queryParams});
+    let queryParams = new HttpParams().set('id', id);
+    return this.http.get<IChatGetByIdResponse>(`${this.url}/Chat/GetById`, {
+      params: queryParams,
+    });
   }
   create(body: IChatCreateRequest) {
     return this.http.post(`${this.url}/Chat/Create`, body);
@@ -30,5 +48,4 @@ export class ChatService {
   delete(chatId: IDelete) {
     return this.http.delete(`${this.url}/Chat/Delete`);
   }
-
 }

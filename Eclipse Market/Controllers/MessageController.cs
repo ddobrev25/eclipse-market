@@ -42,7 +42,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent.ToString(),
+                    TimeSent = x.TimeSent.ToString("dddd, dd MMMM yyyy"),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
@@ -53,7 +53,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent.ToString(),
+                    TimeSent = x.TimeSent.ToString("dddd, dd MMMM yyyy"),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 

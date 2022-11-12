@@ -24,6 +24,7 @@ export class ListingPreviewComponent implements OnInit {
   createChatSubs?: Subscription;
   sendMessageSubs?: Subscription;
   listingCategorySubs?: Subscription;
+  incrementViewsSubs? : Subscription;
 
   remainingCharacters: number = 200;
   textAreaValue: string = '';
@@ -60,11 +61,20 @@ export class ListingPreviewComponent implements OnInit {
       .subscribe({
         next: (resp: IListingGetByIdResponse) => {
           this.selectedListing = resp;
+          this.incrementViews(this.selectedListingId);
         },
         error: (err) => {
           console.log(err);
         },
       });
+  }
+
+  incrementViews(id: number) {
+    this.incrementViewsSubs = this.listingService.incrementViews(id).subscribe({
+      error: err => {
+        console.log(err);
+      }
+    });
   }
 
   valueChange(textAreaValue: string) {

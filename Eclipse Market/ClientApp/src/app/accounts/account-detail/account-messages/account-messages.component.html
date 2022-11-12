@@ -1,7 +1,6 @@
 <div class="container-fluid px-0">
   <div class="row">
     <div class="col-4">
-      search for a chat
       <div
         *ngFor="let chat of chats"
         [ngClass]="chatIsSelected ? '' : 'active'"
@@ -12,24 +11,67 @@
       </div>
     </div>
     <div class="col-8">
-      message chat
       <div
         *ngIf="!chatIsSelected"
         class="noMessage-container d-flex justify-content-center align-items-center my-3"
       >
         <span>Please select a chat!</span>
       </div>
-      <ng-container
-        *ngIf="chatIsSelected"
-        class="message-preview-container d-flex justify-content-center align-items-center my-3"
-      >
-        <div class="" *ngFor="let message of combinedMessages">
-            <div [ngClass]="separateMessage(message) ? 'primary' : 'secondary'">
-
+      <ng-container *ngIf="chatIsSelected">
+        <div  class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between">
+          
+          <div class="message-input-container d-flex align-items-center">
+            <div class="form-floating">
+              <input
+                #msgInput
+                type="text"
+                name="message"
+                placeholder="Напишете съобщение..."
+                class="form-control"
+              />
+              <label for="message">Напишете съобщение...</label>
             </div>
-          {{ message.body }}
-        </div>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-send"
+              class="p-button-rounded p-button-success mx-2"
+              (click)="onSendMessage()"
+            ></button>
+          </div>
 
+          <div
+            class="d-flex flex-column"
+            *ngFor="let message of combinedMessages"
+          >
+            <div [ngClass]="separateMessage(message) ? 'primary' : 'secondary'">
+              <div class="message-wrapper d-flex flex-column">
+                <span
+                  [ngClass]="
+                    separateMessage(message) ? 'text-end' : 'text-start'
+                  "
+                >
+                  {{ message.userName }}
+                </span>
+                <p class="text-center">
+                  {{ message.body }}
+                </p>
+              </div>
+            </div>
+
+            <span
+              [ngClass]="
+                separateMessage(message) ? 'primary-date' : 'secondary-date'
+              "
+            >
+              {{ message.timeSent }}
+            </span>
+          </div>
+
+
+
+        </div>
       </ng-container>
     </div>
   </div>

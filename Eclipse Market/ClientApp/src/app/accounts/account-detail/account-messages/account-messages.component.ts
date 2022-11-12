@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
   IChatGetAllByUserIdResponse,
@@ -7,6 +7,7 @@ import {
 import {
   IMessageGetAllByChatId,
   IMessageResponse,
+  IMessageSendRequest,
 } from 'src/app/core/models/message.model';
 import { ChatService } from 'src/app/core/services/chat.service';
 import { MsgService } from 'src/app/core/services/message.service';
@@ -18,8 +19,11 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./account-messages.component.scss'],
 })
 export class AccountMessagesComponent implements OnInit {
+  @ViewChild('msgInput') msgInput!: ElementRef;
+
   fetchSubs?: Subscription;
   messageSubs?: Subscription;
+  sendMessageSubs?: Subscription;
 
   listingDesc: string =
     'asdasdasdasdasdadasdasdadasdasdadasdasdasdasdasdasdasdadasdasdadasdasdadasdasdasdasdasdasdasdadasdasdadasdasdadasdasd0';
@@ -39,11 +43,12 @@ export class AccountMessagesComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchChats();
+    // this.scrollToBottom();
   }
 
   fetchChats() {
-    if (this.userService.loggedUser?.chats!) {
-      this.chats = this.userService.loggedUser?.chats!;
+    if (this.userService.loggedUser?.chats?.length) {
+      this.chats = this.userService.loggedUser.chats;
       return;
     }
     this.fetchSubs = this.chatService.getAllByUserId().subscribe({
@@ -58,7 +63,7 @@ export class AccountMessagesComponent implements OnInit {
   }
 
   separateMessage(message: IMessageResponse): boolean {
-    if(this.primaryMessages?.includes(message)) {
+    if (this.primaryMessages?.includes(message)) {
       return true;
     }
     return false;
@@ -73,10 +78,14 @@ export class AccountMessagesComponent implements OnInit {
         next: (resp: IMessageGetAllByChatId) => {
           this.primaryMessages = resp.primaryMessages;
           this.secondaryMessages = resp.secondaryMessages;
-          this.combinedMessages = [...this.primaryMessages, ...this.secondaryMessages];
-          this.combinedMessages.sort(function(a,b) {
+          this.combinedMessages = [
+            ...this.primaryMessages,
+            ...this.secondaryMessages,
+          ];
+          this.combinedMessages.sort(function (a, b) {
             return a.timeSent.localeCompare(b.timeSent);
           });
+          this.combinedMessages.reverse();
         },
         error: (err: any) => {
           console.log(err);
@@ -84,8 +93,30 @@ export class AccountMessagesComponent implements OnInit {
       });
   }
 
+  onSendMessage() {
+    if (this.selectedChat) {
+      const body: IMessageSendRequest = {
+        body: this.msgInput.nativeElement.value,
+        chatId: this.selectedChat.id,
+      };
+      this.sendMessageSubs = this.msgService.send(body).subscribe({
+        next: (resp: any) => {
+          this.msgInput.nativeElement.value = null;
+        },
+        error: (err) => {
+          ``;
+          console.log(err);
+        },
+      });
+    }
+  }
+
+
   ngOnDestroy() {
     this.fetchSubs?.unsubscribe();
     this.chatIsSelected = false;
+    this.fetchSubs?.unsubscribe;
+    this.messageSubs?.unsubscribe;
+    this.sendMessageSubs?.unsubscribe;
   }
 }
