@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 
 namespace Eclipse_Market.Services
@@ -9,20 +10,18 @@ namespace Eclipse_Market.Services
         {
             string? userIdRawValue = user.FindFirst(ClaimTypes.Name)?.Value;
             int userId;
-            if (userIdRawValue != null)
+            if (userIdRawValue == null)
             {
-                if (int.TryParse(userIdRawValue, out userId))
-                {
-                    return userId;
-                }
-                else
-                {
-                    throw new Exception("Could not parse id value from JWT claim to an integer");
-                }
+                throw new Exception("User is not logged in");
+            }
+
+            if (int.TryParse(userIdRawValue, out userId))
+            {
+                return userId;
             }
             else
             {
-                throw new Exception("Id value is null");
+                throw new Exception("Could not parse id value from JWT claim to an integer");
             }
         }
         public string GetUserRoleNameFromToken(ClaimsPrincipal user)
