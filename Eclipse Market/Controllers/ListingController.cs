@@ -97,14 +97,36 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpGet]
-        public ActionResult<ListingGetRecommendedResponse> GetRecommended(int count)
+        public ActionResult<ListingGetRecommendedResponse> GetRecommended(int count, int? listingCategoryId = null)
         {
-            int[] currentListingIds = _dbContext.Listings
-                .Select(x => x.Id)
-                .ToArray();
-            int listingsCount = currentListingIds.Length;
+            if(count <= 0)
+            {
+                return BadRequest("Invalid count");
+            }
+            List<int> currentListingIds = new List<int>();
+            if (listingCategoryId == null)
+            {
+                currentListingIds = _dbContext.Listings
+                    .Select(x => x.Id)
+                    .ToList();
+            }
+            else
+            {
+                if(!_dbContext.ListingCategories.Any(x => x.Id == listingCategoryId))
+                {
+                    return BadRequest(ErrorMessages.InvalidId);
+                }
 
-            if(count > listingsCount)
+                currentListingIds = _dbContext.Listings
+                    .Include(x => x.ListingCategoryId)
+                    .Where(x => x.ListingCategoryId == listingCategoryId)
+                    .Select(x => x.Id)
+                    .ToList();
+            }
+
+            int listingsCount = currentListingIds.Count;
+
+            if (count > listingsCount)
             {
                 return BadRequest("Not enough listings in the database.");
             }
