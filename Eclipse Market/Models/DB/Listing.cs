@@ -17,6 +17,7 @@ namespace Eclipse_Market.Models.DB
         [Required]
         public int AuthorId { get; set; }
         public User Author { get; set; }
+        public byte[] ImageBytes { get; set; }
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }
         public ICollection<ListingUser> UsersBookmarked { get; set; }
