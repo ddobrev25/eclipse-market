@@ -103,6 +103,7 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest("Invalid count");
             }
+
             List<int> currentListingIds = new List<int>();
             if (listingCategoryId == null)
             {
