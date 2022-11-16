@@ -14,6 +14,7 @@
           type="text"
           pInputText
           formControlName="firstName"
+          (keyup.enter)="focusableLastName.focus()"
         />
         <label for="float-input">Име</label>
       </span>
@@ -28,10 +29,12 @@
     <div class="mt-4">
       <span class="p-float-label">
         <input
+          #focusableLastName
           id="float-input"
           type="text"
           pInputText
           formControlName="lastName"
+          (keyup.enter)="focusableUserName.focus()"
         />
         <label for="float-input">Фамилия</label>
       </span>
@@ -46,10 +49,12 @@
     <div class="mt-4">
       <span class="p-float-label">
         <input
+          #focusableUserName
           id="float-input"
           type="text"
           pInputText
           formControlName="userName"
+          (keyup.enter)="focusableEmail.focus()"
         />
         <label for="float-input">Потребителско име</label>
       </span>
@@ -64,10 +69,12 @@
     <div class="mt-4">
       <span class="p-float-label">
         <input
+          #focusableEmail
           id="float-input"
           type="email"
           pInputText
           formControlName="email"
+          (keyup.enter)="focusablePassword.input.nativeElement.focus()"
         />
         <label for="float-input">Имейл адрес</label>
       </span>
@@ -79,6 +86,8 @@
 
     <div class="mt-4">
       <p-password
+        #focusablePassword
+        (keyup.enter)="focusableRepeatPassword.input.nativeElement.focus()"
         formControlName="password"
         placeholder="Парола"
         promptLabel=" "
@@ -108,6 +117,8 @@
 
     <div class="mt-4">
       <p-password
+        #focusableRepeatPassword
+        (keyup.enter)="focusablePhone.focus()"
         formControlName="confirmPassword"
         placeholder="Потвърди парола"
         promptLabel=" "
@@ -144,6 +155,7 @@
     <div class="mt-4">
       <span class="p-float-label">
         <input
+          #focusablePhone
           id="float-input"
           type="text"
           pInputText
@@ -174,7 +186,7 @@
         label="Потвърди"
         class="p-button-success mt-3 p-1 w-25"
         [disabled]="!registerForm.valid"
-        (click)="onLogIn()"
+        (click)="onRegister()"
         routerLink="listings/create"
       ></button>
     </div>
@@ -198,6 +210,7 @@
           type="text"
           pInputText
           formControlName="userName"
+          (keyup.enter)="focusablePassword.focus()"
         />
         <label for="float-input">Потребителско име</label>
       </span>
@@ -212,6 +225,7 @@
     <div class="mt-4">
       <span class="p-float-label">
         <input
+          #focusablePassword
           id="float-input"
           type="password"
           pInputText

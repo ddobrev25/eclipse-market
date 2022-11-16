@@ -70,7 +70,7 @@ export class ListingPreviewComponent implements OnInit {
   }
 
   incrementViews(id: number) {
-    this.incrementViewsSubs = this.listingService.incrementViews(id).subscribe({
+    this.incrementViewsSubs = this.listingService.incrementViews(id)!.subscribe({
       error: err => {
         console.log(err);
       }

@@ -25,8 +25,6 @@ export class AccountMessagesComponent implements OnInit {
   messageSubs?: Subscription;
   sendMessageSubs?: Subscription;
 
-  listingDesc: string =
-    'asdasdasdasdasdadasdasdadasdasdadasdasdasdasdasdasdasdadasdasdadasdasdadasdasdasdasdasdasdasdadasdasdadasdasdadasdasd0';
   chatIsSelected: boolean = false;
   chats: IChatGetAllByUserIdResponse[] = [];
   selectedChat?: IChatGetAllByUserIdResponse;
@@ -43,7 +41,6 @@ export class AccountMessagesComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchChats();
-    // this.scrollToBottom();
   }
 
   fetchChats() {
@@ -104,7 +101,6 @@ export class AccountMessagesComponent implements OnInit {
           this.msgInput.nativeElement.value = null;
         },
         error: (err) => {
-          ``;
           console.log(err);
         },
       });

@@ -4,7 +4,9 @@ import {
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
+import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { IDelete } from '../models/delete.model';
 import {
   IListingGetByIdResponse,
@@ -20,7 +22,8 @@ export class ListingService {
   private httpWithoutInterceptor: HttpClient;
   private url = 'http://localhost:5001';
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
+  constructor(private http: HttpClient, private httpBackend: HttpBackend,
+    private router: Router) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 
@@ -51,9 +54,19 @@ export class ListingService {
   }
 
   incrementViews(id: number) {
-    let queryParams = new HttpParams().set('id', id);
+    const token = localStorage.getItem('token');
+    if(!token) {
+      this.router.navigate(['auth']);
+      return;
+    }
+
+    var headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
+    let queryParams = new HttpParams().set('id', id);    
     return this.http.put(`${this.url}/Listing/IncrementViews`, null, {
       params: queryParams,
+      headers: headers
     });
   }
 
