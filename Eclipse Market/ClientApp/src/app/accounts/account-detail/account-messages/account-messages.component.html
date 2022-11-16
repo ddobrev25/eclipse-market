@@ -21,16 +21,14 @@
         <div  class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between">
           
           <div class="message-input-container d-flex align-items-center">
-            <div class="form-floating">
               <input
+                (keyup.enter)="onSendMessage()"
                 #msgInput
                 type="text"
                 name="message"
                 placeholder="Напишете съобщение..."
                 class="form-control"
               />
-              <label for="message">Напишете съобщение...</label>
-            </div>
             <button
               pButton
               pRipple

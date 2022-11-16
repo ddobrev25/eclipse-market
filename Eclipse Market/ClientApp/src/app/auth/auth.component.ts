@@ -44,6 +44,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
   }
 
+  temp(event: any) {
+    console.log(event)
+  }
+
   //!Login
   loginForm: FormGroup = new FormGroup({
     userName: new FormControl('', [Validators.required]),

@@ -52,12 +52,17 @@
     border-radius: 8px;
     max-width: 50%;
     word-break: break-all;
+    cursor: pointer;
   }
   .secondary {
     background-color: var(--gray-blue-medium);
     margin-left: 0px;
     margin-right: auto;
     border-radius: 8px;
+    word-break: break-all;
+    max-width: 50%;
+    cursor: pointer;
+
   }
   .primary-date {
     font-size: 12px;
