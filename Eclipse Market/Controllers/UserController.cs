@@ -303,6 +303,7 @@ namespace Eclipse_Market.Controllers
 
             var token = CreateJwtToken(user);
 
+
             var claims = _dbContext.RoleClaims
                 .Include(x => x.Claim)
                 .Where(x => x.RoleId == user.RoleId)
