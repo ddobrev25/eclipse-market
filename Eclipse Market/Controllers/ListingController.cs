@@ -38,7 +38,8 @@ namespace Eclipse_Market.Controllers
                 Price = x.Price,
                 TimesBookmarked = x.TimesBookmarked,
                 Title = x.Title,
-                Views = x.Views
+                Views = x.Views,
+                ImageBase64String = x.ImageBase64String
             });
             return Ok(listings);
         }
@@ -69,6 +70,7 @@ namespace Eclipse_Market.Controllers
                     TimesBookmarked = authorListing.TimesBookmarked,
                     Title = authorListing.Title,
                     Views = authorListing.Views,
+                    ImageBase64String = authorListing.ImageBase64String,
                 };
                 listingResponses[i] = listingResponse;
                 i++;
@@ -91,7 +93,9 @@ namespace Eclipse_Market.Controllers
                 TimesBookmarked = listing.TimesBookmarked,
                 Title = listing.Title,
                 Views = listing.Views,
-                Author = authorResponse
+                ImageBase64String = listing.ImageBase64String,
+                Author = authorResponse,
+                
             };
 
             return Ok(response);
@@ -297,7 +301,8 @@ namespace Eclipse_Market.Controllers
                 Price = listing.Price,
                 TimesBookmarked = listing.TimesBookmarked,
                 Title = listing.Title,
-                Views = listing.Views
+                Views = listing.Views,
+                ImageBase64String = listing.ImageBase64String,
             };
         }
 
