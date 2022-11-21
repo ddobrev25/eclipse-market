@@ -29,11 +29,12 @@ namespace Eclipse_Market.Controllers
             var chats = _dbContext.Chats
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
+                .Include(x => x.TopicListingId)
                 .Select(x => new ChatGetAllResponse()
                 {
                     Id = x.Id,
                     TimeStarted = x.TimeStarted.ToString(),
-                    TopicListingId = x.TopicListingId
+                    TopicListingTitle = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().Title
                 }).ToList();
 
             foreach (var chat in chats)
@@ -62,7 +63,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     TimeStarted = x.TimeStarted.ToString(),
-                    TopicListingId = x.TopicListingId
+                    TopicListingTitle = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().Title
                 }).ToList();
 
             foreach (var chat in chats)
@@ -84,6 +85,7 @@ namespace Eclipse_Market.Controllers
             var chat = _dbContext.Chats
                 .Include(_ => _.Participants)
                 .Include(_ => _.Messages)
+                .Include(_ => _.TopicListingId)
                 .FirstOrDefault(x => x.Id == id);
 
             if(chat == null)
@@ -94,7 +96,7 @@ namespace Eclipse_Market.Controllers
             var response = new ChatGetByIdResponse()
             {
                 TimeStarted = chat.TimeStarted.ToString(),
-                TopicListingId = chat.TopicListingId,
+                TopicListingTitle = _dbContext.Listings.Where(x => x.Id == chat.TopicListingId).First().Title,
                 ParticipantIds = chat.Participants.Select(x => x.UserId),
                 MessageIds = chat.Messages.Select(x => x.Id)
             };
