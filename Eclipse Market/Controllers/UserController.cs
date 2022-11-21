@@ -576,7 +576,6 @@ namespace Eclipse_Market.Controllers
         }
         private string ComputeSha256Hash(string rawData)
         {
-            //az sum puqk
             // Create a SHA256   
             using (SHA256 sha256Hash = SHA256.Create())
             {

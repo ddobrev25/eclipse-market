@@ -188,7 +188,8 @@ namespace Eclipse_Market.Controllers
                 ListingCategory = _dbContext.ListingCategories.Where(x => x.Id == request.ListingCategoryId).First(),
                 Title = request.Title,
                 Price = request.Price,
-                Location = request.Location
+                Location = request.Location,
+                ImageBytes = request.ImageBytes,
             };
             _dbContext.Listings.Add(listingToAdd);
             _dbContext.SaveChanges();
