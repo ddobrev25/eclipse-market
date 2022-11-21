@@ -43,7 +43,7 @@ export class AccountListingsComponent implements OnInit {
     description: new FormControl(''),
     price: new FormControl(''),
     location: new FormControl(''),
-    listingCategory: new FormControl(''),
+    listingCategory: new FormControl('')
   });
 
   ngOnInit(): void {

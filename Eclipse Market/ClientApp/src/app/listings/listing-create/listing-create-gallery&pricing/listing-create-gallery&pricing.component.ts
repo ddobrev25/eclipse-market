@@ -12,34 +12,22 @@ import { ListingCreateCommunicationService } from 'src/app/core/services/listing
 })
 export class ListingCreateGalleryComponent implements OnInit {
   fetchSubs?: Subscription;
-  // images : string[] = [];
+  imageAsBase64?: string;
 
+  getBase64(event: any) {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      //me.modelvalue = reader.result;
+      this.imageAsBase64 = reader.result?.toString();
+      console.log(this.imageAsBase64);
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+ }
 
-  // myForm = new FormGroup({
-  //   name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-  //   file: new FormControl('', [Validators.required]),
-  //   fileSource: new FormControl('', [Validators.required])
-  // });
-
-  // get f(){
-  //   return this.myForm.controls;
-  // }
-
-  // onFileChange(event:any) {
-  //   if (event.target.files && event.target.files[0]) {
-  //       var filesAmount = event.target.files.length;
-  //       for (let i = 0; i < filesAmount; i++) {
-  //               var reader = new FileReader();
-  //               reader.onload = (event:any) => {
-  //                  this.images.push(event.target.result); 
-  //                  this.myForm.patchValue({
-  //                     fileSource: this.images
-  //                  });
-  //               }
-  //               reader.readAsDataURL(event.target.files[i]);
-  //       }
-  //   }
-  // }
 
   constructor(private router: Router,
               private listingComService: ListingCreateCommunicationService) { }
@@ -53,7 +41,8 @@ export class ListingCreateGalleryComponent implements OnInit {
     description: new FormControl(''),
     price: new FormControl('', [Validators.required]),
     location: new FormControl(''),
-    listingCategoryId: new FormControl('')
+    listingCategoryId: new FormControl(''),
+    imageBase64String: new FormControl('')
   })
 
 
@@ -65,7 +54,8 @@ export class ListingCreateGalleryComponent implements OnInit {
           description: resp.description,
           price: this.createListingForm.get('price')?.value,
           location: resp.location,
-          listingCategory: resp.listingCategory
+          listingCategoryId: resp.listingCategoryId,
+          imageBase64String: this.imageAsBase64
         });
       }
     )
@@ -75,6 +65,7 @@ export class ListingCreateGalleryComponent implements OnInit {
     this.router.navigate(['/listings/create/general']);
   }
   nextPage() {
+    this.fetchFormData();
     this.listingComService.sendListingData(this.createListingForm.value);
     this.router.navigate(['/listings/create/preview']);
   }

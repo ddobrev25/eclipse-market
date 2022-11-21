@@ -4,7 +4,7 @@
         <div class="col d-flex justify-content-center">
             <p-card [header]="listingForm.value.title" styleClass="preview-card">
                 <ng-template pTemplate="header">
-                    <img alt="Card" src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png">
+                    <img [src]="listingForm.value.imageBase64String" alt="Card">
                 </ng-template>
                 <ng-template pTemplate="body">
                     <p>

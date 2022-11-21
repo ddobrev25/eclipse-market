@@ -12,7 +12,8 @@ export class ListingCreateCommunicationService {
             description: '',
             price: 0,
             location: '',
-            listingCategory: '',
+            listingCategoryId: 0,
+            imageBase64String: ''
         }
     );
 
