@@ -189,7 +189,7 @@ namespace Eclipse_Market.Controllers
                 Title = request.Title,
                 Price = request.Price,
                 Location = request.Location,
-                ImageBytes = request.ImageBytes,
+                ImageBase64String = request.ImageBase64String,
             };
             _dbContext.Listings.Add(listingToAdd);
             _dbContext.SaveChanges();
