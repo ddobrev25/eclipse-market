@@ -29,5 +29,7 @@ namespace Eclipse_Market.Models.DB
 
         public int LoginAttemptCount { get; set; }
         public DateTime DateLockedTo { get; set; }
+
+        public string ImageBase64String { get; set; }
     }
 }

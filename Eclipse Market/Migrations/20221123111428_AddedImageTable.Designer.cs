@@ -4,6 +4,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221123111428_AddedImageTable")]
+    partial class AddedImageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,15 +97,7 @@ namespace Eclipse_Market.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ListingId");
 
                     b.ToTable("Images");
                 });
@@ -120,6 +114,10 @@ namespace Eclipse_Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageBase64String")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -327,17 +325,6 @@ namespace Eclipse_Market.Migrations
                     b.Navigation("Listing");
                 });
 
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Image", b =>
-                {
-                    b.HasOne("Eclipse_Market.Models.DB.Listing", "Listing")
-                        .WithMany("Images")
-                        .HasForeignKey("ListingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Listing");
-                });
-
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
                 {
                     b.HasOne("Eclipse_Market.Models.DB.User", "Author")
@@ -456,8 +443,6 @@ namespace Eclipse_Market.Migrations
                 {
                     b.Navigation("Auction")
                         .IsRequired();
-
-                    b.Navigation("Images");
 
                     b.Navigation("UsersBookmarked");
                 });

@@ -53,6 +53,7 @@ namespace Eclipse_Market.Controllers
                     PhoneNumber = x.PhoneNumber,
                     RoleName = x.Role.Name,
                     DateTimeCreated = x.DateCreated.ToLongDateString(),
+                    ImageBase64String = x.ImageBase64String
                 }).ToList();
             foreach (var user in users)
             {
@@ -117,12 +118,13 @@ namespace Eclipse_Market.Controllers
                 Password = user.Password,
                 UserName = user.UserName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                ImageBase64String = user.ImageBase64String
             };
             return Ok(response);
         }
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
+/*        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<UserGetByIdFullResponse> GetByIdFull(int? id = null)
         {
             if(id == null)
@@ -186,7 +188,7 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views,
                 });
-/*            response.Messages = _dbContext.Messages
+*//*            response.Messages = _dbContext.Messages
                .Where(x => x.RecieverId == user.Id)
                .Select(x => new MessageGetAllResponse
                {
@@ -196,9 +198,9 @@ namespace Eclipse_Market.Controllers
                    ListingId = x.ListingId,
                    Body = x.Body,
                    Title = x.Title
-               });*/
+               });*//*
             return Ok(response);
-        }
+        }*/
         [HttpPost]
         public ActionResult Register(UserRegisterRequest request)
         {
@@ -248,7 +250,8 @@ namespace Eclipse_Market.Controllers
                 Password = ComputeSha256Hash(request.Password),
                 PhoneNumber = request.PhoneNumber,
                 Role = _dbContext.Roles.First(x => x.Id == request.RoleId),
-                DateCreated = DateTime.UtcNow
+                DateCreated = DateTime.UtcNow,
+                ImageBase64String = request.ImageBase64String,
             };
             _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();

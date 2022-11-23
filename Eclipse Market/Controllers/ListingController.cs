@@ -39,7 +39,7 @@ namespace Eclipse_Market.Controllers
                 TimesBookmarked = x.TimesBookmarked,
                 Title = x.Title,
                 Views = x.Views,
-                ImageBase64String = x.ImageBase64String
+                //ImageBase64String = x.ImageBase64String
             });
             return Ok(listings);
         }
@@ -70,7 +70,7 @@ namespace Eclipse_Market.Controllers
                     TimesBookmarked = authorListing.TimesBookmarked,
                     Title = authorListing.Title,
                     Views = authorListing.Views,
-                    ImageBase64String = authorListing.ImageBase64String,
+                    //ImageBase64String = authorListing.ImageBase64String,
                 };
                 listingResponses[i] = listingResponse;
                 i++;
@@ -93,7 +93,7 @@ namespace Eclipse_Market.Controllers
                 TimesBookmarked = listing.TimesBookmarked,
                 Title = listing.Title,
                 Views = listing.Views,
-                ImageBase64String = listing.ImageBase64String,
+                //ImageBase64String = listing.ImageBase64String,
                 Author = authorResponse,
                 
             };
@@ -193,7 +193,7 @@ namespace Eclipse_Market.Controllers
                 Title = request.Title,
                 Price = request.Price,
                 Location = request.Location,
-                ImageBase64String = request.ImageBase64String,
+                //PrimaryImageBase64String = request.ImageBase64String,
             };
             _dbContext.Listings.Add(listingToAdd);
             _dbContext.SaveChanges();
@@ -302,7 +302,7 @@ namespace Eclipse_Market.Controllers
                 TimesBookmarked = listing.TimesBookmarked,
                 Title = listing.Title,
                 Views = listing.Views,
-                ImageBase64String = listing.ImageBase64String,
+                //ImageBase64String = listing.ImageBase64String,
             };
         }
 

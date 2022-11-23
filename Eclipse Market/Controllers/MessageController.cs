@@ -27,7 +27,6 @@ namespace Eclipse_Market.Controllers
         [HttpGet]
         public ActionResult<MessageGetAllByChatIdResponse> GetAllByChatId(int id)
         {
-
             int userId = _jwtService.GetUserIdFromToken(User);
 
             if(!_dbContext.Chats.Any(x => x.Id == id))
@@ -35,8 +34,18 @@ namespace Eclipse_Market.Controllers
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
+            var chat = _dbContext.Chats
+                .Include(x => x.Participants)
+                .Where(x => x.Id == id)
+                .First();
+
+            if(!chat.Participants.Select(x => x.UserId).Contains(userId))
+            {
+                return Forbid();
+            }
+
             var primaryMessages = _dbContext.Messages
-                .Where(x => x.SenderId == userId)
+                .Where(x => x.SenderId == userId && x.ChatId == id)
                 .OrderBy(x => x.TimeSent)
                 .Select(x => new MessageGetAllResponse
                 {
@@ -47,7 +56,7 @@ namespace Eclipse_Market.Controllers
                 }).ToList();
 
             var secondaryMessages = _dbContext.Messages
-                .Where(x => x.SenderId != userId)
+                .Where(x => x.SenderId != userId && x.ChatId == id)
                 .OrderBy(x => x.TimeSent)
                 .Select(x => new MessageGetAllResponse
                 {
