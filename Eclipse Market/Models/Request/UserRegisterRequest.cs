@@ -9,5 +9,6 @@
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         public int RoleId { get; set; }
+        public string ImageBase64String { get; set; }
     }
 }

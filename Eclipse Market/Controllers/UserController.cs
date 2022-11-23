@@ -53,6 +53,7 @@ namespace Eclipse_Market.Controllers
                     PhoneNumber = x.PhoneNumber,
                     RoleName = x.Role.Name,
                     DateTimeCreated = x.DateCreated.ToLongDateString(),
+                    ImageBase64String = x.ImageBase64String
                 }).ToList();
             foreach (var user in users)
             {
@@ -117,7 +118,8 @@ namespace Eclipse_Market.Controllers
                 Password = user.Password,
                 UserName = user.UserName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                ImageBase64String = user.ImageBase64String
             };
             return Ok(response);
         }
@@ -248,7 +250,8 @@ namespace Eclipse_Market.Controllers
                 Password = ComputeSha256Hash(request.Password),
                 PhoneNumber = request.PhoneNumber,
                 Role = _dbContext.Roles.First(x => x.Id == request.RoleId),
-                DateCreated = DateTime.UtcNow
+                DateCreated = DateTime.UtcNow,
+                ImageBase64String = request.ImageBase64String,
             };
             _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();
