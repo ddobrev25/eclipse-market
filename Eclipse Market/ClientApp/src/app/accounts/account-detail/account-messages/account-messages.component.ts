@@ -20,6 +20,8 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class AccountMessagesComponent implements OnInit {
   @ViewChild('msgInput') msgInput!: ElementRef;
+  @ViewChild('editDialog') editDialog!: ElementRef;
+
 
   fetchSubs?: Subscription;
   messageSubs?: Subscription;
@@ -73,6 +75,7 @@ export class AccountMessagesComponent implements OnInit {
       .getAllByChatId(this.selectedChat.id)
       .subscribe({
         next: (resp: IMessageGetAllByChatId) => {
+          console.log(resp);
           this.primaryMessages = resp.primaryMessages;
           this.secondaryMessages = resp.secondaryMessages;
           this.combinedMessages = [
@@ -107,6 +110,20 @@ export class AccountMessagesComponent implements OnInit {
     }
   }
 
+  onRightClick(event: any) {
+    event.preventDefault();
+    
+
+
+    const dialogEl = event.target.parentNode.nextSibling;
+    dialogEl.classList.toggle('visible');
+  }
+
+  test(event: any) {
+    const dialogEl = event.target.parentNode.nextSibling;
+    dialogEl.classList.toggle('visible');
+  }
+  
 
   ngOnDestroy() {
     this.fetchSubs?.unsubscribe();

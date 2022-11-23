@@ -6,6 +6,7 @@
     border: 2px solid var(--gray-blue-border);
     border-radius: 4px;
     cursor: pointer;
+    transition: 0.1s;
   }
   .sender {
     color: var(--text-inactive);
@@ -117,4 +118,27 @@
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     background-color: var(--gray-blue-medium);
   }
+  .message-container:hover {
+    background-color: var(--gray-blue-medium);
+    border: 2px solid var(--border-medium);
+  }
+  .active,
+  .active:hover {
+    background-color: var(--gray-blue);
+    border: 2px solid var(--blue-bg);
+  }
+
+  .edit-dialog {
+    width: 100px;
+    height: 100%;
+    background-color: red;
+    display: none;
+  }
+  .message-box {
+    height: 200px;
+  }
+  .visible {
+    display: block;
+  }
+
 }

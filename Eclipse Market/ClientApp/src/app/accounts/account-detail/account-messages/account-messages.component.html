@@ -3,7 +3,7 @@
     <div class="col-4">
       <div
         *ngFor="let chat of chats"
-        [ngClass]="chatIsSelected ? '' : 'active'"
+        [ngClass]="selectedChat === chat ? 'active' : ''"
         class="message-container w-100 d-flex flex-column p-3 my-3"
         (click)="onSelectChat(chat)"
       >
@@ -38,13 +38,12 @@
               (click)="onSendMessage()"
             ></button>
           </div>
-asdd
           <div
-            class="d-flex flex-column"
+            class="d-flex flex-column message-box"
             *ngFor="let message of combinedMessages"
           >
-            <div [ngClass]="separateMessage(message) ? 'primary' : 'secondary'">
-              <div class="message-wrapper d-flex flex-column">
+            <div [ngClass]="separateMessage(message) ? 'primary flex-row-reverse' : 'secondary'" class="d-flex">
+              <div class="message-wrapper d-flex flex-column" (contextmenu)="onRightClick($event)">
                 <span
                   [ngClass]="
                     separateMessage(message) ? 'text-end' : 'text-start'
@@ -55,6 +54,9 @@ asdd
                 <p class="text-center">
                   {{ message.body }}
                 </p>
+              </div>
+              <div #editDialog class="edit-dialog" (mouseout)="test($event)">
+                edit dialog
               </div>
             </div>
 
