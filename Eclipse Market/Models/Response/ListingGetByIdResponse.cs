@@ -10,5 +10,6 @@
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }
         public string ListingCategory { get; set; }
+        public string ImageBase64String { get; set; }
     }
 }

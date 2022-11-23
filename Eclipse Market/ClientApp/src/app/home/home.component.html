@@ -40,7 +40,7 @@
                     <div class="row wrapper-container mx-xl-0 mx-auto my-3 py-2 col-12 ">
                         <div class="col-lg-3 col-md-4 col-12">
                             <div class="img-container">
-                                <img id="profile-img" alt="Card" src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png">
+                                <img id="profile-img" alt="Card" [src]="listing.imageBase64String">
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-5 col-12">
@@ -70,7 +70,7 @@
                             <ng-template pTemplate="header">
                                 <img 
                                     (click)="onSelectListing(listing)" 
-                                    alt="Card" src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png">
+                                    alt="Card" [src]="listing.imageBase64String">
                             </ng-template>
                             <ng-template pTemplate="body">
                                 <div class="col d-flex flex-column">
