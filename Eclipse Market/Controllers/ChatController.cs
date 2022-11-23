@@ -64,8 +64,7 @@ namespace Eclipse_Market.Controllers
                     Id = x.Id,
                     TimeStarted = x.TimeStarted.ToString(),
                     TopicListingTitle = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().Title,
-                    TopicListingImageBase64String = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().ImageBase64String,
-                    TopicListingAuthorId = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().AuthorId
+                    //TopicListingImageBase64String = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().PrimaryImageBase64String,
                 }).ToList();
             foreach (var chat in chatsResponse)
             {
