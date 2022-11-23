@@ -122,7 +122,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
+/*        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<UserGetByIdFullResponse> GetByIdFull(int? id = null)
         {
             if(id == null)
@@ -186,7 +186,7 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views,
                 });
-/*            response.Messages = _dbContext.Messages
+*//*            response.Messages = _dbContext.Messages
                .Where(x => x.RecieverId == user.Id)
                .Select(x => new MessageGetAllResponse
                {
@@ -196,9 +196,9 @@ namespace Eclipse_Market.Controllers
                    ListingId = x.ListingId,
                    Body = x.Body,
                    Title = x.Title
-               });*/
+               });*//*
             return Ok(response);
-        }
+        }*/
         [HttpPost]
         public ActionResult Register(UserRegisterRequest request)
         {
