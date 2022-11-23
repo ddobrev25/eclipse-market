@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Eclipse_Market.Models.DB
@@ -17,8 +18,7 @@ namespace Eclipse_Market.Models.DB
         [Required]
         public int AuthorId { get; set; }
         public User Author { get; set; }
-        public string ImageBase64String { get; set; }
-        //public List<string> SecondaryImageBase64Strings { get; set; }
+        public ICollection<Image> Images { get; set; }
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }
         public ICollection<ListingUser> UsersBookmarked { get; set; }
