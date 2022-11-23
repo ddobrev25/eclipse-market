@@ -260,14 +260,45 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public ActionResult<UserLoginResponse> Login(UserLoginRequest request)
         {
+            //if the username is not correct return, there is no way to know which user attempted the login
+            if (!_dbContext.Users.Any(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName))
+            {
+                return BadRequest("Incorrect credentials");
+            }
+
+            //if a user with the given username already exists try to pull a user object with the password
             var user = _dbContext.Users
                 .Include(x => x.Role)
                 .Where(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName && x.Password == ComputeSha256Hash(request.Password))
                 .FirstOrDefault();
 
+            //check if the user with the username is locked, if locked return 
+            if (_dbContext.Users.Where(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName).First().DateLockedTo > DateTime.UtcNow)
+            {
+                return BadRequest("Too many login attempts. Please try again later.");
+            }
+
+            //if password is incorrect but username is correct increse login attempt count of the user by 1
             if (user == null)
             {
-                return BadRequest("Incorrect credentials");
+                var userFailedLogin = _dbContext.Users
+                    .Where(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName)
+                    .First();
+
+                userFailedLogin.LoginAttemptCount++;
+                if (userFailedLogin.LoginAttemptCount >= 5)
+                {
+                    userFailedLogin.DateLockedTo = DateTime.UtcNow.AddHours(2);
+                    userFailedLogin.LoginAttemptCount = 0;
+                }
+
+                _dbContext.SaveChanges();
+                return BadRequest("Incorrect Credentials");
+            }
+
+            if (user.DateLockedTo > DateTime.UtcNow)
+            {
+                return BadRequest("Too many login attempts. Please try again later.");
             }
 
             var token = CreateJwtToken(user);
@@ -283,6 +314,10 @@ namespace Eclipse_Market.Controllers
                 Token = token,
                 Claims = claims
             };
+
+            user.LoginAttemptCount = 0;
+            _dbContext.SaveChanges();
+
             return Ok(response);
         }
         [HttpPost]
@@ -576,7 +611,6 @@ namespace Eclipse_Market.Controllers
         }
         private string ComputeSha256Hash(string rawData)
         {
-            //az sum puqk
             // Create a SHA256   
             using (SHA256 sha256Hash = SHA256.Create())
             {

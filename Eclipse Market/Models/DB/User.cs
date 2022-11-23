@@ -26,5 +26,8 @@ namespace Eclipse_Market.Models.DB
         public Role Role { get; set; }
 
         public List<UserChat> Chats { get; set; }
+
+        public int LoginAttemptCount { get; set; }
+        public DateTime DateLockedTo { get; set; }
     }
 }

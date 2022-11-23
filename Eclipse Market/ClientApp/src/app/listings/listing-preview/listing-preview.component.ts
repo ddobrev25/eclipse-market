@@ -50,6 +50,7 @@ export class ListingPreviewComponent implements OnInit {
       this.fetchListingInfo();
     });
   }
+  
   onLoadUserListings() {
     this.userListingsService.next(this.selectedListing?.author!);
     this.router.navigate(['/listings/user']);

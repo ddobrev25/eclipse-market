@@ -18,7 +18,7 @@
                     </app-form-errors>
                 </div>
 
-                <!-- <div class="form-group">
+                 <div class="form-group">
                     <input 
                         formControlName="file"
                         id="file" 
@@ -27,12 +27,12 @@
                         class="form-control"
                         multiple="" 
                         class="imgInput"
-                        (change)="onFileChange($event)">
-                    <div *ngIf="f['file'].touched && f['file'].invalid" class="alert alert-danger">
+                        (change)="getBase64($event)">
+                    <!-- <div *ngIf="f['file'].touched && f['file'].invalid" class="alert alert-danger">
                         <div *ngIf="f['file'].errors && f['file'].errors['required']">File is required.</div>
-                    </div>
+                    </div> -->
                 </div>
-                 
+                 <!--
                 <img *ngFor='let url of images'  [src]="url" style="margin: 3px;"> <br/> -->
 
                 <div class="form-check ms-2">

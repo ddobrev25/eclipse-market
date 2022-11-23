@@ -7,6 +7,6 @@
         public double Price { get; set; }
         public string Location { get; set; }
         public int ListingCategoryId { get; set; }
-        public byte[] ImageBytes { get; set; }
+        public string ImageBase64String { get; set; }
     }
 }

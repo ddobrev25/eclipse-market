@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { IDelete } from '../models/delete.model';
 import {
+  IListingAddRequest,
   IListingGetByIdResponse,
   IListingGetRecommended,
   IListingGetResponse,
@@ -70,7 +71,7 @@ export class ListingService {
     });
   }
 
-  add(body: any) {
+  add(body: IListingAddRequest) {
     return this.http.post(`${this.url}/Listing/Add`, body);
   }
 
