@@ -51,22 +51,23 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<ChatGetAllResponse>> GetAllByUserId()
+        public ActionResult<List<ChatGetAllByUserIdResponse>> GetAllByUserId()
         {
             int userId = JwtService.GetUserIdFromToken(User);
 
-            var chats = _dbContext.Chats
+            var chatsResponse = _dbContext.Chats
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
                 .Where(x => x.Participants.Any(y => y.UserId == userId))
-                .Select(x => new ChatGetAllResponse()
+                .Select(x => new ChatGetAllByUserIdResponse()
                 {
                     Id = x.Id,
                     TimeStarted = x.TimeStarted.ToString(),
-                    TopicListingTitle = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().Title
+                    TopicListingTitle = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().Title,
+                    TopicListingImageBase64String = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().ImageBase64String,
+                    TopicListingAuthorId = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().AuthorId
                 }).ToList();
-
-            foreach (var chat in chats)
+            foreach (var chat in chatsResponse)
             {
                 chat.ParticipantIds = _dbContext.UserChats
                     .Where(x => x.ChatId == chat.Id)
@@ -76,7 +77,7 @@ namespace Eclipse_Market.Controllers
                     .Select(x => x.Id);
             }
 
-            return Ok(chats);
+            return Ok(chatsResponse);
         }
 
         [HttpGet]
