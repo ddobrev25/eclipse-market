@@ -1,29 +1,21 @@
-import { IChat } from "./chat.model"
+type Message = {
+  id: number;
+  body: string;
+  timeSent: string;
+  userName: string;
+};
 
-export interface IMessageGetAllByChatId {
-    primaryMessages: IMessageResponse[]
-    secondaryMessages: IMessageResponse[]
-}
-export interface IMessageResponse {
-    id:number,
-    body: string,
-    timeSent: string,
-    userName: string
+export type MessageGetAllByChatIdResponse = {
+  primaryMessages: Message[];
+  secondaryMessages: Message[];
+};
+
+export type MessageSendRequest = {
+  body: string;
+  chatId: number;
 }
 
-export interface IMessageSendRequest {
-    body: string,
-    chatId: number
-}
-export interface IMessageEditRequest {
-    id: number,
-    newBody: string
-}
-export interface IMessage {
-    id: number,
-    body: string,
-    timeSent: string,
-    senderId: number,
-    chatId: number,
-    chat: IChat
-}
+export type MessageEditRequest = {
+  id: number;
+  newBody: string;
+};

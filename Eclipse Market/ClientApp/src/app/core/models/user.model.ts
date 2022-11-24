@@ -1,29 +1,100 @@
-import { IChat, IChatGetAllByUserIdResponse, IChatGetAllResponse } from "./chat.model";
-import { IListing, IListingGetWithoutAuthorResponse } from "./listing.model";
-import { IMessage } from "./message.model";
+export type DeleteRequest = {
+  id: number;
+};
 
-export interface IUserResponse {
-    id: number;
-    firstName: string;
-    lastName: string;
-    userName: string;
-    email: string;
-    password: string;
-    phoneNumber: string;
-    currentListings?: IListing[];
-    bookmarkedListings?: IListing[];
-    messages?: IMessage[];
-    chats?: IChatGetAllByUserIdResponse[];
-    roleId: number;
-    roleName?: string;
-}
-export interface AuthorGetResponse {
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    dateCreated: string;
-    listings?: IListingGetWithoutAuthorResponse[]
+export type User$ = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  roleName: string;
+  dateTimeCreated: string;
+  //currentListings?: IListing[];
+  //bookmarkedListings?: IListing[];
+  imageBase64String: string;
+} | null;
+
+export type UserSetData$ = {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  email?: string;
+  password?: string;
+  phoneNumber?: string;
+  roleName?: string;
+  dateTimeCreated?: string;
+  //currentListings?: IListing[];
+  //bookmarkedListings?: IListing[];
+  imageBase64String?: string;
+};
+
+
+
+
+export type UserGetAllResponse = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  roleName: string;
+  dateTimeCreated: string;
+  //currentListings?: IListing[];
+  //bookmarkedListings?: IListing[];
+  imageBase64String: string;
+}[];
+
+export type UserGetInfoResponse = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  imageBase64String: string;
+};
+
+export type UserRegisterRequest = {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  roleId: number;
+  imageBase64String: string;
+};
+
+export type UserLoginRequest = {
+  userName: string;
+  password: string;
+};
+
+export type UserLoginResponse = {
+  token: string;
+  claims: string[];
 }
 
-export type IUser = IUserResponse;
-export type IUsers = IUserResponse[];
+export type UserUpdateRequest = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  roleId: number;
+  imageBase64String: string;
+};
+
+export type UserChangePassword = {
+  currentPassword: string;
+  newPassword: string;
+};

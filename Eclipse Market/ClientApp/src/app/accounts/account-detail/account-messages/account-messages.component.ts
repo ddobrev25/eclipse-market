@@ -9,9 +9,9 @@ import {
   IMessageResponse,
   IMessageSendRequest,
 } from 'src/app/core/models/message.model';
-import { ChatService } from 'src/app/core/services/chat.service';
+import { ChatService } from 'src/app/core/services/http/chat.service';
 import { MsgService } from 'src/app/core/services/message.service';
-import { UserService } from 'src/app/core/services/user.service';
+import { UserService } from 'src/app/core/services/http/user.service';
 
 @Component({
   selector: 'app-account-messages',

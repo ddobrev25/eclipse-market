@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { IUser } from '../core/models/user.model';
-import { UserService } from '../core/services/user.service';
+import { UserService } from '../core/services/http/user.service';
 
 @Component({
   selector: 'app-auth',
@@ -45,7 +45,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   temp(event: any) {
-    console.log(event)
+    console.log(event);
   }
 
   //!Login

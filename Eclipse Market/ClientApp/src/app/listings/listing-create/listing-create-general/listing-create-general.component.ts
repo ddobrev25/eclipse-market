@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IListingCategories } from 'src/app/core/models/listing-category.model';
-import { ListingCategoryService } from 'src/app/core/services/listing-category.service';
+import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
 import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
 
 

@@ -4,17 +4,16 @@ import {
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
-import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { IDelete } from '../models/delete.model';
 import {
-  IListingAddRequest,
-  IListingGetByIdResponse,
-  IListingGetRecommended,
-  IListingGetResponse,
-  IListingUpdateRequest,
-} from '../models/listing.model';
+  ListingAddRequest,
+  ListingGetAllResponse,
+  ListingGetByIdResponse,
+  ListingGetRecommendedResponse,
+  ListingUpdateRequest,
+} from '../../models/listing.model';
+import { DeleteRequest } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,13 +22,16 @@ export class ListingService {
   private httpWithoutInterceptor: HttpClient;
   private url = 'http://localhost:5001';
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend,
-    private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private httpBackend: HttpBackend,
+    private router: Router
+  ) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 
   getAll() {
-    return this.http.get<IListingGetResponse>(`${this.url}/Listing/GetAll`);
+    return this.http.get<ListingGetAllResponse>(`${this.url}/Listing/GetAll`);
   }
   getById(id: number) {
     var headers = new HttpHeaders({
@@ -37,7 +39,7 @@ export class ListingService {
       SkipLoader: ``,
     });
     let queryParams = new HttpParams().set('id', id);
-    return this.http.get<IListingGetByIdResponse>(
+    return this.http.get<ListingGetByIdResponse>(
       `${this.url}/Listing/GetById`,
       { headers: headers, params: queryParams }
     );
@@ -48,7 +50,7 @@ export class ListingService {
       SkipLoader: ``,
     });
     let queryParams = new HttpParams().set('count', count);
-    return this.http.get<IListingGetRecommended>(
+    return this.http.get<ListingGetRecommendedResponse>(
       `${this.url}/Listing/GetRecommended`,
       { headers: headers, params: queryParams }
     );
@@ -56,7 +58,7 @@ export class ListingService {
 
   incrementViews(id: number) {
     const token = localStorage.getItem('token');
-    if(!token) {
+    if (!token) {
       this.router.navigate(['auth']);
       return;
     }
@@ -64,21 +66,21 @@ export class ListingService {
     var headers = new HttpHeaders({
       SkipLoader: ``,
     });
-    let queryParams = new HttpParams().set('id', id);    
+    let queryParams = new HttpParams().set('id', id);
     return this.http.put(`${this.url}/Listing/IncrementViews`, null, {
       params: queryParams,
-      headers: headers
+      headers: headers,
     });
   }
 
-  add(body: IListingAddRequest) {
+  add(body: ListingAddRequest) {
     return this.http.post(`${this.url}/Listing/Add`, body);
   }
 
-  update(body: IListingUpdateRequest) {
+  update(body: ListingUpdateRequest) {
     return this.http.put(`${this.url}/Listing/Update`, body);
   }
-  delete(body: IDelete) {
+  delete(body: DeleteRequest) {
     return this.http.delete(`${this.url}/Listing/Delete`, { body: body });
   }
 }

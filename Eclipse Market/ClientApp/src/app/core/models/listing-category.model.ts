@@ -1,16 +1,17 @@
-export interface IListingCategoryResponse {
-    id: number,
-    title: string
-}
-export interface IListingCategoryAddRequest {
-    Title: string
-}
-export interface IListingCategoryUpdateRequest {
-    id: number,
-    title: string
-}
-export interface IListingCategoryDeleteRequest {
-    Id: number
-}
-export type IListingCategories = IListingCategoryResponse[];
-export type IListingCategory = IListingCategoryResponse;
+export type ListingCategoryGetAllResponse = {
+  id: number;
+  title: string;
+}[];
+
+export type ListingCategoryGetByIdResponse = {
+  id: number;
+  title: string;
+};
+
+export type ListingCategoryAddRequest = {
+  title: string;
+};
+export type ListingCategoryUpdateRequest = {
+  id: number;
+  title: string;
+};

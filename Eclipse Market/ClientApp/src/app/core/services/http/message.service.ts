@@ -1,7 +1,7 @@
 import { HttpClient, HttpBackend, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IDelete } from "../models/delete.model";
-import { IMessageEditRequest, IMessageGetAllByChatId, IMessageSendRequest } from "../models/message.model";
+import { MessageEditRequest, MessageGetAllByChatIdResponse, MessageSendRequest } from '../../models/message.model';
+import { DeleteRequest } from '../../models/user.model';
 
 @Injectable({
     providedIn: 'root'
@@ -18,22 +18,22 @@ export class MsgService {
             'SkipLoader': ``
         });
         let queryParams = new HttpParams().set('id', id);
-        return this.http.get<IMessageGetAllByChatId>(`${this.url}/Message/GetAllByChatId`, {params: queryParams, headers: headers});
+        return this.http.get<MessageGetAllByChatIdResponse>(`${this.url}/Message/GetAllByChatId`, {params: queryParams, headers: headers});
     }
-    send(body: IMessageSendRequest) {
+    send(body: MessageSendRequest) {
         let headers = new HttpHeaders({
             'SkipLoader': ``
         });
         return this.http.post(`${this.url}/Message/Send`, body, {headers: headers})
     }
-    edit(body: IMessageEditRequest) {
+    edit(body: MessageEditRequest) {
         let headers = new HttpHeaders({
             'SkipLoader': ``
         });
         return this.http.put(`${this.url}/Message/Edit`, body, {headers: headers});
         console.log("metev");
     }
-    delete(body: IDelete) {
+    delete(body: DeleteRequest) {
         let headers = new HttpHeaders({
             'SkipLoader': ``
         });

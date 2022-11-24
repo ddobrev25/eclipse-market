@@ -7,8 +7,8 @@ import { IDelete } from 'src/app/core/models/delete.model';
 import { IListingGetResponse } from 'src/app/core/models/listing.model';
 import { IUser } from 'src/app/core/models/user.model';
 import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
-import { ListingService } from 'src/app/core/services/listing.service';
-import { UserService } from 'src/app/core/services/user.service';
+import { ListingService } from 'src/app/core/services/http/listing.service';
+import { UserService } from 'src/app/core/services/http/user.service';
 
 @Component({
   selector: 'app-account-listings',

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { IUser } from 'src/app/core/models/user.model';
-import { UserService } from 'src/app/core/services/user.service';
+import { UserService } from 'src/app/core/services/http/user.service';
 
 @Component({
   selector: 'app-account-detail',

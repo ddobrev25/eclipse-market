@@ -7,7 +7,7 @@ import { IRoles } from 'src/app/core/models/role.model';
 import { IUsers, IUser } from 'src/app/core/models/user.model';
 import { AdminService } from 'src/app/core/services/admin.service';
 import { RoleService } from 'src/app/core/services/role.service';
-import { UserService } from 'src/app/core/services/user.service';
+import { UserService } from 'src/app/core/services/http/user.service';
 
 @Component({
   selector: 'app-admin-manage',

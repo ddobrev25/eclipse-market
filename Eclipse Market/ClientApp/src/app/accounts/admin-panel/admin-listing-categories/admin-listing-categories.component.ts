@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { IListingCategories, IListingCategory } from 'src/app/core/models/listing-category.model';
-import { ListingCategoryService } from 'src/app/core/services/listing-category.service';
+import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
 
 @Component({
   selector: 'app-admin-listing-categories',

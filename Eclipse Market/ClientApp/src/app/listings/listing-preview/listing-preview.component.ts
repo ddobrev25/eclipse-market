@@ -5,9 +5,9 @@ import { Subscription } from 'rxjs';
 import { IChatCreateRequest } from 'src/app/core/models/chat.model';
 import { IListingGetByIdResponse } from 'src/app/core/models/listing.model';
 import { IMessageSendRequest } from 'src/app/core/models/message.model';
-import { ChatService } from 'src/app/core/services/chat.service';
-import { ListingCategoryService } from 'src/app/core/services/listing-category.service';
-import { ListingService } from 'src/app/core/services/listing.service';
+import { ChatService } from 'src/app/core/services/http/chat.service';
+import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
+import { ListingService } from 'src/app/core/services/http/listing.service';
 import { MsgService } from 'src/app/core/services/message.service';
 import { UserListingsService } from 'src/app/core/services/user-listings.service';
 

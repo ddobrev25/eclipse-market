@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IListingGetByIdResponse } from 'src/app/core/models/listing.model';
 import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
-import { ListingService } from 'src/app/core/services/listing.service';
+import { ListingService } from 'src/app/core/services/http/listing.service';
 
 @Component({
   selector: 'app-account-listing-preview',

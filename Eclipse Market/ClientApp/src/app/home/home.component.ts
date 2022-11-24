@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IListingCategories } from '../core/models/listing-category.model';
 import { IListingGetRecommended, IListing } from '../core/models/listing.model';
-import { ListingCategoryService } from '../core/services/listing-category.service';
-import { ListingService } from '../core/services/listing.service';
+import { ListingCategoryService } from '../core/services/http/listing-category.service';
+import { ListingService } from '../core/services/http/listing.service';
 
 
 @Component({
