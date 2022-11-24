@@ -123,8 +123,8 @@ namespace Eclipse_Market.Controllers
             };
             return Ok(response);
         }
-        [HttpGet]
-/*        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
+        /*[HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
         public ActionResult<UserGetByIdFullResponse> GetByIdFull(int? id = null)
         {
             if(id == null)
