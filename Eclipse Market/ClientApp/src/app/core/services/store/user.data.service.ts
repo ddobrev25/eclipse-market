@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User$, UserSetData$ } from '../../models/user.model';
+import { User$ } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class UserDataService {
     return this.user$.asObservable();
   }
 
-  setUserData(newData: UserSetData$) {
+  setUserData(newData: User$) {
     this.user$.next({ ...this.user$.value!, ...newData! });
   }
 }

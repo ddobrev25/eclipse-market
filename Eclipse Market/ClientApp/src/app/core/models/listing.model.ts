@@ -80,6 +80,19 @@ export type ListingGetAllResponse = {
 }[];
 
 export type ListingGetByIdResponse = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  authorId: number;
+  views: number;
+  timesBookmarked: number;
+  listingCategory: string;
+  imageBase64String: string;
+};
+
+export type ListingGetByIdWithAuthorResponse = {
   id?: number;
   title: string;
   description: string;
@@ -109,7 +122,7 @@ export type ListingGetByIdResponse = {
 };
 
 export type ListingGetRecommendedResponse = {
-  listing: ListingGetAllResponse[];
+  listings: ListingGetAllResponse[];
 };
 
 export type ListingAddRequest = {

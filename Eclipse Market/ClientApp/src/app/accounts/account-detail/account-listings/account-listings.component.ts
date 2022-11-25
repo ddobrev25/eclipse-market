@@ -5,10 +5,13 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
-import { UserService } from 'src/app/core/services/http/user.service';
-import { ListingGetAllResponse, ListingGetByIdResponse, ListingUpdateRequest } from 'src/app/core/models/listing.model';
+import {
+  ListingGetAllResponse,
+  ListingGetByIdResponse,
+  ListingUpdateRequest,
+} from 'src/app/core/models/listing.model';
 import { UserDataService } from 'src/app/core/services/store/user.data.service';
-import { DeleteRequest, UserGetInfoResponse } from 'src/app/core/models/user.model';
+import { DeleteRequest, User$ } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-account-listings',
@@ -19,7 +22,7 @@ export class AccountListingsComponent implements OnInit {
   updateSubs: Subscription | undefined;
   userListingsChangedSubs: Subscription | undefined;
   deleteSubs: Subscription | undefined;
-  userListingSubs : Subscription | undefined;
+  userListingSubs: Subscription | undefined;
 
   userListings?: ListingGetAllResponse;
   listingSelected: boolean = false;
@@ -31,7 +34,6 @@ export class AccountListingsComponent implements OnInit {
   textAreaValue: string = '';
 
   constructor(
-    private userService: UserService,
     private userDataService: UserDataService,
     private router: Router,
     private listingPreviewService: ListingPreviewService,
@@ -45,7 +47,7 @@ export class AccountListingsComponent implements OnInit {
     description: new FormControl(''),
     price: new FormControl(''),
     location: new FormControl(''),
-    listingCategory: new FormControl('')
+    listingCategory: new FormControl(''),
   });
 
   ngOnInit(): void {
@@ -53,12 +55,13 @@ export class AccountListingsComponent implements OnInit {
   }
 
   fecthUserListings() {
+    //! Need to add if check if currentListing is undefined, Dani needs to add methods in the API first tho
     this.userListingSubs = this.userDataService.userData.subscribe({
-      next: (data) => {
-        //need to fix
-        // this.userListings = data.currentListings;
-      }
-    })
+      next: (data: User$) => {
+        if (!data) return;
+        this.userListings = data.currentListings;
+      },
+    });
   }
 
   valueChange(textAreaValue: string) {
@@ -106,17 +109,18 @@ export class AccountListingsComponent implements OnInit {
   }
 
   ReFetchUserListings() {
-    this.userListingsChangedSubs = this.userService.getInfo().subscribe({
-      next: (userInfo: UserGetInfoResponse) => {
-        this.userDataService.setUserData(userInfo);
-        //need to fix
-        // this.userListings = userInfo.currentListings;
-        this.resetUpdateForm();
-      },
-      error: (error: any) => {
-        console.log(error);
-      },
-    });
+    //! Need to add logic but API does not have the methods I need yet
+    // this.userListingsChangedSubs = this.userService.getInfo().subscribe({
+    //   next: (userInfo: UserGetInfoResponse) => {
+    //     this.userDataService.setUserData(userInfo);
+    //     //need to fix
+    //     // this.userListings = userInfo.currentListings;
+    //     this.resetUpdateForm();
+    //   },
+    //   error: (error: any) => {
+    //     console.log(error);
+    //   },
+    // });
   }
 
   resetUpdateForm() {
@@ -139,7 +143,6 @@ export class AccountListingsComponent implements OnInit {
       id: listingForDelete.id!,
     };
 
-
     this.confirmationService.confirm({
       message: `Сигурнили сте, че искате да изтриете ${listingForDelete.title} ?`,
       header: 'Потвърди',
@@ -161,12 +164,13 @@ export class AccountListingsComponent implements OnInit {
             console.log(error);
           },
         });
-      }
+      },
     });
   }
   ngOnDestroy() {
     this.updateSubs?.unsubscribe();
     this.userListingsChangedSubs?.unsubscribe();
     this.deleteSubs?.unsubscribe();
+    this.userListingSubs?.unsubscribe();
   }
 }

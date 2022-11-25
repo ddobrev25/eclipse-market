@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { User$, UserGetInfoResponse } from 'src/app/core/models/user.model';
+import {
+  User,
+  User$,
+  UserGetInfoResponse,
+} from 'src/app/core/models/user.model';
 import { UserService } from 'src/app/core/services/http/user.service';
 import { UserDataService } from 'src/app/core/services/store/user.data.service';
 
@@ -11,9 +15,9 @@ import { UserDataService } from 'src/app/core/services/store/user.data.service';
   styleUrls: ['./account-info.component.scss'],
 })
 export class AccountInfoComponent implements OnInit, OnDestroy {
-  //need to fix
-  userInfo?: any;
-  loadUserSubs: Subscription | undefined;
+  userInfo?: User;
+  loadUserSubs?: Subscription;
+  fetchUserInfoSubs?: Subscription;
 
   constructor(
     private userService: UserService,
@@ -23,20 +27,24 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadUserInfo();
-    this.userInfo = this.userDataService.userData;
   }
 
   loadUserInfo() {
-    if (!this.userDataService.userData) {
-      this.loadUserSubs = this.userService.getInfo().subscribe({
-        next: (resp: UserGetInfoResponse) => {
-          this.userDataService.setUserData(resp);
-          this.userInfo = resp;
-          return;
-        },
-      });
-    }
-    
+    this.fetchUserInfoSubs = this.userDataService.userData.subscribe({
+      next: (data: User$) => {
+        if (data && data.firstName) {
+          this.userInfo = data;
+        } else {
+          this.loadUserSubs = this.userService.getInfo().subscribe({
+            next: (resp: UserGetInfoResponse) => {
+              this.userDataService.setUserData(resp);
+              this.userInfo = resp;
+            },
+          });
+        }
+      },
+      error: (err) => console.log(err),
+    });
   }
 
   onLogOut() {
@@ -47,5 +55,6 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.loadUserSubs?.unsubscribe();
+    this.fetchUserInfoSubs?.unsubscribe();
   }
 }

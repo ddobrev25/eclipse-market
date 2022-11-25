@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingCategories } from '../core/models/listing-category.model';
-import { IListingGetRecommended, IListing } from '../core/models/listing.model';
+import { ListingCategoryGetAllResponse } from '../core/models/listing-category.model';
+import { ListingGetByIdResponse, ListingGetRecommendedResponse } from '../core/models/listing.model';
 import { ListingCategoryService } from '../core/services/http/listing-category.service';
 import { ListingService } from '../core/services/http/listing.service';
 
@@ -13,10 +13,10 @@ import { ListingService } from '../core/services/http/listing.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  categoryList: IListingCategories = [];
+  categoryList: ListingCategoryGetAllResponse = [];
   categoryGetSubs?: Subscription;
 
-  randomListingList?: IListingGetRecommended;
+  randomListingList?: ListingGetRecommendedResponse;
   randomListingGetSubs?: Subscription;
 
 
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   fetchCategories() {
     if(!this.listingCategoryService.categories) {
       this.categoryGetSubs = this.listingCategoryService.getAll().subscribe({
-        next: (resp: IListingCategories) => {
+        next: (resp: ListingCategoryGetAllResponse) => {
           this.listingCategoryService.categories = resp;
           this.categoryList = resp;
         },
@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
 
   fetchRandomListings() {
     this.randomListingGetSubs = this.listingService.getRecommended(1).subscribe({
-      next: (resp: IListingGetRecommended) => {
+      next: (resp: ListingGetRecommendedResponse) => {
         this.randomListingList = resp;
       },
       error: err => {
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  onSelectListing(listingForPreview: IListing) {
+  onSelectListing(listingForPreview: ListingGetByIdResponse) {
     this.router.navigate(['/listings/preview'], {queryParams: {id: listingForPreview.id}})
   }
 

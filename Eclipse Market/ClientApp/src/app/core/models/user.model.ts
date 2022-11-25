@@ -1,3 +1,6 @@
+import { ChatGetAllResponse } from "./chat.model";
+import { ListingGetAllResponse } from "./listing.model";
+
 export type DeleteRequest = {
   id: number;
 };
@@ -15,7 +18,8 @@ export type User = {
   //currentListings?: IListing[];
   //bookmarkedListings?: IListing[];
   imageBase64String?: string;
-} | null;
+  chats?: ChatGetAllResponse
+};
 
 export type User$ = {
   id?: number;
@@ -27,24 +31,10 @@ export type User$ = {
   phoneNumber?: string;
   roleName?: string;
   dateTimeCreated?: string;
-  //currentListings?: IListing[];
-  //bookmarkedListings?: IListing[];
+  currentListings?: ListingGetAllResponse;
+  bookmarkedListings?: ListingGetAllResponse;
   imageBase64String?: string;
-} | null;
-
-export type UserSetData$ = {
-  id?: number;
-  firstName?: string;
-  lastName?: string;
-  userName?: string;
-  email?: string;
-  password?: string;
-  phoneNumber?: string;
-  roleName?: string;
-  dateTimeCreated?: string;
-  //currentListings?: IListing[];
-  //bookmarkedListings?: IListing[];
-  imageBase64String?: string;
+  chats?: ChatGetAllResponse
 } | null;
 
 export type UserGetAllResponse = {

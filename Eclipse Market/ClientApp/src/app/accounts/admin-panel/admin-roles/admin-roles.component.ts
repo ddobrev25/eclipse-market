@@ -2,9 +2,16 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { RoleAddRequest, RoleGetAllResponse, RoleGetByIdResponse, RoleUpdateRequest } from 'src/app/core/models/role.model';
+import { AdminData$ } from 'src/app/core/models/admin.model';
+import {
+  RoleAddRequest,
+  RoleGetAllResponse,
+  RoleGetByIdResponse,
+  RoleUpdateRequest,
+} from 'src/app/core/models/role.model';
 import { DeleteRequest } from 'src/app/core/models/user.model';
 import { RoleService } from 'src/app/core/services/http/role.service';
+import { AdminDataService } from 'src/app/core/services/store/admin.data.service';
 
 @Component({
   selector: 'app-admin-roles',
@@ -19,6 +26,7 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   roleEditDialog?: boolean;
   rolesChanged: boolean = false;
 
+  roleFetchSubs: Subscription | undefined;
   roleGetSubs: Subscription | undefined;
   roleAddSubs: Subscription | undefined;
   roleEditSubs: Subscription | undefined;
@@ -27,10 +35,9 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   constructor(
     private roleService: RoleService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
-    //need to fix
-  ) // private adminService: AdminService
-  {}
+    private messageService: MessageService,
+    private adminDataService: AdminDataService
+  ) {}
 
   ngOnInit() {
     this.fetchRoles();
@@ -52,22 +59,20 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   }
 
   fetchRoles() {
-    if (
-      // !this.adminService.roles || 
-      this.rolesChanged) {
-      this.roleGetSubs = this.roleService.getAll().subscribe({
-        next: (resp: RoleGetAllResponse) => {
-          // this.adminService.roles = resp;
-          this.roleList = resp;
-          this.rolesChanged = false;
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    } else {
-      // this.roleList = this.adminService.roles;
-    }
+    this.roleGetSubs = this.adminDataService.adminData.subscribe({
+      next: (data: AdminData$) => {
+        if (data && data.roles) {
+          this.roleList = data.roles;
+        } else {
+          this.roleFetchSubs = this.roleService.getAll().subscribe({
+            next: (resp: RoleGetAllResponse) => {
+              this.roleList = resp;
+              this.adminDataService.setAdminData(resp);
+            },
+          });
+        }
+      },
+    });
   }
 
   onToggleRoleAddDialog() {
@@ -173,5 +178,6 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
     this.roleAddSubs?.unsubscribe();
     this.roleEditSubs?.unsubscribe();
     this.roleDeleteSubs?.unsubscribe();
+    this.roleFetchSubs?.unsubscribe();
   }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { User$, UserGetInfoResponse } from 'src/app/core/models/user.model';
@@ -16,13 +15,13 @@ export class AccountDetailComponent implements OnInit {
   itemsAdmin?: MenuItem[];
   activeItem?: MenuItem;
 
-  loadUserSubs: Subscription | undefined;
-  adminSubs: Subscription | undefined;
+  loadUserSubs?: Subscription;
+  adminSubs?: Subscription;
+  fetchUserInfoSubs?: Subscription;
 
   isAdmin: boolean = false;
 
   constructor(
-    private router: Router,
     private userService: UserService,
     private userDataService: UserDataService
   ) {}
@@ -97,35 +96,39 @@ export class AccountDetailComponent implements OnInit {
   }
 
   loadUserInfo() {
-    if (!this.userDataService.userData) {
-      this.loadUserSubs = this.userService.getInfo().subscribe({
-        next: (resp: UserGetInfoResponse) => {
-          this.userDataService.setUserData(resp);
-        },
-        complete: () => {
+    this.fetchUserInfoSubs = this.userDataService.userData.subscribe({
+      next: (data: User$) => {
+        if (data && data.firstName) {
           this.checkForAdmin();
-        },
-      });
-    }
+          return;
+        } else {
+          this.loadUserSubs = this.userService.getInfo().subscribe({
+            next: (resp: UserGetInfoResponse) => {
+              this.userDataService.setUserData(resp);
+              this.checkForAdmin();
+            },
+          });
+        }
+      },
+      error: (err) => console.log(err),
+    });
   }
 
-  
-  //need to fix
   checkForAdmin() {
-    let user;
-    let adminSubs = this.userDataService.userData?.subscribe({
-      next: (data: any) => {
-        user = data;
+    this.adminSubs = this.userDataService.userData.subscribe({
+      next: (data: User$) => {
+        if (data && data.roleName === 'admin') {
+          this.isAdmin = true;
+        } else {
+          this.isAdmin = false;
+        }
       },
     });
-    if (user) {
-      this.isAdmin = true;
-    } else {
-      this.isAdmin = false;
-    }
   }
 
   ngOnDestroy() {
     this.loadUserSubs?.unsubscribe();
+    this.adminSubs?.unsubscribe();
+    this.fetchUserInfoSubs?.unsubscribe();
   }
 }
