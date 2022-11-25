@@ -3,10 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Subscription } from 'rxjs';
-import { IRoles } from 'src/app/core/models/role.model';
-import { IUsers, IUser } from 'src/app/core/models/user.model';
-import { AdminService } from 'src/app/core/services/admin.service';
-import { RoleService } from 'src/app/core/services/role.service';
+import { RoleGetAllResponse } from 'src/app/core/models/role.model';
+import { DeleteRequest, User, User$, UserGetAllResponse, UserUpdateRequest } from 'src/app/core/models/user.model';
+import { RoleService } from 'src/app/core/services/http/role.service';
 import { UserService } from 'src/app/core/services/http/user.service';
 
 @Component({
@@ -16,8 +15,8 @@ import { UserService } from 'src/app/core/services/http/user.service';
 })
 export class AdminManageComponent implements OnInit, OnDestroy {
   @ViewChild('at') accountsTable!: any;
-  accounts: IUsers = [];
-  roleList: IRoles = [];
+  accounts?: UserGetAllResponse;
+  roleList?: RoleGetAllResponse;
 
   accountsChanged: boolean = false;
 
@@ -27,13 +26,15 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   roleSubs : Subscription | undefined;
   
   accountDialog?: boolean;
-  accountForEdit: IUser | undefined;
+  //need to fix
+  accountForEdit: User | undefined;
 
   constructor(private userService: UserService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
-              private roleService: RoleService,
-              private adminService: AdminService) { }
+              private roleService: RoleService
+              // private adminService: AdminService
+              ) { }
 
   ngOnInit(): void {
     this.FetchAccounts();
@@ -57,24 +58,29 @@ export class AdminManageComponent implements OnInit, OnDestroy {
     this.accountsTable.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
   FetchAccounts() {
-    if(!this.adminService.accounts || this.accountsChanged) {
+    if(
+      // !this.adminService.accounts || 
+      this.accountsChanged) {
       this.accountSubs = this.userService.getAll().subscribe({
-        next: (resp: IUsers) => {
-          this.adminService.accounts = resp;
+        next: (resp: UserGetAllResponse) => {
+          // this.adminService.accounts = resp;
           this.accounts = resp;
           this.accountsChanged = false;
         }
       })
     } else {
-      this.accounts = this.adminService.accounts;
+      // this.accounts = this.adminService.accounts;
     }
 
   }
   FetchRoles() {
-    if(!this.adminService.roles) {
+    if(
+      true
+      // !this.adminService.roles
+      ) {
       this.roleSubs = this.roleService.getAll().subscribe({
-        next: (resp: IRoles) => {
-          this.adminService.roles = resp;
+        next: (resp: RoleGetAllResponse) => {
+          // this.adminService.roles = resp;
           this.roleList = resp;
         },
         error: err => { 
@@ -82,34 +88,36 @@ export class AdminManageComponent implements OnInit, OnDestroy {
         }
       })
     } else {
-      this.roleList = this.adminService.roles;
+      // this.roleList = this.adminService.roles;
     }
 
   }
 
-  onSelectAccount(user: IUser) {
+  onSelectAccount(user: User) {
     this.accountDialog = true;
     this.accountsChanged = true;
     this.FetchRoles();
     this.accountForEdit = user;
   }
   onEditAccount() {
-    let user = this.accountForEdit;
+    if(!this.accountForEdit) return;
+
     let roleId;
-    if(this.editForm.get('role')?.value === user?.roleId) {
+    if(this.editForm.get('role')?.value === this.accountForEdit.roleName) {
       roleId = 0;
     } else {
       roleId = this.editForm.get('role')?.value
     }
-    const body = {
-      "Id": user?.id,
-      "FirstName": this.editForm.get('firstName')?.value,
-      "LastName": this.editForm.get('lastName')?.value,
-      "UserName": this.editForm.get('userName')?.value,
-      "Email": this.editForm.get('email')?.value,
-      "Password": this.editForm.get('password')?.value,
-      "PhoneNumber": this.editForm.get('phoneNumber')?.value,
-      "RoleId": roleId
+    const body: UserUpdateRequest = {
+      id: this.accountForEdit.id!,
+      firstName: this.editForm.get('firstName')?.value,
+      lastName: this.editForm.get('lastName')?.value,
+      userName: this.editForm.get('userName')?.value,
+      email: this.editForm.get('email')?.value,
+      password: this.editForm.get('password')?.value,
+      phoneNumber: this.editForm.get('phoneNumber')?.value,
+      roleId: roleId,
+      imageBase64String: 'need to fix'
     };
     this.resetEditForm();
     this.editSubs = this.userService.update(body).subscribe({
@@ -125,9 +133,11 @@ export class AdminManageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDeleteUser(user: IUser) {
-    let body = {
-      'id': user.id
+  onDeleteUser(user: User) {
+    if(!user) return;
+
+    let body: DeleteRequest = {
+      id: user.id!
     }
     this.confirmationService.confirm({
         message: `Сигурнили сте, че искате да изтриете ${user.userName} ?`,

@@ -5,13 +5,13 @@ import { User$, UserSetData$ } from '../../models/user.model';
 @Injectable({
   providedIn: 'root',
 })
-export class UserStoreService {
+export class UserDataService {
   private user$: BehaviorSubject<User$ | null>;
   constructor() {
     this.user$ = new BehaviorSubject<User$ | null>(null);
   }
 
-  get userData(): Observable<User$> | null {
+  get userData(): Observable<User$> {
     return this.user$.asObservable();
   }
 

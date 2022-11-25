@@ -1,17 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {
-  IChatGetAllByUserIdResponse,
-  IChatGetAllResponse,
-} from 'src/app/core/models/chat.model';
-import {
-  IMessageGetAllByChatId,
-  IMessageResponse,
-  IMessageSendRequest,
-} from 'src/app/core/models/message.model';
+import { ChatGetAllByUserIdResponse, ChatGetByIdResponse } from 'src/app/core/models/chat.model';
+import { Message, MessageGetAllByChatIdResponse, MessageSendRequest } from 'src/app/core/models/message.model';
 import { ChatService } from 'src/app/core/services/http/chat.service';
-import { MsgService } from 'src/app/core/services/message.service';
+import { MsgService } from 'src/app/core/services/http/message.service';
 import { UserService } from 'src/app/core/services/http/user.service';
+import { UserDataService } from 'src/app/core/services/store/user.data.service';
 
 @Component({
   selector: 'app-account-messages',
@@ -28,15 +22,16 @@ export class AccountMessagesComponent implements OnInit {
   sendMessageSubs?: Subscription;
 
   chatIsSelected: boolean = false;
-  chats: IChatGetAllByUserIdResponse[] = [];
-  selectedChat?: IChatGetAllByUserIdResponse;
+  chats: ChatGetAllByUserIdResponse = [];
+  selectedChat?: ChatGetByIdResponse;
 
-  primaryMessages?: IMessageResponse[];
-  secondaryMessages?: IMessageResponse[];
-  combinedMessages?: IMessageResponse[];
+  primaryMessages?: Message[];
+  secondaryMessages?: Message[];
+  combinedMessages?: Message[];
 
   constructor(
     private userService: UserService,
+    private userDataService: UserDataService,
     private chatService: ChatService,
     private msgService: MsgService
   ) {}
@@ -46,13 +41,14 @@ export class AccountMessagesComponent implements OnInit {
   }
 
   fetchChats() {
-    if (this.userService.loggedUser?.chats?.length) {
-      this.chats = this.userService.loggedUser.chats;
+    //need to fix
+    if (this.userDataService.userData) {
+      // this.chats = this.userService.loggedUser.chats;
       return;
     }
     this.fetchSubs = this.chatService.getAllByUserId().subscribe({
       next: (resp: any) => {
-        this.userService.loggedUser!.chats = resp;
+        this.userDataService.setUserData(resp);
         this.chats = resp;
       },
       error: (err) => {
@@ -61,20 +57,20 @@ export class AccountMessagesComponent implements OnInit {
     });
   }
 
-  separateMessage(message: IMessageResponse): boolean {
+  separateMessage(message: Message): boolean {
     if (this.primaryMessages?.includes(message)) {
       return true;
     }
     return false;
   }
 
-  onSelectChat(selectedChat: IChatGetAllResponse) {
+  onSelectChat(selectedChat: ChatGetByIdResponse) {
     this.chatIsSelected = true;
     this.selectedChat = selectedChat;
     this.messageSubs = this.msgService
       .getAllByChatId(this.selectedChat.id)
       .subscribe({
-        next: (resp: IMessageGetAllByChatId) => {
+        next: (resp: MessageGetAllByChatIdResponse) => {
           console.log(resp);
           this.primaryMessages = resp.primaryMessages;
           this.secondaryMessages = resp.secondaryMessages;
@@ -95,7 +91,7 @@ export class AccountMessagesComponent implements OnInit {
 
   onSendMessage() {
     if (this.selectedChat) {
-      const body: IMessageSendRequest = {
+      const body: MessageSendRequest = {
         body: this.msgInput.nativeElement.value,
         chatId: this.selectedChat.id,
       };

@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IListingCategories, IListingCategory } from 'src/app/core/models/listing-category.model';
+import { ListingCategoryAddRequest, ListingCategoryGetAllResponse, ListingCategoryGetByIdResponse } from 'src/app/core/models/listing-category.model';
+import { DeleteRequest } from 'src/app/core/models/user.model';
 import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
 
 @Component({
@@ -13,7 +14,7 @@ import { ListingCategoryService } from 'src/app/core/services/http/listing-categ
 export class AdminListingCategoriesComponent implements OnInit {
   @ViewChild('ct') categoriesTable!: any;
 
-  categoryList: IListingCategories = [];
+  categoryList?: ListingCategoryGetAllResponse;
   categoryAddDialog?: boolean;
   categoryEditDialog?: boolean;
   categoriesChanged: boolean = false;
@@ -46,7 +47,7 @@ export class AdminListingCategoriesComponent implements OnInit {
   fetchCategories() {
     if(!this.listingCategoryService.categories || this.categoriesChanged) {
       this.categoryGetSubs = this.listingCategoryService.getAll().subscribe({
-        next: (resp: IListingCategories) => {
+        next: (resp: ListingCategoryGetAllResponse) => {
           this.listingCategoryService.categories = resp;
           this.categoryList = resp;
           this.categoriesChanged = false;
@@ -68,8 +69,8 @@ export class AdminListingCategoriesComponent implements OnInit {
   }
 
   onAddCategory() {
-    const body = {
-      'Title': this.categoryForm.get('title')?.value
+    const body: ListingCategoryAddRequest = {
+      title: this.categoryForm.get('title')?.value
     }
     this.categoryAddSubs = this.listingCategoryService.add(body).subscribe({
       complete: () => {
@@ -88,7 +89,7 @@ export class AdminListingCategoriesComponent implements OnInit {
     this.categoryEditDialog = false;
   }
 
-  onToggleCategoryEditDialog(categoryForEdit: IListingCategory) {
+  onToggleCategoryEditDialog(categoryForEdit: ListingCategoryGetByIdResponse) {
     this.categoryEditDialog = true;
     this.categoryForm.patchValue({
       id: categoryForEdit.id,
@@ -114,9 +115,9 @@ export class AdminListingCategoriesComponent implements OnInit {
     })
   }
 
-  onDeleteCategory(categoryForDelete: IListingCategory) {
-    const body = {
-      'Id': categoryForDelete.id
+  onDeleteCategory(categoryForDelete: ListingCategoryGetByIdResponse) {
+    const body: DeleteRequest = {
+      id: categoryForDelete.id
     }
     this.confirmationService.confirm({
       message: `Сигурнили сте, че искате да изтриете ${categoryForDelete.title} ?`,

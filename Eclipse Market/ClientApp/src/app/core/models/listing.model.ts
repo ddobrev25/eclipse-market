@@ -80,6 +80,7 @@ export type ListingGetAllResponse = {
 }[];
 
 export type ListingGetByIdResponse = {
+  id?: number;
   title: string;
   description: string;
   price: number;

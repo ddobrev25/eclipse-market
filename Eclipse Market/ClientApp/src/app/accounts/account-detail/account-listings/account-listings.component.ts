@@ -3,12 +3,12 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IDelete } from 'src/app/core/models/delete.model';
-import { IListingGetResponse } from 'src/app/core/models/listing.model';
-import { IUser } from 'src/app/core/models/user.model';
 import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
 import { UserService } from 'src/app/core/services/http/user.service';
+import { ListingGetAllResponse, ListingGetByIdResponse, ListingUpdateRequest } from 'src/app/core/models/listing.model';
+import { UserDataService } from 'src/app/core/services/store/user.data.service';
+import { DeleteRequest, UserGetInfoResponse } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-account-listings',
@@ -19,11 +19,12 @@ export class AccountListingsComponent implements OnInit {
   updateSubs: Subscription | undefined;
   userListingsChangedSubs: Subscription | undefined;
   deleteSubs: Subscription | undefined;
+  userListingSubs : Subscription | undefined;
 
-  userListings?: IListingGetResponse[];
+  userListings?: ListingGetAllResponse;
   listingSelected: boolean = false;
 
-  listingForUpdate?: IListingGetResponse;
+  listingForUpdate?: ListingGetByIdResponse;
   listingUpdateDialog: boolean = false;
 
   remainingCharacters: number = 800;
@@ -31,6 +32,7 @@ export class AccountListingsComponent implements OnInit {
 
   constructor(
     private userService: UserService,
+    private userDataService: UserDataService,
     private router: Router,
     private listingPreviewService: ListingPreviewService,
     private listingService: ListingService,
@@ -51,7 +53,12 @@ export class AccountListingsComponent implements OnInit {
   }
 
   fecthUserListings() {
-    this.userListings = this.userService.loggedUser?.currentListings;
+    this.userListingSubs = this.userDataService.userData.subscribe({
+      next: (data) => {
+        //need to fix
+        // this.userListings = data.currentListings;
+      }
+    })
   }
 
   valueChange(textAreaValue: string) {
@@ -63,19 +70,19 @@ export class AccountListingsComponent implements OnInit {
     this.listingSelected = true;
     this.router.navigate(['/account/listing/preview']);
   }
-  onSelectListingForEdit(listingForUpdate: IListingGetResponse) {
+  onSelectListingForEdit(listingForUpdate: ListingGetByIdResponse) {
     this.listingForUpdate = listingForUpdate;
     this.listingUpdateDialog = true;
   }
 
   onEditListing() {
-    const body = {
+    const body: ListingUpdateRequest = {
       id: this.listingForUpdate?.id!,
       title: this.listingUpdateForm.get('title')?.value,
       description: this.listingUpdateForm.get('description')?.value,
       price: this.listingUpdateForm.get('price')?.value,
       location: this.listingUpdateForm.get('location')?.value,
-      listingCategory: this.listingUpdateForm.get('listingCategoryId')?.value,
+      listingCategoryId: this.listingUpdateForm.get('listingCategoryId')?.value,
     };
     if (body.price == null) {
       body.price = 0;
@@ -100,9 +107,10 @@ export class AccountListingsComponent implements OnInit {
 
   ReFetchUserListings() {
     this.userListingsChangedSubs = this.userService.getInfo().subscribe({
-      next: (userInfo: IUser) => {
-        this.userService.loggedUser = userInfo;
-        this.userListings = userInfo.currentListings;
+      next: (userInfo: UserGetInfoResponse) => {
+        this.userDataService.setUserData(userInfo);
+        //need to fix
+        // this.userListings = userInfo.currentListings;
         this.resetUpdateForm();
       },
       error: (error: any) => {
@@ -126,9 +134,9 @@ export class AccountListingsComponent implements OnInit {
     this.resetUpdateForm();
   }
 
-  onDeleteListing(listingForDelete: IListingGetResponse) {
-    const body: IDelete = {
-      Id: listingForDelete.id!,
+  onDeleteListing(listingForDelete: ListingGetByIdResponse) {
+    const body: DeleteRequest = {
+      id: listingForDelete.id!,
     };
 
 

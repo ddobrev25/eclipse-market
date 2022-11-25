@@ -1,4 +1,4 @@
-type Message = {
+export type Message = {
   id: number;
   body: string;
   timeSent: string;

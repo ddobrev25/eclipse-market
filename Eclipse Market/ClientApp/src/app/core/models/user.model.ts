@@ -2,19 +2,34 @@ export type DeleteRequest = {
   id: number;
 };
 
-export type User$ = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  password: string;
-  phoneNumber: string;
-  roleName: string;
-  dateTimeCreated: string;
+export type User = {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  email?: string;
+  password?: string;
+  phoneNumber?: string;
+  roleName?: string;
+  dateTimeCreated?: string;
   //currentListings?: IListing[];
   //bookmarkedListings?: IListing[];
-  imageBase64String: string;
+  imageBase64String?: string;
+} | null;
+
+export type User$ = {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  email?: string;
+  password?: string;
+  phoneNumber?: string;
+  roleName?: string;
+  dateTimeCreated?: string;
+  //currentListings?: IListing[];
+  //bookmarkedListings?: IListing[];
+  imageBase64String?: string;
 } | null;
 
 export type UserSetData$ = {
@@ -30,10 +45,7 @@ export type UserSetData$ = {
   //currentListings?: IListing[];
   //bookmarkedListings?: IListing[];
   imageBase64String?: string;
-};
-
-
-
+} | null;
 
 export type UserGetAllResponse = {
   id: number;
@@ -80,7 +92,7 @@ export type UserLoginRequest = {
 export type UserLoginResponse = {
   token: string;
   claims: string[];
-}
+};
 
 export type UserUpdateRequest = {
   id: number;

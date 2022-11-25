@@ -3,8 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { IUser } from 'src/app/core/models/user.model';
 import { UserService } from 'src/app/core/services/http/user.service';
+import { User$, UserChangePassword, UserUpdateRequest } from 'src/app/core/models/user.model';
+import { UserDataService } from 'src/app/core/services/store/user.data.service';
 
 
 @Component({
@@ -13,12 +14,13 @@ import { UserService } from 'src/app/core/services/http/user.service';
   styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent implements OnInit {
-  userInfo: IUser | undefined;
+  userInfo: User$ | undefined;
 
   updateUserSubs: Subscription | undefined;
   deleteUserSubs: Subscription | undefined;
 
   constructor(private userService: UserService,
+              private userDataService: UserDataService,
               private router: Router,
               private messageService: MessageService,
               private confirmationService: ConfirmationService) { }
@@ -34,10 +36,10 @@ export class AccountSettingsComponent implements OnInit {
 
 
   onEditUser() {
-    const body = {
-      "CurrentPassword": this.updateForm.get('currentPassword')?.value,
-      "NewPassword": this.updateForm.get('newPassword')?.value,
-    };
+    const body: UserChangePassword = {
+      currentPassword: this.updateForm.get('currentPassword')?.value,
+      newPassword: this.updateForm.get('newPassword')?.value
+    }
 
     this.updateUserSubs = this.userService.changePassword(body).subscribe({
       complete: () => {
@@ -80,7 +82,8 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   loadUserInfo() {
-    this.userInfo = this.userService.loggedUser;
+    //need to fix
+    //this.userInfo = this.userDataService.userData;
   }
 
   ngOnDestroy() {
