@@ -10,8 +10,9 @@ import {
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { IUser } from '../core/models/user.model';
 import { UserService } from '../core/services/http/user.service';
+import { UserDataService } from '../core/services/store/user.data.service';
+import { UserGetInfoResponse, UserRegisterRequest } from '../core/models/user.model';
 
 @Component({
   selector: 'app-auth',
@@ -27,6 +28,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
+    private userDataService: UserDataService,
     private router: Router,
     private messageService: MessageService
   ) {}
@@ -73,10 +75,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     });
   }
   loadUserInfo() {
-    if (!this.userService.loggedUser) {
+    if (!this.userDataService.userData) {
       this.loadUserSubs = this.userService.getInfo().subscribe({
-        next: (resp: IUser) => {
-          this.userService.loggedUser = resp;
+        next: (resp: UserGetInfoResponse) => {
+          this.userDataService.setUserData(resp);
         },
         complete: () => {
           this.router.navigate(['/home']);
@@ -140,23 +142,25 @@ export class AuthComponent implements OnInit, OnDestroy {
         Validators.required,
       ]),
       phoneNumber: new FormControl('', [Validators.required]),
+      imageBase64String: new FormControl('', [Validators.required])
     },
     { validators: this.passwordMatchingValidator }
   );
 
   onRegister() {
-    const body = {
-      FirstName: this.registerForm.get('firstName')?.value,
-      LastName: this.registerForm.get('lastName')?.value,
-      UserName: this.registerForm.get('userName')?.value,
-      Email: this.registerForm.get('email')?.value,
-      Password: this.registerForm.get('password')?.value,
-      PhoneNumber: this.registerForm.get('phoneNumber')?.value,
-      RoleId: '0',
+    const body: UserRegisterRequest = {
+      firstName: this.registerForm.get('firstName')?.value,
+      lastName: this.registerForm.get('lastName')?.value,
+      userName: this.registerForm.get('userName')?.value,
+      email: this.registerForm.get('email')?.value,
+      password: this.registerForm.get('password')?.value,
+      phoneNumber: this.registerForm.get('phoneNumber')?.value,
+      roleId: 0,
+      imageBase64String: "inProgress"
     };
 
     this.registerSubscription = this.userService.register(body).subscribe({
-      next: (data) => {
+      next: (resp) => {
         this.messageService.add({
           key: 'tc',
           severity: 'success',

@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
 export class UserService {
   private httpWithoutInterceptor: HttpClient;
   private url = 'http://localhost:5001';
+  // loggedUser?: UserGetInfoResponse;
   // loggedUser?: IUser;
 
   constructor(private http: HttpClient, private httpBackend: HttpBackend) {
@@ -65,7 +66,7 @@ export class UserService {
     });
     if (id) {
       let queryParams = new HttpParams().set('id', id);
-      return this.http.get(`${this.url}/User/GetById`, {
+      return this.http.get<UserGetInfoResponse>(`${this.url}/User/GetById`, {
         headers: headers,
         params: queryParams,
       });

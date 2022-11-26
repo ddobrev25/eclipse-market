@@ -2,34 +2,42 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IRoles, IRole } from 'src/app/core/models/role.model';
-import { AdminService } from 'src/app/core/services/admin.service';
-import { RoleService } from 'src/app/core/services/role.service';
-
+import { AdminData$ } from 'src/app/core/models/admin.model';
+import {
+  RoleAddRequest,
+  RoleGetAllResponse,
+  RoleGetByIdResponse,
+  RoleUpdateRequest,
+} from 'src/app/core/models/role.model';
+import { DeleteRequest } from 'src/app/core/models/user.model';
+import { RoleService } from 'src/app/core/services/http/role.service';
+import { AdminDataService } from 'src/app/core/services/store/admin.data.service';
 
 @Component({
   selector: 'app-admin-roles',
   templateUrl: './admin-roles.component.html',
-  styleUrls: ['./admin-roles.component.scss']
+  styleUrls: ['./admin-roles.component.scss'],
 })
 export class AdminRolesComponent implements OnInit, OnDestroy {
   @ViewChild('rt') rolesTable!: any;
 
-  roleList: IRoles = [];
+  roleList?: RoleGetAllResponse;
   roleAddDialog?: boolean;
   roleEditDialog?: boolean;
   rolesChanged: boolean = false;
 
-
+  roleFetchSubs: Subscription | undefined;
   roleGetSubs: Subscription | undefined;
   roleAddSubs: Subscription | undefined;
   roleEditSubs: Subscription | undefined;
   roleDeleteSubs: Subscription | undefined;
 
-  constructor(private roleService: RoleService,
-              private confirmationService: ConfirmationService,
-              private messageService: MessageService,
-              private adminService: AdminService) { }
+  constructor(
+    private roleService: RoleService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private adminDataService: AdminDataService
+  ) {}
 
   ngOnInit() {
     this.fetchRoles();
@@ -40,31 +48,32 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   roleForm: FormGroup = new FormGroup({
     id: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required]),
-    claims: new FormControl('', [Validators.required])
+    claims: new FormControl('', [Validators.required]),
   });
 
   applyFilterGlobal($event: Event, stringVal: any) {
-    this.rolesTable.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
+    this.rolesTable.filterGlobal(
+      ($event.target as HTMLInputElement).value,
+      stringVal
+    );
   }
 
   fetchRoles() {
-    if(!this.adminService.roles || this.rolesChanged) {
-      this.roleGetSubs = this.roleService.getAll().subscribe({
-        next: (resp: IRoles) => {
-          this.adminService.roles = resp;
-          this.roleList = resp;
-          this.rolesChanged = false;
-        },
-        error: err => {
-          console.log(err);
+    this.roleGetSubs = this.adminDataService.adminData.subscribe({
+      next: (data: AdminData$) => {
+        if (data && data.roles) {
+          this.roleList = data.roles;
+        } else {
+          this.roleFetchSubs = this.roleService.getAll().subscribe({
+            next: (resp: RoleGetAllResponse) => {
+              this.roleList = resp;
+              this.adminDataService.setAdminData(resp);
+            },
+          });
         }
-      })
-    } else {
-      this.roleList = this.adminService.roles;
-    }
+      },
+    });
   }
-
-
 
   onToggleRoleAddDialog() {
     this.roleAddDialog = true;
@@ -72,25 +81,29 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   }
 
   onAddRole() {
-    const claims: string = this.roleForm.get('claims')?.value
-    console.log(claims)
-    console.log(typeof(claims))
-    const body = {
-      'Id': this.roleForm.get('id')?.value,
-      'Name': this.roleForm.get('name')?.value,
-      'Claims': claims.split(","),
-    }
-    console.log(body.Claims)
+    const claims: string = this.roleForm.get('claims')?.value;
+    console.log(claims);
+    console.log(typeof claims);
+    const body: RoleAddRequest = {
+      id: this.roleForm.get('id')?.value,
+      name: this.roleForm.get('name')?.value,
+      claims: claims.split(','),
+    };
     this.roleAddSubs = this.roleService.add(body).subscribe({
-      complete: ()=> {
+      complete: () => {
         this.rolesChanged = true;
-        this.messageService.add({severity:'success', detail: 'Ролята е добавена успешно!', life: 3000});
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Ролята е добавена успешно!',
+          life: 3000,
+        });
         this.fetchRoles();
         this.roleAddDialog = false;
-      }, error: (err) => {
+      },
+      error: (err) => {
         console.log(err);
-      }
-    })
+      },
+    });
   }
 
   onDiscard() {
@@ -98,39 +111,43 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
     this.roleEditDialog = false;
   }
 
-  onToggleRoleEditDialog(role: IRole) {
+  onToggleRoleEditDialog(role: RoleGetByIdResponse) {
     this.roleEditDialog = true;
     this.roleForm.patchValue({
       id: role.id,
       name: role.name,
-      claims: role.claims
-    })
+      claims: role.claims,
+    });
   }
 
   onEditRole() {
-    const claims: string = this.roleForm.get('claims')?.value
-    const body = {
-      'CurrentId': this.roleForm.get('id')?.value,
-      'Name': this.roleForm.get('name')?.value,
-      'Claims': claims.split(","),
-    }
+    const claims: string = this.roleForm.get('claims')?.value;
+    const body: RoleUpdateRequest = {
+      currentId: this.roleForm.get('id')?.value,
+      name: this.roleForm.get('name')?.value,
+      claims: claims.split(','),
+    };
     this.roleEditSubs = this.roleService.update(body).subscribe({
       complete: () => {
         this.rolesChanged = true;
-        this.messageService.add({severity:'success', detail: 'Промените са запазени!', life: 3000});
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Промените са запазени!',
+          life: 3000,
+        });
         this.roleEditDialog = false;
         this.fetchRoles();
       },
-      error: err => {
+      error: (err) => {
         console.log(err);
-      }
-    })
+      },
+    });
   }
 
-  onDeleteRole(role: IRole) {
-    const body = {
-      'Id': role.id
-    }
+  onDeleteRole(role: RoleGetByIdResponse) {
+    const body: DeleteRequest = {
+      id: role.id,
+    };
     this.confirmationService.confirm({
       message: `Сигурнили сте, че искате да изтриете ${role.name} ?`,
       header: 'Потвърди',
@@ -141,14 +158,18 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
         this.roleDeleteSubs = this.roleService.delete(body).subscribe({
           complete: () => {
             this.rolesChanged = true;
-            this.messageService.add({severity:'success', detail: 'Ролята е изтрита успешно!', life: 3000});
+            this.messageService.add({
+              severity: 'success',
+              detail: 'Ролята е изтрита успешно!',
+              life: 3000,
+            });
             this.fetchRoles();
           },
-          error: err => {
-            console.log(err)
-          }
-        })
-      }
+          error: (err) => {
+            console.log(err);
+          },
+        });
+      },
     });
   }
 
@@ -157,6 +178,6 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
     this.roleAddSubs?.unsubscribe();
     this.roleEditSubs?.unsubscribe();
     this.roleDeleteSubs?.unsubscribe();
+    this.roleFetchSubs?.unsubscribe();
   }
-
 }
