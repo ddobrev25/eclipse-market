@@ -264,7 +264,7 @@ namespace Eclipse_Market.Controllers
         public ActionResult<UserLoginResponse> Login(UserLoginRequest request)
         {
             //if the username is not correct return, there is no way to know which user attempted the login
-            if (!_dbContext.Users.Any(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName))
+            if (!_dbContext.Users.Any(x => CollateUserName(x.UserName) == request.UserName))
             {
                 return BadRequest("Incorrect credentials");
             }
@@ -272,11 +272,11 @@ namespace Eclipse_Market.Controllers
             //if a user with the given username already exists try to pull a user object with the password
             var user = _dbContext.Users
                 .Include(x => x.Role)
-                .Where(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName && x.Password == ComputeSha256Hash(request.Password))
+                .Where(x => CollateUserName(x.UserName) == request.UserName && x.Password == ComputeSha256Hash(request.Password))
                 .FirstOrDefault();
 
             //check if the user with the username is locked, if locked return 
-            if (_dbContext.Users.Where(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName).First().DateLockedTo > DateTime.UtcNow)
+            if (_dbContext.Users.Where(x => CollateUserName(x.UserName) == request.UserName).First().DateLockedTo > DateTime.UtcNow)
             {
                 return BadRequest("Too many login attempts. Please try again later.");
             }
@@ -285,7 +285,7 @@ namespace Eclipse_Market.Controllers
             if (user == null)
             {
                 var userFailedLogin = _dbContext.Users
-                    .Where(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName)
+                    .Where(x => CollateUserName(x.UserName) == request.UserName)
                     .First();
 
                 userFailedLogin.LoginAttemptCount++;
@@ -322,6 +322,11 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
 
             return Ok(response);
+        }
+
+        private string CollateUserName(string username)
+        {
+            return EF.Functions.Collate(username, "SQL_Latin1_General_CP1_CS_AS");
         }
         [HttpPost]
         public ActionResult BookmarkListing(UserBookmarkListingRequest request)
