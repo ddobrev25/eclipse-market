@@ -169,6 +169,50 @@ namespace Eclipse_Market.Controllers
             };
             return Ok(response);
         }
+        [HttpGet]
+        public ActionResult<ListingGetAllResponse> GetCurrentByUserId()
+        {
+            int id = _jwtService.GetUserIdFromToken(User);
+            var response = _dbContext.Listings
+                .Where(x => x.AuthorId == id)
+                .Select(x => new ListingGetAllResponse
+                {
+                    AuthorId = x.AuthorId,
+                    Description = x.Description,
+                    ListingCategory = _dbContext.Listings.Where(y => y.Id == x.ListingCategoryId).First().Title,
+                    Location = x.Location,
+                    Price = x.Price,
+                    TimesBookmarked = x.TimesBookmarked,
+                    Title = x.Title,
+                    Id = x.Id,
+                    Views = x.Views
+                });
+            return Ok(response);
+        }
+        [HttpGet]
+        public ActionResult<ListingGetAllResponse> GetBookmarkedByUserId()
+        {
+            int id = _jwtService.GetUserIdFromToken(User);
+
+            var response = _dbContext.ListingUsers
+                .Include(x => x.Listing)
+                .Where(x => x.UserId == id)
+                .Select(x => x.Listing)
+                .Select(x => new ListingGetAllResponse
+                {
+                    Description = x.Description,
+                    AuthorId = x.AuthorId,
+                    Id = x.Id,
+                    ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title,
+                    Location = x.Location,
+                    Price = x.Price,
+                    TimesBookmarked = x.TimesBookmarked,
+                    Title = x.Title,
+                    Views = x.Views
+                });
+            return Ok(response);
+
+        }
         [HttpPost]
         public ActionResult Add(ListingAddRequest request)
         {
