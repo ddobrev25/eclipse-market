@@ -43,7 +43,7 @@ export class ChatService {
     });
   }
   create(body: ChatCreateRequest) {
-    return this.http.post(`${this.url}/Chat/Create`, body);
+    return this.http.post<number>(`${this.url}/Chat/Create`, body);
   }
   delete(chatId: DeleteRequest) {
     return this.http.delete(`${this.url}/Chat/Delete`);

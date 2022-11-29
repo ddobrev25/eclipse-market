@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
-import { IListing } from 'src/app/core/models/listing.model';
+import { ListingGetByIdResponse } from 'src/app/core/models/listing.model';
 import { AuthorGetResponse } from 'src/app/core/models/user.model';
 import { UserListingsService } from 'src/app/core/services/user-listings.service';
 
@@ -24,12 +24,14 @@ export class UserListingsComponent implements OnInit, OnDestroy {
     this.fetchUserInfo();
   }
   fetchUserInfo() {
-    this.userData$ = this.userListingsService.select();
-    this.fetchUserSubs = this.userData$.subscribe((resp: AuthorGetResponse) => {
-      this.userInfo = resp;
-    });
+    this.fetchUserSubs = this.userListingsService.userListings.subscribe({
+      next: (resp: AuthorGetResponse | null) => {
+        if(!resp) return;
+        this.userInfo = resp;
+      }
+    })
   }
-  onSelectListing(listingForPreview: IListing) {
+  onSelectListing(listingForPreview: ListingGetByIdResponse) {
     this.router.navigate(['/listings/preview'], {
       queryParams: { id: listingForPreview.id },
     });

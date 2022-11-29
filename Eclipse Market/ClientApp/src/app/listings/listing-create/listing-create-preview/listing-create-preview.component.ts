@@ -3,10 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IListingAddRequest } from 'src/app/core/models/listing.model';
 import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
-import { UserService } from 'src/app/core/services/http/user.service';
+import { ListingAddRequest } from 'src/app/core/models/listing.model';
 
 @Component({
   selector: 'app-listing-create-preview',
@@ -30,8 +29,7 @@ export class ListingCreatePreviewComponent implements OnInit {
     private listingComService: ListingCreateCommunicationService,
     private listingService: ListingService,
     private messageService: MessageService,
-    private router: Router,
-    private userService: UserService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -39,18 +37,22 @@ export class ListingCreatePreviewComponent implements OnInit {
   }
 
   onCreateListing() {
-    const body: IListingAddRequest = {
+    const body: ListingAddRequest = {
       title: this.listingForm.get('title')?.value,
       description: this.listingForm.get('description')?.value,
       price: this.listingForm.get('price')?.value,
       location: this.listingForm.get('location')?.value,
       listingCategoryId: this.listingForm.get('listingCategoryId')?.value,
-      imageBase64String: this.listingForm.get('imageBase64String')?.value
+      primaryImageBase64String:
+        this.listingForm.get('imageBase64String')?.value,
+      secondaryImageBase64String: this.listingForm
+        .get('imageBase64String')
+        ?.value.toArray(),
     };
-    
+
     this.listingAddSubs = this.listingService.add(body).subscribe({
       complete: () => {
-        this.userService.loggedUser = undefined;
+        // this.userService.loggedUser = undefined;
         this.messageService.add({
           key: 'tc',
           severity: 'success',
@@ -59,22 +61,21 @@ export class ListingCreatePreviewComponent implements OnInit {
         });
         this.router.navigate(['/home']);
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: (err) => console.log(err),
     });
   }
 
   fetchFormData() {
     this.subs = this.listingComService.listingCreateData.subscribe(
-      (resp: IListingAddRequest) => {
+      (resp: ListingAddRequest) => {
         this.listingForm.patchValue({
           title: resp.title,
           description: resp.description,
           price: resp.price,
           location: resp.location,
           listingCategoryId: resp.listingCategoryId,
-          imageBase64String: resp.imageBase64String,
+          primaryImageBase64String: resp.primaryImageBase64String,
+          secondaryImageBase64String: resp.secondaryImageBase64String,
         });
       }
     );

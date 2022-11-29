@@ -1,4 +1,4 @@
-import { ChatGetAllResponse } from "./chat.model";
+import { ChatGetAllByUserIdResponse, ChatGetAllResponse } from "./chat.model";
 import { ListingGetAllResponse } from "./listing.model";
 
 export type DeleteRequest = {
@@ -34,7 +34,7 @@ export type User$ = {
   currentListings?: ListingGetAllResponse;
   bookmarkedListings?: ListingGetAllResponse;
   imageBase64String?: string;
-  chats?: ChatGetAllResponse
+  chats?: ChatGetAllByUserIdResponse | ChatGetAllResponse
 } | null;
 
 export type UserGetAllResponse = {
@@ -100,3 +100,21 @@ export type UserChangePassword = {
   currentPassword: string;
   newPassword: string;
 };
+
+export type AuthorGetResponse = {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  dateCreated: string;
+  listings: {
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    location: string;
+    views: number;
+    timesBookmarked: number;
+    listingCategory: string;
+    imageBase64String: string;
+  }[];
+}

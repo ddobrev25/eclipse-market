@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
-import { ListingGetByIdResponse } from 'src/app/core/models/listing.model';
+import { ListingGetByIdResponse, ListingGetByIdWithAuthorResponse } from 'src/app/core/models/listing.model';
 
 @Component({
   selector: 'app-account-listing-preview',
@@ -28,7 +28,8 @@ export class AccountListingPreviewComponent implements OnInit {
   fetchListingInfo() {
     const id = this.listingPreviewService.listingPreviewId.getValue();
     this.listingSubs = this.listingService.getById(id).subscribe({
-      next: (resp: ListingGetByIdResponse) => {
+      next: (resp: ListingGetByIdResponse | ListingGetByIdWithAuthorResponse) => {
+        if('author' in resp) return;
         this.selectedListing = resp;
       },
       error: (err) => {

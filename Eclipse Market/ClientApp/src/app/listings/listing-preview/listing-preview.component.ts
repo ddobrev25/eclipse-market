@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IChatCreateRequest } from 'src/app/core/models/chat.model';
-import { IListingGetByIdResponse } from 'src/app/core/models/listing.model';
-import { IMessageSendRequest } from 'src/app/core/models/message.model';
+import { ChatCreateRequest } from 'src/app/core/models/chat.model';
+import { ListingGetByIdResponse, ListingGetByIdWithAuthorResponse } from 'src/app/core/models/listing.model';
+import { MessageSendRequest } from 'src/app/core/models/message.model';
 import { ChatService } from 'src/app/core/services/http/chat.service';
-import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
-import { MsgService } from 'src/app/core/services/message.service';
+import { MsgService } from 'src/app/core/services/http/message.service';
 import { UserListingsService } from 'src/app/core/services/user-listings.service';
 
 @Component({
@@ -17,14 +16,14 @@ import { UserListingsService } from 'src/app/core/services/user-listings.service
   styleUrls: ['./listing-preview.component.scss'],
 })
 export class ListingPreviewComponent implements OnInit {
-  selectedListing?: IListingGetByIdResponse;
+  selectedListing?: ListingGetByIdWithAuthorResponse;
   selectedListingId: number = 0;
   listingSubs?: Subscription;
   sub?: Subscription;
   createChatSubs?: Subscription;
   sendMessageSubs?: Subscription;
   listingCategorySubs?: Subscription;
-  incrementViewsSubs? : Subscription;
+  incrementViewsSubs?: Subscription;
 
   remainingCharacters: number = 200;
   textAreaValue: string = '';
@@ -36,7 +35,6 @@ export class ListingPreviewComponent implements OnInit {
     private userListingsService: UserListingsService,
     private chatService: ChatService,
     private messageService: MessageService,
-    private listingCategoryService: ListingCategoryService,
     private msgService: MsgService
   ) {}
 
@@ -50,9 +48,10 @@ export class ListingPreviewComponent implements OnInit {
       this.fetchListingInfo();
     });
   }
-  
+
   onLoadUserListings() {
-    this.userListingsService.next(this.selectedListing?.author!);
+    if (!this.selectedListing) return;
+    this.userListingsService.setUserListings(this.selectedListing.author);
     this.router.navigate(['/listings/user']);
   }
 
@@ -60,22 +59,21 @@ export class ListingPreviewComponent implements OnInit {
     this.listingSubs = this.listingService
       .getById(this.selectedListingId)
       .subscribe({
-        next: (resp: IListingGetByIdResponse) => {
+        next: (resp: ListingGetByIdWithAuthorResponse | ListingGetByIdResponse) => {
+          if('authorId' in resp) return;
           this.selectedListing = resp;
           this.incrementViews(this.selectedListingId);
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: (err) => console.log(err),
       });
   }
 
   incrementViews(id: number) {
-    this.incrementViewsSubs = this.listingService.incrementViews(id)!.subscribe({
-      error: err => {
-        console.log(err);
-      }
-    });
+    this.incrementViewsSubs = this.listingService
+      .incrementViews(id)!
+      .subscribe({
+        error: (err) => console.log(err),
+      });
   }
 
   valueChange(textAreaValue: string) {
@@ -83,24 +81,22 @@ export class ListingPreviewComponent implements OnInit {
   }
 
   onSendMessage() {
-    const body: IChatCreateRequest = {
-      topicListingId: this.selectedListingId
-    }
+    const body: ChatCreateRequest = {
+      topicListingId: this.selectedListingId,
+    };
     this.createChatSubs = this.chatService.create(body).subscribe({
-      next: (resp: any) => {
+      next: (resp: number) => {
         this.sendMessage(resp);
       },
-      error: (err: any) => {
-        console.log(err);
-      }
+      error: (err) => console.log(err),
     });
   }
 
   sendMessage(chatId: any) {
-    const body: IMessageSendRequest = {
+    const body: MessageSendRequest = {
       body: this.textAreaValue,
       chatId: chatId,
-    }
+    };
     this.sendMessageSubs = this.msgService.send(body).subscribe({
       next: (resp: any) => {
         this.messageService.add({
@@ -111,13 +107,16 @@ export class ListingPreviewComponent implements OnInit {
         });
         this.textAreaValue = '';
       },
-      error: (err: any) => {
-        console.log(err);
-      }
+      error: (err: any) => console.log(err),
     });
   }
 
   ngOnDestroy() {
     this.sub?.unsubscribe();
+    this.listingSubs?.unsubscribe();
+    this.createChatSubs?.unsubscribe();
+    this.sendMessageSubs?.unsubscribe();
+    this.incrementViewsSubs?.unsubscribe();
+    this.listingCategorySubs?.unsubscribe();
   }
 }

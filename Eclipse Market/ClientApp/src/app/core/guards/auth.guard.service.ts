@@ -10,7 +10,6 @@ export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private jwtHelper: JwtHelperService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log('entered guard');
 
     const token = localStorage.getItem('token');
     if (token && !this.jwtHelper.isTokenExpired(token)) {

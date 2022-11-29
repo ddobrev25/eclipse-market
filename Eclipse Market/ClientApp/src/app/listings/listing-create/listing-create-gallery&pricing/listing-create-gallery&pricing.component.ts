@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingAddRequest } from 'src/app/core/models/listing.model';
+import { ListingAddRequest } from 'src/app/core/models/listing.model';
 import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
 
 @Component({
   selector: 'app-listing-create-gallery&pricing',
   templateUrl: './listing-create-gallery&pricing.component.html',
-  styleUrls: ['./listing-create-gallery&pricing.component.scss']
+  styleUrls: ['./listing-create-gallery&pricing.component.scss'],
 })
 export class ListingCreateGalleryComponent implements OnInit {
   fetchSubs?: Subscription;
@@ -19,18 +19,15 @@ export class ListingCreateGalleryComponent implements OnInit {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      //me.modelvalue = reader.result;
       this.imageAsBase64 = reader.result?.toString();
-      console.log(this.imageAsBase64);
     };
-    reader.onerror = function (error) {
-      console.log('Error: ', error);
-    };
- }
+    reader.onerror = (error) => console.log('Error: ', error);
+  }
 
-
-  constructor(private router: Router,
-              private listingComService: ListingCreateCommunicationService) { }
+  constructor(
+    private router: Router,
+    private listingComService: ListingCreateCommunicationService
+  ) {}
 
   ngOnInit(): void {
     this.fetchFormData();
@@ -42,23 +39,23 @@ export class ListingCreateGalleryComponent implements OnInit {
     price: new FormControl('', [Validators.required]),
     location: new FormControl(''),
     listingCategoryId: new FormControl(''),
-    imageBase64String: new FormControl('')
-  })
-
+    primaryImageBase64String: new FormControl(''),
+    secondaryImageBase64String: new FormControl(''),
+  });
 
   fetchFormData() {
     this.fetchSubs = this.listingComService.listingCreateData.subscribe(
-      (resp: IListingAddRequest)  => {
+      (resp: ListingAddRequest) => {
         this.createListingForm.patchValue({
           title: resp.title,
           description: resp.description,
           price: this.createListingForm.get('price')?.value,
           location: resp.location,
           listingCategoryId: resp.listingCategoryId,
-          imageBase64String: this.imageAsBase64
+          imageBase64String: this.imageAsBase64,
         });
       }
-    )
+    );
   }
 
   previousPage() {
@@ -73,5 +70,4 @@ export class ListingCreateGalleryComponent implements OnInit {
   ngOnDestroy() {
     this.fetchSubs?.unsubscribe();
   }
-
 }

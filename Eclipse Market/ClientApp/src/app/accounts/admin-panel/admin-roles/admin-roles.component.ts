@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { AdminData$ } from 'src/app/core/models/admin.model';
+import { AdminDataRoles$ } from 'src/app/core/models/admin.model';
 import {
   RoleAddRequest,
   RoleGetAllResponse,
@@ -21,7 +21,7 @@ import { AdminDataService } from 'src/app/core/services/store/admin.data.service
 export class AdminRolesComponent implements OnInit, OnDestroy {
   @ViewChild('rt') rolesTable!: any;
 
-  roleList?: RoleGetAllResponse;
+  roleList: RoleGetAllResponse = [];
   roleAddDialog?: boolean;
   roleEditDialog?: boolean;
   rolesChanged: boolean = false;
@@ -59,18 +59,29 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   }
 
   fetchRoles() {
-    this.roleGetSubs = this.adminDataService.adminData.subscribe({
-      next: (data: AdminData$) => {
-        if (data && data.roles) {
-          this.roleList = data.roles;
+    if (this.rolesChanged) {
+      console.log('main method')
+      this.fetchRolesFromService();
+    }
+    this.roleGetSubs = this.adminDataService.roles.subscribe({
+      next: (data: AdminDataRoles$) => {
+        if (data) {
+          const roleArr = Object.entries(data).map(([index, role]) => role);
+          this.roleList = roleArr;
         } else {
-          this.roleFetchSubs = this.roleService.getAll().subscribe({
-            next: (resp: RoleGetAllResponse) => {
-              this.roleList = resp;
-              this.adminDataService.setAdminData(resp);
-            },
-          });
+          this.fetchRolesFromService();
         }
+      },
+    });
+  }
+
+  fetchRolesFromService() {
+    this.roleFetchSubs = this.roleService.getAll().subscribe({
+      next: (resp: RoleGetAllResponse) => {
+        this.roleList = resp;
+        this.adminDataService.setRoles(resp);
+        this.rolesChanged = false;
+        console.log('fetching');
       },
     });
   }
@@ -82,8 +93,6 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
 
   onAddRole() {
     const claims: string = this.roleForm.get('claims')?.value;
-    console.log(claims);
-    console.log(typeof claims);
     const body: RoleAddRequest = {
       id: this.roleForm.get('id')?.value,
       name: this.roleForm.get('name')?.value,

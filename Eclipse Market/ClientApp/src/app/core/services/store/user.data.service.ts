@@ -6,6 +6,7 @@ import { User$ } from '../../models/user.model';
   providedIn: 'root',
 })
 export class UserDataService {
+  isLoggedIn: boolean = false;
   private user$: BehaviorSubject<User$ | null>;
   constructor() {
     this.user$ = new BehaviorSubject<User$ | null>(null);

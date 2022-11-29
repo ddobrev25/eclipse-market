@@ -16,7 +16,6 @@ export class AccountDetailComponent implements OnInit {
   activeItem?: MenuItem;
 
   loadUserSubs?: Subscription;
-  adminSubs?: Subscription;
   fetchUserInfoSubs?: Subscription;
 
   isAdmin: boolean = false;
@@ -29,7 +28,6 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loadUserInfo();
     this.patchNavbar();
-    this.checkForAdmin();
   }
 
   patchNavbar() {
@@ -115,20 +113,17 @@ export class AccountDetailComponent implements OnInit {
   }
 
   checkForAdmin() {
-    this.adminSubs = this.userDataService.userData.subscribe({
-      next: (data: User$) => {
-        if (data && data.roleName === 'admin') {
-          this.isAdmin = true;
-        } else {
-          this.isAdmin = false;
-        }
-      },
+    const claims = localStorage.getItem('claims')?.split(',');
+    if (!claims) return;
+    claims.forEach((claim) => {
+      if (claim.toLowerCase().indexOf('roledeleteclaim')) {
+        this.isAdmin = true;
+      }
     });
   }
 
   ngOnDestroy() {
     this.loadUserSubs?.unsubscribe();
-    this.adminSubs?.unsubscribe();
     this.fetchUserInfoSubs?.unsubscribe();
   }
 }

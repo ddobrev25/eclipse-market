@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { IListingCategories } from 'src/app/core/models/listing-category.model';
+import { ListingCategoryGetAllResponse } from 'src/app/core/models/listing-category.model';
 import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
 import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
 
@@ -14,7 +14,7 @@ import { ListingCreateCommunicationService } from 'src/app/core/services/listing
 })
 export class ListingCreateGeneralComponent implements OnInit {
   categorySubs?: Subscription;
-  listingCategories?: IListingCategories = [];
+  listingCategories?: ListingCategoryGetAllResponse = [];
   remainingCharacters: number = 800;
   textAreaValue: string = '';
 
@@ -45,7 +45,7 @@ export class ListingCreateGeneralComponent implements OnInit {
   }
   fetchCategories() {
     this.categorySubs = this.listingCategoryService.getAll().subscribe({
-      next: (resp: IListingCategories) => {
+      next: (resp: ListingCategoryGetAllResponse) => {
         this.listingCategories = resp;
         this.listingCategoryService.categories = resp;
       }

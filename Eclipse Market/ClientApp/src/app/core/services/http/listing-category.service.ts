@@ -26,8 +26,14 @@ export class ListingCategoryService {
   }
 
   getAll() {
+    var headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
     return this.http.get<ListingCategoryGetAllResponse>(
-      `${this.url}/ListingCategory/GetAll`
+      `${this.url}/ListingCategory/GetAll`,
+      {
+        headers: headers,
+      }
     );
   }
   getById(id: number) {

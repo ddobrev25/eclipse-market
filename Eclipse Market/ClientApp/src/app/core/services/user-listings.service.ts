@@ -1,22 +1,21 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthorGetResponse } from '../models/user.model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserListingsService {
-    // private data$: BehaviorSubject<AuthorGetResponse> = new BehaviorSubject<AuthorGetResponse>({
-    //   firstName: '',
-    //   lastName: '',
-    //   phoneNumber: '',
-    //   dateCreated: ''
-    // });
+  private userListings$: BehaviorSubject<AuthorGetResponse | null>;
+  constructor() {
+    this.userListings$ = new BehaviorSubject<AuthorGetResponse | null>(null);
+  }
 
-    // next(data: AuthorGetResponse): void {
-    //   this.data$.next(data);
-    // }
-  
-    // select(): Observable<any> {
-    //   return this.data$.asObservable();
-    // }
+  setUserListings(data: AuthorGetResponse) {
+    this.userListings$.next(data);
+  }
+
+  get userListings(): Observable<AuthorGetResponse | null> {
+    return this.userListings$.asObservable();
+  }
 }

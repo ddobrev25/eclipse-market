@@ -3,13 +3,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Subscription } from 'rxjs';
-import { AdminData$ } from 'src/app/core/models/admin.model';
+import { AdminDataRoles$, AdminDataUsers$ } from 'src/app/core/models/admin.model';
 import { RoleGetAllResponse } from 'src/app/core/models/role.model';
 import { DeleteRequest, User, UserGetAllResponse, UserUpdateRequest } from 'src/app/core/models/user.model';
 import { RoleService } from 'src/app/core/services/http/role.service';
 import { UserService } from 'src/app/core/services/http/user.service';
 import { AdminDataService } from 'src/app/core/services/store/admin.data.service';
-import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-admin-manage',
@@ -32,7 +31,6 @@ export class AdminManageComponent implements OnInit, OnDestroy {
 
   
   accountDialog?: boolean;
-  //need to fix
   accountForEdit: User | undefined;
 
   constructor(private userService: UserService,
@@ -64,31 +62,39 @@ export class AdminManageComponent implements OnInit, OnDestroy {
     this.accountsTable.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
   fetchUsers() {
-    this.usersGetSubs = this.adminDataService.adminData.subscribe({
-      next: (data: AdminData$) => {
-        if(data && data.users) {
-          this.users = data.users;
+    if(this.accountsChanged) this.fetchUsersFromService();
+    this.usersGetSubs = this.adminDataService.users.subscribe({
+      next: (data: AdminDataUsers$) => {
+        if(data) {
+          const usersArr = Object.entries(data).map(([index, user]) => (user));
+          this.users = usersArr;
         } else {
-          this.usersFetchSubs = this.userService.getAll().subscribe({
-            next: (resp: UserGetAllResponse) => {
-              this.users = resp;
-              this.adminDataService.setAdminData(resp);
-            }
-          })
+          this.fetchUsersFromService();
         }
       }
     })
   }
+
+  fetchUsersFromService() {
+    this.usersFetchSubs = this.userService.getAll().subscribe({
+      next: (resp: UserGetAllResponse) => {
+        this.users = resp;
+        this.adminDataService.setUsers(resp);
+        this.accountsChanged = false;
+      },
+      error: err => console.log(err)
+    })
+  }
   fetchRoles() {
-    this.roleGetSubs = this.adminDataService.adminData.subscribe({
-      next: (data: AdminData$) => {
-        if (data && data.roles) {
-          this.roleList = data.roles;
+    this.roleGetSubs = this.adminDataService.roles.subscribe({
+      next: (data: AdminDataRoles$) => {
+        if (data) {
+          this.roleList = data;
         } else {
           this.roleFetchSubs = this.roleService.getAll().subscribe({
             next: (resp: RoleGetAllResponse) => {
               this.roleList = resp;
-              this.adminDataService.setAdminData(resp);
+              this.adminDataService.setRoles(resp);
             },
           });
         }
@@ -184,8 +190,8 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.deleteSubs?.unsubscribe();
     this.editSubs?.unsubscribe();
-    this.usersGetSubs?.unsubscribe();
     this.usersFetchSubs?.unsubscribe();
+    this.usersGetSubs?.unsubscribe();
     this.roleFetchSubs?.unsubscribe();
     this.roleGetSubs?.unsubscribe();
   }

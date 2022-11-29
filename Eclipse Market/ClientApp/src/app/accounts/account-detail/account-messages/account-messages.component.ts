@@ -54,7 +54,10 @@ export class AccountMessagesComponent implements OnInit {
         } else {
           this.fetchSubs = this.chatService.getAllByUserId().subscribe({
             next: (resp: ChatGetAllByUserIdResponse) => {
-              this.userDataService.setUserData(resp);
+              const tempBody = {
+                chats: resp
+              }
+              this.userDataService.setUserData(tempBody);
               this.chats = resp;
             },
             error: (err) => console.log(err),

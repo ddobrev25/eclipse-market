@@ -1,21 +1,45 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AdminData, AdminData$ } from '../../models/admin.model';
+import { AdminDataCategories$, AdminDataRoles$, AdminDataUsers$ } from '../../models/admin.model';
+import { UserGetAllResponse } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminDataService {
-  private adminData$: BehaviorSubject<AdminData$ | null>;
+  
+
+  private users$: BehaviorSubject<AdminDataUsers$>;
+  private roles$: BehaviorSubject<AdminDataRoles$>;
+  private listingCategories$: BehaviorSubject<AdminDataCategories$>;
+
   constructor() {
-    this.adminData$ = new BehaviorSubject<AdminData$ | null>(null);
+    this.users$ = new BehaviorSubject<AdminDataUsers$>(null);
+    this.roles$ = new BehaviorSubject<AdminDataRoles$>(null);
+    this.listingCategories$ = new BehaviorSubject<AdminDataCategories$>(null);
   }
 
-  get adminData(): Observable<AdminData$> {
-    return this.adminData$.asObservable();
+
+  get users(): Observable<AdminDataUsers$> {
+    return this.users$.asObservable();
   }
-  setAdminData(newData: AdminData) {
-    this.adminData$.next({ ...this.adminData$.value!, ...newData! });
+  setUsers(newData: AdminDataUsers$) {
+    this.users$.next({ ...this.users$.value, ...newData! });
+  }
+
+  get roles(): Observable<AdminDataRoles$> {
+    return this.roles$.asObservable();
+  }
+  setRoles(newData: AdminDataRoles$) {
+    this.roles$.next({ ...this.roles$.value, ...newData! });
+  }
+
+  get categories(): Observable<AdminDataCategories$> {
+    return this.listingCategories$.asObservable();
+  }
+  setCategories(newData: AdminDataCategories$) {
+    this.listingCategories$.next({ ...this.listingCategories$.value, ...newData! });
   }
   
 }
+

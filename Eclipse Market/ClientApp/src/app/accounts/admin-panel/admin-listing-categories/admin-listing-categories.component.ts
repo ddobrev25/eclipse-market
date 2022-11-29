@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { AdminData$ } from 'src/app/core/models/admin.model';
+import {
+  AdminDataCategories$,
+} from 'src/app/core/models/admin.model';
 import {
   ListingCategoryAddRequest,
   ListingCategoryGetAllResponse,
@@ -57,20 +59,22 @@ export class AdminListingCategoriesComponent implements OnInit {
   });
 
   fetchCategories() {
-    this.categoryGetSubs = this.adminDataService.adminData.subscribe({
-      next: (data: AdminData$) => {
-        if (data && data.listingCategories) {
-          this.categoryList = data.listingCategories;
+    this.categoryGetSubs = this.adminDataService.categories.subscribe({
+      next: (data: AdminDataCategories$) => {
+        if (data) {
+          this.categoryList = data;
         } else {
-          this.categoryFetchSubs = this.listingCategoryService
-            .getAll()
-            .subscribe({
-              next: (resp: ListingCategoryGetAllResponse) => {
-                this.categoryList = resp;
-                this.adminDataService.setAdminData(resp);
-              },
-            });
+          this.fetchCategoriesFromService();
         }
+      },
+    });
+  }
+
+  fetchCategoriesFromService() {
+    this.categoryFetchSubs = this.listingCategoryService.getAll().subscribe({
+      next: (resp: ListingCategoryGetAllResponse) => {
+        this.categoryList = resp;
+        this.adminDataService.setCategories(resp);
       },
     });
   }

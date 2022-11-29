@@ -10,6 +10,7 @@ import {
   ListingAddRequest,
   ListingGetAllResponse,
   ListingGetByIdResponse,
+  ListingGetByIdWithAuthorResponse,
   ListingGetRecommendedResponse,
   ListingUpdateRequest,
 } from '../../models/listing.model';
@@ -39,7 +40,7 @@ export class ListingService {
       SkipLoader: ``,
     });
     let queryParams = new HttpParams().set('id', id);
-    return this.http.get<ListingGetByIdResponse>(
+    return this.http.get<ListingGetByIdWithAuthorResponse | ListingGetByIdResponse>(
       `${this.url}/Listing/GetById`,
       { headers: headers, params: queryParams }
     );

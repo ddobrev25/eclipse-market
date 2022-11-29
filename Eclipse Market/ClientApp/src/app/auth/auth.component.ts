@@ -71,6 +71,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.loadUserInfo();
+        this.userDataService.isLoggedIn = true;
       },
     });
   }

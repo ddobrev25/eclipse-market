@@ -1,26 +1,28 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
+import { ListingAddRequest } from "../models/listing.model";
 // import { IListingAddRequest } from "../models/listing.model";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ListingCreateCommunicationService {
-    // listingCreateData = new BehaviorSubject<IListingAddRequest>(
-    //     {
-    //         title: '',
-    //         description: '',
-    //         price: 0,
-    //         location: '',
-    //         listingCategoryId: 0,
-    //         imageBase64String: ''
-    //     }
-    // );
+    listingCreateData = new BehaviorSubject<ListingAddRequest>(
+        {
+            title: '',
+            description: '',
+            price: 0,
+            location: '',
+            listingCategoryId: 0,
+            primaryImageBase64String: '',
+            secondaryImageBase64String: ['']
+        }
+    );
 
-    // constructor() {}
+    constructor() {}
 
-    // sendListingData(data: IListingAddRequest) {
-    //     this.listingCreateData.next(data);
-    // }
+    sendListingData(data: ListingAddRequest) {
+        this.listingCreateData.next(data);
+    }
 
 }
