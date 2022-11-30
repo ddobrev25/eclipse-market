@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import {
   AdminDataCategories$,
 } from 'src/app/core/models/admin.model';
@@ -59,10 +59,12 @@ export class AdminListingCategoriesComponent implements OnInit {
   });
 
   fetchCategories() {
+    if(this.categoriesChanged) this.fetchCategoriesFromService();
     this.categoryGetSubs = this.adminDataService.categories.subscribe({
       next: (data: AdminDataCategories$) => {
-        if (data) {
-          this.categoryList = data;
+        if (data !== null) {
+          const categoriesArr = Object.entries(data).map(([index, value]) => value);
+          this.categoryList = categoriesArr;
         } else {
           this.fetchCategoriesFromService();
         }
@@ -73,8 +75,8 @@ export class AdminListingCategoriesComponent implements OnInit {
   fetchCategoriesFromService() {
     this.categoryFetchSubs = this.listingCategoryService.getAll().subscribe({
       next: (resp: ListingCategoryGetAllResponse) => {
-        this.categoryList = resp;
-        this.adminDataService.setCategories(resp);
+        this.categoriesChanged = false;
+        this.adminDataService.addToCategories(resp);
       },
     });
   }
@@ -151,6 +153,7 @@ export class AdminListingCategoriesComponent implements OnInit {
           .delete(body)
           .subscribe({
             complete: () => {
+              this.adminDataService.removeCategory(categoryForDelete);
               this.categoriesChanged = true;
               this.messageService.add({
                 severity: 'success',
@@ -164,6 +167,12 @@ export class AdminListingCategoriesComponent implements OnInit {
       },
     });
   }
+
+  // updatedCategories(categoryForDelete: ListingCategoryGetByIdResponse) {
+  //   let categoryArr = this.categoryList?.filter(category => category.id !== categoryForDelete.id)
+  //   if(!categoryArr) return;
+  //   this.adminDataService.removeCategories(categoryArr);
+  // }
 
   ngOnDestroy(): void {
     this.categoryGetSubs?.unsubscribe();

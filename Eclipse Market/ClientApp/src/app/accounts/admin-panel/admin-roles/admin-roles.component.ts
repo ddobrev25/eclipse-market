@@ -60,12 +60,11 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
 
   fetchRoles() {
     if (this.rolesChanged) {
-      console.log('main method')
       this.fetchRolesFromService();
     }
     this.roleGetSubs = this.adminDataService.roles.subscribe({
       next: (data: AdminDataRoles$) => {
-        if (data) {
+        if (data !== null) {
           const roleArr = Object.entries(data).map(([index, role]) => role);
           this.roleList = roleArr;
         } else {
@@ -78,10 +77,8 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   fetchRolesFromService() {
     this.roleFetchSubs = this.roleService.getAll().subscribe({
       next: (resp: RoleGetAllResponse) => {
-        this.roleList = resp;
-        this.adminDataService.setRoles(resp);
         this.rolesChanged = false;
-        console.log('fetching');
+        this.adminDataService.addToRoles(resp);
       },
     });
   }
@@ -130,11 +127,11 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
   }
 
   onEditRole() {
-    const claims: string = this.roleForm.get('claims')?.value;
+    const claims: string = (this.roleForm.get('claims')?.value);
     const body: RoleUpdateRequest = {
       currentId: this.roleForm.get('id')?.value,
       name: this.roleForm.get('name')?.value,
-      claims: claims.split(','),
+      claims: claims.toString().split(','),
     };
     this.roleEditSubs = this.roleService.update(body).subscribe({
       complete: () => {
@@ -166,6 +163,7 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
       accept: () => {
         this.roleDeleteSubs = this.roleService.delete(body).subscribe({
           complete: () => {
+            this.adminDataService.removeRole(role);
             this.rolesChanged = true;
             this.messageService.add({
               severity: 'success',

@@ -143,7 +143,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         Validators.required,
       ]),
       phoneNumber: new FormControl('', [Validators.required]),
-      imageBase64String: new FormControl('', [Validators.required])
+      imageBase64String: new FormControl('')
     },
     { validators: this.passwordMatchingValidator }
   );
