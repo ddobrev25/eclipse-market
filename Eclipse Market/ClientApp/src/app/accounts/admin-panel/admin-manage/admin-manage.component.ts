@@ -38,7 +38,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   editSubs?: Subscription;
 
   accountDialog?: boolean;
-  accountForEdit: User | undefined;
+  accountForEdit: User | null = null;
 
   constructor(
     private userService: UserService,
@@ -50,6 +50,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.fetchUsers();
+    this.fetchRoles();
   }
 
   editForm: FormGroup = new FormGroup({
@@ -112,8 +113,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   fetchUsersFromService() {
     this.usersFetchSubs = this.userService.getAll().subscribe({
       next: (resp: UserGetAllResponse) => {
-        this.users = resp;
-        this.adminDataService.addToUsers(resp);
+        this.adminDataService.setUsers(resp);
         this.accountsChanged = false;
       },
       error: (err) => console.log(err),
@@ -123,11 +123,11 @@ export class AdminManageComponent implements OnInit, OnDestroy {
     this.roleGetSubs = this.adminDataService.roles.subscribe({
       next: (data: AdminDataRoles$) => {
         if (data) {
-          this.roleList = data;
+          this.roleList = Object.entries(data).map(([index, role]) => role);
         } else {
           this.roleFetchSubs = this.roleService.getAll().subscribe({
             next: (resp: RoleGetAllResponse) => {
-              this.adminDataService.addToRoles(resp);
+              this.adminDataService.setRoles(resp);
             },
           });
         }
@@ -136,20 +136,22 @@ export class AdminManageComponent implements OnInit, OnDestroy {
   }
 
   onSelectAccount(user: User) {
+    console.log(user)
     this.accountDialog = true;
     this.accountsChanged = true;
-    this.fetchRoles();
     this.accountForEdit = user;
   }
   onEditAccount() {
     if (!this.accountForEdit) return;
-
     let roleId;
     if (this.editForm.get('role')?.value === this.accountForEdit.roleName) {
       roleId = 0;
+      console.log(roleId);
     } else {
       roleId = this.editForm.get('role')?.value;
     }
+
+    console.log(roleId);
     const body: UserUpdateRequest = {
       id: this.accountForEdit.id!,
       firstName: this.editForm.get('firstName')?.value,
@@ -158,7 +160,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
       email: this.editForm.get('email')?.value,
       password: this.editForm.get('password')?.value,
       phoneNumber: this.editForm.get('phoneNumber')?.value,
-      roleId: roleId,
+      roleId: roleId === "" ? 0 : roleId,
       imageBase64String: 'need to fix',
     };
     this.resetEditForm();
@@ -170,6 +172,7 @@ export class AdminManageComponent implements OnInit, OnDestroy {
         this.accountsChanged = true;
         this.fetchUsers();
         this.accountDialog = false;
+        this.accountForEdit = null;
         this.messageService.add({
           severity: 'success',
           detail: 'Промените са запазени!',

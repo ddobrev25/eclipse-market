@@ -96,10 +96,10 @@
                     [placeholder]="accountForEdit?.phoneNumber">
             <label for="roles">Роля</label>
             <select class="form-select" formControlName="role">
+                <option value="" disabled selected>{{ accountForEdit?.roleName }}</option>
                 <option 
                     *ngFor="let role of roleList" 
-                    value="{{ role.id }}"
-                    [selected]="role.name === accountForEdit?.roleName">
+                    [value]="role.id">
                     {{role.name}}
                 </option>
             </select>

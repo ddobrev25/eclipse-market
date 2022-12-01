@@ -6,7 +6,10 @@ import {
   AdminDataRoles$,
   AdminDataUsers$,
 } from '../../models/admin.model';
-import { ListingCategoryGetAllResponse, ListingCategoryGetByIdResponse } from '../../models/listing-category.model';
+import {
+  ListingCategoryGetAllResponse,
+  ListingCategoryGetByIdResponse,
+} from '../../models/listing-category.model';
 import { RoleGetByIdResponse } from '../../models/role.model';
 import { User } from '../../models/user.model';
 
@@ -27,33 +30,41 @@ export class AdminDataService {
   get users(): Observable<AdminDataUsers$> {
     return this.users$.asObservable();
   }
-  addToUsers(newData: AdminDataUsers$) {
-    this.users$.next({ ...newData!, ...this.users$.value });
+  setUsers(newData: AdminDataUsers$) {
+    this.users$.next({ ...this.users$.value, ...newData! });
   }
   removeUser(userForDelete: User) {
-    this.users$.next(Object.values(this.users$.value!).filter(x => x.id !== userForDelete.id));
+    this.users$.next(
+      Object.values(this.users$.value!).filter((x) => x.id !== userForDelete.id)
+    );
   }
 
   get roles(): Observable<AdminDataRoles$> {
     return this.roles$.asObservable();
   }
-  addToRoles(newData: AdminDataRoles$) {
-    this.roles$.next({ ...newData!, ...this.roles$.value });
+  setRoles(newData: AdminDataRoles$) {
+    this.roles$.next({ ...this.roles$.value, ...newData! });
   }
   removeRole(roleForDelete: RoleGetByIdResponse) {
-    this.roles$.next(Object.values(this.roles$.value!).filter(x => x.id !== roleForDelete.id));
+    this.roles$.next(
+      Object.values(this.roles$.value!).filter((x) => x.id !== roleForDelete.id)
+    );
   }
 
   get categories(): Observable<AdminDataCategories$> {
     return this.listingCategories$.asObservable();
   }
-  addToCategories(newData: AdminDataCategories$) {
+  setCategories(newData: AdminDataCategories$) {
     this.listingCategories$.next({
-      ...newData!,
       ...this.listingCategories$.value,
+      ...newData!,
     });
   }
   removeCategory(categoryForDelete: ListingCategoryGetByIdResponse) {
-    this.listingCategories$.next(Object.values(this.listingCategories$.value!).filter(x => x.id !== categoryForDelete.id));
+    this.listingCategories$.next(
+      Object.values(this.listingCategories$.value!).filter(
+        (x) => x.id !== categoryForDelete.id
+      )
+    );
   }
 }

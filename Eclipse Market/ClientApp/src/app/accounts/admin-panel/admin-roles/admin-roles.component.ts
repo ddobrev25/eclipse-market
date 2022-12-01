@@ -78,7 +78,7 @@ export class AdminRolesComponent implements OnInit, OnDestroy {
     this.roleFetchSubs = this.roleService.getAll().subscribe({
       next: (resp: RoleGetAllResponse) => {
         this.rolesChanged = false;
-        this.adminDataService.addToRoles(resp);
+        this.adminDataService.setRoles(resp);
       },
     });
   }

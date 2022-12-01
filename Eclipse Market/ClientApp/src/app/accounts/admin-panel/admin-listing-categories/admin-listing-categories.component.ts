@@ -76,7 +76,7 @@ export class AdminListingCategoriesComponent implements OnInit {
     this.categoryFetchSubs = this.listingCategoryService.getAll().subscribe({
       next: (resp: ListingCategoryGetAllResponse) => {
         this.categoriesChanged = false;
-        this.adminDataService.addToCategories(resp);
+        this.adminDataService.setCategories(resp);
       },
     });
   }
