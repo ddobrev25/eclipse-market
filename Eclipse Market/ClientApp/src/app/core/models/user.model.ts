@@ -15,8 +15,8 @@ export type User = {
   phoneNumber?: string;
   roleName?: string;
   dateTimeCreated?: string;
-  //currentListings?: IListing[];
-  //bookmarkedListings?: IListing[];
+  currentListings?: ListingGetAllResponse;
+  bookmarkedListings?: ListingGetAllResponse;
   imageBase64String?: string;
   chats?: ChatGetAllResponse
 };
@@ -47,8 +47,8 @@ export type UserGetAllResponse = {
   phoneNumber: string;
   roleName: string;
   dateTimeCreated: string;
-  //currentListings?: IListing[];
-  //bookmarkedListings?: IListing[];
+  currentListings?: ListingGetAllResponse;
+  bookmarkedListings?: ListingGetAllResponse;
   imageBase64String: string;
 }[];
 

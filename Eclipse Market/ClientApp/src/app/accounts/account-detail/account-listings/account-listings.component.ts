@@ -19,13 +19,15 @@ import { DeleteRequest, User$ } from 'src/app/core/models/user.model';
   styleUrls: ['./account-listings.component.scss'],
 })
 export class AccountListingsComponent implements OnInit {
-  updateSubs: Subscription | undefined;
-  userListingsChangedSubs: Subscription | undefined;
-  deleteSubs: Subscription | undefined;
-  userListingSubs: Subscription | undefined;
+  updateSubs?: Subscription;
+  userListingsChangedSubs?: Subscription;
+  deleteSubs?: Subscription;
+  userListingGetSubs?: Subscription;
+  userListingFetchSubs?: Subscription;
 
   userListings?: ListingGetAllResponse;
   listingSelected: boolean = false;
+  listingsChanged: boolean = false;
 
   listingForUpdate?: ListingGetByIdResponse;
   listingUpdateDialog: boolean = false;
@@ -55,13 +57,33 @@ export class AccountListingsComponent implements OnInit {
   }
 
   fecthUserListings() {
-    //! Need to add if check if currentListing is undefined, Dani needs to add methods in the API first tho
-    this.userListingSubs = this.userDataService.userData.subscribe({
+    if (this.listingsChanged) 
+      this.fetchUserListingsFromService();
+    this.userListingGetSubs = this.userDataService.userData.subscribe({
       next: (data: User$) => {
-        if (!data) return;
-        this.userListings = data.currentListings;
+        if (data && data.currentListings)  {
+          console.log(data)
+          this.userListings = data.currentListings;
+        } else {
+          this.fetchUserListingsFromService();
+        }
       },
     });
+  }
+
+  fetchUserListingsFromService() {
+    this.userListingFetchSubs = this.listingService
+      .getCurrentListings()
+      .subscribe({
+        next: (resp: ListingGetAllResponse) => {
+          this.listingsChanged = false;
+          const newData = {
+            currentListings: resp,
+          };
+          this.userDataService.setUserData(newData);
+        },
+        error: (err) => console.log(err),
+      });
   }
 
   valueChange(textAreaValue: string) {
@@ -96,31 +118,16 @@ export class AccountListingsComponent implements OnInit {
         console.log(error);
       },
       complete: () => {
+        this.listingsChanged = true;
         this.listingUpdateDialog = false;
         this.messageService.add({
           severity: 'success',
           detail: 'Промените са запазени!',
           life: 3000,
         });
-        this.ReFetchUserListings();
         this.fecthUserListings();
       },
     });
-  }
-
-  ReFetchUserListings() {
-    //! Need to add logic but API does not have the methods I need yet
-    // this.userListingsChangedSubs = this.userService.getInfo().subscribe({
-    //   next: (userInfo: UserGetInfoResponse) => {
-    //     this.userDataService.setUserData(userInfo);
-    //     //need to fix
-    //     // this.userListings = userInfo.currentListings;
-    //     this.resetUpdateForm();
-    //   },
-    //   error: (error: any) => {
-    //     console.log(error);
-    //   },
-    // });
   }
 
   resetUpdateForm() {
@@ -152,12 +159,12 @@ export class AccountListingsComponent implements OnInit {
       accept: () => {
         this.deleteSubs = this.listingService.delete(body).subscribe({
           complete: () => {
+            this.listingsChanged = true;
             this.messageService.add({
               severity: 'success',
               detail: 'Обявате е изтрита успешно!',
               life: 3000,
             });
-            this.ReFetchUserListings();
             this.fecthUserListings();
           },
           error: (error: any) => {
@@ -171,6 +178,7 @@ export class AccountListingsComponent implements OnInit {
     this.updateSubs?.unsubscribe();
     this.userListingsChangedSubs?.unsubscribe();
     this.deleteSubs?.unsubscribe();
-    this.userListingSubs?.unsubscribe();
+    this.userListingGetSubs?.unsubscribe();
+    this.userListingFetchSubs?.unsubscribe();
   }
 }

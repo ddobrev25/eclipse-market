@@ -16,6 +16,7 @@ import {
   UserUpdateRequest,
 } from '../../models/user.model';
 import { Observable } from 'rxjs';
+import { ListingGetAllResponse } from '../../models/listing.model';
 
 @Injectable({
   providedIn: 'root',

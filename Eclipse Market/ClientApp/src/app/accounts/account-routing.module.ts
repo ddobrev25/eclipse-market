@@ -20,8 +20,12 @@ const routes: Routes = [
         { path: 'info', component: AccountInfoComponent },
         { path: 'messages', component: AccountMessagesComponent },
         { path: 'edit', component: AccountSettingsComponent },
-        { path: 'listings', component: AccountListingsComponent, canActivate: [AccountListingsGuardService] },
-        { path: 'listing/preview', component: AccountListingPreviewComponent, canActivate: [AccountListingsGuardService] },
+        { path: 'listings', component: AccountListingsComponent, canActivate: [
+            // AccountListingsGuardService
+        ] },
+        { path: 'listing/preview', component: AccountListingPreviewComponent, canActivate: [
+            // AccountListingsGuardService
+        ] },
         { path: 'bookmarks', component: AccountBookmarksComponent },
         { path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard], children: [
             { path: 'manage-accounts', component: AdminManageComponent },

@@ -19,4 +19,6 @@ export class UserDataService {
   setUserData(newData: User$) {
     this.user$.next({ ...this.user$.value!, ...newData! });
   }
+
+  
 }

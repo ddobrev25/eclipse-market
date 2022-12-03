@@ -35,26 +35,52 @@ export class ListingService {
     return this.http.get<ListingGetAllResponse>(`${this.url}/Listing/GetAll`);
   }
   getById(id: number) {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       Accept: 'application/json',
       SkipLoader: ``,
     });
-    let queryParams = new HttpParams().set('id', id);
+    const queryParams = new HttpParams().set('id', id);
     return this.http.get<ListingGetByIdWithAuthorResponse | ListingGetByIdResponse>(
       `${this.url}/Listing/GetById`,
       { headers: headers, params: queryParams }
     );
   }
   getRecommended(count: number) {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       Accept: 'application/json',
       SkipLoader: ``,
     });
-    let queryParams = new HttpParams().set('count', count);
+    const queryParams = new HttpParams().set('count', count);
     return this.http.get<ListingGetRecommendedResponse>(
       `${this.url}/Listing/GetRecommended`,
       { headers: headers, params: queryParams }
     );
+  }
+  getRecommendedByCategory(count: number, categoryId: number) {
+    const headers = new HttpHeaders({
+      Accept: 'application/json',
+      SkipLoader: ``,
+    });
+    const queryParams = new HttpParams()
+    queryParams.append('count', count);
+    queryParams.append('listingCategoryId', categoryId);
+
+    return this.http.get<ListingGetRecommendedResponse>(
+      `${this.url}/Listing/GetRecommended`,
+      { headers: headers, params: queryParams }
+    );
+  }
+  getCurrentListings() {
+    const headers = new HttpHeaders({
+      SkipLoader: ``
+    });
+    return this.http.get<ListingGetAllResponse>(`${this.url}/Listing/GetCurrentByUserId`, {headers: headers});
+  }
+  getBookmarkedListings() {
+    const headers = new HttpHeaders({
+      SkipLoader: ``
+    });
+    return this.http.get<ListingGetAllResponse>(`${this.url}/Listing/GetBookmarkedByUserId`, {headers: headers});
   }
 
   incrementViews(id: number) {
@@ -64,10 +90,10 @@ export class ListingService {
       return;
     }
 
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       SkipLoader: ``,
     });
-    let queryParams = new HttpParams().set('id', id);
+    const queryParams = new HttpParams().set('id', id);
     return this.http.put(`${this.url}/Listing/IncrementViews`, null, {
       params: queryParams,
       headers: headers,
@@ -79,7 +105,10 @@ export class ListingService {
   }
 
   update(body: ListingUpdateRequest) {
-    return this.http.put(`${this.url}/Listing/Update`, body);
+    const headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
+    return this.http.put(`${this.url}/Listing/Update`, body, {headers: headers});
   }
   delete(body: DeleteRequest) {
     return this.http.delete(`${this.url}/Listing/Delete`, { body: body });
