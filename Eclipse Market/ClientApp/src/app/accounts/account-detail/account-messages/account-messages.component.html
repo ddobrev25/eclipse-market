@@ -18,17 +18,18 @@
         <span>Please select a chat!</span>
       </div>
       <ng-container *ngIf="chatIsSelected">
-        <div  class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between">
-          
+        <div
+          class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between"
+        >
           <div class="message-input-container d-flex align-items-center">
-              <input
-                (keyup.enter)="onSendMessage()"
-                #msgInput
-                type="text"
-                name="message"
-                placeholder="Напишете съобщение..."
-                class="form-control"
-              />
+            <input
+              (keyup.enter)="onSendMessage()"
+              #msgInput
+              type="text"
+              name="message"
+              placeholder="Напишете съобщение..."
+              class="form-control"
+            />
             <button
               pButton
               pRipple
@@ -42,8 +43,18 @@
             class="d-flex flex-column message-box"
             *ngFor="let message of combinedMessages"
           >
-            <div [ngClass]="separateMessage(message) ? 'primary flex-row-reverse' : 'secondary'" class="d-flex">
-              <div class="message-wrapper d-flex flex-column" (contextmenu)="onRightClick($event)">
+            <div
+              [ngClass]="
+                separateMessage(message)
+                  ? 'primary flex-row-reverse'
+                  : 'secondary'
+              "
+              class="d-flex"
+            >
+              <div
+                class="message-wrapper d-flex flex-column"
+                (contextmenu)="onRightClick($event)"
+              >
                 <span
                   [ngClass]="
                     separateMessage(message) ? 'text-end' : 'text-start'
@@ -55,8 +66,23 @@
                   {{ message.body }}
                 </p>
               </div>
-              <div #editDialog class="edit-dialog" (mouseout)="test($event)">
-                edit dialog
+              <div #editDialog class="edit-dialog py-3" (mouseout)="test($event)">
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  label="Изтрий"
+                  class="p-button-danger p-button-sm"
+                  (click)="onDeleteMessage(message)"
+                ></button>
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  label="Редакция"
+                  class="p-button-success p-button-sm"
+                  (click)="onDeleteMessage(message)"
+                ></button>
               </div>
             </div>
 
@@ -68,9 +94,6 @@
               {{ message.timeSent }}
             </span>
           </div>
-
-
-
         </div>
       </ng-container>
     </div>

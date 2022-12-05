@@ -20,6 +20,7 @@ import { UserDataService } from 'src/app/core/services/store/user.data.service';
 })
 export class AccountMessagesComponent implements OnInit {
   @ViewChild('msgInput') msgInput!: ElementRef;
+  @ViewChild('container') container!: ElementRef;
   @ViewChild('editDialog') editDialog!: ElementRef;
 
   fetchSubs?: Subscription;
@@ -117,17 +118,21 @@ export class AccountMessagesComponent implements OnInit {
     }
   }
 
+  onDeleteMessage(message: Message) {
+
+  }
+
   onRightClick(event: any) {
     event.preventDefault();
-
     const dialogEl = event.target.parentNode.nextSibling;
     dialogEl.classList.toggle('visible');
   }
 
   test(event: any) {
-    const dialogEl = event.target.parentNode.nextSibling;
-    dialogEl.classList.toggle('visible');
+    event.target.classList.remove('visible');
   }
+
+
 
   ngOnDestroy() {
     this.chatIsSelected = false;

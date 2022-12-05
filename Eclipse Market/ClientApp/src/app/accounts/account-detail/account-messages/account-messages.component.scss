@@ -47,23 +47,27 @@
     padding: 12px;
   }
   .primary {
-    background-color: var(--blue-bg);
     margin-right: 0px;
     margin-left: auto;
     border-radius: 8px;
-    max-width: 50%;
+    max-width: 60%;
     word-break: break-all;
     cursor: pointer;
   }
+  .primary > .message-wrapper {
+    background-color: var(--blue-bg);
+  }
+
   .secondary {
-    background-color: var(--gray-blue-medium);
     margin-left: 0px;
     margin-right: auto;
     border-radius: 8px;
     word-break: break-all;
-    max-width: 50%;
+    max-width: 60%;
     cursor: pointer;
-
+  }
+  .secondary > .message-wrapper {
+    background-color: var(--gray-blue-medium);
   }
   .primary-date {
     font-size: 12px;
@@ -129,16 +133,15 @@
   }
 
   .edit-dialog {
-    width: 100px;
-    height: 100%;
-    background-color: red;
+    width: 180px;
     display: none;
-  }
-  .message-box {
-    height: 200px;
+    height: 80px;
   }
   .visible {
-    display: block;
+    display: flex;
+  }
+  .edit-dialog > button {
+    width: 50%;
   }
 
 }
