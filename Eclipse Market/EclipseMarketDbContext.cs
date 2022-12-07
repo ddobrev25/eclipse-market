@@ -65,6 +65,12 @@ namespace Eclipse_Market
                 .HasOne(uc => uc.Chat)
                 .WithMany(c => c.Participants)
                 .HasForeignKey(uc => uc.ChatId);
+
+
+/*            modelBuilder.Entity<Image>()
+                .HasOne(i => i.Listing)
+                .WithOne(ad => ad.)
+                .HasForeignKey<StudentAddress>(ad => ad.AddressOfStudentId);*/
         }
     }
 
