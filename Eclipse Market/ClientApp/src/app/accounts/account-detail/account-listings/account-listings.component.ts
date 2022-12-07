@@ -108,6 +108,7 @@ export class AccountListingsComponent implements OnInit {
       price: this.listingUpdateForm.get('price')?.value,
       location: this.listingUpdateForm.get('location')?.value,
       listingCategoryId: this.listingUpdateForm.get('listingCategoryId')?.value,
+      imageBase64String: ['']
     };
     if (body.price == null) {
       body.price = 0;

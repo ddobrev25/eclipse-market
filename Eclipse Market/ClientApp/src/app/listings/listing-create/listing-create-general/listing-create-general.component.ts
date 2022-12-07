@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ListingCategoryGetAllResponse } from 'src/app/core/models/listing-category.model';
 import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
 import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
 
-
 @Component({
   selector: 'app-listing-create-general',
   templateUrl: './listing-create-general.component.html',
-  styleUrls: ['./listing-create-general.component.scss']
+  styleUrls: ['./listing-create-general.component.scss'],
 })
 export class ListingCreateGeneralComponent implements OnInit {
   categorySubs?: Subscription;
@@ -20,25 +19,42 @@ export class ListingCreateGeneralComponent implements OnInit {
 
   auctionMode: boolean = false;
 
-
   createListingForm: FormGroup = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
-    description: new FormControl('', [Validators.required, Validators.maxLength(800), Validators.minLength(80)]),
+    title: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30),
+      Validators.minLength(3),
+    ]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(800),
+      Validators.minLength(80),
+    ]),
     location: new FormControl('', [Validators.required]),
-    listingCategoryId: new FormControl('', [Validators.required])
-  })
+    listingCategoryId: new FormControl('', [Validators.required]),
+    imageBase64String: new FormArray([])
+  });
 
   createAuctionForm: FormGroup = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]),
-    description: new FormControl('', [Validators.required, Validators.maxLength(800), Validators.minLength(80)]),
+    title: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30),
+      Validators.minLength(3),
+    ]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(800),
+      Validators.minLength(80),
+    ]),
     location: new FormControl('', [Validators.required]),
-    listingCategoryId: new FormControl('', [Validators.required])
-  })
+    listingCategoryId: new FormControl('', [Validators.required]),
+  });
 
-
-  constructor(private router: Router,
-              private listingComService: ListingCreateCommunicationService,
-              private listingCategoryService: ListingCategoryService) { }
+  constructor(
+    private router: Router,
+    private listingComService: ListingCreateCommunicationService,
+    private listingCategoryService: ListingCategoryService
+  ) {}
 
   ngOnInit() {
     this.fetchCategories();
@@ -48,10 +64,9 @@ export class ListingCreateGeneralComponent implements OnInit {
       next: (resp: ListingCategoryGetAllResponse) => {
         this.listingCategories = resp;
         this.listingCategoryService.categories = resp;
-      }
-    })
+      },
+    });
   }
-
 
   valueChange(textAreaValue: string) {
     this.remainingCharacters = 800 - textAreaValue.length;
@@ -59,7 +74,6 @@ export class ListingCreateGeneralComponent implements OnInit {
 
   onSelectListing() {
     this.auctionMode = false;
-
   }
   onSelectAuction() {
     this.auctionMode = true;
@@ -73,5 +87,4 @@ export class ListingCreateGeneralComponent implements OnInit {
   ngOnDestroy() {
     this.categorySubs?.unsubscribe();
   }
-
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ListingAddRequest } from 'src/app/core/models/listing.model';
@@ -26,33 +26,40 @@ export class ListingCreateGalleryComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private listingComService: ListingCreateCommunicationService
+    private listingComService: ListingCreateCommunicationService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.fetchFormData();
   }
 
-  createListingForm: FormGroup = new FormGroup({
-    title: new FormControl(''),
-    description: new FormControl(''),
-    price: new FormControl('', [Validators.required]),
-    location: new FormControl(''),
-    listingCategoryId: new FormControl(''),
-    primaryImageBase64String: new FormControl(''),
-    secondaryImageBase64String: new FormControl(''),
+  createListingForm: FormGroup = this.fb.group({
+    title: this.fb.control(''),
+    description: this.fb.control(''),
+    price: this.fb.control('', [Validators.required]),
+    location: this.fb.control(''),
+    listingCategoryId: this.fb.control(''),
+    imageBase64String: this.fb.array([])
   });
 
   fetchFormData() {
     this.fetchSubs = this.listingComService.listingCreateData.subscribe(
       (resp: ListingAddRequest) => {
+        //need to fix
+        const imageArr: string[] = [];
+        if(this.imageAsBase64) {
+          imageArr.push(this.imageAsBase64);
+        }
         this.createListingForm.patchValue({
           title: resp.title,
           description: resp.description,
           price: this.createListingForm.get('price')?.value,
           location: resp.location,
           listingCategoryId: resp.listingCategoryId,
-          imageBase64String: this.imageAsBase64,
+          imageBase64String: [
+            '3431'
+          ],
         });
       }
     );
@@ -61,8 +68,9 @@ export class ListingCreateGalleryComponent implements OnInit {
   previousPage() {
     this.router.navigate(['/listings/create/general']);
   }
-  nextPage() {
+nextPage() {
     this.fetchFormData();
+    
     this.listingComService.sendListingData(this.createListingForm.value);
     this.router.navigate(['/listings/create/preview']);
   }

@@ -34,6 +34,7 @@
                             name="title"
                             placeholder="Заглавие"
                             class="form-control"
+                            (keyup.enter)="focusableDescription.focus()"
                             formControlName="title">
                     <label for="title" >Заглавие</label>
                     <app-form-errors 
@@ -43,6 +44,8 @@
                 </div>
                 <div class="form-floating mb-4">
                     <textarea type="text"
+                            #focusableDescription
+                            (keyup.enter)="focusableLocation.focus()"
                             [(ngModel)]="textAreaValue" 
                             (ngModelChange)="valueChange(textAreaValue)"
                             id="descTextArea"
@@ -62,6 +65,8 @@
                 <div class="form-floating mb-4">
                     <input type="text"
                             name="location"
+                            #focusableLocation
+                            (keyup.enter)="focusableCategory.focus()"
                             placeholder="Локация"
                             class="form-control"
                             formControlName="location">
@@ -73,6 +78,7 @@
                 </div>
                 <div class="form-floating mb-4">
                     <select 
+                        #focusableCategory
                         class="form-select"
                         name="listingCategory"
                         formControlName="listingCategoryId">

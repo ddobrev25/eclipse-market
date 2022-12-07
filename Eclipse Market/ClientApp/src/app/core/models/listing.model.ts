@@ -131,8 +131,7 @@ export type ListingAddRequest = {
   price: number;
   location: string;
   listingCategoryId: number;
-  primaryImageBase64String: string;
-  secondaryImageBase64String: string[];
+  imageBase64String: string[];
 };
 
 export type ListingUpdateRequest = {
@@ -142,6 +141,5 @@ export type ListingUpdateRequest = {
   price: number;
   location: string;
   listingCategoryId: number;
-  //primaryImageBase64String: string;
-  //secondaryImageBase64String: string[];
+  imageBase64String: string[];
 };

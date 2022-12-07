@@ -14,14 +14,14 @@ export class ListingCreateCommunicationService {
             price: 0,
             location: '',
             listingCategoryId: 0,
-            primaryImageBase64String: '',
-            secondaryImageBase64String: ['']
+            imageBase64String: []
         }
     );
 
     constructor() {}
 
     sendListingData(data: ListingAddRequest) {
+        console.log(data)
         this.listingCreateData.next(data);
     }
 
