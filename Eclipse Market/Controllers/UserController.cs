@@ -454,6 +454,26 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
+        [HttpPut]
+        public ActionResult UpdateImage(UserImageUpdateRequest request)
+        {
+            var userId = _jwtService.GetUserIdFromToken(User);
+            var user = _dbContext.Users.Where(x => x.Id == userId).First();
+            var imageToChange = _dbContext.Images.Where(x => x.UserId == userId).FirstOrDefault();
+
+            if(imageToChange == null)
+            {
+                user.Image = new Image { Base64String = request.NewImageBase64String };
+                _dbContext.SaveChanges();
+                return Ok();
+            }
+
+            imageToChange.Base64String = request.NewImageBase64String;
+            _dbContext.SaveChanges();
+
+            return Ok();
+
+        }
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserDelete")]
         public ActionResult Delete(UserDeleteRequest request)
