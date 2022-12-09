@@ -7,21 +7,13 @@ import { ListingAddRequest } from "../models/listing.model";
     providedIn: 'root'
 })
 export class ListingCreateCommunicationService {
-    listingCreateData = new BehaviorSubject<ListingAddRequest>(
-        {
-            title: '',
-            description: '',
-            price: 0,
-            location: '',
-            listingCategoryId: 0,
-            primaryImageBase64String: '',
-            secondaryImageBase64String: ['']
-        }
-    );
+    listingCreateData: BehaviorSubject<ListingAddRequest | null>;
 
-    constructor() {}
+    constructor() {
+        this.listingCreateData = new BehaviorSubject<ListingAddRequest | null>(null);
+    }
 
-    sendListingData(data: ListingAddRequest) {
+    sendListingData(data: ListingAddRequest | null) {
         this.listingCreateData.next(data);
     }
 

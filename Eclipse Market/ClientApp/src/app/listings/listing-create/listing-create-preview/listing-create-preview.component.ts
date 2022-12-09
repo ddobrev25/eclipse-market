@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -17,19 +22,28 @@ export class ListingCreatePreviewComponent implements OnInit {
   listingAddSubs?: Subscription;
 
   listingForm: FormGroup = new FormGroup({
-    title: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    price: new FormControl('', [Validators.required]),
-    location: new FormControl('', [Validators.required]),
-    listingCategoryId: new FormControl('', [Validators.required]),
-    imageBase64String: new FormControl('', []),
+    title: this.fb.control('', [
+      Validators.required,
+      Validators.maxLength(30),
+      Validators.minLength(3),
+    ]),
+    description: this.fb.control('', [
+      Validators.required,
+      Validators.maxLength(800),
+      Validators.minLength(80),
+    ]),
+    price: this.fb.control('', [Validators.required]),
+    location: this.fb.control('', [Validators.required]),
+    listingCategoryId: this.fb.control('', [Validators.required]),
+    imageBase64String: this.fb.array(['']),
   });
 
   constructor(
     private listingComService: ListingCreateCommunicationService,
     private listingService: ListingService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -43,16 +57,13 @@ export class ListingCreatePreviewComponent implements OnInit {
       price: this.listingForm.get('price')?.value,
       location: this.listingForm.get('location')?.value,
       listingCategoryId: this.listingForm.get('listingCategoryId')?.value,
-      primaryImageBase64String:
-        this.listingForm.get('imageBase64String')?.value,
-      secondaryImageBase64String: this.listingForm
-        .get('imageBase64String')
-        ?.value.toArray(),
+      imageBase64String: this.listingForm.get('imageBase64String')?.value,
     };
 
     this.listingAddSubs = this.listingService.add(body).subscribe({
       complete: () => {
         // this.userService.loggedUser = undefined;
+        this.listingComService.sendListingData(null);
         this.messageService.add({
           key: 'tc',
           severity: 'success',
@@ -62,20 +73,24 @@ export class ListingCreatePreviewComponent implements OnInit {
         this.router.navigate(['/home']);
       },
       error: (err) => console.log(err),
+
     });
   }
 
   fetchFormData() {
     this.subs = this.listingComService.listingCreateData.subscribe(
-      (resp: ListingAddRequest) => {
+      (resp: ListingAddRequest | null) => {
+        if (!resp) {
+          this.router.navigate(['/listings/create/general']);
+          return;
+        }
         this.listingForm.patchValue({
           title: resp.title,
           description: resp.description,
           price: resp.price,
           location: resp.location,
           listingCategoryId: resp.listingCategoryId,
-          primaryImageBase64String: resp.primaryImageBase64String,
-          secondaryImageBase64String: resp.secondaryImageBase64String,
+          imageBase64String: resp.imageBase64String,
         });
       }
     );
