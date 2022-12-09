@@ -18,12 +18,11 @@ namespace Eclipse_Market.Models.DB
         [Required]
         public int AuthorId { get; set; }
         public User Author { get; set; }
-        public ICollection<Image> Images { get; set; }
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }
         public ICollection<ListingUser> UsersBookmarked { get; set; }
 
-
+        public List<Image> Images { get; set; }
 
         public int ListingCategoryId { get; set; }
         public ListingCategory ListingCategory { get; set; }

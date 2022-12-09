@@ -4,6 +4,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221207102157_AddedImageListingOTM")]
+    partial class AddedImageListingOTM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,15 +100,9 @@ namespace Eclipse_Market.Migrations
                     b.Property<int>("ListingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ListingId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Images");
                 });
@@ -271,6 +267,10 @@ namespace Eclipse_Market.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageBase64String")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -334,15 +334,7 @@ namespace Eclipse_Market.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eclipse_Market.Models.DB.User", "User")
-                        .WithOne("Image")
-                        .HasForeignKey("Eclipse_Market.Models.DB.Image", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Listing");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
@@ -488,9 +480,6 @@ namespace Eclipse_Market.Migrations
                     b.Navigation("Chats");
 
                     b.Navigation("CurrentListings");
-
-                    b.Navigation("Image")
-                        .IsRequired();
 
                     b.Navigation("Messages");
                 });
