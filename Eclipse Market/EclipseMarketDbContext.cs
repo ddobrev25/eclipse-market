@@ -17,8 +17,8 @@ namespace Eclipse_Market
         public DbSet<Chat> Chats { get; set; }
         public DbSet<UserChat> UserChats { get; set; }
         public DbSet<Auction> Auctions { get; set; }
-        public DbSet<Image> Images { get; set; }
-
+        public DbSet<UserImage> UserImages { get; set; }
+        public DbSet<ListingImage> ListingImages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //User - Listing one to many - Author has many listings, many listings have one author

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -53,7 +54,7 @@ namespace Eclipse_Market.Controllers
                     PhoneNumber = x.PhoneNumber,
                     RoleName = x.Role.Name,
                     DateTimeCreated = x.DateCreated.ToLongDateString(),
-                    ImageBase64String = x.Image.Base64String
+                    //ImageBase64String = x.Image.Base64String
                 }).ToList();
             foreach (var user in users)
             {
@@ -103,13 +104,20 @@ namespace Eclipse_Market.Controllers
                 return Forbid();
             }
 
-            var user = _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
+            var user = _dbContext.Users
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
 
             if(user == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
-
+            //var image = _dbContext.Images.Where(x => x.UserId == user.Id).FirstOrDefault();
+/*            string? imageBase64String = null;
+            if(image != null)
+            {
+                imageBase64String = image.Base64String;
+            }*/
             var response = new UserGetByIdResponse()
             {
                 Id = user.Id,
@@ -119,7 +127,7 @@ namespace Eclipse_Market.Controllers
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                ImageBase64String = user.Image.Base64String
+                //ImageBase64String = imageBase64String
             };
             return Ok(response);
         }
@@ -251,7 +259,7 @@ namespace Eclipse_Market.Controllers
                 PhoneNumber = request.PhoneNumber,
                 Role = _dbContext.Roles.First(x => x.Id == request.RoleId),
                 DateCreated = DateTime.UtcNow,
-                Image = new Image { Base64String = request.ImageBase64String}
+                //Image = new Image { Base64String = request.ImageBase64String}
             };
             _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();
@@ -454,7 +462,7 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-        [HttpPut]
+/*        [HttpPut]
         public ActionResult UpdateImage(UserImageUpdateRequest request)
         {
             var userId = _jwtService.GetUserIdFromToken(User);
@@ -463,7 +471,13 @@ namespace Eclipse_Market.Controllers
 
             if(imageToChange == null)
             {
-                user.Image = new Image { Base64String = request.NewImageBase64String };
+                Image imageToAdd = new Image
+                {
+                    Base64String = request.NewImageBase64String,
+                    User = user,
+                    UserId = userId
+                };
+                _dbContext.Images.Add(imageToAdd);
                 _dbContext.SaveChanges();
                 return Ok();
             }
@@ -473,7 +487,7 @@ namespace Eclipse_Market.Controllers
 
             return Ok();
 
-        }
+        }*/
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserDelete")]
         public ActionResult Delete(UserDeleteRequest request)
