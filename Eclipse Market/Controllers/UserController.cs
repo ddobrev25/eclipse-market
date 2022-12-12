@@ -260,6 +260,8 @@ namespace Eclipse_Market.Controllers
                 Role = _dbContext.Roles.First(x => x.Id == request.RoleId),
                 DateCreated = DateTime.UtcNow,
             };
+            //check later
+            _dbContext.SaveChanges();
             var addedUser = _dbContext.Users.Where(x => x.UserName == request.UserName).First();
 
             UserImage image = new UserImage
