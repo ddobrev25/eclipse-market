@@ -21,6 +21,7 @@ namespace Eclipse_Market
         public DbSet<ListingImage> ListingImages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             //User - Listing one to many - Author has many listings, many listings have one author
             modelBuilder.Entity<Listing>()
                .HasOne(l => l.Author)

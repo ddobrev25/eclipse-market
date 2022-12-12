@@ -54,7 +54,7 @@ namespace Eclipse_Market.Controllers
                     PhoneNumber = x.PhoneNumber,
                     RoleName = x.Role.Name,
                     DateTimeCreated = x.DateCreated.ToLongDateString(),
-                    //ImageBase64String = x.Image.Base64String
+                    ImageBase64String = x.Image.Base64String
                 }).ToList();
             foreach (var user in users)
             {
@@ -259,13 +259,18 @@ namespace Eclipse_Market.Controllers
                 PhoneNumber = request.PhoneNumber,
                 Role = _dbContext.Roles.First(x => x.Id == request.RoleId),
                 DateCreated = DateTime.UtcNow,
-                //Image = new Image { Base64String = request.ImageBase64String}
             };
-            _dbContext.Users.Add(userToAdd);
-            _dbContext.SaveChanges();
+            var addedUser = _dbContext.Users.Where(x => x.UserName == request.UserName).First();
 
+            UserImage image = new UserImage
+            {
+                Base64String = request.ImageBase64String,
+                User = addedUser,
+                UserId = addedUser.Id
+            };
+            _dbContext.UserImages.Add(image);
             _emailService.SendRegistartionEmail("givanov@eclipse.com", userToAdd);
-
+            _dbContext.SaveChanges();
             return Ok();
         }
         [HttpPost]
