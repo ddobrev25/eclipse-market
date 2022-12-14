@@ -112,12 +112,6 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
-            //var image = _dbContext.Images.Where(x => x.UserId == user.Id).FirstOrDefault();
-/*            string? imageBase64String = null;
-            if(image != null)
-            {
-                imageBase64String = image.Base64String;
-            }*/
             var response = new UserGetByIdResponse()
             {
                 Id = user.Id,

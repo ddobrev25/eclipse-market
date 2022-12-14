@@ -5,6 +5,7 @@ using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data.Entity;
 using System.Reflection;
 
@@ -123,7 +124,7 @@ namespace Eclipse_Market.Controllers
                 }
 
                 currentListingIds = _dbContext.Listings
-                    .Include(x => x.ListingCategoryId)
+                    //.Include(x => x.ListingCategoryId)
                     .Where(x => x.ListingCategoryId == listingCategoryId)
                     .Select(x => x.Id)
                     .ToList();
@@ -195,7 +196,7 @@ namespace Eclipse_Market.Controllers
             int id = _jwtService.GetUserIdFromToken(User);
 
             var response = _dbContext.ListingUsers
-                .Include(x => x.Listing)
+                //.Include(x => x.Listing)
                 .Where(x => x.UserId == id)
                 .Select(x => x.Listing)
                 .Select(x => new ListingGetAllResponse
@@ -226,7 +227,7 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest("Invalid listing category");
             }
-
+            List<ListingImage> imagesToAdd = new List<ListingImage>();
             Listing listingToAdd = new Listing
             {
                 Description = request.Description,
@@ -237,9 +238,21 @@ namespace Eclipse_Market.Controllers
                 Title = request.Title,
                 Price = request.Price,
                 Location = request.Location,
-                //PrimaryImageBase64String = request.ImageBase64String,
             };
+
             _dbContext.Listings.Add(listingToAdd);
+            _dbContext.SaveChanges();
+            int listingId = listingToAdd.Id;
+            foreach (string base64String in request.ImageBase64Strings)
+            {
+                imagesToAdd.Add(new ListingImage
+                {
+                    Base64String = base64String,
+                    Listing = listingToAdd,
+                    ListingId = listingId
+                });
+            }
+            _dbContext.ListingImages.AddRange(imagesToAdd);
             _dbContext.SaveChanges();
             return Ok();
         }
@@ -293,7 +306,7 @@ namespace Eclipse_Market.Controllers
         public ActionResult<int> IncrementViews(int id)
         {
             var listingForIncrement = _dbContext.Listings
-                .Include(x => x.AuthorId)
+                //.Include(x => x.AuthorId)
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 
