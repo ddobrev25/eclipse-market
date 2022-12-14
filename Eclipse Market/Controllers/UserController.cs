@@ -127,7 +127,7 @@ namespace Eclipse_Market.Controllers
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                //ImageBase64String = imageBase64String
+                ImageBase64String = user.Image.Base64String
             };
             return Ok(response);
         }
@@ -261,6 +261,7 @@ namespace Eclipse_Market.Controllers
                 DateCreated = DateTime.UtcNow,
             };
             //check later
+            _dbContext.Users.Add(userToAdd);
             _dbContext.SaveChanges();
             var addedUser = _dbContext.Users.Where(x => x.UserName == request.UserName).First();
 
@@ -469,22 +470,22 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-/*        [HttpPut]
+        [HttpPut]
         public ActionResult UpdateImage(UserImageUpdateRequest request)
         {
             var userId = _jwtService.GetUserIdFromToken(User);
             var user = _dbContext.Users.Where(x => x.Id == userId).First();
-            var imageToChange = _dbContext.Images.Where(x => x.UserId == userId).FirstOrDefault();
+            var imageToChange = _dbContext.UserImages.Where(x => x.UserId == userId).FirstOrDefault();
 
             if(imageToChange == null)
             {
-                Image imageToAdd = new Image
+                UserImage image = new UserImage
                 {
                     Base64String = request.NewImageBase64String,
                     User = user,
                     UserId = userId
                 };
-                _dbContext.Images.Add(imageToAdd);
+                _dbContext.UserImages.Add(image);
                 _dbContext.SaveChanges();
                 return Ok();
             }
@@ -494,7 +495,7 @@ namespace Eclipse_Market.Controllers
 
             return Ok();
 
-        }*/
+        }
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserDelete")]
         public ActionResult Delete(UserDeleteRequest request)
