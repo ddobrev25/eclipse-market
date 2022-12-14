@@ -26,7 +26,7 @@ export class ListingCreateGeneralComponent implements OnInit {
     price: this.fb.control(''),
     location: this.fb.control('', [Validators.required]),
     listingCategoryId: this.fb.control('', [Validators.required]),
-    imageBase64String: this.fb.array([''])
+    imageBase64Strings: this.fb.array([''])
   })
 
   createAuctionForm: FormGroup = new FormGroup({

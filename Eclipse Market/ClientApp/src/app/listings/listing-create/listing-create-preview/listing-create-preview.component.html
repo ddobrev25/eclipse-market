@@ -4,7 +4,7 @@
         <div class="col d-flex justify-content-center">
             <p-card [header]="listingForm.value.title" styleClass="preview-card">
                 <ng-template pTemplate="header">
-                    <img [src]="listingForm.value.imageBase64String" alt="Card">
+                    <img [src]="listingForm.value.imageBase64Strings[0]" alt="Card">
                 </ng-template>
                 <ng-template pTemplate="body">
                     <p>

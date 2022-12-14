@@ -35,7 +35,7 @@ export class ListingCreatePreviewComponent implements OnInit {
     price: this.fb.control('', [Validators.required]),
     location: this.fb.control('', [Validators.required]),
     listingCategoryId: this.fb.control('', [Validators.required]),
-    imageBase64String: this.fb.array(['']),
+    imageBase64Strings: this.fb.array(['']),
   });
 
   constructor(
@@ -57,12 +57,11 @@ export class ListingCreatePreviewComponent implements OnInit {
       price: this.listingForm.get('price')?.value,
       location: this.listingForm.get('location')?.value,
       listingCategoryId: this.listingForm.get('listingCategoryId')?.value,
-      imageBase64String: this.listingForm.get('imageBase64String')?.value,
+      imageBase64Strings: this.listingForm.get('imageBase64Strings')?.value,
     };
 
     this.listingAddSubs = this.listingService.add(body).subscribe({
       complete: () => {
-        // this.userService.loggedUser = undefined;
         this.listingComService.sendListingData(null);
         this.messageService.add({
           key: 'tc',
@@ -90,7 +89,7 @@ export class ListingCreatePreviewComponent implements OnInit {
           price: resp.price,
           location: resp.location,
           listingCategoryId: resp.listingCategoryId,
-          imageBase64String: resp.imageBase64String,
+          imageBase64Strings: resp.imageBase64Strings,
         });
       }
     );
@@ -102,6 +101,7 @@ export class ListingCreatePreviewComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.listingComService.sendListingData(null);
     this.subs?.unsubscribe();
     this.listingAddSubs?.unsubscribe();
   }

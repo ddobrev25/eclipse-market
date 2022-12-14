@@ -20,8 +20,8 @@ export class ListingCreateGalleryComponent implements OnInit {
   fetchSubs?: Subscription;
   images: string[] = [];
 
+
   getBase64(event: any) {
-    console.log(this.images);
     let file = event.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -29,6 +29,7 @@ export class ListingCreateGalleryComponent implements OnInit {
       if (reader.result) this.images.push(reader.result.toString());
     };
     reader.onerror = (error) => console.log('Error: ', error);
+    event.target.value = '';
   }
 
   constructor(
@@ -40,7 +41,6 @@ export class ListingCreateGalleryComponent implements OnInit {
   ngOnInit(): void {
     this.fetchFormData();
     this.images = [];
-    console.log(this.images);
   }
 
   createListingForm: FormGroup = new FormGroup({
@@ -57,7 +57,7 @@ export class ListingCreateGalleryComponent implements OnInit {
     price: this.fb.control('', [Validators.required]),
     location: this.fb.control('', [Validators.required]),
     listingCategoryId: this.fb.control('', [Validators.required]),
-    imageBase64String: this.fb.array([''], [Validators.required]),
+    imageBase64Strings: this.fb.array([''], [Validators.required]),
   });
 
   fetchFormData() {
@@ -67,14 +67,14 @@ export class ListingCreateGalleryComponent implements OnInit {
           this.router.navigate(['/listings/create/general']);
           return;
         }
-        this.images = resp.imageBase64String;
+        this.images = resp.imageBase64Strings;
         this.createListingForm.patchValue({
           title: resp.title,
           description: resp.description,
           price: this.createListingForm.get('price')?.value,
           location: resp.location,
           listingCategoryId: resp.listingCategoryId,
-          imageBase64String: resp.imageBase64String,
+          imageBase64Strings: resp.imageBase64Strings,
         });
       }
     );
@@ -82,7 +82,7 @@ export class ListingCreateGalleryComponent implements OnInit {
 
   async setImages() {
     const imagesControl: FormArray = this.createListingForm.get(
-      'imageBase64String'
+      'imageBase64Strings'
     ) as FormArray;
     imagesControl.clear();
     this.images.filter((image) => image);
@@ -99,6 +99,17 @@ export class ListingCreateGalleryComponent implements OnInit {
     this.listingComService.sendListingData(this.createListingForm.value);
     this.router.navigate(['/listings/create/preview']);
   }
+
+
+  onMouseOver(event: any) {
+    event.target.children[1].classList.toggle('visible');
+  }
+  onRemoveImage(image: string) {
+    const index = this.images.indexOf(image);
+    this.images.splice(index, 1);
+  }
+
+
 
   ngOnDestroy() {
     this.fetchSubs?.unsubscribe();

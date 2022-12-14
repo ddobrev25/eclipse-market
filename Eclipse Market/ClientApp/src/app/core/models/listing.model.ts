@@ -63,7 +63,7 @@ export type ListingAddRequest = {
   price: number;
   location: string;
   listingCategoryId: number;
-  imageBase64String: string[];
+  imageBase64Strings: string[];
 };
 
 export type ListingUpdateRequest = {
