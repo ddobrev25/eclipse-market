@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
@@ -11,6 +11,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./account-listing-preview.component.scss'],
 })
 export class AccountListingPreviewComponent implements OnInit {
+  @ViewChild('img') imgEl?: ElementRef;
+
+  currentImage?: string;
+  selectedListingImages: string[] = [];
   listingSubs?: Subscription;
   selectedListing?: ListingGetByIdWithAuthorResponse;
 
@@ -48,6 +52,52 @@ export class AccountListingPreviewComponent implements OnInit {
 
   valueChange(textAreaValue: string) {
     this.remainingCharacters = 200 - textAreaValue.length;
+  }
+  onShowImageOverlay(event: any) {
+    if(this.selectedListingImages.length <= 1) {
+      const smh = event.target.children[1].children[0].children;
+      Object.entries(smh).forEach((el: any) => {
+        el[1].style.opacity = 0.5;
+      });
+    }
+    event.target.children[0].classList.toggle('show-overlay')
+  }
+  onNextImage(event: any) {
+    const currentImage = this.imgEl?.nativeElement.currentSrc;
+    const currentImageIndex = this.selectedListingImages.indexOf(currentImage);
+    const nextImage = this.selectedListingImages[currentImageIndex + 1];
+    if(currentImageIndex >= this.selectedListingImages.length - 1) {
+      this.currentImage = currentImage;
+      return;
+    }
+    event.target.parentElement.children[0].style.opacity = 1;
+    if(currentImageIndex + 1 === this.selectedListingImages.length - 1) {
+      event.target.style.opacity = 0.5;
+      this.currentImage = nextImage;
+      return;
+    } else {
+      event.target.style.opacity = 1;
+      this.currentImage = nextImage;
+    }
+  }
+
+
+  onPreviousImage(event: any) {
+    const currentImage = this.imgEl?.nativeElement.currentSrc;
+    const currentImageIndex = this.selectedListingImages.indexOf(currentImage);
+    const previousImage = this.selectedListingImages[currentImageIndex - 1];
+    if(currentImageIndex - 1 < 0) {
+      this.currentImage = currentImage;
+      return;
+    }
+    event.target.nextSibling.style.opacity = 1;
+    if(currentImageIndex - 1 === 0) {
+      event.target.style.opacity = 0.5;
+      this.currentImage = previousImage;
+      return;
+    }
+    event.target.style.opacity = 1;
+    this.currentImage = previousImage;
   }
 
   ngOnDestroy() {

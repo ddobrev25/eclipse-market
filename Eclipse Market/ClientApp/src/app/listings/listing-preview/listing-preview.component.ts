@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { CursorError } from '@angular/compiler/src/ml_parser/lexer';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -16,6 +17,10 @@ import { UserListingsService } from 'src/app/core/services/user-listings.service
   styleUrls: ['./listing-preview.component.scss'],
 })
 export class ListingPreviewComponent implements OnInit {
+  @ViewChild('img') imgEl?: ElementRef;
+
+  currentImage?: string;
+  selectedListingImages: string[] = [];
   selectedListing?: ListingGetByIdWithAuthorResponse;
   selectedListingId: number = 0;
   listingSubs?: Subscription;
@@ -62,6 +67,7 @@ export class ListingPreviewComponent implements OnInit {
         next: (resp: ListingGetByIdWithAuthorResponse | ListingGetByIdResponse) => {
           if('authorId' in resp) return;
           this.selectedListing = resp;
+          this.selectedListingImages = resp.imageBase64String;
           this.incrementViews(this.selectedListingId);
         },
         error: (err) => console.log(err),
@@ -109,6 +115,53 @@ export class ListingPreviewComponent implements OnInit {
       },
       error: (err: any) => console.log(err),
     });
+  }
+
+  onShowImageOverlay(event: any) {
+    if(this.selectedListingImages.length <= 1) {
+      const smh = event.target.children[1].children[0].children;
+      Object.entries(smh).forEach((el: any) => {
+        el[1].style.opacity = 0.5;
+      });
+    }
+    event.target.children[0].classList.toggle('show-overlay')
+  }
+  onNextImage(event: any) {
+    const currentImage = this.imgEl?.nativeElement.currentSrc;
+    const currentImageIndex = this.selectedListingImages.indexOf(currentImage);
+    const nextImage = this.selectedListingImages[currentImageIndex + 1];
+    if(currentImageIndex >= this.selectedListingImages.length - 1) {
+      this.currentImage = currentImage;
+      return;
+    }
+    event.target.parentElement.children[0].style.opacity = 1;
+    if(currentImageIndex + 1 === this.selectedListingImages.length - 1) {
+      event.target.style.opacity = 0.5;
+      this.currentImage = nextImage;
+      return;
+    } else {
+      event.target.style.opacity = 1;
+      this.currentImage = nextImage;
+    }
+  }
+
+
+  onPreviousImage(event: any) {
+    const currentImage = this.imgEl?.nativeElement.currentSrc;
+    const currentImageIndex = this.selectedListingImages.indexOf(currentImage);
+    const previousImage = this.selectedListingImages[currentImageIndex - 1];
+    if(currentImageIndex - 1 < 0) {
+      this.currentImage = currentImage;
+      return;
+    }
+    event.target.nextSibling.style.opacity = 1;
+    if(currentImageIndex - 1 === 0) {
+      event.target.style.opacity = 0.5;
+      this.currentImage = previousImage;
+      return;
+    }
+    event.target.style.opacity = 1;
+    this.currentImage = previousImage;
   }
 
   ngOnDestroy() {

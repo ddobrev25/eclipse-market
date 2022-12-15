@@ -1,36 +1,37 @@
 <div class="container-fluid my-4 py-4" id="main-container">
-    <div class="row">
-        <div class="col-md-7 col-12 my-3 p-0 px-4">
-            <div class="img-container">
-                <img id="listing-img" alt="Card" [src]="selectedListing?.imageBase64String">
-            </div>
-
-
-        </div>
-        <div class="col-md-5 col-12 my-3 p-0 pe-md-4 px-md-0 px-4">
-            <div class="info-container w-100 h-100 p-3 d-flex flex-column">
-                <div class="category">
-                    <span>Listing Category</span> 
-                </div>
-                <div class="title pt-1">
-                    <span>{{ selectedListing?.title }}</span>
-                </div>
-                <div class="description pt-3">
-                    <p>
-                        {{ selectedListing?.description }}
-                    </p>
-                </div>
-
-                <div class="footer d-flex justify-content-end mt-auto mb-2">
-                    <div class="price p-0 d-flex flex-column">
-                       <span>Цена: {{ selectedListing?.price }} лв</span> 
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end mt-auto">
-                    <span class="views">Преглеждания:  {{ selectedListing?.views }}</span>
-                </div>
-            </div>
-            
-        </div>
+  <div class="row">
+    <div class="col-md-7 col-12 my-3 p-0 px-4">
+      <div
+        class="img-container"
+        (mouseenter)="onShowImageOverlay($event)"
+        (mouseleave)="onShowImageOverlay($event)"
+      >
+        <img id="listing-img" alt="Card" [src]="currentImage" />
+      </div>
     </div>
+    <div class="col-md-5 col-12 my-3 p-0 pe-md-4 px-md-0 px-4">
+      <div class="info-container w-100 h-100 p-3 d-flex flex-column">
+        <div class="category">
+          <span>Listing Category</span>
+        </div>
+        <div class="title pt-1">
+          <span>{{ selectedListing?.title }}</span>
+        </div>
+        <div class="description pt-3">
+          <p>
+            {{ selectedListing?.description }}
+          </p>
+        </div>
+
+        <div class="footer d-flex justify-content-end mt-auto mb-2">
+          <div class="price p-0 d-flex flex-column">
+            <span>Цена: {{ selectedListing?.price }} лв</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-auto">
+          <span class="views">Преглеждания: {{ selectedListing?.views }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
