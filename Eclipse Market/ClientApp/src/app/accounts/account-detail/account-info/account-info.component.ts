@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import {
   User,
   User$,
   UserGetInfoResponse,
+  UserUpdateImageRequest,
 } from 'src/app/core/models/user.model';
 import { UserService } from 'src/app/core/services/http/user.service';
 import { UserDataService } from 'src/app/core/services/store/user.data.service';
@@ -18,11 +20,15 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   userInfo?: User;
   loadUserSubs?: Subscription;
   fetchUserInfoSubs?: Subscription;
+  updateImgSubs? : Subscription;
+  showUploadImageDialog: boolean = false;
+  userDataChanged: boolean = false;
 
   constructor(
     private userService: UserService,
     private userDataService: UserDataService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +36,16 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   }
 
   loadUserInfo() {
+    if(this.userDataChanged) {
+      this.loadUserSubs = this.userService.getInfo().subscribe({
+        next: (resp: UserGetInfoResponse) => {
+          this.userDataService.setUserData(resp);
+          this.userInfo = resp;
+          this.userDataChanged = false;
+          return;
+        },
+      });
+    }
     this.fetchUserInfoSubs = this.userDataService.userData.subscribe({
       next: (data: User$) => {
         if (data && data.firstName) {
@@ -45,6 +61,42 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
       },
       error: (err) => console.log(err),
     });
+  }
+
+  onToggleUploadImageOverlay(event: any) {
+    event.target.children[1].classList.toggle('visible')
+  }
+  onShowUploadImageDialog() {
+    this.showUploadImageDialog = !this.showUploadImageDialog;
+  }
+  onUploadImage(event: any) {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (reader.result) this.onUpdateImage((reader.result).toString());
+    };
+    reader.onerror = (error) => console.log('Error: ', error);
+    event.target.value = '';
+  }
+
+  onUpdateImage(image: string) {
+    const body: UserUpdateImageRequest = {
+      newImageBase64String: image
+    }
+    this.updateImgSubs = this.userService.updateImage(body).subscribe({
+      complete: () => {
+        this.userDataChanged = true;
+        this.loadUserInfo();
+        this.messageService.add({
+          key: 'tc',
+          severity: 'success',
+          detail: 'Профилната снимка е променена успешно!',
+          life: 3000,
+        });
+      },
+      error: err => console.log(err)
+    })
   }
 
   onLogOut() {

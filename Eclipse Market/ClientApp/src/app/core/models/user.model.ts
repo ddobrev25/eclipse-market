@@ -100,7 +100,9 @@ export type UserChangePassword = {
   currentPassword: string;
   newPassword: string;
 };
-
+export type UserUpdateImageRequest  = {
+  newImageBase64String: string;
+}
 export type AuthorGetResponse = {
   firstName: string;
   lastName: string;

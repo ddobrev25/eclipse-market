@@ -13,10 +13,10 @@ import {
   UserLoginRequest,
   UserLoginResponse,
   UserRegisterRequest,
+  UserUpdateImageRequest,
   UserUpdateRequest,
 } from '../../models/user.model';
 import { Observable } from 'rxjs';
-import { ListingGetAllResponse } from '../../models/listing.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,15 +24,13 @@ import { ListingGetAllResponse } from '../../models/listing.model';
 export class UserService {
   private httpWithoutInterceptor: HttpClient;
   private url = 'http://localhost:5001';
-  // loggedUser?: UserGetInfoResponse;
-  // loggedUser?: IUser;
 
   constructor(private http: HttpClient, private httpBackend: HttpBackend) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 
   logIn(body: UserLoginRequest): Observable<any> {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       Accept: 'application/json',
     });
     return this.http.post<UserLoginResponse>(`${this.url}/User/Login`, body, {
@@ -42,7 +40,7 @@ export class UserService {
   }
 
   register(body: UserRegisterRequest) {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       Accept: 'application/json',
     });
 
@@ -53,7 +51,7 @@ export class UserService {
   }
 
   getAll() {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       SkipLoader: ``,
     });
     return this.http.get<UserGetAllResponse>(`${this.url}/User/GetAll`, {
@@ -61,12 +59,12 @@ export class UserService {
     });
   }
   getInfo(id?: number) {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       Accept: 'application/json',
       SkipLoader: ``,
     });
     if (id) {
-      let queryParams = new HttpParams().set('id', id);
+      const queryParams = new HttpParams().set('id', id);
       return this.http.get<UserGetInfoResponse>(`${this.url}/User/GetById`, {
         headers: headers,
         params: queryParams,
@@ -78,7 +76,7 @@ export class UserService {
   }
 
   update(body: UserUpdateRequest) {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       Accept: 'application/json',
     });
     return this.http.put(`${this.url}/User/Update`, body, {
@@ -88,7 +86,7 @@ export class UserService {
   }
 
   changePassword(body: UserChangePassword) {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       Accept: 'application/json',
     });
     return this.http.put(`${this.url}/User/ChangePassword`, body, {
@@ -96,8 +94,17 @@ export class UserService {
     });
   }
 
+  updateImage(body: UserUpdateImageRequest) {
+    const headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
+    return this.http.put(`${this.url}/User/UpdateImage`, body, {
+      headers: headers,
+    });
+  }
+
   delete(body: DeleteRequest) {
-    var headers = new HttpHeaders({
+    const headers = new HttpHeaders({
       'Content-type': 'application/json',
       SkipLoader: ``,
     });

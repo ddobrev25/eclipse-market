@@ -105,6 +105,7 @@ namespace Eclipse_Market.Controllers
             }
 
             var user = _dbContext.Users
+                .Include(x => x.Image)
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 

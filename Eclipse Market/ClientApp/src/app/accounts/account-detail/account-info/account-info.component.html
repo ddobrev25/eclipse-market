@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
   <div class="row">
     <div class="col d-flex justify-content-center">
       <h4>Информация за акаунта</h4>
@@ -51,6 +51,43 @@
         class="p-button-danger mt-3"
         (click)="onLogOut()"
       ></button>
+    </div>
+  </div>
+</div> -->
+
+<div class="container-fluid bg-dark">
+  <div class="row py-3 px-5">
+    <div
+      class="col-xl-2 col-lg-3 col-md-4 col-sm-5 img-container p-1"
+      (mouseenter)="onToggleUploadImageOverlay($event)"
+      (mouseleave)="onToggleUploadImageOverlay($event)"
+    >
+      <img [src]="userInfo?.imageBase64String" alt="no image" />
+      <div class="upload-image-overlay">
+        <input
+          id="file-upload"
+          type="file"
+          accept="image/png, image/jpeg"
+          class="form-control"
+          multiple=""
+          class="imgInput"
+          hidden
+          (change)="onUploadImage($event)"
+        />
+        <label
+          for="file-upload"
+          class="d-flex flex-column justify-content-center align-items-center h-100"
+        >
+          <i class="pi pi-upload"></i>
+          <span>Смени снимка</span>
+        </label>
+      </div>
+    </div>
+    <div class="col-1">
+
+    </div>
+    <div class="col-xl-9 col-lg-8 col-md-7 col-sm-6 name-container">
+      <span class="full-name h-100 d-flex align-items-center">{{ userInfo?.firstName + " " + userInfo?.lastName! }}</span>
     </div>
   </div>
 </div>

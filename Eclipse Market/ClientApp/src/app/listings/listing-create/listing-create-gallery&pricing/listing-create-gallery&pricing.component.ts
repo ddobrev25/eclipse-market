@@ -20,18 +20,6 @@ export class ListingCreateGalleryComponent implements OnInit {
   fetchSubs?: Subscription;
   images: string[] = [];
 
-
-  getBase64(event: any) {
-    let file = event.target.files[0];
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      if (reader.result) this.images.push(reader.result.toString());
-    };
-    reader.onerror = (error) => console.log('Error: ', error);
-    event.target.value = '';
-  }
-
   constructor(
     private router: Router,
     private listingComService: ListingCreateCommunicationService,
@@ -78,6 +66,16 @@ export class ListingCreateGalleryComponent implements OnInit {
         });
       }
     );
+  }
+  getBase64(event: any) {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (reader.result) this.images.push(reader.result.toString());
+    };
+    reader.onerror = (error) => console.log('Error: ', error);
+    event.target.value = '';
   }
 
   async setImages() {
