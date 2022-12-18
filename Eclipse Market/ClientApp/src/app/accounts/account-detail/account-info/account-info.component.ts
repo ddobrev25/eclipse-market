@@ -21,7 +21,6 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   loadUserSubs?: Subscription;
   fetchUserInfoSubs?: Subscription;
   updateImgSubs? : Subscription;
-  showUploadImageDialog: boolean = false;
   userDataChanged: boolean = false;
 
   constructor(
@@ -65,9 +64,6 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
 
   onToggleUploadImageOverlay(event: any) {
     event.target.children[1].classList.toggle('visible')
-  }
-  onShowUploadImageDialog() {
-    this.showUploadImageDialog = !this.showUploadImageDialog;
   }
   onUploadImage(event: any) {
     let file = event.target.files[0];

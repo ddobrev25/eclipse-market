@@ -59,20 +59,13 @@ export class UserService {
     });
   }
   getInfo(id?: number) {
-    const headers = new HttpHeaders({
-      Accept: 'application/json',
-      SkipLoader: ``,
-    });
     if (id) {
       const queryParams = new HttpParams().set('id', id);
       return this.http.get<UserGetInfoResponse>(`${this.url}/User/GetById`, {
-        headers: headers,
         params: queryParams,
       });
     }
-    return this.http.get<UserGetInfoResponse>(`${this.url}/User/GetById`, {
-      headers: headers,
-    });
+    return this.http.get<UserGetInfoResponse>(`${this.url}/User/GetById`);
   }
 
   update(body: UserUpdateRequest) {

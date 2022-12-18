@@ -55,39 +55,111 @@
   </div>
 </div> -->
 
-<div class="container-fluid bg-dark">
-  <div class="row py-3 px-5">
+<div class="container-fluid px-5 py-4 mt-5">
+  <div class="row my-4">
     <div
-      class="col-xl-2 col-lg-3 col-md-4 col-sm-5 img-container p-1"
-      (mouseenter)="onToggleUploadImageOverlay($event)"
-      (mouseleave)="onToggleUploadImageOverlay($event)"
+      class="col-12 col-md-4 p-3 img-container d-flex justify-content-between"
     >
-      <img [src]="userInfo?.imageBase64String" alt="no image" />
-      <div class="upload-image-overlay">
+      <div
+        class="wrapper w-75"
+        (mouseenter)="onToggleUploadImageOverlay($event)"
+        (mouseleave)="onToggleUploadImageOverlay($event)"
+      >
+        <img [src]="userInfo?.imageBase64String" alt="no image" />
+        <div class="upload-image-overlay">
+          <input
+            id="file-upload"
+            type="file"
+            accept="image/png, image/jpeg"
+            class="form-control"
+            multiple=""
+            class="imgInput"
+            hidden
+            (change)="onUploadImage($event)"
+          />
+          <label
+            for="file-upload"
+            class="d-flex flex-column justify-content-center align-items-center h-100"
+          >
+            <i class="pi pi-upload"></i>
+            <span class="text-center">Смени снимка</span>
+          </label>
+        </div>
+      </div>
+
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Изход"
+        class="p-button-danger mt-3 align-self-end"
+        (click)="onLogOut()"
+      ></button>
+    </div>
+    <div class="col-12 col-md-8 p-0 ps-md-3 mt-2 mt-md-0">
+      <div
+        class="info-container h-100 p-3 d-flex flex-column justify-content-center"
+      >
+        <label for="userName" class="my-1">Потребителско име</label>
         <input
-          id="file-upload"
-          type="file"
-          accept="image/png, image/jpeg"
-          class="form-control"
-          multiple=""
-          class="imgInput"
-          hidden
-          (change)="onUploadImage($event)"
+          type="text"
+          name="userName"
+          [placeholder]="userInfo?.userName !== null ? userInfo?.userName : ''"
+          class="form-control mb-4"
         />
-        <label
-          for="file-upload"
-          class="d-flex flex-column justify-content-center align-items-center h-100"
-        >
-          <i class="pi pi-upload"></i>
-          <span>Смени снимка</span>
-        </label>
       </div>
     </div>
-    <div class="col-1">
+  </div>
 
+  <div class="row my-4">
+    <div class="col-12 col-md-6 p-0 pe-md-3">
+      <div class="info-container p-3">
+        <label for="firstName" class="my-1">Име</label>
+        <input
+          type="text"
+          name="firstName"
+          class="form-control mb-4"
+          [placeholder]="
+            userInfo?.firstName !== null ? userInfo?.firstName : ''
+          "
+        />
+      </div>
     </div>
-    <div class="col-xl-9 col-lg-8 col-md-7 col-sm-6 name-container">
-      <span class="full-name h-100 d-flex align-items-center">{{ userInfo?.firstName + " " + userInfo?.lastName! }}</span>
+    <div class="col-12 col-md-6 p-0 ps-md-3 mt-2 mt-md-0">
+      <div class="info-container p-3">
+        <label for="lastName" class="my-1">Фамилия</label>
+        <input
+          type="text"
+          name="lastName"
+          [placeholder]="userInfo?.lastName !== null ? userInfo?.lastName : ''"
+          class="form-control mb-4"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-4">
+    <div class="col-12 col-md-6 p-0 pe-md-3">
+      <div class="info-container p-3">
+        <label for="userName" class="my-1">Потребителско име</label>
+        <input
+          type="text"
+          name="userName"
+          [placeholder]="userInfo?.userName !== null ? userInfo?.userName : ''"
+          class="form-control mb-4"
+        />
+      </div>
+    </div>
+    <div class="col-12 col-md-6 p-0 ps-md-3 mt-2 mt-md-0">
+      <div class="info-container p-3">
+        <label for="email" class="my-1">Имейл адрес</label>
+        <input
+          type="text"
+          name="email"
+          [placeholder]="userInfo?.email !== null ? userInfo?.email : ''"
+          class="form-control mb-4"
+        />
+      </div>
     </div>
   </div>
 </div>
