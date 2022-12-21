@@ -33,7 +33,6 @@ namespace Eclipse_Market.Services
             }
             return userRoleName;
         }
-
         public List<string> GetUserClaimsFromToken(ClaimsPrincipal user)
         {
             var claims = user.FindAll("RoleClaim")?.ToList();

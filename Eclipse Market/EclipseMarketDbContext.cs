@@ -27,9 +27,11 @@ namespace Eclipse_Market
                .HasOne(l => l.Author)
                .WithMany(u => u.CurrentListings);
 
-/*            modelBuilder.Entity<Message>()
-              .HasOne(m => m.Chat)
-              .WithMany(ch => ch.Messages);*/
+
+            //Listing - ListingImage one to many
+            modelBuilder.Entity<ListingImage>()
+               .HasOne(li => li.Listing)
+               .WithMany(l => l.Images);
 
             //User - Listing many to many - Many listings can be bookmarked by many users
             modelBuilder.Entity<ListingUser>()
