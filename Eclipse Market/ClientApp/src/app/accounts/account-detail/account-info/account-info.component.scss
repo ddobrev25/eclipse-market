@@ -1,6 +1,6 @@
 :host::ng-deep {
   .wrapper > img {
-    width: 75%;
+    width: 100%;
     aspect-ratio: 1/1;
     border-radius: 50%;
     z-index: 1;
@@ -15,7 +15,7 @@
   }
   .upload-image-overlay {
     background-color: rgba(0, 0, 0, 0.575);
-    width: 75%;
+    width: 100%;
     aspect-ratio: 1/1;
     position: absolute;
     top: 0;

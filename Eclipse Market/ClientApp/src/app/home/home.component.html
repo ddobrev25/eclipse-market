@@ -13,6 +13,7 @@
             class="col p-0 d-flex flex-wrap justify-content-center">
             <div 
                 class="m-2"
+                (click)="onGetRecommendedByCategoryId(category.id)"
                 *ngFor="let category of categoryList">
                 <p-chip 
                 class="category-container"

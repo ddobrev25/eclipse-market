@@ -61,9 +61,11 @@ export class ListingService {
       Accept: 'application/json',
       SkipLoader: ``,
     });
-    const queryParams = new HttpParams()
-    queryParams.append('count', count);
-    queryParams.append('listingCategoryId', categoryId);
+    const queryParamsObj = {
+      count: count,
+      listingCategoryId: categoryId
+   };
+   const queryParams = new HttpParams({ fromObject: queryParamsObj });
 
     return this.http.get<ListingGetRecommendedResponse>(
       `${this.url}/Listing/GetRecommended`,
