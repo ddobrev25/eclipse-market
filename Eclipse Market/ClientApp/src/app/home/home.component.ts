@@ -18,6 +18,8 @@ export class HomeComponent implements OnInit {
 
   randomListingList?: ListingGetRecommendedResponse;
   randomListingGetSubs?: Subscription;
+  randomListingByCategoryGetSubs?: Subscription;
+
 
 
   constructor(private listingCategoryService: ListingCategoryService,
@@ -54,6 +56,15 @@ export class HomeComponent implements OnInit {
       }
     })
   }
+  onGetRecommendedByCategoryId(categoryId: number) {
+    this.randomListingByCategoryGetSubs = this.listingService.getRecommendedByCategory(1, categoryId).subscribe({
+      next: (resp: ListingGetRecommendedResponse) => {
+        this.randomListingList = resp;
+      },
+      error: err => console.log(err)
+    })
+  }
+
 
   onSelectListing(listingForPreview: ListingGetByIdResponse) {
     this.router.navigate(['/listings/preview'], {queryParams: {id: listingForPreview.id}})
@@ -61,6 +72,7 @@ export class HomeComponent implements OnInit {
 
   ngOnDestroy() {
     this.categoryGetSubs?.unsubscribe();
+    this.randomListingByCategoryGetSubs?.unsubscribe();
     this.randomListingGetSubs?.unsubscribe();
   }
 
