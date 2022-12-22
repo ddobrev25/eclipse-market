@@ -40,8 +40,19 @@ namespace Eclipse_Market.Controllers
                 TimesBookmarked = x.TimesBookmarked,
                 Title = x.Title,
                 Views = x.Views,
-                //ImageBase64String = x.ImageBase64String
-            });
+            }).ToList();
+
+            foreach (var listing in listings)
+            {
+                var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
+
+                //List<string> imageBase64Strings = new List<string>();
+
+                foreach (var listingImage in listingImages)
+                {
+                    listing.ImageBase64Strings.Add(listingImage.Base64String);
+                }
+            }
             return Ok(listings);
         }
         [HttpGet]
@@ -71,8 +82,14 @@ namespace Eclipse_Market.Controllers
                     TimesBookmarked = authorListing.TimesBookmarked,
                     Title = authorListing.Title,
                     Views = authorListing.Views,
-                    //ImageBase64String = authorListing.ImageBase64String,
                 };
+
+                var withoutAuthorListingImages = _dbContext.ListingImages.Where(x => x.ListingId == listingResponse.Id);
+                foreach (var listingImage in withoutAuthorListingImages)
+                {
+                    listingResponse.ImageBase64Strings.Add(listingImage.Base64String);
+                }
+
                 listingResponses[i] = listingResponse;
                 i++;
             }
@@ -94,10 +111,15 @@ namespace Eclipse_Market.Controllers
                 TimesBookmarked = listing.TimesBookmarked,
                 Title = listing.Title,
                 Views = listing.Views,
-                //ImageBase64String = listing.ImageBase64String,
                 Author = authorResponse,
                 
             };
+
+            var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
+            foreach (var listingImage in listingImages)
+            {
+                response.ImageBase64Strings.Add(listingImage.Base64String);
+            }
 
             return Ok(response);
         }
@@ -252,6 +274,38 @@ namespace Eclipse_Market.Controllers
                     ListingId = listingId
                 });
             }
+            _dbContext.ListingImages.AddRange(imagesToAdd);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+        [HttpPost]
+        public ActionResult UpdateImages(ListingUpdateImagesRequest request)
+        {
+
+            var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).FirstOrDefault();
+
+            if (listing == null)
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            int listingId = listing.Id;
+
+            var imagesToRemove = _dbContext.ListingImages.Where(x => x.ListingId == listingId);
+            _dbContext.ListingImages.RemoveRange(imagesToRemove);
+
+            List<ListingImage> imagesToAdd = new List<ListingImage>();
+
+            foreach (string newBase64String in request.ImageBase64Strings)
+            {
+                imagesToAdd.Add(new ListingImage
+                {
+                    Base64String = newBase64String,
+                    ListingId = listingId,
+                    Listing = listing
+                });
+            }
+
             _dbContext.ListingImages.AddRange(imagesToAdd);
             _dbContext.SaveChanges();
             return Ok();

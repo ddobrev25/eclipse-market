@@ -13,6 +13,6 @@ namespace Eclipse_Market.Models.Response
         public int Views { get; set; }
         public int TimesBookmarked { get; set; }
         public string ListingCategory { get; set; }
-        public string ImageBase64String { get; set; }
+        public List<string> ImageBase64Strings { get; set; } = new List<string>();
     }
 }
