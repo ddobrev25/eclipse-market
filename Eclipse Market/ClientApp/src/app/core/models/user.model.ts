@@ -120,3 +120,9 @@ export type AuthorGetResponse = {
     imageBase64String: string;
   }[];
 }
+export type BookmarkListingRequest = {
+  listingId: number;
+}
+export type UnBookmarkListingRequest = {
+  listingId: number;
+}

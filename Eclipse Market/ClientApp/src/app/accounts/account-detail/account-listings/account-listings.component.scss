@@ -93,5 +93,19 @@ h3 {
     .p-dialog .p-dialog-footer {
         background-color: var(--gray-blue-dark);
     }
+
+    .p-card-header > i {
+        font-size: 3rem;
+        position: relative;
+        top: -6px;
+        left: calc(100% - 50px);
+        cursor: pointer;
+    }
+    .bookmarked {
+        color: var(--danger);
+    }
+    .p-card-header {
+        width: 100%;
+    }
     
 }
