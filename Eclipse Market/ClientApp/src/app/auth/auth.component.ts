@@ -51,10 +51,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
   }
 
-  temp(event: any) {
-    console.log(event);
-  }
-
   //!Login
   loginForm: FormGroup = new FormGroup({
     userName: new FormControl('', [Validators.required]),
@@ -77,6 +73,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       complete: () => {
         this.loadUserInfo();
         this.userDataService.isLoggedIn = true;
+        this.router.navigate(['/home']);
       },
     });
   }
@@ -96,6 +93,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   //!/Login
   //!Register
   registerToggle() {
+    if (this.registerMode) {
+      this.registerForm.reset();
+    }
     this.registerMode = !this.registerMode;
   }
 
@@ -154,8 +154,8 @@ export class AuthComponent implements OnInit, OnDestroy {
         ),
         Validators.required,
       ]),
-      phoneNumber: new FormControl('awdadw', [Validators.required]),
-      imageBase64String: new FormControl(''),
+      phoneNumber: new FormControl('', [Validators.required]),
+      imageBase64String: new FormControl('', [Validators.required]),
     },
     { validators: this.passwordMatchingValidator }
   );
@@ -169,7 +169,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       password: this.registerForm.get('password')?.value,
       phoneNumber: this.registerForm.get('phoneNumber')?.value,
       roleId: 0,
-      imageBase64String: 'inProgress',
+      imageBase64String: this.registerForm.get('imageBase64String')?.value,
     };
 
     this.registerSubscription = this.userService.register(body).subscribe({
@@ -182,6 +182,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         });
         this.router.navigate(['/home']);
       },
+      error: (err) => console.log(err),
     });
   }
 

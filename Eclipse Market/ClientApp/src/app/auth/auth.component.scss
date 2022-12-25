@@ -1,63 +1,3 @@
-// .regLink a {
-//   color: rgb(85, 176, 236);
-//   cursor: pointer;
-// }
-// .form {
-//   padding: 20px 10px;
-//   background-color: var(--gray-blue-dark);
-//   color: var(--text-light);
-//   border-radius: 10px;
-// }
-// .bg {
-//   padding: 150px 250px;
-//   // background: #2980b9  url('https://static.tumblr.com/03fbbc566b081016810402488936fbae/pqpk3dn/MRSmlzpj3/tumblr_static_bg3.png') repeat 0 0;
-//   // -webkit-animation: 10s linear 0s normal none infinite animate;
-//   // -moz-animation: 10s linear 0s normal none infinite animate;
-//   // -ms-animation: 10s linear 0s normal none infinite animate;
-//   // -o-animation: 10s linear 0s normal none infinite animate;
-//   // animation: 10s linear 0s normal none infinite animate;
-//   background: linear-gradient(
-//     190deg,
-//     var(--gray-blue-medium),
-//     var(--gray-blue)
-//   );
-// }
-// @-webkit-keyframes animate {
-// 	from {background-position:0 0;}
-// 	to {background-position: 500px 0;}
-// }
-
-// @-moz-keyframes animate {
-// 	from {background-position:0 0;}
-// 	to {background-position: 500px 0;}
-// }
-
-// @-ms-keyframes animate {
-// 	from {background-position:0 0;}
-// 	to {background-position: 500px 0;}
-// }
-
-// @-o-keyframes animate {
-// 	from {background-position:0 0;}
-// 	to {background-position: 500px 0;}
-// }
-
-// @keyframes animate {
-// 	from {background-position:0 0;}
-// 	to {background-position: 500px 0;}
-// }
-// button {
-//     min-width: 10rem;
-//     margin-right: .5rem;
-// }
-
-// @media screen and (max-width: 960px) {
-//     button {
-//         width: 100%;
-//         margin-bottom: .5rem;
-//     }
-// }
-
 :host::ng-deep {
   .p-password,
   .p-inputtext {
@@ -91,21 +31,23 @@
     width: 100%;
     padding: 12px;
     font-size: 18px;
-    // border: 3px solid var(--gray-blue);
-    // border-radius: 16px;
-    
-    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box;
+
+    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
+      linear-gradient(to right, var(--border-medium), var(--border-medium))
+        border-box;
     border-radius: 16px;
-    border: 4px solid transparent;
-    
+    border: 3px solid transparent;
+
     outline: none;
     cursor: pointer;
   }
   .input-container > input:hover {
     background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
-    linear-gradient(to right, var(--blue-bg), darkorchid) border-box;
+      linear-gradient(to right, var(--blue-bg), darkorchid) border-box;
   }
   .input-container > input:focus {
+    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
+      linear-gradient(to right, var(--blue-bg), darkorchid) border-box;
     cursor: text;
   }
   .input-container > label {
@@ -144,7 +86,7 @@
   .btn-container {
     padding: 0px 12px;
     button {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       border-radius: 16px;
     }
   }
@@ -162,11 +104,75 @@
   }
   .image-upload {
     font-size: 2rem;
-    border-radius: 50%;
+    margin: 0px 12px;
+    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
+      linear-gradient(to right, var(--border-medium), var(--border-medium))
+        border-box;
+    border-radius: 16px;
+    border: 3px solid transparent;
+    max-width: 25%;
+    height: auto;
+    aspect-ratio: 1/1;
   }
   .image-upload i {
     font-size: 4rem;
     cursor: pointer;
   }
-  
+  .image-wrapper {
+    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
+      linear-gradient(to right, var(--border-medium), var(--border-medium))
+        border-box;
+    border-radius: 20px;
+    border: 3px solid transparent;
+    margin: 0px 12px;
+    max-width: 25%;
+    height: 100%;
+    aspect-ratio: 1/1;
+  }
+  .image-wrapper > label > img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 996px) {
+    .img-firstname-lastname-container {
+      flex-direction: column;
+      align-items: center;
+      .image-upload {
+        max-width: 50%;
+      }
+      .image-wrapper {
+        max-width: 50%;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .btn-container {
+      button {
+        font-size: 1rem;
+      }
+    }
+    .btn-container > button.loginBtn {
+      width: 100% !important;
+    }
+  }
+  @media (max-width: 576px) {
+    .btn-container {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      button {
+        width: 100% !important;
+      }
+    }
+  }
+  .regLink a {
+    color: var(--blue-bg);
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .regLink a:hover {
+    color: var(--blue-bg);
+  }
 }
