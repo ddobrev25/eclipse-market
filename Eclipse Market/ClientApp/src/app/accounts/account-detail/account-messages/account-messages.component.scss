@@ -45,29 +45,32 @@
     border: 2px solid var(--gray-blue-border);
     border-radius: 8px;
     padding: 12px;
+    height: max-content !important;
+    max-width: 60%;
+    
   }
   .primary {
-    margin-right: 0px;
-    margin-left: auto;
+    width: 100%;
     border-radius: 8px;
-    max-width: 60%;
     word-break: break-all;
     cursor: pointer;
   }
   .primary > .message-wrapper {
     background-color: var(--blue-bg);
+    margin-right: 0px;
+    margin-left: auto;
   }
 
   .secondary {
-    margin-left: 0px;
-    margin-right: auto;
+    width: 100%;
     border-radius: 8px;
     word-break: break-all;
-    max-width: 60%;
     cursor: pointer;
   }
   .secondary > .message-wrapper {
     background-color: var(--gray-blue-medium);
+    margin-right: auto;
+    margin-left: 0px;
   }
   .primary-date {
     font-size: 12px;
@@ -133,15 +136,38 @@
   }
 
   .edit-dialog {
-    width: 180px;
-    display: none;
-    height: 80px;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: var(--border-medium);
+    transform: translateX(-50%) translateY(-50%);
   }
-  .visible {
-    display: flex;
+
+  .message-menu {
+    position: relative;
+    height: fit-content;
+    // transform: translateX(-100%) translateY(-100%);
+    background: var(--gray-blue-border);
+    border-radius: 4px;
+    padding: 6px;
+    max-width: fit-content;
+    li {
+      padding: 4px 8px;
+      list-style: none;
+      cursor: pointer;
+      i:hover {
+        color: var(--blue-bg);
+      }
+      i.pi-trash:hover {
+        color: var(--danger);
+      }
+    }
+    li:hover {
+      background: var(--gray-blue);
+    }
   }
-  .edit-dialog > button {
-    width: 50%;
+  .message-box {
+    width: 100%;
   }
 
 }
