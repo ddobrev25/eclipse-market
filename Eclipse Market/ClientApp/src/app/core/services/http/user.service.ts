@@ -6,7 +6,9 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import {
+  BookmarkListingRequest,
   DeleteRequest,
+  UnBookmarkListingRequest,
   UserChangePassword,
   UserGetAllResponse,
   UserGetInfoResponse,
@@ -93,6 +95,24 @@ export class UserService {
     });
     return this.http.put(`${this.url}/User/UpdateImage`, body, {
       headers: headers,
+    });
+  }
+
+  bookmarkListing(body: BookmarkListingRequest) {
+    const headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
+    return this.http.post(`${this.url}/User/BookmarkListing`, body, {
+      headers: headers
+    });
+  }
+  unBookmarkListing(body: UnBookmarkListingRequest) {
+    const headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
+    return this.http.delete(`${this.url}/User/UnbookmarkListing`, {
+      headers: headers,
+      body: body
     });
   }
 

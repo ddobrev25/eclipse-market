@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
 import {
@@ -11,7 +11,8 @@ import {
   ListingUpdateRequest,
 } from 'src/app/core/models/listing.model';
 import { UserDataService } from 'src/app/core/services/store/user.data.service';
-import { DeleteRequest, User$ } from 'src/app/core/models/user.model';
+import { BookmarkListingRequest, DeleteRequest, UnBookmarkListingRequest, User$ } from 'src/app/core/models/user.model';
+import { UserService } from 'src/app/core/services/http/user.service';
 
 @Component({
   selector: 'app-account-listings',
@@ -19,12 +20,19 @@ import { DeleteRequest, User$ } from 'src/app/core/models/user.model';
   styleUrls: ['./account-listings.component.scss'],
 })
 export class AccountListingsComponent implements OnInit {
+  @ViewChild('bookmark') bookmark?: ElementRef;
+
   updateSubs?: Subscription;
   userListingsChangedSubs?: Subscription;
   deleteSubs?: Subscription;
   userListingGetSubs?: Subscription;
   userListingFetchSubs?: Subscription;
+  bookmarkListingSubs?: Subscription;
+  bookmarkedListingFetchSubs?: Subscription;
+  bookmarkedListingGetSubs?: Subscription;
 
+
+  bookmarkedListings?: ListingGetAllResponse;
   userListings?: ListingGetAllResponse;
   listingSelected: boolean = false;
   listingsChanged: boolean = false;
@@ -41,7 +49,8 @@ export class AccountListingsComponent implements OnInit {
     private listingPreviewService: ListingPreviewService,
     private listingService: ListingService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private userService: UserService
   ) {}
 
   listingUpdateForm: FormGroup = new FormGroup({
@@ -59,10 +68,11 @@ export class AccountListingsComponent implements OnInit {
   fecthUserListings() {
     if (this.listingsChanged) 
       this.fetchUserListingsFromService();
-    this.userListingGetSubs = this.userDataService.userData.subscribe({
+      this.userListingGetSubs = this.userDataService.userData.subscribe({
       next: (data: User$) => {
         if (data && data.currentListings)  {
-          console.log(data)
+          console.log('inside if')
+          // this.checkIfListingIsBookmarked();
           this.userListings = data.currentListings;
         } else {
           this.fetchUserListingsFromService();
@@ -175,6 +185,98 @@ export class AccountListingsComponent implements OnInit {
       },
     });
   }
+
+  onBookmarkListing(event: any, listing: ListingGetByIdResponse) {
+    event.target.classList.toggle('bookmarked');
+    event.target.classList.toggle('pi-bookmark');
+    event.target.classList.toggle('pi-bookmark-fill');
+    if (event.target.classList.contains('pi-bookmark-fill')) {
+      const body: BookmarkListingRequest = {
+        listingId: listing.id,
+      };
+      this.bookmarkListingSubs = this.userService
+        .bookmarkListing(body)
+        .subscribe({
+          complete: () => {
+            this.bookmarkedListings?.push(listing)
+            const newData = {
+              bookmarkedListings: this.bookmarkedListings,
+            };
+            this.userDataService.setUserData(newData);
+            this.messageService.add({
+              key: 'tc',
+              severity: 'success',
+              detail: 'Обявата е добавена към отметки!',
+              life: 3000,
+            });
+          },
+        });
+    } else {
+      const body: UnBookmarkListingRequest = {
+        listingId: listing.id,
+      };
+      this.bookmarkListingSubs = this.userService
+        .unBookmarkListing(body)
+        .subscribe({
+          complete: () => {
+            const index = this.bookmarkedListings?.findIndex(
+              (x) => x.id === listing.id
+            );
+            if (index) {
+              this.bookmarkedListings?.splice(index, 1);
+              const newData = {
+                bookmarkedListings: this.bookmarkedListings
+              }
+              this.userDataService.setUserData(newData);
+            }
+            this.messageService.add({
+              key: 'tc',
+              severity: 'warn',
+              detail: 'Обявата е премахната от отметки!',
+              life: 3000,
+            });
+          },
+        });
+    }
+  }
+
+  // fetchBookmarkedListings() {
+  //   this.bookmarkedListingFetchSubs = this.listingService
+  //     .getBookmarkedListings()
+  //     .subscribe({
+  //       next: (resp: ListingGetAllResponse) => {
+  //         const newData = {
+  //           bookmarkedListings: resp,
+  //         };
+  //         this.userDataService.setUserData(newData);
+  //       },
+  //     });
+  // }
+
+  // checkIfListingIsBookmarked() {
+  //   this.bookmarkedListingGetSubs = this.userDataService.userData
+  //     .pipe(map((b) => b?.bookmarkedListings))
+  //     .subscribe({
+  //       next: (resp?: ListingGetAllResponse) => {
+  //         if (!resp) this.fetchBookmarkedListings();
+  //         if (resp) {
+  //           this.bookmarkedListings = resp;
+  //           console.log(this.bookmarkedListings, this.userListings)
+  //           this.userListings?.forEach(listing => {
+  //             resp.forEach((bookmarkedListing) => {
+  //               if (+listing.id === +bookmarkedListing.id) {
+  //                 this.bookmark?.nativeElement.classList.add('bookmarked');
+  //                 this.bookmark?.nativeElement.classList.remove('pi-bookmark');
+  //                 this.bookmark?.nativeElement.classList.add('pi-bookmark-fill');
+  //               }
+  //             });
+  //           })
+           
+  //         }
+  //       },
+  //     });
+  // }
+
   ngOnDestroy() {
     this.updateSubs?.unsubscribe();
     this.userListingsChangedSubs?.unsubscribe();

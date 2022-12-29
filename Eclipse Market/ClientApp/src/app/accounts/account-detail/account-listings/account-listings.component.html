@@ -5,6 +5,8 @@
   >
     <p-card [header]="listing.title" styleClass="preview-card">
       <ng-template pTemplate="header">
+        <!-- <i #bookmark class="pi pi-bookmark" (click)="onBookmarkListing($event, listing)"></i> -->
+
         <img
           (click)="onSelectListing(listing.id!)"
           alt="Card"

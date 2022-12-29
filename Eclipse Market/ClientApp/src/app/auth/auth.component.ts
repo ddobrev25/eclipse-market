@@ -12,7 +12,10 @@ import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { UserService } from '../core/services/http/user.service';
 import { UserDataService } from '../core/services/store/user.data.service';
-import { UserGetInfoResponse, UserRegisterRequest } from '../core/models/user.model';
+import {
+  UserGetInfoResponse,
+  UserRegisterRequest,
+} from '../core/models/user.model';
 
 @Component({
   selector: 'app-auth',
@@ -25,6 +28,8 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   registerSubscription: Subscription | undefined;
   loadUserSubs: Subscription | undefined;
+
+  avatar?: string;
 
   constructor(
     private userService: UserService,
@@ -44,10 +49,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     } else {
       this.isLoggedIn = false;
     }
-  }
-
-  temp(event: any) {
-    console.log(event);
   }
 
   //!Login
@@ -72,6 +73,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       complete: () => {
         this.loadUserInfo();
         this.userDataService.isLoggedIn = true;
+        this.router.navigate(['/home']);
       },
     });
   }
@@ -91,6 +93,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   //!/Login
   //!Register
   registerToggle() {
+    if (this.registerMode) {
+      this.registerForm.reset();
+    }
     this.registerMode = !this.registerMode;
   }
 
@@ -99,6 +104,13 @@ export class AuthComponent implements OnInit, OnDestroy {
   ): ValidationErrors | null => {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
+
+    if (password?.value !== confirmPassword?.value) {
+      confirmPassword?.setErrors({
+        ...(confirmPassword.errors || {}),
+        notmatched: true,
+      });
+    }
 
     return password?.value === confirmPassword?.value
       ? null
@@ -143,7 +155,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         Validators.required,
       ]),
       phoneNumber: new FormControl('', [Validators.required]),
-      imageBase64String: new FormControl('')
+      imageBase64String: new FormControl('', [Validators.required]),
     },
     { validators: this.passwordMatchingValidator }
   );
@@ -157,7 +169,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       password: this.registerForm.get('password')?.value,
       phoneNumber: this.registerForm.get('phoneNumber')?.value,
       roleId: 0,
-      imageBase64String: "inProgress"
+      imageBase64String: this.registerForm.get('imageBase64String')?.value,
     };
 
     this.registerSubscription = this.userService.register(body).subscribe({
@@ -170,8 +182,29 @@ export class AuthComponent implements OnInit, OnDestroy {
         });
         this.router.navigate(['/home']);
       },
+      error: (err) => console.log(err),
     });
   }
+
+  onToggleUploadImageOverlay(event: any) {
+    event.target.children[1].classList.toggle('visible');
+  }
+  onUploadImage(event: any) {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (reader.result) {
+        this.registerForm.patchValue({
+          imageBase64String: reader.result.toString(),
+        });
+        this.avatar = reader.result.toString();
+      }
+    };
+    reader.onerror = (error) => console.log('Error: ', error);
+    event.target.value = '';
+  }
+
   //!/Register
 
   ngOnDestroy(): void {

@@ -5,4 +5,6 @@
     <div *ngIf="control.errors?.['pattern']">Полето {{controlName}} трябва да бъде в правилния формат!</div>
     <div *ngIf="control.errors?.['min']">Полето {{controlName}} трябва да бъде поне {{min}}</div>
     <div *ngIf="control.errors?.['max']">Полето {{controlName}} трябва да бъде под {{max}}</div>
+    <div *ngIf="control.errors?.['notmatched']">Паролите не съвпадат</div>
+
 </div>
