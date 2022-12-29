@@ -41,18 +41,7 @@ namespace Eclipse_Market.Controllers
                 Title = x.Title,
                 Views = x.Views,
             }).ToList();
-
-            foreach (var listing in listings)
-            {
-                var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
-
-                //List<string> imageBase64Strings = new List<string>();
-
-                foreach (var listingImage in listingImages)
-                {
-                    listing.ImageBase64Strings.Add(listingImage.Base64String);
-                }
-            }
+            PopulateListingImages(ref listings);
             return Ok(listings);
         }
         [HttpGet]
@@ -114,7 +103,6 @@ namespace Eclipse_Market.Controllers
                 Author = authorResponse,
                 
             };
-
             var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
             foreach (var listingImage in listingImages)
             {
@@ -124,7 +112,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpGet]
-        public ActionResult<ListingGetRecommendedResponse> GetRecommended(int count, int? listingCategoryId = null)
+        public ActionResult<List<ListingGetAllResponse>> GetRecommended(int count, int? listingCategoryId = null)
         {
             if(count <= 0)
             {
@@ -161,7 +149,7 @@ namespace Eclipse_Market.Controllers
 
             Random random = new Random();
 
-            ListingGetAllResponse[] listingGetAllResponses = new ListingGetAllResponse[count];
+            ListingGetAllResponse[] response = new ListingGetAllResponse[count];
 
             for (int i = 0; i < count; i++)
             {
@@ -170,15 +158,15 @@ namespace Eclipse_Market.Controllers
                     .Where(x => x.Id == randomId)
                     .First();
 
-                if (listingGetAllResponses.All(x => x == null))
+                if (response.All(x => x == null))
                 {
-                    listingGetAllResponses[i] = ParseListingToGetAllResponse(randomListing);
+                    response[i] = ParseListingToGetAllResponse(randomListing);
                 }
                 else
                 {
-                    if (!listingGetAllResponses.Any(x => x?.Id == randomId))
+                    if (!response.Any(x => x?.Id == randomId))
                     {
-                        listingGetAllResponses[i] = ParseListingToGetAllResponse(randomListing);
+                        response[i] = ParseListingToGetAllResponse(randomListing);
                     }
                     else
                     {
@@ -186,14 +174,11 @@ namespace Eclipse_Market.Controllers
                     }
                 }
             }
-            var response = new ListingGetRecommendedResponse
-            {
-                Listings = listingGetAllResponses.ToList()
-            };
+            PopulateListingImages(ref response);
             return Ok(response);
         }
         [HttpGet]
-        public ActionResult<ListingGetAllResponse> GetCurrentByUserId()
+        public ActionResult<List<ListingGetAllResponse>> GetCurrentByUserId()
         {
             int id = _jwtService.GetUserIdFromToken(User);
             var response = _dbContext.Listings
@@ -209,7 +194,8 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Id = x.Id,
                     Views = x.Views
-                });
+                }).ToList();
+            PopulateListingImages(ref response);
             return Ok(response);
         }
         [HttpGet]
@@ -232,7 +218,8 @@ namespace Eclipse_Market.Controllers
                     TimesBookmarked = x.TimesBookmarked,
                     Title = x.Title,
                     Views = x.Views
-                });
+                }).ToList();
+            PopulateListingImages(ref response);
             return Ok(response);
 
         }
@@ -415,6 +402,30 @@ namespace Eclipse_Market.Controllers
                 Views = listing.Views,
                 //ImageBase64String = listing.ImageBase64String,
             };
+        }
+        private void PopulateListingImages(ref List<ListingGetAllResponse> listings)
+        {
+            foreach (var listing in listings)
+            {
+                var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
+
+                foreach (var listingImage in listingImages)
+                {
+                    listing.ImageBase64Strings.Add(listingImage.Base64String);
+                }
+            }
+        }
+        private void PopulateListingImages(ref ListingGetAllResponse[] listings)
+        {
+            foreach (var listing in listings)
+            {
+                var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
+
+                foreach (var listingImage in listingImages)
+                {
+                    listing.ImageBase64Strings.Add(listingImage.Base64String);
+                }
+            }
         }
 
     }
