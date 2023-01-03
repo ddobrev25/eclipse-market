@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserDataService } from './core/services/store/user.data.service';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
+import { SignalrService } from './signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -9,26 +10,46 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 })
 export class AppComponent implements OnInit {
   title = 'EclipseMarket';
-  public spinnerComponent = SpinnerComponent;
+  // public spinnerComponent = SpinnerComponent;
 
-  constructor(private userDataService: UserDataService) {
+  // constructor(private userDataService: UserDataService) {
 
-  }
+  // }
+
+  // ngOnInit() {
+  //   this.setTheme();
+  // }
+  // setTheme(): void {
+  //   const themePreference = localStorage.getItem('theme');
+  //   if (!themePreference) {
+  //     localStorage.setItem('theme', 'dark');
+  //   }
+  //   if (themePreference === 'light') {
+  //     document.body.classList.add('light-theme');
+  //   }
+  // }
+
+  // isLogged() {
+    
+  // }
+  @ViewChild('msgInput') message?: any;
+  someResponse?: string;
+
+
+  constructor(private signalrService: SignalrService) {}
 
   ngOnInit() {
-    this.setTheme();
-  }
-  setTheme(): void {
-    const themePreference = localStorage.getItem('theme');
-    if (!themePreference) {
-      localStorage.setItem('theme', 'dark');
-    }
-    if (themePreference === 'light') {
-      document.body.classList.add('light-theme');
-    }
+    this.signalrService.startConnection();
+    this.signalrService.askServerListener();
   }
 
-  isLogged() {
-    
+  onSendMessage() {
+    this.signalrService.askServer(this.message!.nativeElement.value);
   }
+
+
+  ngOnDestroy() {
+    this.signalrService.hubConnection.off("askServerResponse");
+  }
+
 }
