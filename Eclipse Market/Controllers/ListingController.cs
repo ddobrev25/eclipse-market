@@ -268,7 +268,6 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public ActionResult UpdateImages(ListingUpdateImagesRequest request)
         {
-
             var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).FirstOrDefault();
 
             if (listing == null)
