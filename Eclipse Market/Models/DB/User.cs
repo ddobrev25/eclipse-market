@@ -31,6 +31,7 @@ namespace Eclipse_Market.Models.DB
         public DateTime DateLockedTo { get; set; }
 
         public UserImage Image { get; set; }
+        public List<ChatHubConnection> ChatConnections { get; set; }
 
     }
 }
