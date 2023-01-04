@@ -9,21 +9,23 @@ namespace Eclipse_Market.Hubs
 
     public class ChatHub : Hub
     {
-        private EclipseMarketDbContext _context;
-        public ChatHub(EclipseMarketDbContext context)
+        private EclipseMarketDbContext _dbContext;
+        public ChatHub(EclipseMarketDbContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
 
         public override Task OnConnectedAsync()
         {
-            var a = _context;
             var userName = Context.User.Identity.Name;
             var conId = Context.ConnectionId;
             var identifier = Context.UserIdentifier;
             var neshto = Context.User.Identity;
             var drugo = Clients.Caller;
             return base.OnConnectedAsync();
+        }
+        private void MapUserToConnection(string connectionId)
+        {
         }
         public async Task AskServer(string someTextFromClient)
         {
