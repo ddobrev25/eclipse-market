@@ -4,6 +4,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230104105832_AddedUserAgentInChatHub")]
+    partial class AddedUserAgentInChatHub
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Auctions", (string)null);
+                    b.ToTable("Auctions");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Chat", b =>
@@ -63,7 +65,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.ChatHubConnection", b =>
@@ -92,7 +94,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatHubConnections", (string)null);
+                    b.ToTable("ChatHubConnections");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Claim", b =>
@@ -109,7 +111,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Claims", (string)null);
+                    b.ToTable("Claims");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
@@ -153,7 +155,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ListingCategoryId");
 
-                    b.ToTable("Listings", (string)null);
+                    b.ToTable("Listings");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.ListingCategory", b =>
@@ -170,7 +172,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ListingCategories", (string)null);
+                    b.ToTable("ListingCategories");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.ListingImage", b =>
@@ -192,7 +194,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ListingId");
 
-                    b.ToTable("ListingImages", (string)null);
+                    b.ToTable("ListingImages");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.ListingUser", b =>
@@ -207,7 +209,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ListingId");
 
-                    b.ToTable("ListingUsers", (string)null);
+                    b.ToTable("ListingUsers");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Message", b =>
@@ -240,7 +242,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Role", b =>
@@ -254,7 +256,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.RoleClaim", b =>
@@ -269,7 +271,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ClaimId");
 
-                    b.ToTable("RoleClaims", (string)null);
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.User", b =>
@@ -320,7 +322,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.UserChat", b =>
@@ -335,7 +337,7 @@ namespace Eclipse_Market.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.ToTable("UserChats", (string)null);
+                    b.ToTable("UserChats");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.UserImage", b =>
@@ -358,7 +360,7 @@ namespace Eclipse_Market.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserImages", (string)null);
+                    b.ToTable("UserImages");
                 });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Auction", b =>

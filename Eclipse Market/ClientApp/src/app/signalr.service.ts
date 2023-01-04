@@ -16,6 +16,7 @@ export class SignalrService {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl('http://localhost:5001/chatHub',  {
         accessTokenFactory: () => this.token,
+        
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })
