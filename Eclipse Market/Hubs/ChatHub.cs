@@ -6,6 +6,7 @@ using Eclipse_Market.Models.DB;
 using Microsoft.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Eclipse_Market.Hubs
 {
@@ -18,26 +19,19 @@ namespace Eclipse_Market.Hubs
         {
             _dbContext = dbContext;
         }
-
-        public override Task OnConnectedAsync()
+        public async override Task OnConnectedAsync()
         {
-            int userId = int.Parse(Context.User.Identity.Name);
-            var conId = Context.ConnectionId;
-            var userAgent = Context.GetHttpContext().Request.Headers.UserAgent;
-            MapUserToConnection(userId, conId, userAgent);
-            return base.OnConnectedAsync();
+            await AddUserToGroups();
+            MapUserToConnection();
         }
         
         public override Task OnDisconnectedAsync(Exception? exception)
         {
-            int userId = int.Parse(Context.User.Identity.Name);
-            var conId = Context.ConnectionId;
-            var userAgent = Context.GetHttpContext().Request.Headers.UserAgent;
             var chatHubConnectionToRemove = _dbContext.ChatHubConnections
-                .Where(x => x.UserId == userId &&
+                .Where(x => x.UserId == GetUserId() &&
                 x.IsConnected == true &&
-                x.ConnectionId == conId &&
-                x.UserAgent == userAgent.ToString())
+                x.ConnectionId == GetConnectionId() &&
+                x.UserAgent == GetUserAgent().ToString())
                 .FirstOrDefault();
             if(chatHubConnectionToRemove is null)
             {
@@ -47,21 +41,35 @@ namespace Eclipse_Market.Hubs
             _dbContext.SaveChanges();
             return base.OnDisconnectedAsync(exception);
         }
-        private void MapUserToConnection(int userId, string connectionId, string userAgent)
+        private void MapUserToConnection()
         {
-            if(!_dbContext.Users.Any(x => x.Id == userId))
+            if(!_dbContext.Users.Any(x => x.Id == GetUserId()))
             {
                 throw new Exception();
             }
             _dbContext.ChatHubConnections.Add(new ChatHubConnection
             {
-                ConnectionId = connectionId,
+                ConnectionId = GetConnectionId(),
                 IsConnected = true,
-                UserAgent = userAgent,
-                UserId = userId,
-                User = _dbContext.Users.Where(x => x.Id == userId).First()
+                UserAgent = GetUserAgent(),
+                UserId = GetUserId(),
+                User = _dbContext.Users.Where(x => x.Id == GetUserId()).First()
             });
             _dbContext.SaveChanges();
+        }
+        private async Task AddUserToGroups()
+        {
+            int userId = GetUserId();
+            var chatIdsOfUser = _dbContext.UserChats
+                .Include(x => x.ChatId)
+                .Where(x => x.UserId == userId)
+                .Select(x => x.ChatId)
+                .ToList();
+
+            foreach (int chatId in chatIdsOfUser)
+            {
+                await Groups.AddToGroupAsync(GetConnectionId(), chatId.ToString());
+            }
         }
         public async Task AskServer(string someTextFromClient)
         {
@@ -76,6 +84,18 @@ namespace Eclipse_Market.Hubs
             }
 
             await Clients.Clients(Context.ConnectionId).SendAsync("askServerResponse", tempString);
+        }
+        private int GetUserId()
+        {
+            return int.Parse(Context.User.Identity.Name);
+        }
+        private string GetConnectionId()
+        {
+            return Context.ConnectionId;
+        }
+        private string GetUserAgent()
+        {
+            return Context.GetHttpContext().Request.Headers.UserAgent.ToString();
         }
     }
 }
