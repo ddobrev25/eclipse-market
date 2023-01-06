@@ -1,8 +1,11 @@
-﻿using Eclipse_Market.Models.DB;
+﻿using Eclipse_Market.Hubs;
+using Eclipse_Market.Models;
+using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
@@ -16,12 +19,14 @@ namespace Eclipse_Market.Controllers
         private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
         private IJwtService _jwtService { get; }
+        private IHubContext<ChatHub> _hubContext;
 
-        public MessageController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService)
+        public MessageController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService, IHubContext<ChatHub> hubContext)
         {
             _dbContext = dbContext;
             Configuration = configuration;
             _jwtService = jwtService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -163,6 +168,11 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
 
             return Ok();
+        }        
+/*        protected virtual void OnMessageDeleted()
+        {
+            MessageDeleted.Invoke(this, EventArgs.Empty);
         }
+        public event EventHandler MessageDeleted;*/
     }
 }

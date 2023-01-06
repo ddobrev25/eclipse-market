@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Eclipse_Market.Models.Request;
 
 namespace Eclipse_Market.Hubs
 {
@@ -23,6 +24,7 @@ namespace Eclipse_Market.Hubs
         {
             await AddUserToGroups();
             MapUserToConnection();
+            await base.OnConnectedAsync();
         }
         
         public override Task OnDisconnectedAsync(Exception? exception)
@@ -61,7 +63,6 @@ namespace Eclipse_Market.Hubs
         {
             int userId = GetUserId();
             var chatIdsOfUser = _dbContext.UserChats
-                .Include(x => x.ChatId)
                 .Where(x => x.UserId == userId)
                 .Select(x => x.ChatId)
                 .ToList();
@@ -96,6 +97,42 @@ namespace Eclipse_Market.Hubs
         private string GetUserAgent()
         {
             return Context.GetHttpContext().Request.Headers.UserAgent.ToString();
+        }
+        public async Task Send(MessageSendRequest request)
+        {
+            var senderId = GetUserId();
+
+            if (request.Body == string.Empty)
+            {
+                throw new HubException("Body string can not be empty.");
+            }
+            var chatToSendTo = _dbContext.Chats
+                .Include(x => x.Participants)
+                .Where(x => x.Id == request.ChatId)
+                .FirstOrDefault();
+            
+            if (chatToSendTo == null)
+            {
+                throw new HubException(ErrorMessages.InvalidId);
+            }
+
+            var chatParticipantIds = chatToSendTo.Participants.Select(x => x.UserId);
+
+            if (!chatParticipantIds.Contains(senderId))
+            {
+                throw new HubException("Invalid permissions");
+            }
+
+            var messageToAdd = new Message
+            {
+                Body = request.Body,
+                SenderId = senderId,
+                TimeSent = DateTime.UtcNow,
+                ChatId = request.ChatId
+            };
+            _dbContext.Messages.Add(messageToAdd);
+            _dbContext.SaveChanges();
+            await Clients.Group(chatToSendTo.Id.ToString()).SendAsync("SendMessageResponse", messageToAdd.Body);
         }
     }
 }

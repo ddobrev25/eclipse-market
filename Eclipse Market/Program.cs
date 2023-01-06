@@ -115,7 +115,11 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(e => 
+{ 
+    e.MaximumReceiveMessageSize = 10240000; 
+    e.EnableDetailedErrors = true; 
+});
 builder.Services.AddCors();
 
 builder.Services.AddScoped<IEmailService, EmailService>();

@@ -44,7 +44,10 @@ export class AppComponent implements OnInit {
   }
 
   onSendMessage() {
-    this.signalrService.askServer(this.message!.nativeElement.value);
+    this.signalrService.askServer({
+     body: 'dano raboti',
+     chatId: 5 
+    });
   }
 
 
