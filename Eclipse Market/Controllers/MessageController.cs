@@ -146,6 +146,10 @@ namespace Eclipse_Market.Controllers
             messageToEdit.Body = request.NewBody;
             _dbContext.SaveChanges();
 
+            int chatId = _dbContext.Chats.Where(x => x.Id == messageToEdit.ChatId).First().Id;
+
+            _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageEditResponse", messageToEdit);
+
             return Ok();
         }
 

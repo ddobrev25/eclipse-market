@@ -36,7 +36,7 @@ askServer(message: MessageSendRequest) {
       .catch((err) => console.log(err));
   }
   askServerListener() {
-    this.hubConnection.on("SendMessageResponse", (sometext) => {
+    this.hubConnection.on("MessageEditResponse", (sometext) => {
         console.log(sometext);
     })
   }
