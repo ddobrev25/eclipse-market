@@ -5,22 +5,19 @@
         *ngFor="let chat of chats"
         [ngClass]="selectedChat === chat ? 'active' : ''"
         class="message-container w-100 d-flex flex-column p-3 my-3"
-        (click)="onSelectChat(chat)"
-      >
+        (click)="onSelectChat(chat)">
         <span>{{ chat.topicListingId }}</span>
       </div>
     </div>
     <div class="col-8">
       <div
         *ngIf="!chatIsSelected"
-        class="noMessage-container d-flex justify-content-center align-items-center my-3"
-      >
+        class="noMessage-container d-flex justify-content-center align-items-center my-3">
         <span>Please select a chat!</span>
       </div>
       <ng-container *ngIf="chatIsSelected">
         <div
-          class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between"
-        >
+          class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between">
           <div class="message-input-container d-flex align-items-center">
             <input
               (keyup.enter)="onSendMessage()"
@@ -28,21 +25,18 @@
               type="text"
               name="message"
               placeholder="Напишете съобщение..."
-              class="form-control"
-            />
+              class="form-control" />
             <button
               pButton
               pRipple
               type="button"
               icon="pi pi-send"
               class="p-button-rounded p-button-success mx-2"
-              (click)="onSendMessage()"
-            ></button>
+              (click)="onSendMessage()"></button>
           </div>
           <div
             class="d-flex flex-column message-box"
-            *ngFor="let message of combinedMessages; let i = index"
-          >
+            *ngFor="let message of combinedMessages; let i = index">
             <div
               #messageLine
               [ngClass]="
@@ -50,18 +44,15 @@
                   ? 'primary flex-row-reverse'
                   : 'secondary'
               "
-              class="d-flex message-line"
-            >
+              class="d-flex message-line">
               <div
                 #messageWrapper
                 class="message-wrapper d-flex flex-column"
-                (contextmenu)="onRightClick($event, i)"
-              >
+                (contextmenu)="onRightClick($event, i)">
                 <span
                   [ngClass]="
                     separateMessage(message) ? 'text-end' : 'text-start'
-                  "
-                >
+                  ">
                   {{ message.userName }}
                 </span>
                 <p class="text-center">
@@ -73,8 +64,7 @@
             <span
               [ngClass]="
                 separateMessage(message) ? 'primary-date' : 'secondary-date'
-              "
-            >
+              ">
               {{ message.timeSent }}
             </span>
           </div>

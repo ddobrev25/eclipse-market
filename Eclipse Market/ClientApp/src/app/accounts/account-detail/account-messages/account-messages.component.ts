@@ -131,65 +131,68 @@ export class AccountMessagesComponent implements OnInit {
     }
   }
 
-  onDeleteMessage(message: Message) {}
+  onDeleteMessage() {
+    console.log('inside delete message method')
+  }
 
   onRightClick(event: any, index: number) {
-    event.preventDefault();
+    // event.preventDefault();
 
-    const newEl = document.createElement('ul');
-    const parentEl = this.msgWrappers.get(index);
-    if (parentEl?.nativeElement.parentElement.children.length >= 2) return;
+    // const newEl = document.createElement('ul');
+    // const parentEl = this.msgWrappers.get(index);
+    // if (parentEl?.nativeElement.parentElement.children.length >= 2) return;
 
-    if (this.lastActiveMenuList >= 0 && this.lastActiveMenuList !== index) {
-      const previuesMenuListEl = this.msgLines.get(this.lastActiveMenuList);
-      if (previuesMenuListEl?.nativeElement.children.length > 1)
-        previuesMenuListEl?.nativeElement.removeChild(
-          previuesMenuListEl.nativeElement.children[1]
-        );
-      this.lastActiveMenuList = -1;
-    }
+    // if (this.lastActiveMenuList >= 0 && this.lastActiveMenuList !== index) {
+    //   const previuesMenuListEl = this.msgLines.get(this.lastActiveMenuList);
+    //   if (previuesMenuListEl?.nativeElement.children.length > 1)
+    //     previuesMenuListEl?.nativeElement.removeChild(
+    //       previuesMenuListEl.nativeElement.children[1]
+    //     );
+    //   this.lastActiveMenuList = -1;
+    // }
 
-    newEl.classList.add('message-menu');
-    newEl.innerHTML = `
-    <li class="reply">Отговор <i class="pi pi-reply"></i></li>
-    <li class="copy">Копирай <i class="pi pi-copy"></i></li>
-    <li class="delete">Изтрий <i class="pi pi-trash"></i></li>
-    `;
+    // newEl.classList.add('message-menu');
+    // newEl.innerHTML = `
+    // <li class="reply">Отговор <i class="pi pi-reply"></i></li>
+    // <li class="copy">Копирай <i class="pi pi-copy"></i></li>
+    // <li class="edit">Редактирай <i class="pi pi-pencil"></i></li>
+    // <li class="delete" (click)="onDeleteMessage()">Изтрий <i class="pi pi-trash"></i></li>
+    // `;
 
-    if (
-      this.msgLines.get(index)?.nativeElement.classList.contains('secondary')
-    ) {
-      const msgWidth =
-        this.msgLines.get(index)?.nativeElement.children[0].offsetWidth;
-      newEl.style.top = '0px';
-      newEl.style.left = `calc(-100% + 115px + ${msgWidth}px)`;
-      this.removeEventListener = this.renderer.listen(
-        newEl,
-        'mouseleave',
-        this.onMouseLeave
-      );
-    } else {
-      const msgWidth =
-        this.msgLines.get(index)?.nativeElement.children[0].offsetWidth;
-      newEl.style.top = '0px';
-      newEl.style.left = `calc(100% - 115px - ${msgWidth}px)`;
-      this.removeEventListener = this.renderer.listen(
-        newEl,
-        'mouseleave',
-        this.onMouseLeave
-      );
-    }
+    // if (
+    //   this.msgLines.get(index)?.nativeElement.classList.contains('secondary')
+    // ) {
+    //   const msgWidth =
+    //     this.msgLines.get(index)?.nativeElement.children[0].offsetWidth;
+    //   newEl.style.top = '0px';
+    //   newEl.style.left = `calc(-100% + 140px + ${msgWidth}px)`;
+    //   this.removeEventListener = this.renderer.listen(
+    //     newEl,
+    //     'mouseleave',
+    //     this.onMouseLeave
+    //   );
+    // } else {
+    //   const msgWidth =
+    //     this.msgLines.get(index)?.nativeElement.children[0].offsetWidth;
+    //   newEl.style.top = '0px';
+    //   newEl.style.left = `calc(100% - 140px - ${msgWidth}px)`;
+    //   this.removeEventListener = this.renderer.listen(
+    //     newEl,
+    //     'mouseleave',
+    //     this.onMouseLeave
+    //   );
+    // }
 
-    const msgHeight =
-      this.msgLines.get(index)?.nativeElement.children[0].offsetHeight;
-    this.renderer.setStyle(
-      this.msgLines.get(index)?.nativeElement,
-      'height',
-      `${msgHeight}px`
-    );
+    // const msgHeight =
+    //   this.msgLines.get(index)?.nativeElement.children[0].offsetHeight;
+    // this.renderer.setStyle(
+    //   this.msgLines.get(index)?.nativeElement,
+    //   'height',
+    //   `${msgHeight}px`
+    // );
 
-    this.lastActiveMenuList = index;
-    parentEl?.nativeElement.parentElement.appendChild(newEl);
+    // this.lastActiveMenuList = index;
+    // parentEl?.nativeElement.parentElement.appendChild(newEl);
   }
 
   onMouseLeave(event: any) {
@@ -197,6 +200,8 @@ export class AccountMessagesComponent implements OnInit {
     const childEl = event.target;
     parentEl.removeChild(childEl);
   }
+
+
 
   ngOnDestroy() {
     this.chatIsSelected = false;

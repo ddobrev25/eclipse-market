@@ -1,3 +1,6 @@
 {
-    "prettier.bracketSameLine": true
+  "prettier.bracketSameLine": true,
+  "prettier.htmlWhitespaceSensitivity": "ignore",
+"prettier.configPath": "",
+"prettier.useEditorConfig": false
 }

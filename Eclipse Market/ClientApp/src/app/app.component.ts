@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { MessageSignalrService } from './core/services/message.signalr.service';
 import { UserDataService } from './core/services/store/user.data.service';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
-import { SignalrService } from './signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -10,49 +10,34 @@ import { SignalrService } from './signalr.service';
 })
 export class AppComponent implements OnInit {
   title = 'EclipseMarket';
-  // public spinnerComponent = SpinnerComponent;
+  public spinnerComponent = SpinnerComponent;
+  @ViewChild('sm') ul?: ElementRef;
 
-  // constructor(private userDataService: UserDataService) {
+  constructor(private userDataService: UserDataService,
+    private messageSignalrService: MessageSignalrService) {
 
-  // }
-
-  // ngOnInit() {
-  //   this.setTheme();
-  // }
-  // setTheme(): void {
-  //   const themePreference = localStorage.getItem('theme');
-  //   if (!themePreference) {
-  //     localStorage.setItem('theme', 'dark');
-  //   }
-  //   if (themePreference === 'light') {
-  //     document.body.classList.add('light-theme');
-  //   }
-  // }
-
-  // isLogged() {
-    
-  // }
-  @ViewChild('msgInput') message?: any;
-  someResponse?: string;
-
-
-  constructor(private signalrService: SignalrService) {}
+  }
 
   ngOnInit() {
-    this.signalrService.startConnection();
-    this.signalrService.askServerListener();
+    this.setTheme();
+    this.messageSignalrService.startConnection();
+    this.messageSignalrService.MessageAddListener();
+    this.messageSignalrService.MessageEditListener();
+    this.messageSignalrService.MessageDeleteListener();
+  }
+  setTheme(): void {
+    const themePreference = localStorage.getItem('theme');
+    if (!themePreference) {
+      localStorage.setItem('theme', 'dark');
+    }
+    if (themePreference === 'light') {
+      document.body.classList.add('light-theme');
+    }
   }
 
-  onSendMessage() {
-    this.signalrService.askServer({
-     body: 'dano raboti',
-     chatId: 5 
-    });
+  isLogged() {
+    
   }
 
-
-  ngOnDestroy() {
-    this.signalrService.hubConnection.off("askServerResponse");
-  }
 
 }
