@@ -80,7 +80,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public ActionResult Send(MessageSendRequest request)
+        public async Task<ActionResult> Send(MessageSendRequest request)
         {
 
             var senderId = _jwtService.GetUserIdFromToken(User);
@@ -116,10 +116,14 @@ namespace Eclipse_Market.Controllers
             };
             _dbContext.Messages.Add(messageToAdd);
             _dbContext.SaveChanges();
+
+            int chatId = _dbContext.Chats.Where(x => x.Id == messageToAdd.ChatId).First().Id;
+            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageAddResponse", messageToAdd);
+
             return Ok();
         }
         [HttpPut]
-        public ActionResult Edit(MessageEditRequest request)
+        public async Task<ActionResult> Edit(MessageEditRequest request)
         {
             var messageToEdit = _dbContext.Messages.FirstOrDefault(x => x.Id == request.Id);
 
@@ -146,15 +150,22 @@ namespace Eclipse_Market.Controllers
             messageToEdit.Body = request.NewBody;
             _dbContext.SaveChanges();
 
-            int chatId = _dbContext.Chats.Where(x => x.Id == messageToEdit.ChatId).First().Id;
+            var editedMessage = new MessageGetAllResponse
+            {
+                Id = messageToEdit.Id,
+                Body = messageToEdit.Body,
+                TimeSent = messageToEdit.TimeSent.ToString(),
+                UserName = _dbContext.Users.Where(x => x.Id == messageToEdit.SenderId).First().UserName
+            };
 
-            _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageEditResponse", messageToEdit);
+            int chatId = _dbContext.Chats.Where(x => x.Id == messageToEdit.ChatId).First().Id;
+            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageEditResponse", editedMessage);
 
             return Ok();
         }
 
         [HttpDelete]
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             var messageToDelete = _dbContext.Messages.FirstOrDefault(x => x.Id == id);
 
@@ -171,12 +182,10 @@ namespace Eclipse_Market.Controllers
             _dbContext.Messages.Remove(messageToDelete);
             _dbContext.SaveChanges();
 
+            int chatId = _dbContext.Chats.Where(x => x.Id == messageToDelete.ChatId).First().Id;
+            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageDeleteResponse", id);
+
             return Ok();
         }        
-/*        protected virtual void OnMessageDeleted()
-        {
-            MessageDeleted.Invoke(this, EventArgs.Empty);
-        }
-        public event EventHandler MessageDeleted;*/
     }
 }
