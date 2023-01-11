@@ -32,6 +32,8 @@ export class AccountMessagesComponent implements OnInit {
   @ViewChildren('messageWrapper') msgWrappers!: QueryList<ElementRef>;
   @ViewChildren('messageLine') msgLines!: QueryList<ElementRef>;
 
+  @ViewChild('t') test?: ElementRef;
+
   removeEventListener?: () => void;
 
   lastActiveMenuList: number = -1;
@@ -135,7 +137,23 @@ export class AccountMessagesComponent implements OnInit {
     console.log('inside delete message method')
   }
 
-  onRightClick(event: any, index: number) {
+  onRightClick(event: any, index: number, message: Message) {
+    event.preventDefault();
+
+    const x = event.currentTarget.offsetLeft;
+    const y = event.currentTarget.offsetTop;
+
+console.log(x,y)
+
+    this.renderer.setStyle(this.test?.nativeElement, 'display', 'block')
+    this.renderer.setStyle(this.test?.nativeElement, 'top', `0px`);
+    this.renderer.setStyle(this.test?.nativeElement, 'left', `${x - 300}px`);
+
+
+
+    console.log(event)
+    console.log(event.currentTarget.offsetTop, event.currentTarget.offsetLeft)
+
     // event.preventDefault();
 
     // const newEl = document.createElement('ul');

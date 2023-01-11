@@ -117,8 +117,17 @@ namespace Eclipse_Market.Controllers
             _dbContext.Messages.Add(messageToAdd);
             _dbContext.SaveChanges();
 
+
+            var newMessage = new MessageGetAllResponse
+            {
+                Id = messageToAdd.Id,
+                Body = messageToAdd.Body,
+                TimeSent = messageToAdd.TimeSent.ToString(),
+                UserName = _dbContext.Users.Where(x => x.Id == messageToAdd.SenderId).First().UserName
+            };
+
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToAdd.ChatId).First().Id;
-            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageAddResponse", messageToAdd);
+            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageAddResponse", newMessage);
 
             return Ok();
         }
