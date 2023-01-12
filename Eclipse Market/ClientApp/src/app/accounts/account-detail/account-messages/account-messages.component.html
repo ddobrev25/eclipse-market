@@ -16,9 +16,6 @@
         <span>Please select a chat!</span>
       </div>
       <ng-container *ngIf="chatIsSelected">
-        <div #t class="test">
-          lets hope this works!
-        </div>
         <div
           class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between">
           <div class="message-input-container d-flex align-items-center">
@@ -40,6 +37,11 @@
           <div
             class="d-flex flex-column message-box"
             *ngFor="let message of combinedMessages; let i = index">
+            <ul #t class="message-menu">
+              <li class="reply">Отговор <i class="pi pi-reply"></i></li>
+              <li class="copy">Копирай <i class="pi pi-copy"></i></li>
+              <li class="delete" (click)="onDeleteMessage(message)">Изтрий <i class="pi pi-trash"></i></li>
+            </ul>
             <div
               #messageLine
               [ngClass]="

@@ -6,33 +6,33 @@ import {
   QueryList,
   ViewChildren,
   Renderer2,
-} from '@angular/core';
-import { Subscription } from 'rxjs';
+} from "@angular/core";
+import { Subscription } from "rxjs";
 import {
   ChatGetAllByUserIdResponse,
   ChatGetByIdResponse,
-} from 'src/app/core/models/chat.model';
+} from "src/app/core/models/chat.model";
 import {
   Message,
   MessageGetAllByChatIdResponse,
   MessageSendRequest,
-} from 'src/app/core/models/message.model';
-import { ChatService } from 'src/app/core/services/http/chat.service';
-import { MsgService } from 'src/app/core/services/http/message.service';
-import { UserDataService } from 'src/app/core/services/store/user.data.service';
+} from "src/app/core/models/message.model";
+import { ChatService } from "src/app/core/services/http/chat.service";
+import { MsgService } from "src/app/core/services/http/message.service";
+import { UserDataService } from "src/app/core/services/store/user.data.service";
 
 @Component({
-  selector: 'app-account-messages',
-  templateUrl: './account-messages.component.html',
-  styleUrls: ['./account-messages.component.scss'],
+  selector: "app-account-messages",
+  templateUrl: "./account-messages.component.html",
+  styleUrls: ["./account-messages.component.scss"],
 })
 export class AccountMessagesComponent implements OnInit {
-  @ViewChild('msgInput') msgInput!: ElementRef;
-  @ViewChild('container') container!: ElementRef;
-  @ViewChildren('messageWrapper') msgWrappers!: QueryList<ElementRef>;
-  @ViewChildren('messageLine') msgLines!: QueryList<ElementRef>;
+  @ViewChild("msgInput") msgInput!: ElementRef;
+  @ViewChild("container") container!: ElementRef;
+  @ViewChildren("messageWrapper") msgWrappers!: QueryList<ElementRef>;
+  @ViewChildren("messageLine") msgLines!: QueryList<ElementRef>;
 
-  @ViewChild('t') test?: ElementRef;
+  @ViewChildren("t") test?: QueryList<ElementRef>;
 
   removeEventListener?: () => void;
 
@@ -98,7 +98,6 @@ export class AccountMessagesComponent implements OnInit {
       .getAllByChatId(this.selectedChat.id)
       .subscribe({
         next: (resp: MessageGetAllByChatIdResponse) => {
-          console.log(resp);
           this.primaryMessages = resp.primaryMessages;
           this.secondaryMessages = resp.secondaryMessages;
           this.combinedMessages = [
@@ -133,93 +132,28 @@ export class AccountMessagesComponent implements OnInit {
     }
   }
 
-  onDeleteMessage() {
-    console.log('inside delete message method')
+  onDeleteMessage(message: Message) {
+    console.log("inside delete message method");
   }
 
   onRightClick(event: any, index: number, message: Message) {
     event.preventDefault();
 
-    const x = event.currentTarget.offsetLeft;
+    const contextMenuEl = this.test?.get(index);
+
+    const x = event.currentTarget.parentElement.classList.contains("primary")
+      ? event.currentTarget.offsetLeft - contextMenuEl?.nativeElement.offsetWidth
+      : event.currentTarget.offsetLeft + event.currentTarget.offsetWidth;
     const y = event.currentTarget.offsetTop;
 
-console.log(x,y)
+    this.renderer.setStyle(contextMenuEl?.nativeElement, "visibility", "visible");
+    this.renderer.setStyle(contextMenuEl?.nativeElement, "top", `${y}px`);
+    this.renderer.setStyle(contextMenuEl?.nativeElement, "left", `${x}px`);
 
-    this.renderer.setStyle(this.test?.nativeElement, 'display', 'block')
-    this.renderer.setStyle(this.test?.nativeElement, 'top', `0px`);
-    this.renderer.setStyle(this.test?.nativeElement, 'left', `${x - 300}px`);
-
-
-
-    console.log(event)
-    console.log(event.currentTarget.offsetTop, event.currentTarget.offsetLeft)
-
-    // event.preventDefault();
-
-    // const newEl = document.createElement('ul');
-    // const parentEl = this.msgWrappers.get(index);
-    // if (parentEl?.nativeElement.parentElement.children.length >= 2) return;
-
-    // if (this.lastActiveMenuList >= 0 && this.lastActiveMenuList !== index) {
-    //   const previuesMenuListEl = this.msgLines.get(this.lastActiveMenuList);
-    //   if (previuesMenuListEl?.nativeElement.children.length > 1)
-    //     previuesMenuListEl?.nativeElement.removeChild(
-    //       previuesMenuListEl.nativeElement.children[1]
-    //     );
-    //   this.lastActiveMenuList = -1;
-    // }
-
-    // newEl.classList.add('message-menu');
-    // newEl.innerHTML = `
-    // <li class="reply">Отговор <i class="pi pi-reply"></i></li>
-    // <li class="copy">Копирай <i class="pi pi-copy"></i></li>
-    // <li class="edit">Редактирай <i class="pi pi-pencil"></i></li>
-    // <li class="delete" (click)="onDeleteMessage()">Изтрий <i class="pi pi-trash"></i></li>
-    // `;
-
-    // if (
-    //   this.msgLines.get(index)?.nativeElement.classList.contains('secondary')
-    // ) {
-    //   const msgWidth =
-    //     this.msgLines.get(index)?.nativeElement.children[0].offsetWidth;
-    //   newEl.style.top = '0px';
-    //   newEl.style.left = `calc(-100% + 140px + ${msgWidth}px)`;
-    //   this.removeEventListener = this.renderer.listen(
-    //     newEl,
-    //     'mouseleave',
-    //     this.onMouseLeave
-    //   );
-    // } else {
-    //   const msgWidth =
-    //     this.msgLines.get(index)?.nativeElement.children[0].offsetWidth;
-    //   newEl.style.top = '0px';
-    //   newEl.style.left = `calc(100% - 140px - ${msgWidth}px)`;
-    //   this.removeEventListener = this.renderer.listen(
-    //     newEl,
-    //     'mouseleave',
-    //     this.onMouseLeave
-    //   );
-    // }
-
-    // const msgHeight =
-    //   this.msgLines.get(index)?.nativeElement.children[0].offsetHeight;
-    // this.renderer.setStyle(
-    //   this.msgLines.get(index)?.nativeElement,
-    //   'height',
-    //   `${msgHeight}px`
-    // );
-
-    // this.lastActiveMenuList = index;
-    // parentEl?.nativeElement.parentElement.appendChild(newEl);
+    this.renderer.listen(contextMenuEl?.nativeElement, "mouseleave", () => {
+      this.renderer.setStyle(contextMenuEl?.nativeElement, "visibility", "hidden")
+    })
   }
-
-  onMouseLeave(event: any) {
-    const parentEl = event.target.parentElement;
-    const childEl = event.target;
-    parentEl.removeChild(childEl);
-  }
-
-
 
   ngOnDestroy() {
     this.chatIsSelected = false;
