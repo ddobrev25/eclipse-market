@@ -37,13 +37,12 @@
           <div
             class="d-flex flex-column message-box"
             *ngFor="let message of combinedMessages; let i = index">
-            <ul #t class="message-menu">
-              <li class="reply">Отговор <i class="pi pi-reply"></i></li>
-              <li class="copy">Копирай <i class="pi pi-copy"></i></li>
+            <ul #contextMenu class="message-menu">
+              <li class="edit" (click)="onEditMessage(message)">Редактирай <i class="pi pi-pencil"></i></li>
+              <li class="copy" (click)="onCopyMessage(message)">Копирай <i class="pi pi-copy"></i></li>
               <li class="delete" (click)="onDeleteMessage(message)">Изтрий <i class="pi pi-trash"></i></li>
             </ul>
             <div
-              #messageLine
               [ngClass]="
                 separateMessage(message)
                   ? 'primary flex-row-reverse'
@@ -51,9 +50,8 @@
               "
               class="d-flex message-line">
               <div
-                #messageWrapper
                 class="message-wrapper d-flex flex-column"
-                (contextmenu)="onRightClick($event, i, message)">
+                (contextmenu)="onShowMessageContextMenu($event, i)">
                 <span
                   [ngClass]="
                     separateMessage(message) ? 'text-end' : 'text-start'

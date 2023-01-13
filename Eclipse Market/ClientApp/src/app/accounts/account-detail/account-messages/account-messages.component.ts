@@ -7,6 +7,7 @@ import {
   ViewChildren,
   Renderer2,
 } from "@angular/core";
+import { MessageService } from "primeng/api";
 import { Subscription } from "rxjs";
 import {
   ChatGetAllByUserIdResponse,
@@ -14,9 +15,11 @@ import {
 } from "src/app/core/models/chat.model";
 import {
   Message,
+  MessageEditRequest,
   MessageGetAllByChatIdResponse,
   MessageSendRequest,
 } from "src/app/core/models/message.model";
+import { DeleteRequest } from "src/app/core/models/user.model";
 import { ChatService } from "src/app/core/services/http/chat.service";
 import { MsgService } from "src/app/core/services/http/message.service";
 import { UserDataService } from "src/app/core/services/store/user.data.service";
@@ -28,11 +31,7 @@ import { UserDataService } from "src/app/core/services/store/user.data.service";
 })
 export class AccountMessagesComponent implements OnInit {
   @ViewChild("msgInput") msgInput!: ElementRef;
-  @ViewChild("container") container!: ElementRef;
-  @ViewChildren("messageWrapper") msgWrappers!: QueryList<ElementRef>;
-  @ViewChildren("messageLine") msgLines!: QueryList<ElementRef>;
-
-  @ViewChildren("t") test?: QueryList<ElementRef>;
+  @ViewChildren("contextMenu") messageMenu?: QueryList<ElementRef>;
 
   removeEventListener?: () => void;
 
@@ -41,6 +40,8 @@ export class AccountMessagesComponent implements OnInit {
   fetchChatsSubs?: Subscription;
   messageSubs?: Subscription;
   sendMessageSubs?: Subscription;
+  deleteMessageSubs?: Subscription;
+  editMessageSubs?: Subscription;
 
   chatIsSelected: boolean = false;
   chats: ChatGetAllByUserIdResponse = [];
@@ -54,7 +55,8 @@ export class AccountMessagesComponent implements OnInit {
     private userDataService: UserDataService,
     private chatService: ChatService,
     private msgService: MsgService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -133,13 +135,32 @@ export class AccountMessagesComponent implements OnInit {
   }
 
   onDeleteMessage(message: Message) {
-    console.log("inside delete message method");
+    const body: DeleteRequest = {
+      id: message.id
+    }
+    this.deleteMessageSubs = this.msgService.delete(body).subscribe({
+      error: err => console.log(err)
+    })
+  }
+  onEditMessage(message: Message) {
+    const body: MessageEditRequest = {
+      id: message.id,
+      newBody: "need to add"
+    }
+    this.editMessageSubs = this.msgService.edit(body).subscribe({
+      error: err => console.log(err),
+      complete: () => {}
+    })
+  }
+  onCopyMessage(message: Message) {
+    navigator.clipboard.writeText('text to be copied');
   }
 
-  onRightClick(event: any, index: number, message: Message) {
+
+  onShowMessageContextMenu(event: any, index: number) {
     event.preventDefault();
 
-    const contextMenuEl = this.test?.get(index);
+    const contextMenuEl = this.messageMenu?.get(index);
 
     const x = event.currentTarget.parentElement.classList.contains("primary")
       ? event.currentTarget.offsetLeft - contextMenuEl?.nativeElement.offsetWidth
