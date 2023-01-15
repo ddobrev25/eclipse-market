@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import {
+  Chat$,
   Message,
   MessageGetAllByChatIdResponse,
 } from "../../models/message.model";
@@ -13,6 +14,7 @@ export class MessageDataService {
   constructor() {
     this.userMessages$ =
       new BehaviorSubject<MessageGetAllByChatIdResponse | null>(null);
+    this.chat$ = new BehaviorSubject<Chat$ | null>(null);
   }
 
   get userMessages() {
@@ -99,4 +101,32 @@ export class MessageDataService {
       this.userMessages$.next(newValue);
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+private chat$: BehaviorSubject<Chat$ | null>;
+
+get chats() {
+  return this.chat$.asObservable();
+}
+
+setChats(newData: Chat$) {
+  this.chat$.next({...this.chat$.value, ...newData})
+}
+
+
+
+
+
 }

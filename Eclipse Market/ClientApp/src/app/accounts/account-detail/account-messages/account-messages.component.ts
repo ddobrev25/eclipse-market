@@ -22,6 +22,7 @@ import {
   ChatGetByIdResponse,
 } from "src/app/core/models/chat.model";
 import {
+  Chat$,
   Message,
   Message$,
   MessageEditRequest,
@@ -51,12 +52,14 @@ export class AccountMessagesComponent implements OnInit {
 
   chatIsSelected: boolean = false;
   chatsChanged: boolean = false;
-  selectedChat?: ChatGetByIdResponse;
+  selectedChatId?: number;
 
   private primaryMessages: Message[] = [];
   message$: Observable<Message$> = new Observable<Message$>();
   destroy$: ReplaySubject<void> = new ReplaySubject<void>(1);
   chat$: Observable<ChatGetAllResponse> = new Observable<ChatGetAllResponse>();
+
+  test$: Observable<Chat$> = new Observable<Chat$>();
 
   constructor(
     private userDataService: UserDataService,
@@ -68,7 +71,50 @@ export class AccountMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchChats();
+    // this.fetchChats();
+
+    this.test$ = this.messageDataService.chats.pipe(
+      switchMap((x: Chat$ | null) => {
+        return x !== null
+          ? of(x)
+          : this.chatService.getAllByUserId().pipe(
+              map((x: ChatGetAllResponse) => {
+                const chatObj: Chat$ = [];
+                x.forEach((chat) => {
+                  chatObj.push({
+                    chatId: chat.id,
+                    topicListingTitle: chat.topicListingTitle,
+                    primaryMessages: null,
+                    secondaryMessages: null,
+                    combinedMessages: null,
+                  });
+                });
+                return chatObj;
+              })
+            );
+      }),
+      map((x: Chat$) => {
+        x.forEach((chat) => {
+          this.msgService
+            .getAllByChatId(chat.chatId)
+            .pipe(
+              takeUntil(this.destroy$),
+              tap((x) => {
+                x.primaryMessages.forEach((primaryMessage) => {
+                  if (this.primaryMessages.indexOf(primaryMessage) === -1) {
+                    this.primaryMessages.push(primaryMessage);
+                  }
+                });
+                chat.primaryMessages = x.primaryMessages;
+                chat.secondaryMessages = x.secondaryMessages;
+                chat.combinedMessages = this.sortMessages(x);
+              })
+            )
+            .subscribe();
+        });
+        return x;
+      })
+    );
   }
 
   private updateChatsInDataService(newChats: ChatGetAllResponse) {
@@ -108,9 +154,10 @@ export class AccountMessagesComponent implements OnInit {
       }),
       map((x) => {
         const cbMessages = {
+          chatId: selectedChatId,
           combinedMessages: this.sortMessages(x),
         };
-        cbMessages.combinedMessages.filter(x => x.chatId === selectedChatId);
+        cbMessages.combinedMessages.filter((x) => x.chatId === selectedChatId);
         return cbMessages;
       })
     );
@@ -125,16 +172,24 @@ export class AccountMessagesComponent implements OnInit {
       takeUntil(this.destroy$)
     );
   }
-  
-  onSelectChat(selectedChat: ChatGetByIdResponse) {
-    if(this.selectedChat?.id === selectedChat.id) return;
-    this.messageDataService.setUserMessages(
-      { primaryMessages: [], secondaryMessages: [] },
-      true
-    );
+
+  onSelectChat(selectedChatId: number) {
+    // if (this.selectedChat?.id === selectedChat.id) return;
+    // this.messageDataService.setUserMessages(
+    //   { primaryMessages: [], secondaryMessages: [] },
+    //   true
+    // );
+    // this.chatIsSelected = true;
+    // this.selectedChat = selectedChat;
+    // this.fetchMessagesByChatFromService(selectedChat.id).subscribe();
+
+    console.log(this.primaryMessages)
+
+    if (this.selectedChatId === selectedChatId) return;
     this.chatIsSelected = true;
-    this.selectedChat = selectedChat;
-    this.fetchMessagesByChatFromService(selectedChat.id).subscribe();
+    this.selectedChatId = selectedChatId;
+
+    
   }
 
   private sortMessages(x: MessageGetAllByChatIdResponse): Message[] {
@@ -156,16 +211,15 @@ export class AccountMessagesComponent implements OnInit {
     });
 
     this.primaryMessages = x.primaryMessages;
-    return combinedMessages;
+    return combinedMessages.reverse();
   }
 
-
   onSendMessage() {
-    if (this.selectedChat) {
+    if (this.selectedChatId) {
       if (this.msgInput.nativeElement.value === "") return;
       const body: MessageSendRequest = {
         body: this.msgInput.nativeElement.value,
-        chatId: this.selectedChat.id,
+        chatId: this.selectedChatId,
       };
       this.msgService
         .send(body)

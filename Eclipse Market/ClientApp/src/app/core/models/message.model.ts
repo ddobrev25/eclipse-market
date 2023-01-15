@@ -25,3 +25,11 @@ export type Message$ = {
   combinedMessages: Message[]
 }
 
+export type Chat$ = {
+  chatId: number;
+  topicListingTitle: string;
+  primaryMessages: Message[] | null;
+  secondaryMessages: Message[] | null;
+  combinedMessages: Message[] | null;
+}[];
+
