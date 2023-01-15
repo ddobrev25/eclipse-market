@@ -168,4 +168,22 @@
       background: var(--gray-blue);
     }
   }
+  .msg-edit-button {
+    scale: 0.8;
+  }
+  .msg-edit-input {
+    background-color: var(--gray-blue);
+    color: var(--text-light);
+    width: 100%;
+  }
+  .msg-edit-input::placeholder {
+    color: var(--text-inactive);
+  }
+  .p-dialog,
+  .p-dialog-footer {
+    padding: 0 0 1rem 0;
+  }
+  .p-dialog-content {
+    padding-bottom: 1rem;
+  }
 }

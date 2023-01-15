@@ -1,6 +1,6 @@
 import { HttpClient, HttpBackend, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { MessageEditRequest, MessageGetAllByChatIdResponse, MessageSendRequest } from '../../models/message.model';
+import { Message, MessageEditRequest, MessageGetAllByChatIdResponse, MessageSendRequest } from '../../models/message.model';
 import { DeleteRequest } from '../../models/user.model';
 
 @Injectable({
@@ -24,7 +24,7 @@ export class MsgService {
         let headers = new HttpHeaders({
             'SkipLoader': ``
         });
-        return this.http.post(`${this.url}/Message/Send`, body, {headers: headers})
+        return this.http.post<Message>(`${this.url}/Message/Send`, body, {headers: headers})
     }
     edit(body: MessageEditRequest) {
         let headers = new HttpHeaders({
@@ -37,6 +37,7 @@ export class MsgService {
         let headers = new HttpHeaders({
             'SkipLoader': ``
         });
-        return this.http.delete(`${this.url}/Message/Delete`, {body: body, headers: headers})
+        let queryParams = new HttpParams().set('id', body.id);
+        return this.http.delete(`${this.url}/Message/Delete`, {headers: headers, params: queryParams})
     }
 }

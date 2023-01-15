@@ -1,4 +1,3 @@
-import { CursorError } from '@angular/compiler/src/ml_parser/lexer';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
@@ -7,7 +6,6 @@ import {
   AdminDataUsers$,
 } from '../../models/admin.model';
 import {
-  ListingCategoryGetAllResponse,
   ListingCategoryGetByIdResponse,
 } from '../../models/listing-category.model';
 import { RoleGetByIdResponse } from '../../models/role.model';

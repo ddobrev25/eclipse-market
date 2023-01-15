@@ -21,9 +21,9 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.setTheme();
     this.messageSignalrService.startConnection();
-    this.messageSignalrService.MessageAddListener();
-    this.messageSignalrService.MessageEditListener();
-    this.messageSignalrService.MessageDeleteListener();
+    this.messageSignalrService.messageAddListener();
+    this.messageSignalrService.messageEditListener();
+    this.messageSignalrService.messageDeleteListener();
   }
   setTheme(): void {
     const themePreference = localStorage.getItem('theme');

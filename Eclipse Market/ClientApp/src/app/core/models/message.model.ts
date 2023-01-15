@@ -19,3 +19,8 @@ export type MessageEditRequest = {
   id: number;
   newBody: string;
 };
+
+export type Message$ = {
+  combinedMessages: Message[]
+}
+

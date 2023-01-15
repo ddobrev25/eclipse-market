@@ -56,7 +56,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent.ToString("dd MMMM yyyy, h:mm"),
+                    TimeSent = x.TimeSent.ToString(),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
@@ -67,7 +67,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     Body = x.Body,
-                    TimeSent = x.TimeSent.ToString("dd MMMM yyyy, h:mm"),
+                    TimeSent = x.TimeSent.ToString(),
                     UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
                 }).ToList();
 
@@ -126,10 +126,17 @@ namespace Eclipse_Market.Controllers
                 UserName = _dbContext.Users.Where(x => x.Id == messageToAdd.SenderId).First().UserName
             };
 
-            int chatId = _dbContext.Chats.Where(x => x.Id == messageToAdd.ChatId).First().Id;
-            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageAddResponse", newMessage);
+            var senderConnections = _dbContext.Users
+                .Include(x => x.ChatConnections)
+                .Where(x => x.Id == senderId)
+                .First().ChatConnections
+                .Select(x => x.ConnectionId)
+                .ToList();
 
-            return Ok();
+            int chatId = _dbContext.Chats.Where(x => x.Id == messageToAdd.ChatId).First().Id;
+            await _hubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageAddResponse", newMessage);
+
+            return Ok(newMessage);
         }
         [HttpPut]
         public async Task<ActionResult> Edit(MessageEditRequest request)
@@ -191,8 +198,14 @@ namespace Eclipse_Market.Controllers
             _dbContext.Messages.Remove(messageToDelete);
             _dbContext.SaveChanges();
 
+            var senderConnections = _dbContext.Users
+                .Include(x => x.ChatConnections)
+                .Where(x => x.Id == messageToDelete.SenderId)
+                .First().ChatConnections
+                .Select(x => x.ConnectionId)
+                .ToList();
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToDelete.ChatId).First().Id;
-            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageDeleteResponse", id);
+            await _hubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageDeleteResponse", id);
 
             return Ok();
         }        

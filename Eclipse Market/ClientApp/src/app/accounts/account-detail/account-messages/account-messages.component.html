@@ -1,12 +1,14 @@
 <div class="container-fluid px-0">
   <div class="row">
     <div class="col-4">
-      <div
-        *ngFor="let chat of chats"
-        [ngClass]="selectedChat === chat ? 'active' : ''"
-        class="message-container w-100 d-flex flex-column p-3 my-3"
-        (click)="onSelectChat(chat)">
-        <span>{{ chat.topicListingId }}</span>
+      <div *ngIf="chat$ | async as chats">
+        <div
+          *ngFor="let chat of chats"
+          [ngClass]="selectedChat === chat ? 'active' : ''"
+          class="message-container w-100 d-flex flex-column p-3 my-3"
+          (click)="onSelectChat(chat)">
+          <span>{{ chat.topicListingTitle }}</span>
+        </div>
       </div>
     </div>
     <div class="col-8">
@@ -17,6 +19,7 @@
       </div>
       <ng-container *ngIf="chatIsSelected">
         <div
+          *ngIf="message$ | async as messages"
           class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between">
           <div class="message-input-container d-flex align-items-center">
             <input
@@ -36,15 +39,34 @@
           </div>
           <div
             class="d-flex flex-column message-box"
-            *ngFor="let message of combinedMessages; let i = index">
+            *ngFor="let message of messages.combinedMessages; let i = index">
             <ul #contextMenu class="message-menu">
-              <li class="edit" (click)="onEditMessage(message)">Редактирай <i class="pi pi-pencil"></i></li>
-              <li class="copy" (click)="onCopyMessage(message)">Копирай <i class="pi pi-copy"></i></li>
-              <li class="delete" (click)="onDeleteMessage(message)">Изтрий <i class="pi pi-trash"></i></li>
+              <li
+                [ngStyle]="{
+                  display: isPrimary(message) ? 'block' : 'none'
+                }"
+                class="edit"
+                (click)="onToggleEditMessageDialog(message, i)">
+                Редактирай
+                <i class="pi pi-pencil"></i>
+              </li>
+              <li class="copy" (click)="onCopyMessage(message)">
+                Копирай
+                <i class="pi pi-copy"></i>
+              </li>
+              <li
+                [ngStyle]="{
+                  display: isPrimary(message) ? 'block' : 'none'
+                }"
+                class="delete"
+                (click)="onDeleteMessage(message)">
+                Изтрий
+                <i class="pi pi-trash"></i>
+              </li>
             </ul>
             <div
               [ngClass]="
-                separateMessage(message)
+                isPrimary(message)
                   ? 'primary flex-row-reverse'
                   : 'secondary'
               "
@@ -54,7 +76,7 @@
                 (contextmenu)="onShowMessageContextMenu($event, i)">
                 <span
                   [ngClass]="
-                    separateMessage(message) ? 'text-end' : 'text-start'
+                    isPrimary(message) ? 'text-end' : 'text-start'
                   ">
                   {{ message.userName }}
                 </span>
@@ -66,7 +88,7 @@
 
             <span
               [ngClass]="
-                separateMessage(message) ? 'primary-date' : 'secondary-date'
+                isPrimary(message) ? 'primary-date' : 'secondary-date'
               ">
               {{ message.timeSent }}
             </span>
@@ -76,3 +98,32 @@
     </div>
   </div>
 </div>
+<p-dialog
+  [blockScroll]="true"
+  [draggable]="false"
+  [(visible)]="isEditMessageDialogVisible">
+  <ng-template pTemplate="header">Редакция на съобщение</ng-template>
+  <input
+    #editedMessageInput
+    pInputText
+    class="msg-edit-input"
+    type="text"
+    [placeholder]="selectedMessageForDelete?.body" />
+  <ng-template pTemplate="footer">
+    <button
+      class="msg-edit-button"
+      pButton
+      pRipple
+      label="Запази"
+      icon="pi pi-check"
+      (click)="onEditMessage()"></button>
+  </ng-template>
+</p-dialog>
+
+<!-- <div *ngIf="test$ | async as messages">
+  <div 
+    class="bg-dark"
+    *ngFor="let message of messages.combinedMessages">
+    {{message.body}}
+  </div>
+</div> -->

@@ -53,9 +53,7 @@ export type ListingGetByIdWithAuthorResponse = {
   imageBase64String: string[];
 };
 
-export type ListingGetRecommendedResponse = {
-  listings: ListingGetAllResponse[];
-};
+export type ListingGetRecommendedResponse = ListingGetAllResponse;
 
 export type ListingAddRequest = {
   title: string;

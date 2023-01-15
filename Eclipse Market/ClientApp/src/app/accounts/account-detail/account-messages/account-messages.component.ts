@@ -8,13 +8,22 @@ import {
   Renderer2,
 } from "@angular/core";
 import { MessageService } from "primeng/api";
-import { Subscription } from "rxjs";
 import {
-  ChatGetAllByUserIdResponse,
+  map,
+  Observable,
+  of,
+  ReplaySubject,
+  switchMap,
+  takeUntil,
+  tap,
+} from "rxjs";
+import {
+  ChatGetAllResponse,
   ChatGetByIdResponse,
 } from "src/app/core/models/chat.model";
 import {
   Message,
+  Message$,
   MessageEditRequest,
   MessageGetAllByChatIdResponse,
   MessageSendRequest,
@@ -22,6 +31,7 @@ import {
 import { DeleteRequest } from "src/app/core/models/user.model";
 import { ChatService } from "src/app/core/services/http/chat.service";
 import { MsgService } from "src/app/core/services/http/message.service";
+import { MessageDataService } from "src/app/core/services/store/message.data.service";
 import { UserDataService } from "src/app/core/services/store/user.data.service";
 
 @Component({
@@ -32,130 +42,188 @@ import { UserDataService } from "src/app/core/services/store/user.data.service";
 export class AccountMessagesComponent implements OnInit {
   @ViewChild("msgInput") msgInput!: ElementRef;
   @ViewChildren("contextMenu") messageMenu?: QueryList<ElementRef>;
+  @ViewChild("editedMessageInput") editedMessageInput?: ElementRef;
 
   removeEventListener?: () => void;
 
-  lastActiveMenuList: number = -1;
-  fetchSubs?: Subscription;
-  fetchChatsSubs?: Subscription;
-  messageSubs?: Subscription;
-  sendMessageSubs?: Subscription;
-  deleteMessageSubs?: Subscription;
-  editMessageSubs?: Subscription;
+  isEditMessageDialogVisible: boolean = false;
+  selectedMessageForDelete: Message | null = null;
 
   chatIsSelected: boolean = false;
-  chats: ChatGetAllByUserIdResponse = [];
+  chatsChanged: boolean = false;
   selectedChat?: ChatGetByIdResponse;
 
-  primaryMessages?: Message[];
-  secondaryMessages?: Message[];
-  combinedMessages?: Message[];
+  private primaryMessages: Message[] = [];
+  message$: Observable<Message$> = new Observable<Message$>();
+  destroy$: ReplaySubject<void> = new ReplaySubject<void>(1);
+  chat$: Observable<ChatGetAllResponse> = new Observable<ChatGetAllResponse>();
 
   constructor(
     private userDataService: UserDataService,
     private chatService: ChatService,
     private msgService: MsgService,
     private renderer: Renderer2,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private messageDataService: MessageDataService
   ) {}
 
   ngOnInit(): void {
     this.fetchChats();
   }
 
-  fetchChats() {
-    this.fetchChatsSubs = this.userDataService.userData.subscribe({
-      next: (data) => {
-        if (data && data.chats) {
-          this.chats = data.chats;
-          return;
-        } else {
-          this.fetchSubs = this.chatService.getAllByUserId().subscribe({
-            next: (resp: ChatGetAllByUserIdResponse) => {
-              const tempBody = {
-                chats: resp,
-              };
-              this.userDataService.setUserData(tempBody);
-              this.chats = resp;
-            },
-            error: (err) => console.log(err),
-          });
-        }
-      },
-      error: (err) => console.log(err),
-    });
+  private updateChatsInDataService(newChats: ChatGetAllResponse) {
+    const newData = {
+      chats: newChats,
+    };
+    this.chatsChanged = false;
+    this.userDataService.setUserData(newData);
   }
 
-  separateMessage(message: Message): boolean {
-    if (this.primaryMessages?.includes(message)) {
-      return true;
-    }
+  private fetchChats() {
+    this.chat$ = this.userDataService.userData.pipe(
+      switchMap((x) => {
+        return x?.chats
+          ? of(x.chats)
+          : this.chatService
+              .getAllByUserId()
+              .pipe(tap((x) => (this.chatsChanged = true)));
+      }),
+      tap((x) => {
+        if (this.chatsChanged) this.updateChatsInDataService(x);
+      })
+    );
+  }
+
+  isPrimary(message: Message) {
+    if (this.primaryMessages.includes(message)) return true;
     return false;
   }
 
+  private fetchMessagesByChat(selectedChatId: number) {
+    this.message$ = this.messageDataService.userMessages.pipe(
+      switchMap((x) => {
+        return x === null
+          ? this.fetchMessagesByChatFromService(selectedChatId)
+          : of(x);
+      }),
+      map((x) => {
+        const cbMessages = {
+          combinedMessages: this.sortMessages(x),
+        };
+        return cbMessages;
+      })
+    );
+  }
+
+  private fetchMessagesByChatFromService(selectedChatId: number) {
+    return this.msgService.getAllByChatId(selectedChatId).pipe(
+      tap((x) => {
+        this.fetchMessagesByChat(selectedChatId);
+        this.messageDataService.setUserMessages(x);
+      }),
+      takeUntil(this.destroy$)
+    );
+  }
+  
   onSelectChat(selectedChat: ChatGetByIdResponse) {
+    if(this.chatIsSelected) return;
     this.chatIsSelected = true;
     this.selectedChat = selectedChat;
-    this.messageSubs = this.msgService
-      .getAllByChatId(this.selectedChat.id)
-      .subscribe({
-        next: (resp: MessageGetAllByChatIdResponse) => {
-          this.primaryMessages = resp.primaryMessages;
-          this.secondaryMessages = resp.secondaryMessages;
-          this.combinedMessages = [
-            ...this.primaryMessages,
-            ...this.secondaryMessages,
-          ];
-          this.combinedMessages.sort(function (a, b) {
-            return a.timeSent.localeCompare(b.timeSent);
-          });
-          this.combinedMessages.reverse();
-        },
-        error: (err: any) => {
-          console.log(err);
-        },
-      });
+    this.fetchMessagesByChatFromService(selectedChat.id).subscribe();
   }
+
+  private sortMessages(x: MessageGetAllByChatIdResponse): Message[] {
+    const combinedMessages = [...x.primaryMessages, ...x.secondaryMessages];
+    combinedMessages.sort(function (a, b) {
+      return new Date(a.timeSent).valueOf() - new Date(b.timeSent).valueOf();
+    });
+    combinedMessages.reverse();
+
+    combinedMessages.map((x) => {
+      x.timeSent = new Date(x.timeSent).toLocaleDateString("en-US", {
+        timeZone: "Europe/Sofia",
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "2-digit",
+      });
+    });
+
+    this.primaryMessages = x.primaryMessages;
+    return combinedMessages;
+  }
+
 
   onSendMessage() {
     if (this.selectedChat) {
+      if (this.msgInput.nativeElement.value === "") return;
       const body: MessageSendRequest = {
         body: this.msgInput.nativeElement.value,
         chatId: this.selectedChat.id,
       };
-      this.sendMessageSubs = this.msgService.send(body).subscribe({
-        next: (resp: any) => {
-          this.msgInput.nativeElement.value = null;
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
+      this.msgService
+        .send(body)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (resp: Message) => {
+            this.renderer.setProperty(
+              this.msgInput.nativeElement,
+              "value",
+              null
+            );
+            const newData: MessageGetAllByChatIdResponse = {
+              primaryMessages: [resp],
+              secondaryMessages: [],
+            };
+            this.messageDataService.setUserMessages(newData);
+          },
+          error: (err) => console.log(err),
+        });
     }
   }
 
   onDeleteMessage(message: Message) {
     const body: DeleteRequest = {
-      id: message.id
-    }
-    this.deleteMessageSubs = this.msgService.delete(body).subscribe({
-      error: err => console.log(err)
-    })
-  }
-  onEditMessage(message: Message) {
-    const body: MessageEditRequest = {
       id: message.id,
-      newBody: "need to add"
-    }
-    this.editMessageSubs = this.msgService.edit(body).subscribe({
-      error: err => console.log(err),
-      complete: () => {}
-    })
-  }
-  onCopyMessage(message: Message) {
-    navigator.clipboard.writeText('text to be copied');
+    };
+    this.msgService
+      .delete(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (err) => console.log(err),
+        complete: () => {
+          this.messageDataService.removeSenderMesage(message.id);
+        },
+      });
   }
 
+  onEditMessage() {
+    if (!this.selectedMessageForDelete || !this.editedMessageInput) return;
+
+    const body: MessageEditRequest = {
+      id: this.selectedMessageForDelete.id,
+      newBody: this.editedMessageInput.nativeElement.value,
+    };
+    this.msgService
+      .edit(body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (err) => console.log(err),
+        complete: () => {
+          this.isEditMessageDialogVisible = false;
+        },
+      });
+  }
+  onCopyMessage(message: Message) {
+    navigator.clipboard.writeText(message.body);
+    this.messageService.add({
+      key: "br",
+      severity: "info",
+      detail: "Съобщението е копирано",
+      life: 3000,
+    });
+  }
 
   onShowMessageContextMenu(event: any, index: number) {
     event.preventDefault();
@@ -163,25 +231,53 @@ export class AccountMessagesComponent implements OnInit {
     const contextMenuEl = this.messageMenu?.get(index);
 
     const x = event.currentTarget.parentElement.classList.contains("primary")
-      ? event.currentTarget.offsetLeft - contextMenuEl?.nativeElement.offsetWidth
+      ? event.currentTarget.offsetLeft -
+        contextMenuEl?.nativeElement.offsetWidth
       : event.currentTarget.offsetLeft + event.currentTarget.offsetWidth;
     const y = event.currentTarget.offsetTop;
 
-    this.renderer.setStyle(contextMenuEl?.nativeElement, "visibility", "visible");
+    this.renderer.setStyle(
+      contextMenuEl?.nativeElement,
+      "visibility",
+      "visible"
+    );
     this.renderer.setStyle(contextMenuEl?.nativeElement, "top", `${y}px`);
     this.renderer.setStyle(contextMenuEl?.nativeElement, "left", `${x}px`);
 
-    this.renderer.listen(contextMenuEl?.nativeElement, "mouseleave", () => {
-      this.renderer.setStyle(contextMenuEl?.nativeElement, "visibility", "hidden")
-    })
+    this.removeEventListener = this.renderer.listen(
+      contextMenuEl?.nativeElement,
+      "mouseleave",
+      () => {
+        this.renderer.setStyle(
+          contextMenuEl?.nativeElement,
+          "visibility",
+          "hidden"
+        );
+        this.removeEventListener!();
+      }
+    );
+  }
+
+  onToggleEditMessageDialog(messageForDelete: Message, index: number) {
+    if (!this.isEditMessageDialogVisible) {
+      this.selectedMessageForDelete = messageForDelete;
+    }
+    this.renderer.setProperty(
+      this.editedMessageInput?.nativeElement,
+      "value",
+      null
+    );
+    this.isEditMessageDialogVisible = !this.isEditMessageDialogVisible;
   }
 
   ngOnDestroy() {
     this.chatIsSelected = false;
-    this.fetchSubs?.unsubscribe();
-    this.fetchChatsSubs?.unsubscribe();
-    this.messageSubs?.unsubscribe();
-    this.sendMessageSubs?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.removeEventListener) this.removeEventListener();
+    this.messageDataService.setUserMessages(
+      { primaryMessages: [], secondaryMessages: [] },
+      true
+    );
   }
 }
