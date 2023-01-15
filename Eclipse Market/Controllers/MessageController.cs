@@ -57,7 +57,8 @@ namespace Eclipse_Market.Controllers
                     Id = x.Id,
                     Body = x.Body,
                     TimeSent = x.TimeSent.ToString(),
-                    UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
+                    UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName,
+                    ChatId = id,
                 }).ToList();
 
             var secondaryMessages = _dbContext.Messages
@@ -68,7 +69,8 @@ namespace Eclipse_Market.Controllers
                     Id = x.Id,
                     Body = x.Body,
                     TimeSent = x.TimeSent.ToString(),
-                    UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName
+                    UserName = _dbContext.Users.Where(y => y.Id == x.SenderId).First().UserName,
+                    ChatId = id
                 }).ToList();
 
             var response = new MessageGetAllByChatIdResponse
@@ -80,7 +82,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Send(MessageSendRequest request)
+        public async Task<ActionResult<MessageGetAllResponse>> Send(MessageSendRequest request)
         {
 
             var senderId = _jwtService.GetUserIdFromToken(User);
@@ -123,7 +125,8 @@ namespace Eclipse_Market.Controllers
                 Id = messageToAdd.Id,
                 Body = messageToAdd.Body,
                 TimeSent = messageToAdd.TimeSent.ToString(),
-                UserName = _dbContext.Users.Where(x => x.Id == messageToAdd.SenderId).First().UserName
+                UserName = _dbContext.Users.Where(x => x.Id == messageToAdd.SenderId).First().UserName,
+                ChatId = request.ChatId
             };
 
             var senderConnections = _dbContext.Users
@@ -171,7 +174,8 @@ namespace Eclipse_Market.Controllers
                 Id = messageToEdit.Id,
                 Body = messageToEdit.Body,
                 TimeSent = messageToEdit.TimeSent.ToString(),
-                UserName = _dbContext.Users.Where(x => x.Id == messageToEdit.SenderId).First().UserName
+                UserName = _dbContext.Users.Where(x => x.Id == messageToEdit.SenderId).First().UserName,
+                ChatId = messageToEdit.ChatId
             };
 
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToEdit.ChatId).First().Id;
@@ -204,6 +208,7 @@ namespace Eclipse_Market.Controllers
                 .First().ChatConnections
                 .Select(x => x.ConnectionId)
                 .ToList();
+
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToDelete.ChatId).First().Id;
             await _hubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageDeleteResponse", id);
 

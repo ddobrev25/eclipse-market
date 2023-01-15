@@ -3,6 +3,7 @@ export type Message = {
   body: string;
   timeSent: string;
   userName: string;
+  chatId: number;
 };
 
 export type MessageGetAllByChatIdResponse = {

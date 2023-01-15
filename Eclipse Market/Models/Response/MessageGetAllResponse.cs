@@ -6,5 +6,6 @@
         public string Body { get; set; }
         public string TimeSent { get; set; }
         public string UserName { get; set; }
+        public int ChatId { get; set; }
     }
 }

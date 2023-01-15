@@ -110,6 +110,7 @@ export class AccountMessagesComponent implements OnInit {
         const cbMessages = {
           combinedMessages: this.sortMessages(x),
         };
+        cbMessages.combinedMessages.filter(x => x.chatId === selectedChatId);
         return cbMessages;
       })
     );
