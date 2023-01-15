@@ -126,7 +126,7 @@ export class AccountMessagesComponent implements OnInit {
   }
   
   onSelectChat(selectedChat: ChatGetByIdResponse) {
-    if(this.chatIsSelected) return;
+    if(this.selectedChat?.id === selectedChat.id) return;
     this.chatIsSelected = true;
     this.selectedChat = selectedChat;
     this.fetchMessagesByChatFromService(selectedChat.id).subscribe();
