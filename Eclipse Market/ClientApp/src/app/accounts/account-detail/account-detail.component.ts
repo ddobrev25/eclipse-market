@@ -113,12 +113,12 @@ export class AccountDetailComponent implements OnInit {
   }
 
   checkForAdmin() {
-    const claims = localStorage.getItem('claims')?.split(',');
-    if (!claims) return;
-    claims.forEach((claim) => {
-      if (claim.toLowerCase().indexOf('roledeleteclaim')) {
-        this.isAdmin = true;
-      }
+    if(!localStorage.getItem('claims')) return;
+    const claims = localStorage.getItem('claims');
+    const a = JSON.parse(claims!).toString()
+    const b = a.split(',')
+    b.forEach((claim: string) => {
+      if(claim.toLowerCase() === 'roledeleteclaim') this.isAdmin = true;
     });
   }
 

@@ -24,7 +24,6 @@ export type MessageEditRequest = {
 export type Message$ = {
   combinedMessages: Message[]
 }
-
 export type Chat$ = {
   chatId: number;
   topicListingTitle: string;

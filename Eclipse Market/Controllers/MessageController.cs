@@ -210,7 +210,7 @@ namespace Eclipse_Market.Controllers
                 .ToList();
 
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToDelete.ChatId).First().Id;
-            await _hubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageDeleteResponse", id);
+            await _hubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageDeleteResponse", messageToDelete);
 
             return Ok();
         }        

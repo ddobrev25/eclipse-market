@@ -1,13 +1,15 @@
 <div class="container-fluid px-0">
   <div class="row">
     <div class="col-4">
-      <div *ngIf="test$ | async as test">
+      <div *ngIf="chat$ | async as chats" class="d-flex flex-column-reverse">
         <div
-          *ngFor="let chat of test"
+          *ngFor="let chat of chats"
           [ngClass]="selectedChatId === chat.chatId ? 'active' : ''"
-          class="message-container w-100 d-flex flex-column p-3 my-3"
+          class="message-container w-100 d-flex justify-content-between p-3 my-3"
           (click)="onSelectChat(chat.chatId)">
           <span>{{ chat.topicListingTitle }}</span>
+          <button class="btn btn-danger" (click)="onDeleteChat(chat)" id="deleteChatBtn"><i class="pi pi-trash"></i></button>
+
         </div>
       </div>
     </div>
@@ -15,11 +17,11 @@
       <div
         *ngIf="!chatIsSelected"
         class="noMessage-container d-flex justify-content-center align-items-center my-3">
-        <span>Please select a chat!</span>
+        <span>Изберете чат</span>
       </div>
       <ng-container *ngIf="chatIsSelected">
         <div
-          *ngIf="test$ | async as test"
+          *ngIf="chat$ | async as chats"
           class="message-preview-container my-3 p-1 p-md-4 d-flex flex-column-reverse justify-content-between">
           <div class="message-input-container d-flex align-items-center">
             <input
@@ -37,10 +39,10 @@
               class="p-button-rounded p-button-success mx-2"
               (click)="onSendMessage()"></button>
           </div>
-          <div *ngFor="let sm of test">
+          <div *ngFor="let chat of chats">
             <div
               class="d-flex flex-column message-box"
-              *ngFor="let message of sm.combinedMessages; let i = index">
+              *ngFor="let message of chat.combinedMessages; let i = index">
               <div *ngIf="message.chatId === selectedChatId">
                 <ul #contextMenu class="message-menu">
                   <li
@@ -109,6 +111,7 @@
   <ng-template pTemplate="header">Редакция на съобщение</ng-template>
   <input
     #editedMessageInput
+    (keyup.enter)="onEditMessage()"
     pInputText
     class="msg-edit-input"
     type="text"
@@ -120,15 +123,7 @@
       pRipple
       label="Запази"
       icon="pi pi-check"
+      (keyup.enter)="onEditMessage()"
       (click)="onEditMessage()"></button>
   </ng-template>
 </p-dialog>
-
-<!-- <div *ngIf="test$ | async as test">
-  <div class="bg-dark" *ngFor="let chat of test">
-    <div *ngFor="let primary of chat.combinedMessages">
-      {{ primary.body }}
-    </div>
-    -----------------------------------------------
-  </div>
-</div> -->

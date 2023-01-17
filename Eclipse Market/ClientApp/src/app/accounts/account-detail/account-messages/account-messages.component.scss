@@ -74,13 +74,11 @@
   }
   .primary-date {
     font-size: 12px;
-    margin-right: 0px;
-    margin-left: auto;
+    float: right;
   }
   .secondary-date {
     font-size: 12px;
-    margin-left: 0px;
-    margin-right: auto;
+    float: left;
   }
   p {
     margin: 0;
@@ -185,5 +183,9 @@
   }
   .p-dialog-content {
     padding-bottom: 1rem;
+  }
+  #deleteChatBtn {
+    width: min-content;
+    height: min-content;
   }
 }

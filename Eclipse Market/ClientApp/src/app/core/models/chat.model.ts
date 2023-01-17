@@ -1,3 +1,5 @@
+import { Message } from "./message.model";
+
 export type ChatGetAllResponse = {
   id: number;
   timeStarted: string;
@@ -19,3 +21,11 @@ export type ChatGetByIdResponse = {
 export type ChatCreateRequest = {
   topicListingId: number;
 };
+
+export type Chat = {
+  chatId: number;
+  topicListingTitle: string;
+  primaryMessages: Message[] | null;
+  secondaryMessages: Message[] | null;
+  combinedMessages: Message[] | null;
+}

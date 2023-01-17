@@ -18,13 +18,12 @@ import {
   tap,
 } from "rxjs";
 import {
-  ChatGetAllResponse,
-  ChatGetByIdResponse,
+  Chat,
+  ChatGetAllResponse
 } from "src/app/core/models/chat.model";
 import {
   Chat$,
   Message,
-  Message$,
   MessageEditRequest,
   MessageGetAllByChatIdResponse,
   MessageSendRequest,
@@ -33,7 +32,7 @@ import { DeleteRequest } from "src/app/core/models/user.model";
 import { ChatService } from "src/app/core/services/http/chat.service";
 import { MsgService } from "src/app/core/services/http/message.service";
 import { MessageDataService } from "src/app/core/services/store/message.data.service";
-import { UserDataService } from "src/app/core/services/store/user.data.service";
+import * as _ from "lodash";
 
 @Component({
   selector: "app-account-messages",
@@ -55,14 +54,10 @@ export class AccountMessagesComponent implements OnInit {
   selectedChatId?: number;
 
   private primaryMessages: Message[] = [];
-  message$: Observable<Message$> = new Observable<Message$>();
   destroy$: ReplaySubject<void> = new ReplaySubject<void>(1);
-  chat$: Observable<ChatGetAllResponse> = new Observable<ChatGetAllResponse>();
-
-  test$: Observable<Chat$> = new Observable<Chat$>();
+  chat$: Observable<Chat$> = new Observable<Chat$>();
 
   constructor(
-    private userDataService: UserDataService,
     private chatService: ChatService,
     private msgService: MsgService,
     private renderer: Renderer2,
@@ -71,9 +66,11 @@ export class AccountMessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.fetchChats();
+    this.fetchChats();
+  }
 
-    this.test$ = this.messageDataService.chats.pipe(
+  private fetchChats() {
+    this.chat$ = this.messageDataService.chats.pipe(
       switchMap((x: Chat$ | null) => {
         return x !== null
           ? of(x)
@@ -89,7 +86,8 @@ export class AccountMessagesComponent implements OnInit {
                     combinedMessages: null,
                   });
                 });
-                return chatObj;
+                this.messageDataService.chatsChanged = true;
+                return _.sortBy(chatObj, 'chatId');
               })
             );
       }),
@@ -100,11 +98,11 @@ export class AccountMessagesComponent implements OnInit {
             .pipe(
               takeUntil(this.destroy$),
               tap((x) => {
-                x.primaryMessages.forEach((primaryMessage) => {
-                  if (this.primaryMessages.indexOf(primaryMessage) === -1) {
-                    this.primaryMessages.push(primaryMessage);
-                  }
-                });
+                this.primaryMessages = _.concat(
+                  x.primaryMessages,
+                  this.primaryMessages
+                );
+                this.primaryMessages = _.unionBy(this.primaryMessages, "id");
                 chat.primaryMessages = x.primaryMessages;
                 chat.secondaryMessages = x.secondaryMessages;
                 chat.combinedMessages = this.sortMessages(x);
@@ -113,83 +111,23 @@ export class AccountMessagesComponent implements OnInit {
             .subscribe();
         });
         return x;
-      })
-    );
-  }
-
-  private updateChatsInDataService(newChats: ChatGetAllResponse) {
-    const newData = {
-      chats: newChats,
-    };
-    this.chatsChanged = false;
-    this.userDataService.setUserData(newData);
-  }
-
-  private fetchChats() {
-    this.chat$ = this.userDataService.userData.pipe(
-      switchMap((x) => {
-        return x?.chats
-          ? of(x.chats)
-          : this.chatService
-              .getAllByUserId()
-              .pipe(tap((x) => (this.chatsChanged = true)));
       }),
       tap((x) => {
-        if (this.chatsChanged) this.updateChatsInDataService(x);
+        if (this.messageDataService.chatsChanged)
+          this.messageDataService.setChats(x);
       })
     );
   }
 
   isPrimary(message: Message) {
-    if (this.primaryMessages.includes(message)) return true;
+    if (_.find(this.primaryMessages, message)) return true;
     return false;
   }
 
-  private fetchMessagesByChat(selectedChatId: number) {
-    this.message$ = this.messageDataService.userMessages.pipe(
-      switchMap((x) => {
-        return x === null
-          ? this.fetchMessagesByChatFromService(selectedChatId)
-          : of(x);
-      }),
-      map((x) => {
-        const cbMessages = {
-          chatId: selectedChatId,
-          combinedMessages: this.sortMessages(x),
-        };
-        cbMessages.combinedMessages.filter((x) => x.chatId === selectedChatId);
-        return cbMessages;
-      })
-    );
-  }
-
-  private fetchMessagesByChatFromService(selectedChatId: number) {
-    return this.msgService.getAllByChatId(selectedChatId).pipe(
-      tap((x) => {
-        this.fetchMessagesByChat(selectedChatId);
-        this.messageDataService.setUserMessages(x);
-      }),
-      takeUntil(this.destroy$)
-    );
-  }
-
   onSelectChat(selectedChatId: number) {
-    // if (this.selectedChat?.id === selectedChat.id) return;
-    // this.messageDataService.setUserMessages(
-    //   { primaryMessages: [], secondaryMessages: [] },
-    //   true
-    // );
-    // this.chatIsSelected = true;
-    // this.selectedChat = selectedChat;
-    // this.fetchMessagesByChatFromService(selectedChat.id).subscribe();
-
-    console.log(this.primaryMessages)
-
     if (this.selectedChatId === selectedChatId) return;
     this.chatIsSelected = true;
     this.selectedChatId = selectedChatId;
-
-    
   }
 
   private sortMessages(x: MessageGetAllByChatIdResponse): Message[] {
@@ -209,8 +147,6 @@ export class AccountMessagesComponent implements OnInit {
         minute: "2-digit",
       });
     });
-
-    this.primaryMessages = x.primaryMessages;
     return combinedMessages.reverse();
   }
 
@@ -231,11 +167,12 @@ export class AccountMessagesComponent implements OnInit {
               "value",
               null
             );
-            const newData: MessageGetAllByChatIdResponse = {
+            const newData = {
               primaryMessages: [resp],
               secondaryMessages: [],
+              combinedMessages: [],
             };
-            this.messageDataService.setUserMessages(newData);
+            this.messageDataService.setChatMessages(this.selectedChatId!, newData);
           },
           error: (err) => console.log(err),
         });
@@ -252,7 +189,7 @@ export class AccountMessagesComponent implements OnInit {
       .subscribe({
         error: (err) => console.log(err),
         complete: () => {
-          this.messageDataService.removeSenderMesage(message.id);
+          this.messageDataService.removeMessage(message.chatId, message.id);
         },
       });
   }
@@ -329,14 +266,14 @@ export class AccountMessagesComponent implements OnInit {
     this.isEditMessageDialogVisible = !this.isEditMessageDialogVisible;
   }
 
+  onDeleteChat(chat: Chat) {
+    
+  }
+
   ngOnDestroy() {
     this.chatIsSelected = false;
     this.destroy$.next();
     this.destroy$.complete();
     if (this.removeEventListener) this.removeEventListener();
-    this.messageDataService.setUserMessages(
-      { primaryMessages: [], secondaryMessages: [] },
-      true
-    );
   }
 }

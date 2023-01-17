@@ -42,24 +42,25 @@ export class MessageSignalrService {
 
   messageAddListener(): void {
     this.hubConnection?.on("MessageAddResponse", (newMessage: Message) => {
-      const newData: MessageGetAllByChatIdResponse = {
+      const newData = {
         primaryMessages: [],
         secondaryMessages: [newMessage],
+        combinedMessages: []
       };
-      this.messageDataService.setUserMessages(newData);
+      this.messageDataService.setChatMessages(newMessage.chatId, newData);
       this.notifyUser("SEND");
     });
   }
   messageEditListener(): void {
     this.hubConnection?.on("MessageEditResponse", (newMessage: Message) => {
-      this.messageDataService.updateUserMessages(newMessage);
+      this.messageDataService.updateMessage(newMessage.chatId, newMessage);
     });
   }
   messageDeleteListener(): void {
     this.hubConnection?.on(
       "MessageDeleteResponse",
-      (deletedMessageId: number) => {
-        this.messageDataService.removeMessage(deletedMessageId);
+      (deletedMessage: Message) => {
+        this.messageDataService.removeMessage(deletedMessage.chatId, deletedMessage.id);
       }
     );
   }

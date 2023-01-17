@@ -1,132 +1,93 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import {
-  Chat$,
-  Message,
-  MessageGetAllByChatIdResponse,
-} from "../../models/message.model";
+import { Chat$, Message } from "../../models/message.model";
+
+import * as _ from "lodash";
 
 @Injectable({
   providedIn: "root",
 })
 export class MessageDataService {
-  private userMessages$: BehaviorSubject<MessageGetAllByChatIdResponse | null>;
+  chatsChanged: boolean = false;
+  private chat$: BehaviorSubject<Chat$ | null>;
+
   constructor() {
-    this.userMessages$ =
-      new BehaviorSubject<MessageGetAllByChatIdResponse | null>(null);
     this.chat$ = new BehaviorSubject<Chat$ | null>(null);
   }
 
-  get userMessages() {
-    return this.userMessages$.asObservable();
+  get chats() {
+    return this.chat$.asObservable();
   }
 
-  setUserMessages(newData: MessageGetAllByChatIdResponse, reset = false) {
-    if (reset) {
-      this.userMessages$.next(null);
-      return;
+  setChats(newData: Chat$) {
+    this.chatsChanged = false;
+    if (this.chat$.value === null) this.chat$.next([...newData]);
+    else this.chat$.next([...this.chat$.value, ...newData]);
+  }
+
+  setChatMessages(
+    chatId: number,
+    newData: {
+      primaryMessages: Message[];
+      secondaryMessages: Message[];
+      combinedMessages: Message[];
     }
-    let newValue;
-    if (this.userMessages$.value) {
-      newValue = {
+  ) {
+    const oldChatValue = _.find(this.chat$.value, ["chatId", chatId]);
+    if (!oldChatValue) return;
+    const newChatValue = [
+      {
+        chatId: chatId,
+        topicListingTitle: oldChatValue.topicListingTitle,
         primaryMessages: [
-          ...this.userMessages$.value.primaryMessages,
+          ...oldChatValue.primaryMessages!,
           ...newData.primaryMessages,
         ],
         secondaryMessages: [
-          ...this.userMessages$.value.secondaryMessages,
+          ...oldChatValue.secondaryMessages!,
           ...newData.secondaryMessages,
         ],
-      };
-    } else {
-      newValue = {
-        primaryMessages: [...newData.primaryMessages],
-        secondaryMessages: [...newData.secondaryMessages],
-      };
-    }
-    this.userMessages$.next(newValue);
+        combinedMessages: [
+          ...oldChatValue.combinedMessages!,
+          ...newData.combinedMessages,
+        ],
+      },
+    ];
+
+    const oldValue = this.chat$.value?.filter((x) => x.chatId !== chatId);
+    if (!oldValue) return;
+    this.chatsChanged = false;
+    this.chat$.next([...oldValue, ...newChatValue]);
   }
 
-  updateUserMessages(newMessage: Message) {
-    const newPrimaryMessages = this.userMessages$.value?.primaryMessages.map(
-      (x) => {
-        if (x.id === newMessage.id) {
-          x = newMessage;
-        }
-        return x;
-      }
-    );
-    const newSecondaryMessages =
-      this.userMessages$.value?.secondaryMessages.map((x) => {
-        if (x.id === newMessage.id) {
-          x = newMessage;
-        }
-        return x;
-      });
-    this.userMessages$.next({
-      primaryMessages: newPrimaryMessages!,
-      secondaryMessages: newSecondaryMessages!,
+  updateMessage(chatId: number, newMessage: Message) {
+    const chat = _.find(this.chat$.value, ["chatId", chatId]);
+    if (!chat) return;
+    chat?.primaryMessages?.map((x) => {
+      if (x.id === newMessage.id) x = newMessage;
+      return x;
     });
+    chat?.secondaryMessages?.map((x) => {
+      if (x.id === newMessage.id) x = newMessage;
+      return x;
+    });
+
+    const chatsValue = this.chat$.value?.filter((x) => x.chatId !== chatId);
+    chatsValue?.push(chat);
+
+    if (chatsValue) this.chat$.next([...chatsValue]);
   }
 
-  removeMessage(messageForDeleteId: number) {
-    let newValue;
-    const newSecondaryMessages =
-      this.userMessages$.value?.secondaryMessages.filter(
-        (x) => x.id !== messageForDeleteId
-      );
-    if (newSecondaryMessages && this.userMessages$.value?.secondaryMessages) {
-      newValue = {
-        primaryMessages: [...this.userMessages$.value.primaryMessages],
-        secondaryMessages: [...newSecondaryMessages],
-      };
-    }
-    if (newValue) {
-      this.userMessages$.next(newValue);
-    }
-  }
-
-  removeSenderMesage(messageForDeleteId: number) {
-    let newValue;
-    const newPrimaryMessages = this.userMessages$.value?.primaryMessages.filter(
+  removeMessage(chatId: number, messageForDeleteId: number) {
+    const chat = _.find(this.chat$.value, ["chatId", chatId]);
+    const newChatPrimaryMessages = chat?.primaryMessages?.filter(
       (x) => x.id !== messageForDeleteId
     );
-    if (newPrimaryMessages && this.userMessages$.value?.secondaryMessages) {
-      newValue = {
-        primaryMessages: [...newPrimaryMessages],
-        secondaryMessages: [...this.userMessages$.value.secondaryMessages],
-      };
-    }
-    if (newValue) {
-      this.userMessages$.next(newValue);
-    }
+
+    const chatsValue = this.chat$.value?.filter((x) => x.chatId !== chatId);
+    if (!chat || !newChatPrimaryMessages) return;
+    chat.primaryMessages = newChatPrimaryMessages;
+    chatsValue?.push(chat);
+    if (chatsValue) this.chat$.next([...chatsValue]);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-private chat$: BehaviorSubject<Chat$ | null>;
-
-get chats() {
-  return this.chat$.asObservable();
-}
-
-setChats(newData: Chat$) {
-  this.chat$.next({...this.chat$.value, ...newData})
-}
-
-
-
-
-
 }
