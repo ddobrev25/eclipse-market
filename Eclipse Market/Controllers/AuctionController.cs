@@ -34,7 +34,7 @@ namespace Eclipse_Market.Controllers
         [HttpPost]
         public ActionResult Create(AuctionCreateRequest request)
         {
-            if(!_dbContext.Listings.Any(x => x.Id == request.ListingId))
+            if (!_dbContext.Listings.Any(x => x.Id == request.ListingId))
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }

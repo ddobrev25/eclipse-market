@@ -4,6 +4,7 @@ using Eclipse_Market;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Eclipse_Market.Migrations
 {
     [DbContext(typeof(EclipseMarketDbContext))]
-    partial class EclipseMarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230118103252_RemovedAuctionTable")]
+    partial class RemovedAuctionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,66 +23,6 @@ namespace Eclipse_Market.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Auction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<double>("BidIncrement")
-                        .HasColumnType("float");
-
-                    b.Property<double>("BuyoutPrice")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("ExpireTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("StartingPrice")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListingId")
-                        .IsUnique();
-
-                    b.ToTable("Auctions");
-                });
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Bid", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int>("AuctionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuctionId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Bids");
-                });
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Chat", b =>
                 {
@@ -396,36 +338,6 @@ namespace Eclipse_Market.Migrations
                     b.ToTable("UserImages");
                 });
 
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Auction", b =>
-                {
-                    b.HasOne("Eclipse_Market.Models.DB.Listing", "Listing")
-                        .WithOne("Auction")
-                        .HasForeignKey("Eclipse_Market.Models.DB.Auction", "ListingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Listing");
-                });
-
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Bid", b =>
-                {
-                    b.HasOne("Eclipse_Market.Models.DB.Auction", "Auction")
-                        .WithMany("Bids")
-                        .HasForeignKey("AuctionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eclipse_Market.Models.DB.User", "User")
-                        .WithMany("Bids")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Auction");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Eclipse_Market.Models.DB.ChatHubConnection", b =>
                 {
                     b.HasOne("Eclipse_Market.Models.DB.User", "User")
@@ -561,11 +473,6 @@ namespace Eclipse_Market.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Eclipse_Market.Models.DB.Auction", b =>
-                {
-                    b.Navigation("Bids");
-                });
-
             modelBuilder.Entity("Eclipse_Market.Models.DB.Chat", b =>
                 {
                     b.Navigation("Messages");
@@ -580,9 +487,6 @@ namespace Eclipse_Market.Migrations
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.Listing", b =>
                 {
-                    b.Navigation("Auction")
-                        .IsRequired();
-
                     b.Navigation("Images");
 
                     b.Navigation("UsersBookmarked");
@@ -602,8 +506,6 @@ namespace Eclipse_Market.Migrations
 
             modelBuilder.Entity("Eclipse_Market.Models.DB.User", b =>
                 {
-                    b.Navigation("Bids");
-
                     b.Navigation("BookmarkedListings");
 
                     b.Navigation("ChatConnections");

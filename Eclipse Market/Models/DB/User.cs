@@ -33,5 +33,7 @@ namespace Eclipse_Market.Models.DB
         public UserImage Image { get; set; }
         public List<ChatHubConnection> ChatConnections { get; set; }
 
+        public List<Bid> Bids { get; set; }
+
     }
 }

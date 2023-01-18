@@ -20,6 +20,7 @@ namespace Eclipse_Market
         public DbSet<UserImage> UserImages { get; set; }
         public DbSet<ListingImage> ListingImages { get; set; }
         public DbSet<ChatHubConnection> ChatHubConnections { get; set; }
+        public DbSet<Bid> Bids { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

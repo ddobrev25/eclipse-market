@@ -27,7 +27,7 @@ namespace Eclipse_Market.Models.DB
         public int ListingCategoryId { get; set; }
         public ListingCategory ListingCategory { get; set; }
 
-        public virtual Auction Auction { get; set; }
+        public Auction Auction { get; set; }
 
     }
 }
