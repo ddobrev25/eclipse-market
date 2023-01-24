@@ -69,7 +69,7 @@ export class AccountListingsComponent implements OnInit {
     if (this.listingsChanged) 
       this.fetchUserListingsFromService();
       this.userListingGetSubs = this.userDataService.userData.subscribe({
-      next: (data: User$) => {
+      next: (data: User$ | null) => {
         if (data && data.currentListings)  {
           console.log('inside if')
           // this.checkIfListingIsBookmarked();
@@ -118,7 +118,7 @@ export class AccountListingsComponent implements OnInit {
       price: this.listingUpdateForm.get('price')?.value,
       location: this.listingUpdateForm.get('location')?.value,
       listingCategoryId: this.listingUpdateForm.get('listingCategoryId')?.value,
-      imageBase64String: ['']
+      imageBase64Strings: ['']
     };
     if (body.price == null) {
       body.price = 0;

@@ -95,7 +95,7 @@ export class AccountDetailComponent implements OnInit {
 
   loadUserInfo() {
     this.fetchUserInfoSubs = this.userDataService.userData.subscribe({
-      next: (data: User$) => {
+      next: (data: User$ | null) => {
         if (data && data.firstName) {
           this.checkForAdmin();
           return;

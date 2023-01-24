@@ -8,7 +8,8 @@ import { DeleteRequest } from '../../models/user.model';
 })
 export class MsgService {
     private httpWithoutInterceptor: HttpClient;
-    private url = "http://localhost:5001";
+    private url = 'http://localhost:5001';
+
   
     constructor(private http: HttpClient,
                 private httpBackend: HttpBackend) { this.httpWithoutInterceptor = new HttpClient(httpBackend) }

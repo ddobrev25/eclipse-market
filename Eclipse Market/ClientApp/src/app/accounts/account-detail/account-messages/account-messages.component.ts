@@ -17,10 +17,7 @@ import {
   takeUntil,
   tap,
 } from "rxjs";
-import {
-  Chat,
-  ChatGetAllResponse
-} from "src/app/core/models/chat.model";
+import { Chat, ChatGetAllResponse } from "src/app/core/models/chat.model";
 import {
   Chat$,
   Message,
@@ -72,24 +69,24 @@ export class AccountMessagesComponent implements OnInit {
   private fetchChats() {
     this.chat$ = this.messageDataService.chats.pipe(
       switchMap((x: Chat$ | null) => {
-        return x !== null
-          ? of(x)
-          : this.chatService.getAllByUserId().pipe(
-              map((x: ChatGetAllResponse) => {
-                const chatObj: Chat$ = [];
-                x.forEach((chat) => {
-                  chatObj.push({
-                    chatId: chat.id,
-                    topicListingTitle: chat.topicListingTitle,
-                    primaryMessages: null,
-                    secondaryMessages: null,
-                    combinedMessages: null,
-                  });
+        if (x === null || this.messageDataService.chatsChanged)
+          return this.chatService.getAllByUserId().pipe(
+            map((x: ChatGetAllResponse) => {
+              const chatObj: Chat$ = [];
+              x.forEach((chat) => {
+                chatObj.push({
+                  chatId: chat.id,
+                  topicListingTitle: chat.topicListingTitle,
+                  primaryMessages: null,
+                  secondaryMessages: null,
+                  combinedMessages: null,
                 });
-                this.messageDataService.chatsChanged = true;
-                return _.sortBy(chatObj, 'chatId');
-              })
-            );
+              });
+              this.messageDataService.chatsChanged = true;
+              return _.sortBy(chatObj, "chatId");
+            })
+          );
+        return of(x);
       }),
       map((x: Chat$) => {
         x.forEach((chat) => {
@@ -172,7 +169,10 @@ export class AccountMessagesComponent implements OnInit {
               secondaryMessages: [],
               combinedMessages: [],
             };
-            this.messageDataService.setChatMessages(this.selectedChatId!, newData);
+            this.messageDataService.setChatMessages(
+              this.selectedChatId!,
+              newData
+            );
           },
           error: (err) => console.log(err),
         });
@@ -266,9 +266,7 @@ export class AccountMessagesComponent implements OnInit {
     this.isEditMessageDialogVisible = !this.isEditMessageDialogVisible;
   }
 
-  onDeleteChat(chat: Chat) {
-    
-  }
+  onDeleteChat(chat: Chat) {}
 
   ngOnDestroy() {
     this.chatIsSelected = false;
