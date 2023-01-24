@@ -8,7 +8,7 @@ export type ListingGetAllResponse = {
   views: number;
   timesBookmarked: number;
   listingCategory: string;
-  imageBase64String: string[];
+  imageBase64Strings: string[];
 }[];
 
 export type ListingGetByIdResponse = {
@@ -21,7 +21,7 @@ export type ListingGetByIdResponse = {
   views: number;
   timesBookmarked: number;
   listingCategory: string;
-  imageBase64String: string[];
+  imageBase64Strings: string[];
 };
 
 export type ListingGetByIdWithAuthorResponse = {
@@ -50,7 +50,7 @@ export type ListingGetByIdWithAuthorResponse = {
   views: number;
   timesBookmarked: number;
   listingCategory: string;
-  imageBase64String: string[];
+  imageBase64Strings: string[];
 };
 
 export type ListingGetRecommendedResponse = ListingGetAllResponse;
@@ -71,5 +71,5 @@ export type ListingUpdateRequest = {
   price: number;
   location: string;
   listingCategoryId: number;
-  imageBase64String: string[];
+  imageBase64Strings: string[];
 };

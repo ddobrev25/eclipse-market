@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { User$ } from '../../models/user.model';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import { User$ } from "../../models/user.model";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class UserDataService {
   isLoggedIn: boolean = false;
@@ -12,13 +12,15 @@ export class UserDataService {
     this.user$ = new BehaviorSubject<User$ | null>(null);
   }
 
-  get userData(): Observable<User$> {
+  get userData(): Observable<User$ | null> {
     return this.user$.asObservable();
   }
 
-  setUserData(newData: User$) {
+  setUserData(newData: User$ | null) {
+    if (newData === null) {
+      this.user$.next(null);
+      return;
+    }
     this.user$.next({ ...this.user$.value!, ...newData! });
   }
-
-  
 }

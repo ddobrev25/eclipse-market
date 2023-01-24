@@ -17,6 +17,7 @@ import { ChatService } from 'src/app/core/services/http/chat.service';
 import { ListingService } from 'src/app/core/services/http/listing.service';
 import { MsgService } from 'src/app/core/services/http/message.service';
 import { UserService } from 'src/app/core/services/http/user.service';
+import { MessageDataService } from 'src/app/core/services/store/message.data.service';
 import { UserDataService } from 'src/app/core/services/store/user.data.service';
 import { UserListingsService } from 'src/app/core/services/user-listings.service';
 
@@ -57,7 +58,8 @@ export class ListingPreviewComponent implements OnInit {
     private messageService: MessageService,
     private msgService: MsgService,
     private userService: UserService,
-    private userDataService: UserDataService
+    private userDataService: UserDataService,
+    private messageDataService: MessageDataService
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +87,8 @@ export class ListingPreviewComponent implements OnInit {
           if ('authorId' in resp) return;
           this.checkIfListingIsBookmarked();
           this.selectedListing = resp;
-          this.selectedListingImages = resp.imageBase64String;
+          this.selectedListingImages = resp.imageBase64Strings;
+          this.currentImage = resp.imageBase64Strings[0];
           this.incrementViews(this.selectedListingId);
         },
         error: (err) => console.log(err),
@@ -110,6 +113,7 @@ export class ListingPreviewComponent implements OnInit {
     };
     this.createChatSubs = this.chatService.create(body).subscribe({
       next: (resp: number) => {
+        this.messageDataService.chatsChanged = true;
         this.sendMessage(resp);
       },
       error: (err) => console.log(err),
@@ -136,7 +140,7 @@ export class ListingPreviewComponent implements OnInit {
   }
 
   onShowImageOverlay(event: any) {
-    if (this.selectedListingImages.length <= 1) {
+    if (this.selectedListingImages?.length <= 1) {
       const smh = event.target.children[1].children[0].children;
       Object.entries(smh).forEach((el: any) => {
         el[1].style.opacity = 0.5;
@@ -222,7 +226,7 @@ export class ListingPreviewComponent implements OnInit {
             }
             this.messageService.add({
               key: 'tc',
-              severity: 'warn',
+              severity: 'info',
               detail: 'Обявата е премахната от отметки!',
               life: 3000,
             });

@@ -1,13 +1,11 @@
 <div class="container-xl py-4 mx-auto my-5" id="main-container">
   <div class="row">
     <div class="col-md-7 col-12 my-4 p-0 px-4">
-      <div class="img-container" (mouseenter)="onShowImageOverlay($event)" (mouseleave)="onShowImageOverlay($event)">
-        <img
-          #img
-          id="listing-img"
-          alt="Card"
-          [src]="currentImage"
-        />
+      <div
+        class="img-container"
+        (mouseenter)="onShowImageOverlay($event)"
+        (mouseleave)="onShowImageOverlay($event)">
+        <img #img id="listing-img" alt="Card" [src]="currentImage" />
         <div class="img-overlay">
           <span class="d-flex align-items-center justify-content-between h-100">
             <i class="pi pi-chevron-left" (click)="onPreviousImage($event)"></i>
@@ -22,29 +20,29 @@
               <img
                 id="profile-img"
                 alt="Card"
-                src="https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png"
-              />
+                [src]="selectedListing?.author" />
             </div>
             <div
-              class="col-lg-4 col-6 d-flex flex-column justify-content-center"
-            >
-              <span
-                >{{ selectedListing?.author?.firstName }}
-                {{ selectedListing?.author?.lastName }}</span
-              >
-              <span>{{ selectedListing?.author?.phoneNumber }}</span>
+              class="col-lg-4 col-6 d-flex flex-column justify-content-center py-4">
+              <span>
+                <i class="pi pi-user"></i>
+                {{ selectedListing?.author?.firstName }}
+                {{ selectedListing?.author?.lastName }}
+              </span>
+              <span>
+                <i class="pi pi-phone"></i>
+                {{ selectedListing?.author?.phoneNumber }}
+              </span>
             </div>
             <div
-              class="col-lg-5 col-12 d-flex align-items-center justify-content-center mb-lg-0 mb-3"
-            >
+              class="col-lg-5 col-12 d-flex align-items-center justify-content-center mb-lg-0 mb-3">
               <button
                 pButton
                 pRipple
                 type="button"
                 label="Виж другите обяви на този потребител"
                 class="p-button-primary"
-                (click)="onLoadUserListings()"
-              ></button>
+                (click)="onLoadUserListings()"></button>
             </div>
           </div>
         </div>
@@ -54,7 +52,10 @@
       <div class="info-container w-100 p-3 d-flex flex-column">
         <div class="category d-flex justify-content-between align-items-center">
           <span>{{ selectedListing?.listingCategory }}</span>
-          <i #bookmark class="pi pi-bookmark" (click)="onBookmarkListing($event)"></i>
+          <i
+            #bookmark
+            class="pi pi-bookmark"
+            (click)="onBookmarkListing($event)"></i>
         </div>
         <div class="title pt-1">
           <span>{{ selectedListing?.title }}</span>
@@ -85,11 +86,10 @@
             name="message"
             maxlength="200"
             placeholder="Съобщение"
-            class="form-control"
-          ></textarea>
-          <span id="charLeft"
-            >Остават ви {{ remainingCharacters }} символа</span
-          >
+            class="form-control"></textarea>
+          <span id="charLeft">
+            Остават ви {{ remainingCharacters }} символа
+          </span>
           <label for="message">Напиши съобщение</label>
         </div>
         <div class="send-btn mt-5">
@@ -99,8 +99,7 @@
             type="button"
             label="Изпрати съобщение"
             class="p-button-success w-100"
-            (click)="onSendMessage()"
-          ></button>
+            (click)="onSendMessage()"></button>
         </div>
       </div>
     </div>

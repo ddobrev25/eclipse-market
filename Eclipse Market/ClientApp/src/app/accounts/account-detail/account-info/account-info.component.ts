@@ -38,6 +38,7 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
     if(this.userDataChanged) {
       this.loadUserSubs = this.userService.getInfo().subscribe({
         next: (resp: UserGetInfoResponse) => {
+          console.log(resp);
           this.userDataService.setUserData(resp);
           this.userInfo = resp;
           this.userDataChanged = false;
@@ -46,16 +47,16 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
       });
     }
     this.fetchUserInfoSubs = this.userDataService.userData.subscribe({
-      next: (data: User$) => {
-        if (data && data.firstName) {
-          this.userInfo = data;
-        } else {
+      next: (data: User$ | null) => {
+        if (data === null) {
           this.loadUserSubs = this.userService.getInfo().subscribe({
             next: (resp: UserGetInfoResponse) => {
               this.userDataService.setUserData(resp);
               this.userInfo = resp;
             },
           });
+        } else {
+          this.userInfo = data;
         }
       },
       error: (err) => console.log(err),
@@ -96,13 +97,14 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   }
 
   onLogOut() {
-    localStorage.clear();
-    this.userDataService.setUserData(null);
     this.router.navigate(['/home']);
+    this.userDataService.setUserData(null);
+    localStorage.clear();
   }
 
   ngOnDestroy() {
     this.loadUserSubs?.unsubscribe();
     this.fetchUserInfoSubs?.unsubscribe();
+    this.updateImgSubs?.unsubscribe();
   }
 }

@@ -19,6 +19,8 @@ import { DeleteRequest } from '../../models/user.model';
 export class ListingCategoryService {
   private httpWithoutInterceptor: HttpClient;
   private url = 'http://localhost:5001';
+
+
   categories: any;
 
   constructor(private http: HttpClient, private httpBackend: HttpBackend) {

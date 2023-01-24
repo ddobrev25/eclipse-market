@@ -35,7 +35,7 @@ export type User$ = {
   bookmarkedListings?: ListingGetAllResponse;
   imageBase64String?: string;
   chats?: ChatGetAllByUserIdResponse | ChatGetAllResponse
-} | null;
+};
 
 export type UserGetAllResponse = {
   id: number;
