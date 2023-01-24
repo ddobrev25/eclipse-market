@@ -116,13 +116,10 @@
         float: right;
     }
     #profile-img {
+        width: 120px;
         aspect-ratio: 1 / 1;
-        width: 100%;
         padding: 10px;
         border-radius: 50%;
-    }
-    #profile-img {
-        width: 120px;
     }
 
     .category > i {

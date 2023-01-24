@@ -108,6 +108,7 @@ export type AuthorGetResponse = {
   lastName: string;
   phoneNumber: string;
   dateCreated: string;
+  imageBase64String: string;
   listings: {
     id: number;
     title: string;
@@ -117,7 +118,7 @@ export type AuthorGetResponse = {
     views: number;
     timesBookmarked: number;
     listingCategory: string;
-    imageBase64String: string;
+    imageBase64Strings: string[];
   }[];
 }
 export type BookmarkListingRequest = {

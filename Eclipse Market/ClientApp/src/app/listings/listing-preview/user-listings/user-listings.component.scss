@@ -13,15 +13,14 @@
         background-color: var(--gray-blue-dark);
         border-color: var(--gray-blue-border);
     }
-    #invisible-span {
-        opacity: 0;
-    }
     h3 {
         color: var(--text-light);
     }
     #profile-img {
-        width: 100%;
-        height: auto;
+        width: 60%;
+        aspect-ratio: 1 / 1;
+        padding: 10px;
+        border-radius: 50%;
     }
     #listing-img {
         aspect-ratio: 1 / 1;
