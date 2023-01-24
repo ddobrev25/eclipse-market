@@ -89,6 +89,7 @@ namespace Eclipse_Market.Controllers
                 FirstName = author.FirstName,
                 LastName = author.LastName,
                 PhoneNumber = author.PhoneNumber,
+                ImageBase64String = _dbContext.UserImages.Where(x => x.UserId == author.Id).First().Base64String,
                 Listings = listingResponses
             };
             var response = new ListingGetByIdResponse
