@@ -27,6 +27,7 @@ export class MessageSignalrService {
 
   startConnection = () => {
     const token = localStorage.getItem("token");
+    if(!token) return;
     const jwt = token !== null ? JSON.parse(token) : "";
 
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -39,6 +40,10 @@ export class MessageSignalrService {
 
     this.hubConnection.start().catch((err: any) => console.log(err));
   };
+
+  stopConnection = () => {
+    this.hubConnection?.stop();
+  }
 
   messageAddListener(): void {
     this.hubConnection?.on("MessageAddResponse", (newMessage: Message) => {

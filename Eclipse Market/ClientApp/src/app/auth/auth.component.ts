@@ -16,6 +16,7 @@ import {
   UserGetInfoResponse,
   UserRegisterRequest,
 } from '../core/models/user.model';
+import { MessageSignalrService } from '../core/services/message.signalr.service';
 
 @Component({
   selector: 'app-auth',
@@ -35,7 +36,8 @@ export class AuthComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private userDataService: UserDataService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private messageSignalrService: MessageSignalrService
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +75,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       complete: () => {
         this.loadUserInfo();
         this.userDataService.isLoggedIn = true;
+        this.messageSignalrService.startConnection();
         this.router.navigate(['/home']);
       },
     });

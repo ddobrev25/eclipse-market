@@ -9,6 +9,7 @@ import {
   UserUpdateImageRequest,
 } from 'src/app/core/models/user.model';
 import { UserService } from 'src/app/core/services/http/user.service';
+import { MessageSignalrService } from 'src/app/core/services/message.signalr.service';
 import { UserDataService } from 'src/app/core/services/store/user.data.service';
 
 @Component({
@@ -27,7 +28,8 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private userDataService: UserDataService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private messageSignalrService: MessageSignalrService
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +102,7 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
     this.router.navigate(['/home']);
     this.userDataService.setUserData(null);
     localStorage.clear();
+    this.messageSignalrService.stopConnection();
   }
 
   ngOnDestroy() {
