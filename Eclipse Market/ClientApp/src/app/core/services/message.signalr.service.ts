@@ -6,7 +6,9 @@ import {
 } from "@angular/router";
 import * as signalR from "@microsoft/signalr";
 import { MessageService } from "primeng/api";
+import { Chat, ChatGetByIdResponse } from "../models/chat.model";
 import {
+  Chat$,
   Message,
   MessageGetAllByChatIdResponse,
 } from "../models/message.model";
@@ -23,11 +25,11 @@ export class MessageSignalrService {
     private messageDataService: MessageDataService,
     private messageService: MessageService,
     private router: Router
-  ) {}
+  ) { }
 
   startConnection = () => {
     const token = localStorage.getItem("token");
-    if(!token) return;
+    if (!token) return;
     const jwt = token !== null ? JSON.parse(token) : "";
 
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -52,22 +54,38 @@ export class MessageSignalrService {
         secondaryMessages: [newMessage],
         combinedMessages: []
       };
-      this.messageDataService.setChatMessages(newMessage.chatId, newData);
+      this.messageDataService.setChatMessages(newMessage.chatId, newData)
       this.notifyUser("SEND");
     });
   }
   messageEditListener(): void {
     this.hubConnection?.on("MessageEditResponse", (newMessage: Message) => {
-      this.messageDataService.updateMessage(newMessage.chatId, newMessage);
+      this.messageDataService.updateMessage(newMessage.chatId, newMessage)
     });
   }
   messageDeleteListener(): void {
     this.hubConnection?.on(
       "MessageDeleteResponse",
       (deletedMessage: Message) => {
-        this.messageDataService.removeMessage(deletedMessage.chatId, deletedMessage.id);
+        this.messageDataService.removeMessage(deletedMessage.chatId, deletedMessage.id)
       }
     );
+  }
+
+  chatCreateListener(): void {
+    this.hubConnection?.on(
+      "ChatCreateResponse",
+      (createdChat: ChatGetByIdResponse) => {
+        const newChat: Chat$ = [{
+          chatId: createdChat.id,
+          topicListingTitle: createdChat.topicListingTitle,
+          primaryMessages: null,
+          secondaryMessages: null,
+          combinedMessages: null
+        }]
+        this.messageDataService.setChats(newChat);
+      }
+    )
   }
 
   private notifyUser(action: MessageAction) {

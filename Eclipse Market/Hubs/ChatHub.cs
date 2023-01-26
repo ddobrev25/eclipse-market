@@ -72,20 +72,6 @@ namespace Eclipse_Market.Hubs
                 await Groups.AddToGroupAsync(GetConnectionId(), chatId.ToString());
             }
         }
-        public async Task AskServer(string someTextFromClient)
-        {
-            string tempString;
-            if (someTextFromClient == "hey")
-            {
-                tempString = "Message was 'hey'";
-            }
-            else
-            {
-                tempString = "Message was  " + someTextFromClient;
-            }
-
-            await Clients.Clients(Context.ConnectionId).SendAsync("askServerResponse", tempString);
-        }
         private int GetUserId()
         {
             return int.Parse(Context.User.Identity.Name);
@@ -97,42 +83,6 @@ namespace Eclipse_Market.Hubs
         private string GetUserAgent()
         {
             return Context.GetHttpContext().Request.Headers.UserAgent.ToString();
-        }
-        public async Task Send(MessageSendRequest request)
-        {
-            var senderId = GetUserId();
-
-            if (request.Body == string.Empty)
-            {
-                throw new HubException("Body string can not be empty.");
-            }
-            var chatToSendTo = _dbContext.Chats
-                .Include(x => x.Participants)
-                .Where(x => x.Id == request.ChatId)
-                .FirstOrDefault();
-            
-            if (chatToSendTo == null)
-            {
-                throw new HubException(ErrorMessages.InvalidId);
-            }
-
-            var chatParticipantIds = chatToSendTo.Participants.Select(x => x.UserId);
-
-            if (!chatParticipantIds.Contains(senderId))
-            {
-                throw new HubException("Invalid permissions");
-            }
-
-            var messageToAdd = new Message
-            {
-                Body = request.Body,
-                SenderId = senderId,
-                TimeSent = DateTime.UtcNow,
-                ChatId = request.ChatId
-            };
-            _dbContext.Messages.Add(messageToAdd);
-            _dbContext.SaveChanges();
-            await Clients.Group(chatToSendTo.Id.ToString()).SendAsync("SendMessageResponse", messageToAdd.Body);
         }
     }
 }

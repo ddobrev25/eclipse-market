@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
     this.messageSignalrService.messageAddListener();
     this.messageSignalrService.messageEditListener();
     this.messageSignalrService.messageDeleteListener();
+    this.messageSignalrService.chatCreateListener();
   }
   setTheme(): void {
     const themePreference = localStorage.getItem('theme');

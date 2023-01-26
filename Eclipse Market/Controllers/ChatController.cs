@@ -1,8 +1,10 @@
-﻿using Eclipse_Market.Models.DB;
+﻿using Eclipse_Market.Hubs;
+using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Data.Entity;
 using System.Reflection.Metadata.Ecma335;
@@ -16,12 +18,15 @@ namespace Eclipse_Market.Controllers
         private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
         public IJwtService JwtService { get; set; }
-        public ChatController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService)
+        private IHubContext<ChatHub> _chatHubContext;
+        public ChatController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService, IHubContext<ChatHub> chatHubContext)
         {
             _dbContext = dbContext;
             Configuration = configuration;
             JwtService = jwtService;
+            _chatHubContext = chatHubContext;
         }
+
 
         [HttpGet]
         public ActionResult<List<ChatGetAllResponse>> GetAll()
@@ -105,7 +110,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public ActionResult<int> Create(ChatCreateRequest request)
+        public async Task<ActionResult<int>> Create(ChatCreateRequest request)
         {
             var sender = _dbContext.Users.First(x => x.Id == JwtService.GetUserIdFromToken(User));
 
@@ -113,14 +118,14 @@ namespace Eclipse_Market.Controllers
                 .Include(x => x.AuthorId)
                 .FirstOrDefault(x => x.Id == request.TopicListingId);
 
-            if(listingOfSender == null)
+            if (listingOfSender == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
             var receiver = _dbContext.Users.First(x => x.Id == listingOfSender.AuthorId);
 
-            if(sender.Id == receiver.Id)
+            if (sender.Id == receiver.Id)
             {
                 return BadRequest("A user can not start a chat with themself.");
             }
@@ -147,14 +152,14 @@ namespace Eclipse_Market.Controllers
                         {
                             var currentParticipants = chat.Participants;
 
-                            if(AreParticipantsMatching(currentParticipants, participants))
+                            if (AreParticipantsMatching(currentParticipants, participants))
                             {
                                 return Ok(chat.Id);
                             }
                         }
-                            
 
-                        return Ok("Error");
+
+                        //return Ok("Error");
                     }
                 }
             }
@@ -167,8 +172,20 @@ namespace Eclipse_Market.Controllers
             };
             _dbContext.Chats.Add(chatToAdd);
             _dbContext.SaveChanges();
+            List<string> connectionIds = new List<string>();
+            foreach (var participant in participants)
+            {
+                connectionIds = _dbContext.ChatHubConnections
+                    .Where(x => x.UserId == participant.UserId)
+                    .Select(x => x.ConnectionId)
+                    .ToList();
+                foreach (var connId in connectionIds)
+                {
+                    await _chatHubContext.Groups.AddToGroupAsync(connId, chatToAdd.Id.ToString());
+                }
+            }
+            await _chatHubContext.Clients.GroupExcept(chatToAdd.Id.ToString(), connectionIds).SendAsync("ChatCreateResponse", chatToAdd);
             return Ok(chatToAdd.Id);
-
         }
         private bool AreParticipantsMatching(ICollection<UserChat> participants1, ICollection<UserChat> participants2)
         {
