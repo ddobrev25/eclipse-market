@@ -21,8 +21,11 @@ export class MessageDataService {
 
   setChats(newData: Chat$) {
     this.chatsChanged = false;
+    console.log("before next", this.chat$.value, newData)
     if (this.chat$.value === null) this.chat$.next([...newData]);
     else this.chat$.next([...this.chat$.value, ...newData]);
+    console.log("after next", this.chat$.value)
+
   }
 
   setChatMessages(

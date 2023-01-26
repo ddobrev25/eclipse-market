@@ -5,6 +5,7 @@ import {
   Router,
 } from "@angular/router";
 import * as signalR from "@microsoft/signalr";
+import { create } from "lodash";
 import { MessageService } from "primeng/api";
 import { Chat, ChatGetByIdResponse } from "../models/chat.model";
 import {
@@ -83,6 +84,7 @@ export class MessageSignalrService {
           secondaryMessages: null,
           combinedMessages: null
         }]
+        console.log('signalrChat response', createdChat, newChat)
         this.messageDataService.setChats(newChat);
       }
     )

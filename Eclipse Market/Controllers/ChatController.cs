@@ -172,19 +172,30 @@ namespace Eclipse_Market.Controllers
             };
             _dbContext.Chats.Add(chatToAdd);
             _dbContext.SaveChanges();
-            List<string> connectionIds = new List<string>();
+            List<string> groupConnectionIds = new List<string>();
+            var senderConnections = _dbContext.ChatHubConnections
+                .Where(x => x.UserId == sender.Id)
+                .Select(x => x.ConnectionId)
+                .ToList();
+
+            var newChat = new ChatGetAllByUserIdResponse
+            {
+                   Id = chatToAdd.Id,
+                   TopicListingTitle = _dbContext.Listings.Where(x => x.Id == chatToAdd.TopicListingId).First().Title
+            };
             foreach (var participant in participants)
             {
-                connectionIds = _dbContext.ChatHubConnections
+                groupConnectionIds = _dbContext.ChatHubConnections
                     .Where(x => x.UserId == participant.UserId)
                     .Select(x => x.ConnectionId)
                     .ToList();
-                foreach (var connId in connectionIds)
+                foreach (var connId in groupConnectionIds)
                 {
                     await _chatHubContext.Groups.AddToGroupAsync(connId, chatToAdd.Id.ToString());
                 }
             }
-            await _chatHubContext.Clients.GroupExcept(chatToAdd.Id.ToString(), connectionIds).SendAsync("ChatCreateResponse", chatToAdd);
+
+            await _chatHubContext.Clients.GroupExcept(chatToAdd.Id.ToString(), senderConnections).SendAsync("ChatCreateResponse", newChat);
             return Ok(chatToAdd.Id);
         }
         private bool AreParticipantsMatching(ICollection<UserChat> participants1, ICollection<UserChat> participants2)
