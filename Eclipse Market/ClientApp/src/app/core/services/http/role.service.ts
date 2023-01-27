@@ -6,15 +6,16 @@ import {
   RoleUpdateRequest,
 } from '../../models/role.model';
 import { DeleteRequest } from '../../models/user.model';
+import { PenTestService } from 'src/app/pen-test-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoleService {
   private httpWithoutInterceptor: HttpClient;
-  private url = 'http://localhost:5001';
+  private url = this.penTest.url;
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
+  constructor(private http: HttpClient, private httpBackend: HttpBackend, private penTest: PenTestService) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 

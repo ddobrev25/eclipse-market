@@ -3,24 +3,25 @@ import {
   HttpBackend,
   HttpParams,
   HttpHeaders,
-} from '@angular/common/http';
-import { Injectable } from '@angular/core';
+} from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { PenTestService } from "src/app/pen-test-service.service";
 import {
   ChatCreateRequest,
   ChatGetAllByUserIdResponse,
   ChatGetAllResponse,
   ChatGetByIdResponse,
-} from '../../models/chat.model';
-import { DeleteRequest } from '../../models/user.model';
+} from "../../models/chat.model";
+import { DeleteRequest } from "../../models/user.model";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ChatService {
   private httpWithoutInterceptor: HttpClient;
-  private url = 'http://localhost:5001';
+  private url = this.penTest.url;
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
+  constructor(private http: HttpClient, private httpBackend: HttpBackend, private penTest: PenTestService) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 
@@ -37,7 +38,7 @@ export class ChatService {
     );
   }
   getById(id: number) {
-    let queryParams = new HttpParams().set('id', id);
+    let queryParams = new HttpParams().set("id", id);
     return this.http.get<ChatGetByIdResponse>(`${this.url}/Chat/GetById`, {
       params: queryParams,
     });

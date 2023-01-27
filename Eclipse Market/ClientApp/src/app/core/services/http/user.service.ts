@@ -19,16 +19,17 @@ import {
   UserUpdateRequest,
 } from '../../models/user.model';
 import { Observable } from 'rxjs';
+import { PenTestService } from 'src/app/pen-test-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private httpWithoutInterceptor: HttpClient;
-  private url = 'http://localhost:5001';
+  private url = this.penTest.url;
 
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
+  constructor(private http: HttpClient, private httpBackend: HttpBackend, private penTest: PenTestService) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 

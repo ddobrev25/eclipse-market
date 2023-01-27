@@ -6,6 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { PenTestService } from 'src/app/pen-test-service.service';
 import {
   ListingAddRequest,
   ListingGetAllResponse,
@@ -21,12 +22,13 @@ import { DeleteRequest } from '../../models/user.model';
 })
 export class ListingService {
   private httpWithoutInterceptor: HttpClient;
-  private url = 'http://localhost:5001';
+  private url = this.penTest.url;
 
   constructor(
     private http: HttpClient,
     private httpBackend: HttpBackend,
-    private router: Router
+    private router: Router,
+    private penTest: PenTestService
   ) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }

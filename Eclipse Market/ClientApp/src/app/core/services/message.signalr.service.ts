@@ -7,6 +7,7 @@ import {
 import * as signalR from "@microsoft/signalr";
 import { create } from "lodash";
 import { MessageService } from "primeng/api";
+import { PenTestService } from "src/app/pen-test-service.service";
 import { Chat, ChatGetByIdResponse } from "../models/chat.model";
 import {
   Chat$,
@@ -20,12 +21,13 @@ import { MessageDataService } from "./store/message.data.service";
 })
 export class MessageSignalrService {
   hubConnection?: signalR.HubConnection;
-  url: string = "http://localhost:5001/chatHub";
+  url: string = this.penTest.url;
 
   constructor(
     private messageDataService: MessageDataService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private penTest: PenTestService
   ) { }
 
   startConnection = () => {
