@@ -10,7 +10,7 @@
         <img
           (click)="onSelectListing(listing.id!)"
           alt="Card"
-          [src]="listing.imageBase64Strings"
+          [src]="listing.imageBase64Strings[0]"
         />
       </ng-template>
       <ng-template pTemplate="body">

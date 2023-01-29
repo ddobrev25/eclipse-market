@@ -19,13 +19,14 @@ export class MessageDataService {
     return this.chat$.asObservable();
   }
 
-  setChats(newData: Chat$) {
+  setChats(newData: Chat$ | null) {
+    if(newData === null) {
+      this.chat$.next(null);
+      return;
+    }
     this.chatsChanged = false;
-    console.log("before next", this.chat$.value, newData)
     if (this.chat$.value === null) this.chat$.next([...newData]);
     else this.chat$.next([...this.chat$.value, ...newData]);
-    console.log("after next", this.chat$.value)
-
   }
 
   setChatMessages(

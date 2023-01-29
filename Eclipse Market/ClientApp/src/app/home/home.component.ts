@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
   }
 
   fetchRandomListings() {
-    this.randomListingGetSubs = this.listingService.getRecommended(1).subscribe({
+    this.randomListingGetSubs = this.listingService.getRecommended(4).subscribe({
       next: (resp: ListingGetRecommendedResponse) => {
         this.randomListingList = resp;
       },

@@ -6,13 +6,19 @@
         (mouseenter)="onShowImageOverlay($event)"
         (mouseleave)="onShowImageOverlay($event)"
       >
-        <img id="listing-img" alt="Card" [src]="currentImage" />
+        <img #img id="listing-img" alt="Card" [src]="currentImage" />
+        <div class="img-overlay">
+          <span class="d-flex align-items-center justify-content-between h-100">
+            <i class="pi pi-chevron-left" (click)="onPreviousImage($event)"></i>
+            <i class="pi pi-chevron-right" (click)="onNextImage($event)"></i>
+          </span>
+        </div>
       </div>
     </div>
     <div class="col-md-5 col-12 my-3 p-0 pe-md-4 px-md-0 px-4">
       <div class="info-container w-100 h-100 p-3 d-flex flex-column">
         <div class="category">
-          <span>Listing Category</span>
+          <span>{{ selectedListing?.listingCategory }}</span>
         </div>
         <div class="title pt-1">
           <span>{{ selectedListing?.title }}</span>

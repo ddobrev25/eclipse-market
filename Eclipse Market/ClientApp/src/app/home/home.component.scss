@@ -111,13 +111,11 @@
     }
 
     .preview-card {
-        max-height: 500px;
         margin-bottom: 20px;
         background: var(--gray-blue-dark);
         border: 2px solid var(--gray-blue-border);
         border-radius: 0;
         word-break: break-all;
-        transition: .2s;
     }
     .preview-card:hover {
         border-bottom-color: var(--blue-bg);
@@ -126,9 +124,15 @@
         width: auto;
         max-width: 481px;
     }
-    .p-card-header img {
+    .p-card-header img.img-list {
         height: auto;
-        padding: 12px;
+        padding: 16px;
+        cursor: pointer;
+    }
+    .p-card-header img.img-grid {
+        width: 100%;
+        aspect-ratio: 1/1;
+        padding: 16px;
         cursor: pointer;
     }
     .p-card-body {

@@ -15,6 +15,9 @@
         width: 100%;
         max-width: 481px;
     }
+    .p-card-header {
+        position: relative;
+    }
     .p-card-header img {
         width: 100%;
         aspect-ratio: 2/1;
@@ -76,15 +79,12 @@
     }
     .p-card-header > i {
         font-size: 3rem;
-        position: relative;
+        position: absolute;
         top: -6px;
-        left: calc(100% - 50px);
+        left: calc(100% - 60px);
         cursor: pointer;
     }
     .bookmarked {
         color: var(--danger);
-    }
-    .p-card-header {
-        width: 100%;
     }
 }

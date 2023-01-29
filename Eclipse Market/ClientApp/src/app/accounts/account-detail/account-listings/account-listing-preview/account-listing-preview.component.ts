@@ -1,17 +1,20 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
-import { ListingService } from 'src/app/core/services/http/listing.service';
-import { ListingGetByIdResponse, ListingGetByIdWithAuthorResponse } from 'src/app/core/models/listing.model';
-import { Router } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
+import { ListingPreviewService } from "src/app/core/services/listing-preview.service";
+import { ListingService } from "src/app/core/services/http/listing.service";
+import {
+  ListingGetByIdResponse,
+  ListingGetByIdWithAuthorResponse,
+} from "src/app/core/models/listing.model";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-account-listing-preview',
-  templateUrl: './account-listing-preview.component.html',
-  styleUrls: ['./account-listing-preview.component.scss'],
+  selector: "app-account-listing-preview",
+  templateUrl: "./account-listing-preview.component.html",
+  styleUrls: ["./account-listing-preview.component.scss"],
 })
 export class AccountListingPreviewComponent implements OnInit {
-  @ViewChild('img') imgEl?: ElementRef;
+  @ViewChild("img") imgEl?: ElementRef;
 
   currentImage?: string;
   selectedListingImages: string[] = [];
@@ -19,7 +22,7 @@ export class AccountListingPreviewComponent implements OnInit {
   selectedListing?: ListingGetByIdWithAuthorResponse;
 
   remainingCharacters: number = 200;
-  textAreaValue: string = '';
+  textAreaValue: string = "";
 
   constructor(
     private listingPreviewService: ListingPreviewService,
@@ -33,15 +36,18 @@ export class AccountListingPreviewComponent implements OnInit {
 
   fetchListingInfo() {
     const id = this.listingPreviewService.listingPreviewId.getValue();
-    if(!id) {
-      this.router.navigate(['/home']);
-      
+    if (!id) {
+      this.router.navigate(["/home"]);
     }
     this.listingSubs = this.listingService.getById(id).subscribe({
-      next: (resp: ListingGetByIdResponse | ListingGetByIdWithAuthorResponse) => {
-        console.log(resp);
-        if(!('author' in resp)) return;
+      next: (
+        resp: ListingGetByIdResponse | ListingGetByIdWithAuthorResponse
+      ) => {
+        if (!("author" in resp)) return;
         this.selectedListing = resp;
+        this.selectedListingImages = resp.imageBase64Strings;
+        console.log(this.selectedListingImages);
+        this.currentImage = resp.imageBase64Strings[0];
       },
       error: (err) => {
         console.log(err);
@@ -54,24 +60,24 @@ export class AccountListingPreviewComponent implements OnInit {
     this.remainingCharacters = 200 - textAreaValue.length;
   }
   onShowImageOverlay(event: any) {
-    if(this.selectedListingImages.length <= 1) {
+    if (this.selectedListingImages.length <= 1) {
       const smh = event.target.children[1].children[0].children;
       Object.entries(smh).forEach((el: any) => {
         el[1].style.opacity = 0.5;
       });
     }
-    event.target.children[0].classList.toggle('show-overlay')
+    event.target.children[0].classList.toggle("show-overlay");
   }
   onNextImage(event: any) {
     const currentImage = this.imgEl?.nativeElement.currentSrc;
     const currentImageIndex = this.selectedListingImages.indexOf(currentImage);
     const nextImage = this.selectedListingImages[currentImageIndex + 1];
-    if(currentImageIndex >= this.selectedListingImages.length - 1) {
+    if (currentImageIndex >= this.selectedListingImages.length - 1) {
       this.currentImage = currentImage;
       return;
     }
     event.target.parentElement.children[0].style.opacity = 1;
-    if(currentImageIndex + 1 === this.selectedListingImages.length - 1) {
+    if (currentImageIndex + 1 === this.selectedListingImages.length - 1) {
       event.target.style.opacity = 0.5;
       this.currentImage = nextImage;
       return;
@@ -81,17 +87,16 @@ export class AccountListingPreviewComponent implements OnInit {
     }
   }
 
-
   onPreviousImage(event: any) {
     const currentImage = this.imgEl?.nativeElement.currentSrc;
     const currentImageIndex = this.selectedListingImages.indexOf(currentImage);
     const previousImage = this.selectedListingImages[currentImageIndex - 1];
-    if(currentImageIndex - 1 < 0) {
+    if (currentImageIndex - 1 < 0) {
       this.currentImage = currentImage;
       return;
     }
     event.target.nextSibling.style.opacity = 1;
-    if(currentImageIndex - 1 === 0) {
+    if (currentImageIndex - 1 === 0) {
       event.target.style.opacity = 0.5;
       this.currentImage = previousImage;
       return;

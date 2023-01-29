@@ -1,12 +1,13 @@
-#main-container{
-    background: var(--gray-blue-dark);
-    border: 2px var(--gray-blue-border) solid;
-    color: var(--text-light);
-    border-radius: 8px;
-    width: 100%;
-    margin: 0;
-}
+
 :host::ng-deep {
+    #main-container{
+        background: var(--gray-blue-dark);
+        border: 2px var(--gray-blue-border) solid;
+        color: var(--text-light);
+        border-radius: 8px;
+        width: 100%;
+        margin: 0;
+    }
     .preview-card {
         min-height: 300px;
         margin-bottom: 20px;
@@ -15,11 +16,37 @@
         border: 2px solid var(--gray-blue-border);
         border-radius: 8px;
     }
-
+    .img-container {
+        position: relative;
+    }
     #listing-img {
-        height: auto;
+        aspect-ratio: 2/1;
         width: 100%;
         border-radius: 8px;
+        border: 2px solid var(--gray-blue-border);
+        position: relative;
+        z-index: 2;
+    }
+    .img-overlay {
+        aspect-ratio: 2/1;
+        width: 100%;
+        border-radius: 8px;
+        border: 2px solid var(--gray-blue-border);
+        background-color: rgba(0, 0, 0, 0.322);
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        z-index: 1;
+    }
+    .img-overlay > span > i {
+        font-size: 2rem;
+        cursor: pointer;
+    }
+    .img-overlay > span > i:nth-child(1) {
+        opacity: 0.5;
+    }
+    .show-overlay {
+        z-index: 0 !important;
     }
     .message-container {
         background: var(--gray-blue);
