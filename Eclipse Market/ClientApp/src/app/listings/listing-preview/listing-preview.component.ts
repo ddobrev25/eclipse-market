@@ -1,34 +1,34 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { map, Subscription } from 'rxjs';
-import { ChatCreateRequest } from 'src/app/core/models/chat.model';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MessageService } from "primeng/api";
+import { map, of, Subscription, switchMap, take } from "rxjs";
+import { ChatCreateRequest } from "src/app/core/models/chat.model";
 import {
   ListingGetAllResponse,
   ListingGetByIdResponse,
   ListingGetByIdWithAuthorResponse,
-} from 'src/app/core/models/listing.model';
-import { MessageSendRequest } from 'src/app/core/models/message.model';
+} from "src/app/core/models/listing.model";
+import { MessageSendRequest } from "src/app/core/models/message.model";
 import {
   BookmarkListingRequest,
   UnBookmarkListingRequest,
-} from 'src/app/core/models/user.model';
-import { ChatService } from 'src/app/core/services/http/chat.service';
-import { ListingService } from 'src/app/core/services/http/listing.service';
-import { MsgService } from 'src/app/core/services/http/message.service';
-import { UserService } from 'src/app/core/services/http/user.service';
-import { MessageDataService } from 'src/app/core/services/store/message.data.service';
-import { UserDataService } from 'src/app/core/services/store/user.data.service';
-import { UserListingsService } from 'src/app/core/services/user-listings.service';
+} from "src/app/core/models/user.model";
+import { ChatService } from "src/app/core/services/http/chat.service";
+import { ListingService } from "src/app/core/services/http/listing.service";
+import { MsgService } from "src/app/core/services/http/message.service";
+import { UserService } from "src/app/core/services/http/user.service";
+import { MessageDataService } from "src/app/core/services/store/message.data.service";
+import { UserDataService } from "src/app/core/services/store/user.data.service";
+import { UserListingsService } from "src/app/core/services/user-listings.service";
 
 @Component({
-  selector: 'app-listing-preview',
-  templateUrl: './listing-preview.component.html',
-  styleUrls: ['./listing-preview.component.scss'],
+  selector: "app-listing-preview",
+  templateUrl: "./listing-preview.component.html",
+  styleUrls: ["./listing-preview.component.scss"],
 })
 export class ListingPreviewComponent implements OnInit {
-  @ViewChild('img') imgEl?: ElementRef;
-  @ViewChild('bookmark') bookmark?: ElementRef;
+  @ViewChild("img") imgEl?: ElementRef;
+  @ViewChild("bookmark") bookmark?: ElementRef;
 
   currentImage?: string;
   selectedListingImages: string[] = [];
@@ -47,7 +47,9 @@ export class ListingPreviewComponent implements OnInit {
   bookmarkedListingFetchSubs?: Subscription;
 
   remainingCharacters: number = 200;
-  textAreaValue: string = '';
+  textAreaValue: string = "";
+
+  isAuthor: boolean = false;
 
   constructor(
     private listingService: ListingService,
@@ -67,14 +69,14 @@ export class ListingPreviewComponent implements OnInit {
   }
 
   fetchQueryParams() {
-    this.selectedListingId = this.route.snapshot.queryParams['id'];
+    this.selectedListingId = this.route.snapshot.queryParams["id"];
     this.fetchListingInfo();
   }
 
   onLoadUserListings() {
     if (!this.selectedListing) return;
     this.userListingsService.setUserListings(this.selectedListing.author);
-    this.router.navigate(['/listings/user']);
+    this.router.navigate(["/listings/user"]);
   }
 
   fetchListingInfo() {
@@ -84,14 +86,32 @@ export class ListingPreviewComponent implements OnInit {
         next: (
           resp: ListingGetByIdWithAuthorResponse | ListingGetByIdResponse
         ) => {
-          if ('authorId' in resp) return;
+          if ("authorId" in resp) return;
           this.checkIfListingIsBookmarked();
           this.selectedListing = resp;
           this.selectedListingImages = resp.imageBase64Strings;
           this.currentImage = resp.imageBase64Strings[0];
           this.incrementViews(this.selectedListingId);
+          this.checkForAuthor(resp);
         },
         error: (err) => console.log(err),
+      });
+  }
+
+  checkForAuthor(listing: ListingGetByIdWithAuthorResponse) {
+    this.userDataService.userData
+      .pipe(
+        map((x) => x?.currentListings),
+        switchMap((x) => {
+          return x ? of(x) : this.listingService.getCurrentListings();
+        }),
+        take(1)
+      )
+      .subscribe({
+        next: (resp?: ListingGetAllResponse) => {
+          if (resp?.find((x) => x.id === +this.selectedListingId))
+            this.isAuthor = true;
+        },
       });
   }
 
@@ -128,12 +148,12 @@ export class ListingPreviewComponent implements OnInit {
     this.sendMessageSubs = this.msgService.send(body).subscribe({
       next: (resp: any) => {
         this.messageService.add({
-          key: 'tc',
-          severity: 'success',
-          detail: 'Съобщението е изпратено успешно!',
+          key: "tc",
+          severity: "success",
+          detail: "Съобщението е изпратено успешно!",
           life: 3000,
         });
-        this.textAreaValue = '';
+        this.textAreaValue = "";
       },
       error: (err: any) => console.log(err),
     });
@@ -146,7 +166,7 @@ export class ListingPreviewComponent implements OnInit {
         el[1].style.opacity = 0.5;
       });
     }
-    event.target.children[0].classList.toggle('show-overlay');
+    event.target.children[0].classList.toggle("show-overlay");
   }
   onNextImage(event: any) {
     const currentImage = this.imgEl?.nativeElement.currentSrc;
@@ -186,10 +206,10 @@ export class ListingPreviewComponent implements OnInit {
   }
 
   onBookmarkListing(event: any) {
-    event.target.classList.toggle('bookmarked');
-    event.target.classList.toggle('pi-bookmark');
-    event.target.classList.toggle('pi-bookmark-fill');
-    if (event.target.classList.contains('pi-bookmark-fill')) {
+    event.target.classList.toggle("bookmarked");
+    event.target.classList.toggle("pi-bookmark");
+    event.target.classList.toggle("pi-bookmark-fill");
+    if (event.target.classList.contains("pi-bookmark-fill")) {
       const body: BookmarkListingRequest = {
         listingId: this.selectedListingId,
       };
@@ -199,9 +219,9 @@ export class ListingPreviewComponent implements OnInit {
           complete: () => {
             this.fetchBookmarkedListings();
             this.messageService.add({
-              key: 'tc',
-              severity: 'success',
-              detail: 'Обявата е добавена към отметки!',
+              key: "tc",
+              severity: "success",
+              detail: "Обявата е добавена към отметки!",
               life: 3000,
             });
           },
@@ -225,9 +245,9 @@ export class ListingPreviewComponent implements OnInit {
               this.userDataService.setUserData(newData);
             }
             this.messageService.add({
-              key: 'tc',
-              severity: 'info',
-              detail: 'Обявата е премахната от отметки!',
+              key: "tc",
+              severity: "info",
+              detail: "Обявата е премахната от отметки!",
               life: 3000,
             });
           },
@@ -245,9 +265,9 @@ export class ListingPreviewComponent implements OnInit {
             this.bookmarkedListings = resp;
             resp.forEach((bookmarkedListing) => {
               if (+this.selectedListingId === +bookmarkedListing.id) {
-                this.bookmark?.nativeElement.classList.add('bookmarked');
-                this.bookmark?.nativeElement.classList.remove('pi-bookmark');
-                this.bookmark?.nativeElement.classList.add('pi-bookmark-fill');
+                this.bookmark?.nativeElement.classList.add("bookmarked");
+                this.bookmark?.nativeElement.classList.remove("pi-bookmark");
+                this.bookmark?.nativeElement.classList.add("pi-bookmark-fill");
               }
             });
           }

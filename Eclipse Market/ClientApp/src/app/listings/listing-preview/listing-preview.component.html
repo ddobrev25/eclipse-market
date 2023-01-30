@@ -76,7 +76,9 @@
         </div>
       </div>
 
-      <div class="message-container mt-4 p-3">
+      <div 
+        *ngIf="!isAuthor"
+        class="message-container mt-4 p-3">
         <div class="form-floating">
           <textarea
             type="text"

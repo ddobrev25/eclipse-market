@@ -1,6 +1,6 @@
 <div class="container-fluid px-0">
   <div class="row">
-    <div class="col-md-4 col-12 order-md-1 order-2">
+    <div class="col-md-4 col-12 order-md-1 order-2 chat-container my-3">
       <div *ngIf="chat$ | async as chats" class="d-flex flex-column-reverse">
         <div
           *ngFor="let chat of chats"
@@ -8,8 +8,6 @@
           class="message-container w-100 d-flex justify-content-between p-3 my-3"
           (click)="onSelectChat(chat.chatId)">
           <span>{{ chat.topicListingTitle }}</span>
-          <button class="btn btn-danger" (click)="onDeleteChat(chat)" id="deleteChatBtn"><i class="pi pi-trash"></i></button>
-
         </div>
       </div>
     </div>

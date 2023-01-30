@@ -1,15 +1,4 @@
-export type ListingGetAllResponse = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  location: string;
-  authorId: number;
-  views: number;
-  timesBookmarked: number;
-  listingCategory: string;
-  imageBase64Strings: string[];
-}[];
+export type ListingGetAllResponse = ListingGetByIdResponse[];
 
 export type ListingGetByIdResponse = {
   id: number;

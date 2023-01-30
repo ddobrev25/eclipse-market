@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -35,7 +37,7 @@ export class ListingCreatePreviewComponent implements OnInit {
     price: this.fb.control('', [Validators.required]),
     location: this.fb.control('', [Validators.required]),
     listingCategoryId: this.fb.control('', [Validators.required]),
-    imageBase64Strings: this.fb.array(['']),
+    imageBase64Strings: this.fb.array([''], [Validators.required]),
   });
 
   constructor(
@@ -59,7 +61,7 @@ export class ListingCreatePreviewComponent implements OnInit {
       listingCategoryId: this.listingForm.get('listingCategoryId')?.value,
       imageBase64Strings: this.listingForm.get('imageBase64Strings')?.value,
     };
-
+    
     this.listingAddSubs = this.listingService.add(body).subscribe({
       complete: () => {
         this.listingComService.sendListingData(null);
@@ -88,9 +90,18 @@ export class ListingCreatePreviewComponent implements OnInit {
           description: resp.description,
           price: resp.price,
           location: resp.location,
-          listingCategoryId: resp.listingCategoryId,
-          imageBase64Strings: resp.imageBase64Strings,
+          listingCategoryId: resp.listingCategoryId
         });
+
+        const imagesControl: FormArray = this.listingForm.get(
+          'imageBase64Strings'
+        ) as FormArray;
+        imagesControl.clear();
+        const images: string[] = resp.imageBase64Strings;
+        images.forEach((image) => {
+          imagesControl.push(new FormControl(image));
+        });
+
       }
     );
   }

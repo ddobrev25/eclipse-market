@@ -9,6 +9,8 @@
 .nav-tabs {
     border: none;
     font-weight: 700;
+    height: 100%;
+    font-size: 20px;
 }
 .active-nav {
     border-top: 2px solid var(--blue-bg);
@@ -29,6 +31,7 @@
 }
 #addBtn {
     margin: 4px 0;
+    font-size: 20px;
 }
 
 .toggle-button {

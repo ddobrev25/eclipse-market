@@ -87,6 +87,7 @@ export class ListingCreateGalleryComponent implements OnInit {
     this.images.forEach((image) => {
       imagesControl.push(new FormControl(image));
     });
+    console.log(this.createListingForm.value)
   }
 
   previousPage() {

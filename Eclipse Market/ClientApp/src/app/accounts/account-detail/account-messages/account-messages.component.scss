@@ -1,12 +1,18 @@
 :host::ng-deep {
+  .chat-container {
+    overflow-y: scroll;
+    height: 800px;
+    background-color: var(--gray-blue-dark);
+    border: 2px solid var(--gray-blue-border);
+    border-radius: 8px;
+  }
   .message-container {
-    background: var(--gray-blue-dark);
+    background: var(--gray-blue);
     color: var(--text-light);
-    min-height: 140px;
+    height: 140px;
     border: 2px solid var(--gray-blue-border);
     border-radius: 4px;
     cursor: pointer;
-    transition: 0.1s;
   }
   .sender {
     color: var(--text-inactive);
@@ -19,7 +25,7 @@
     word-break: break-all;
   }
   .noMessage-container {
-    height: 600px;
+    height: 800px;
     width: 100%;
     color: var(--text-light);
     background: var(--gray-blue-dark);
@@ -31,9 +37,8 @@
   }
   .message-preview-container {
     position: relative;
-    min-height: 600px;
+    height: 800px;
     width: 100%;
-    max-height: 800px;
     color: var(--text-light);
     background: var(--gray-blue-dark);
     border: 2px solid var(--gray-blue-border);
@@ -108,18 +113,21 @@
     width: 100%;
   }
 
-  .message-preview-container::-webkit-scrollbar-track {
+  .message-preview-container::-webkit-scrollbar-track,
+  .chat-container::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: inherit;
   }
 
-  .message-preview-container::-webkit-scrollbar {
+  .message-preview-container::-webkit-scrollbar,
+  .chat-container::-webkit-scrollbar {
     width: 12px;
     background-color: Rgba(0, 0, 0, 0.3);
   }
 
-  .message-preview-container::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+  .message-preview-container::-webkit-scrollbar-thumb,
+  .chat-container::-webkit-scrollbar-thumb {
+    border-radius: 8px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: var(--gray-blue-medium);
   }
