@@ -13,6 +13,7 @@ import {
   ListingGetByIdResponse,
   ListingGetByIdWithAuthorResponse,
   ListingGetRecommendedResponse,
+  ListingUpdateImagesRequest,
   ListingUpdateRequest,
 } from '../../models/listing.model';
 import { DeleteRequest } from '../../models/user.model';
@@ -49,8 +50,7 @@ export class ListingService {
   }
   getRecommended(count: number) {
     const headers = new HttpHeaders({
-      Accept: 'application/json',
-      SkipLoader: ``,
+      Accept: 'application/json'
     });
     const queryParams = new HttpParams().set('count', count);
     return this.http.get<ListingGetRecommendedResponse>(
@@ -60,8 +60,7 @@ export class ListingService {
   }
   getRecommendedByCategory(count: number, categoryId: number) {
     const headers = new HttpHeaders({
-      Accept: 'application/json',
-      SkipLoader: ``,
+      Accept: 'application/json'
     });
     const queryParamsObj = {
       count: count,
@@ -114,6 +113,14 @@ export class ListingService {
     });
     return this.http.put(`${this.url}/Listing/Update`, body, {headers: headers});
   }
+
+  updateImages(body: ListingUpdateImagesRequest) {
+    const headers = new HttpHeaders({
+      SkipLoader: ``,
+    });
+    return this.http.post(`${this.url}/Listing/UpdateImages`, body, {headers: headers});
+  }
+
   delete(body: DeleteRequest) {
     return this.http.delete(`${this.url}/Listing/Delete`, { body: body });
   }

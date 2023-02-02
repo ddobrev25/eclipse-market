@@ -1,20 +1,20 @@
 :host ::ng-deep {
     .p-paginator {
-        border: 2px var(--gray-blue-border) solid;
+        border: 2px var(--border) solid;
         border-top: none;
-        background: var(--gray-blue);
+        background: var(--primary-medium);
     }
     .p-paginator .p-paginator-current,
     .p-paginator .p-paginator-pages .p-paginator-page {
-        color: var(--text-light);
+        color: var(--text-primary);
     }
     .p-datatable .p-datatable-header {
-        background: var(--gray-blue-medium);
+        background: var(--primary-light);
         border: none;
     }
     .p-inputtext.p-component.p-element {
-        border: 2px var(--gray-blue-border) solid;
-        background: var(--gray-blue); 
+        border: 2px var(--border) solid;
+        background: var(--primary-medium); 
     }
     option {
         color: #fff
@@ -22,31 +22,31 @@
     input,
     .p-inputtext.p-component.p-element,
     select { 
-        background-color: var(--gray-blue);
+        background-color: var(--primary-medium);
         padding: 12px 14px;
-        border: 2px var(--gray-blue-border) solid;
-        color: var(--text-light);
+        border: 2px var(--border) solid;
+        color: var(--text-primary);
 
     }
     .p-datatable .p-datatable-thead > tr > th,
     input::placeholder {
-        color: var(--text-light);
+        color: var(--text-primary);
     }
     input:focus {
-        background: var(--gray-blue);
-        color: var(--text-light);
+        background: var(--primary-medium);
+        color: var(--text-primary);
     }
     p-table.p-element tr:nth-child(even) {
-        background: var(--gray-blue); 
+        background: var(--primary-medium); 
     }
     p-table.p-element tr:nth-child(odd) {
-        background: var(--gray-blue-medium); 
+        background: var(--primary-light); 
     }
     p-table.p-element tr {
-    border: 2px var(--gray-blue-border) solid;
+    border: 2px var(--border) solid;
     }
     p-table.p-element th {
-        background: var(--gray-blue);
+        background: var(--primary-medium);
     }
     td.action-btn button {
         text-align: center;
@@ -55,8 +55,8 @@
     }
 
     .p-dialog {
-        border: var(--gray-blue-border) 2px solid;
-        color: var(--text-light);
+        border: var(--border) 2px solid;
+        color: var(--text-primary);
     }
     .p-button {
         box-shadow: none !important;
@@ -66,10 +66,10 @@
     div.p-dialog-header,
     div.p-dialog-content,
     div.p-dialog-footer {
-        background-color: var(--gray-blue-dark);
+        background-color: var(--primary-dark);
     }
     button.p-ripple.p-element.p-button {
-        background-color: var(--blue-bg);
+        background-color: var(--secondary);
     }
     ::-webkit-scrollbar {
         height: 8px !important;
@@ -78,7 +78,7 @@
         background: var(--blue-gray)
     }
     .p-paginator {
-        border: 2px var(--gray-blue-border) solid;
+        border: 2px var(--border) solid;
         border-top: none;
     }
 }

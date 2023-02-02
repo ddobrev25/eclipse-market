@@ -1,31 +1,30 @@
-.content { 
-    background: var(--gray-blue);
-    min-height: 1000px;
-}
 :host::ng-deep {
-    .p-tabmenu .p-tabmenu-nav {
-        display: flex;
-        flex-grow: 1;
-    }
-    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
-        width: 100%;
-        text-align: center;
-    }
-    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
-        border-width: 2px 0 0 0;
-        border-radius: 0;
-        background: var(--gray-blue-dark);
-    }
-    .p-tabmenu a:hover,
-    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link{
-        background: var(--gray-blue) !important;
-    }
-    .p-tabmenu .p-tabmenu-nav-btn.p-link {
-        background: var(--gray-blue-dark) !important;
-    }
-    .p-tabmenu-nav-container {
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-    }
-    
+  .content {
+    background: var(--primary-medium);
+    min-height: 1000px;
+  }
+  .p-tabmenu .p-tabmenu-nav {
+    display: flex;
+    flex-grow: 1;
+  }
+  .p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
+    width: 100%;
+    text-align: center;
+  }
+  .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+    border-width: 2px 0 0 0;
+    border-radius: 0;
+    background: var(--primary-dark);
+  }
+  .p-tabmenu a:hover,
+  .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+    background: var(--primary-medium) !important;
+  }
+  .p-tabmenu .p-tabmenu-nav-btn.p-link {
+    background: var(--primary-dark) !important;
+  }
+  .p-tabmenu-nav-container {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
 }

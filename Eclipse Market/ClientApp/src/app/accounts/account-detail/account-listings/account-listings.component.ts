@@ -1,26 +1,32 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { map, Subscription } from 'rxjs';
-import { ListingPreviewService } from 'src/app/core/services/listing-preview.service';
-import { ListingService } from 'src/app/core/services/http/listing.service';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { FormGroup, FormControl, FormBuilder } from "@angular/forms";
+import { Router } from "@angular/router";
+import { ConfirmationService, MessageService } from "primeng/api";
+import { forkJoin, map, Subscription, take } from "rxjs";
+import { ListingPreviewService } from "src/app/core/services/listing-preview.service";
+import { ListingService } from "src/app/core/services/http/listing.service";
 import {
   ListingGetAllResponse,
   ListingGetByIdResponse,
+  ListingUpdateImagesRequest,
   ListingUpdateRequest,
-} from 'src/app/core/models/listing.model';
-import { UserDataService } from 'src/app/core/services/store/user.data.service';
-import { BookmarkListingRequest, DeleteRequest, UnBookmarkListingRequest, User$ } from 'src/app/core/models/user.model';
-import { UserService } from 'src/app/core/services/http/user.service';
+} from "src/app/core/models/listing.model";
+import { UserDataService } from "src/app/core/services/store/user.data.service";
+import {
+  BookmarkListingRequest,
+  DeleteRequest,
+  UnBookmarkListingRequest,
+  User$,
+} from "src/app/core/models/user.model";
+import { UserService } from "src/app/core/services/http/user.service";
 
 @Component({
-  selector: 'app-account-listings',
-  templateUrl: './account-listings.component.html',
-  styleUrls: ['./account-listings.component.scss'],
+  selector: "app-account-listings",
+  templateUrl: "./account-listings.component.html",
+  styleUrls: ["./account-listings.component.scss"],
 })
 export class AccountListingsComponent implements OnInit {
-  @ViewChild('bookmark') bookmark?: ElementRef;
+  @ViewChild("bookmark") bookmark?: ElementRef;
 
   updateSubs?: Subscription;
   userListingsChangedSubs?: Subscription;
@@ -30,7 +36,7 @@ export class AccountListingsComponent implements OnInit {
   bookmarkListingSubs?: Subscription;
   bookmarkedListingFetchSubs?: Subscription;
   bookmarkedListingGetSubs?: Subscription;
-
+  updateImgSubs?: Subscription;
 
   bookmarkedListings?: ListingGetAllResponse;
   userListings?: ListingGetAllResponse;
@@ -41,7 +47,9 @@ export class AccountListingsComponent implements OnInit {
   listingUpdateDialog: boolean = false;
 
   remainingCharacters: number = 800;
-  textAreaValue: string = '';
+  textAreaValue: string = "";
+
+  images: string[] = [];
 
   constructor(
     private userDataService: UserDataService,
@@ -50,15 +58,16 @@ export class AccountListingsComponent implements OnInit {
     private listingService: ListingService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private userService: UserService
+    private userService: UserService,
+    private fb: FormBuilder
   ) {}
 
-  listingUpdateForm: FormGroup = new FormGroup({
-    title: new FormControl(''),
-    description: new FormControl(''),
-    price: new FormControl(''),
-    location: new FormControl(''),
-    listingCategory: new FormControl(''),
+  listingUpdateForm: FormGroup = this.fb.group({
+    title: this.fb.control(""),
+    description: this.fb.control(""),
+    price: this.fb.control(""),
+    location: this.fb.control(""),
+    listingCategory: this.fb.control(""),
   });
 
   ngOnInit(): void {
@@ -66,13 +75,10 @@ export class AccountListingsComponent implements OnInit {
   }
 
   fecthUserListings() {
-    if (this.listingsChanged) 
-      this.fetchUserListingsFromService();
-      this.userListingGetSubs = this.userDataService.userData.subscribe({
+    if (this.listingsChanged) this.fetchUserListingsFromService();
+    this.userListingGetSubs = this.userDataService.userData.subscribe({
       next: (data: User$ | null) => {
-        if (data && data.currentListings)  {
-          console.log('inside if')
-          // this.checkIfListingIsBookmarked();
+        if (data && data.currentListings) {
           this.userListings = data.currentListings;
         } else {
           this.fetchUserListingsFromService();
@@ -103,50 +109,61 @@ export class AccountListingsComponent implements OnInit {
   onSelectListing(id: number) {
     this.listingPreviewService.sendListingId(id);
     this.listingSelected = true;
-    this.router.navigate(['/account/listing/preview']);
+    this.router.navigate(["/account/listing/preview"]);
   }
   onSelectListingForEdit(listingForUpdate: ListingGetByIdResponse) {
     this.listingForUpdate = listingForUpdate;
+    this.images = listingForUpdate.imageBase64Strings;
     this.listingUpdateDialog = true;
   }
 
   onEditListing() {
+    if (!this.listingForUpdate) return;
     const body: ListingUpdateRequest = {
-      id: this.listingForUpdate?.id!,
-      title: this.listingUpdateForm.get('title')?.value,
-      description: this.listingUpdateForm.get('description')?.value,
-      price: this.listingUpdateForm.get('price')?.value,
-      location: this.listingUpdateForm.get('location')?.value,
-      listingCategoryId: this.listingUpdateForm.get('listingCategoryId')?.value,
-      imageBase64Strings: ['']
+      id: this.listingForUpdate.id,
+      title: this.listingUpdateForm.get("title")?.value,
+      description: this.listingUpdateForm.get("description")?.value,
+      price: this.listingUpdateForm.get("price")?.value,
+      location: this.listingUpdateForm.get("location")?.value,
+      listingCategoryId: this.listingUpdateForm.get("listingCategoryId")?.value,
     };
     if (body.price == null) {
       body.price = 0;
     }
+    const imgBody: ListingUpdateImagesRequest = {
+      listingId: this.listingForUpdate.id,
+      imageBase64Strings: this.images,
+    };
+
     this.resetUpdateForm();
-    this.updateSubs = this.listingService.update(body).subscribe({
-      error: (error: any) => {
-        console.log(error);
-      },
-      complete: () => {
-        this.listingsChanged = true;
-        this.listingUpdateDialog = false;
-        this.messageService.add({
-          severity: 'success',
-          detail: 'Промените са запазени!',
-          life: 3000,
-        });
-        this.fecthUserListings();
-      },
-    });
+    forkJoin([
+      this.listingService.update(body),
+      this.listingService.updateImages(imgBody),
+    ])
+      .pipe(take(1))
+      .subscribe({
+        error: (error: any) => {
+          console.log(error);
+        },
+        complete: () => {
+          this.listingsChanged = true;
+          this.listingUpdateDialog = false;
+          this.messageService.add({
+            severity: "success",
+            detail: "Промените са запазени!",
+            life: 3000,
+          });
+          this.fecthUserListings();
+        }
+      });
   }
 
   resetUpdateForm() {
     this.listingUpdateForm.patchValue({
-      title: '',
-      description: '',
+      title: "",
+      description: "",
       price: null,
-      location: '',
+      location: "",
       listingCategoryId: 0,
     });
   }
@@ -163,17 +180,17 @@ export class AccountListingsComponent implements OnInit {
 
     this.confirmationService.confirm({
       message: `Сигурнили сте, че искате да изтриете ${listingForDelete.title} ?`,
-      header: 'Потвърди',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Да',
-      rejectLabel: 'Не',
+      header: "Потвърди",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "Да",
+      rejectLabel: "Не",
       accept: () => {
         this.deleteSubs = this.listingService.delete(body).subscribe({
           complete: () => {
             this.listingsChanged = true;
             this.messageService.add({
-              severity: 'success',
-              detail: 'Обявате е изтрита успешно!',
+              severity: "success",
+              detail: "Обявате е изтрита успешно!",
               life: 3000,
             });
             this.fecthUserListings();
@@ -187,10 +204,10 @@ export class AccountListingsComponent implements OnInit {
   }
 
   onBookmarkListing(event: any, listing: ListingGetByIdResponse) {
-    event.target.classList.toggle('bookmarked');
-    event.target.classList.toggle('pi-bookmark');
-    event.target.classList.toggle('pi-bookmark-fill');
-    if (event.target.classList.contains('pi-bookmark-fill')) {
+    event.target.classList.toggle("bookmarked");
+    event.target.classList.toggle("pi-bookmark");
+    event.target.classList.toggle("pi-bookmark-fill");
+    if (event.target.classList.contains("pi-bookmark-fill")) {
       const body: BookmarkListingRequest = {
         listingId: listing.id,
       };
@@ -198,15 +215,15 @@ export class AccountListingsComponent implements OnInit {
         .bookmarkListing(body)
         .subscribe({
           complete: () => {
-            this.bookmarkedListings?.push(listing)
+            this.bookmarkedListings?.push(listing);
             const newData = {
               bookmarkedListings: this.bookmarkedListings,
             };
             this.userDataService.setUserData(newData);
             this.messageService.add({
-              key: 'tc',
-              severity: 'success',
-              detail: 'Обявата е добавена към отметки!',
+              key: "tc",
+              severity: "success",
+              detail: "Обявата е добавена към отметки!",
               life: 3000,
             });
           },
@@ -222,17 +239,17 @@ export class AccountListingsComponent implements OnInit {
             const index = this.bookmarkedListings?.findIndex(
               (x) => x.id === listing.id
             );
-            if (index) {
+            if (index !== undefined && index >= 0) {
               this.bookmarkedListings?.splice(index, 1);
               const newData = {
-                bookmarkedListings: this.bookmarkedListings
-              }
+                bookmarkedListings: this.bookmarkedListings,
+              };
               this.userDataService.setUserData(newData);
             }
             this.messageService.add({
-              key: 'tc',
-              severity: 'warn',
-              detail: 'Обявата е премахната от отметки!',
+              key: "tc",
+              severity: "warn",
+              detail: "Обявата е премахната от отметки!",
               life: 3000,
             });
           },
@@ -240,42 +257,23 @@ export class AccountListingsComponent implements OnInit {
     }
   }
 
-  // fetchBookmarkedListings() {
-  //   this.bookmarkedListingFetchSubs = this.listingService
-  //     .getBookmarkedListings()
-  //     .subscribe({
-  //       next: (resp: ListingGetAllResponse) => {
-  //         const newData = {
-  //           bookmarkedListings: resp,
-  //         };
-  //         this.userDataService.setUserData(newData);
-  //       },
-  //     });
-  // }
-
-  // checkIfListingIsBookmarked() {
-  //   this.bookmarkedListingGetSubs = this.userDataService.userData
-  //     .pipe(map((b) => b?.bookmarkedListings))
-  //     .subscribe({
-  //       next: (resp?: ListingGetAllResponse) => {
-  //         if (!resp) this.fetchBookmarkedListings();
-  //         if (resp) {
-  //           this.bookmarkedListings = resp;
-  //           console.log(this.bookmarkedListings, this.userListings)
-  //           this.userListings?.forEach(listing => {
-  //             resp.forEach((bookmarkedListing) => {
-  //               if (+listing.id === +bookmarkedListing.id) {
-  //                 this.bookmark?.nativeElement.classList.add('bookmarked');
-  //                 this.bookmark?.nativeElement.classList.remove('pi-bookmark');
-  //                 this.bookmark?.nativeElement.classList.add('pi-bookmark-fill');
-  //               }
-  //             });
-  //           })
-           
-  //         }
-  //       },
-  //     });
-  // }
+  onRemoveImage(imageForDeletion: string) {
+    const index = this.images.indexOf(imageForDeletion);
+    this.images.splice(index, 1);
+  }
+  onAddImage(event: any) {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      if (reader.result) this.images.push(reader.result.toString());
+    };
+    reader.onerror = (error) => console.log("Error: ", error);
+    event.target.value = "";
+  }
+  onMouseOver(event: any) {
+    event.target.children[1].classList.toggle("visible");
+  }
 
   ngOnDestroy() {
     this.updateSubs?.unsubscribe();
@@ -283,5 +281,6 @@ export class AccountListingsComponent implements OnInit {
     this.deleteSubs?.unsubscribe();
     this.userListingGetSubs?.unsubscribe();
     this.userListingFetchSubs?.unsubscribe();
+    this.updateImgSubs?.unsubscribe();
   }
 }

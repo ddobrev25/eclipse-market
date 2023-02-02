@@ -1,49 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap");
 * {
-    font-family: 'Rubik', sans-serif;
-    color: var(--text-light);
+  font-family: "Rubik", sans-serif;
+  color: var(--text-primary);
 }
+
 body {
-    --text-light: #EEEDF0;
-    --text-dark: #1c2127;
-    --text-inactive: #adadad;
+  --text-primary: #eeedf0;
+  --text-secondary: #1c2127;
+  --text-inactive: #adadad;
+  --danger: #fca5a5;
+  --success: #86efac;
 
-    --blue-bg: #93C5FD;
-    --gray-blue: #071426;
-    --gray-blue-dark: #040d19;
-    --gray-blue-border: #0b213f;
-    --gray-blue-hover: #232425;
-    --gray-blue-medium: #0d1d35;
-    --border-medium: #455474;
+  --primary-light: #0d1d35;
+  --primary-medium: #071426;
+  --primary-dark: #040d19;
+  --secondary: #93c5fd;
 
-    --blue: #3456FF;
-    --grey-dark: #273247;
-    --grey-medium: #2f3441;
-    --blue-gray: #102338;
-    --blue-gray-dark: #071426;
-
-    --danger: #fca5a5;
-    --success: #86efac;
+  --header-bg: #040d19;
+  --navtab-hover: #071426;
+  --border: #0b213f;
+  --border-hover: #455474;
+  --background-hover: #173250;
 }
 body.light-theme {
-    --text-light: #495057;
-    --text-dark: #EEEDF0;
-    --text-inactive: #adadad;
+  --text-primary: #1c1d1e;
+  --text-secondary: #495057;
+  --text-inactive: #adadad;
+  --text-light: #eeedf0;
+  --danger: #ef4444;
+  --success: #1ea97c;
 
-    --blue-bg: #93C5FD;
-    --gray-blue: #dfdfdf;
-    --gray-blue-dark: #f3f3f3;
-    --gray-blue-border: #8ab5f1;
-    --gray-blue-hover: #d5dce2;
-    --gray-blue-medium: #c7deff;
-    --border-medium: #697eac;
+  --primary-light: #fff;
+  --primary-medium: #eff3f8;
+  --primary-dark: #fff;
+  --secondary: #3b82f6;
 
-    --blue: #bfc8f5;
-    --grey-dark: #86a7e6;
-    --grey-medium: #a5a9b6;
-    --blue-gray: #5e9adf;
-    --blue-gray-dark: #0668f0;
-
+  --header-bg: #173250;
+  --navtab-hover: #0b213f;
+  --border: #aed2fc;
+  --border-hover: #455474;
+  --background-hover: #173250;
 }

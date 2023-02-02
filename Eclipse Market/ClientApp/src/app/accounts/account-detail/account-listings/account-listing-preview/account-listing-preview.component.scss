@@ -1,9 +1,9 @@
 
 :host::ng-deep {
     #main-container{
-        background: var(--gray-blue-dark);
-        border: 2px var(--gray-blue-border) solid;
-        color: var(--text-light);
+        background: var(--primary-dark);
+        border: 2px var(--border) solid;
+        color: var(--text-primary);
         border-radius: 8px;
         width: 100%;
         margin: 0;
@@ -12,8 +12,8 @@
         min-height: 300px;
         margin-bottom: 20px;
         height: auto;
-        background: var(--gray-blue);
-        border: 2px solid var(--gray-blue-border);
+        background: var(--primary-medium);
+        border: 2px solid var(--border);
         border-radius: 8px;
     }
     .img-container {
@@ -23,7 +23,7 @@
         aspect-ratio: 2/1;
         width: 100%;
         border-radius: 8px;
-        border: 2px solid var(--gray-blue-border);
+        border: 2px solid var(--border);
         position: relative;
         z-index: 2;
     }
@@ -31,7 +31,7 @@
         aspect-ratio: 2/1;
         width: 100%;
         border-radius: 8px;
-        border: 2px solid var(--gray-blue-border);
+        border: 2px solid var(--border);
         background-color: rgba(0, 0, 0, 0.322);
         position: absolute;
         bottom: 0px;
@@ -49,29 +49,29 @@
         z-index: 0 !important;
     }
     .message-container {
-        background: var(--gray-blue);
-        border: 2px var(--gray-blue-border) solid;
+        background: var(--primary-medium);
+        border: 2px var(--border) solid;
         border-radius: 8px;
 
     }
     .author-card {
         width: 100%;
-        background: var(--gray-blue);
+        background: var(--primary-medium);
         margin-top: 20px;
-        border: 2px var(--gray-blue-border) solid;
+        border: 2px var(--border) solid;
         border-radius: 8px;
     }
     .info-container {
-        border: 2px var(--gray-blue-border) solid;
+        border: 2px var(--border) solid;
         border-radius: 8px;
-        background: var(--gray-blue);
+        background: var(--primary-medium);
         max-height: 600px;
         height: auto;
     }
     .category span {
         color: var(--text-inactive);
         font-size: 18px;
-        border-bottom: 2px solid var(--blue-bg);
+        border-bottom: 2px solid var(--secondary);
 
     }
     .title span {
@@ -84,7 +84,7 @@
         display: block;
     }
     .price {
-        border-bottom: 2px solid var(--blue-bg);
+        border-bottom: 2px solid var(--secondary);
     }
     .description {
         word-break: break-all;
@@ -101,9 +101,9 @@
     }
     textarea,
     textarea:focus{ 
-        background-color: var(--gray-blue-hover);
-        border: 2px var(--gray-blue-border) solid;
-        color: var(--text-light);
+        background-color: var(--background-hover);
+        border: 2px var(--border) solid;
+        color: var(--text-primary);
         font-size: 16px;
         width: 80%;
     }

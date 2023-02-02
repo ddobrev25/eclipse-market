@@ -21,7 +21,7 @@ import { MessageDataService } from "./store/message.data.service";
 })
 export class MessageSignalrService {
   hubConnection?: signalR.HubConnection;
-  url: string = this.penTest.url;
+  url: string = this.penTest.url + '/chatHub';
 
   constructor(
     private messageDataService: MessageDataService,

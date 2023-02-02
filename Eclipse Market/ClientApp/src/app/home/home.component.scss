@@ -1,6 +1,6 @@
 .container-xl {
     min-height: 1000px;
-    color: var(--text-light);
+    color: var(--text-primary);
 }
 :host::ng-deep {
     .p-dataview .p-dataview-header,
@@ -8,28 +8,29 @@
         background-color: transparent;
     }
     .p-selectbutton .p-button {
-        background-color: var(--gray-blue-dark);
-        border-color: var(--gray-blue-border);
+        background-color: var(--primary-dark);
+        border-color: var(--border);
     }
     .category-container {
         cursor: pointer;
     }
     .p-chip {
         padding: 4px 6px;
-        background: var(--gray-blue-dark);
-        border: 2px solid var(--gray-blue-border);
+        background: var(--primary-dark);
+        border: 2px solid var(--border);
         transition: .2s;
     }
     .p-chip:hover {
-        border-color: var(--blue-bg);
+        border-color: var(--secondary);
     }
     #heading {
-        border-bottom: 2px solid var(--gray-blue-border);
+        border-bottom: 2px solid var(--border);
         transition: .2s ease-in-out;
         font-size: 32px;
     }
     #heading:hover {
-        border-bottom: 2px solid var(--blue-bg);
+        cursor: default;
+        border-bottom: 2px solid var(--secondary);
     }
     #profile-img {
         aspect-ratio: 1 / 1;
@@ -64,12 +65,12 @@
         text-overflow: ellipsis;
     }
     .wrapper-container {
-        background: var(--gray-blue-dark);
+        background: var(--primary-dark);
         transition: .2s;
-        border: 2px solid var(--gray-blue-border) !important;
+        border: 2px solid var(--border) !important;
     }
     .wrapper-container:hover {
-        border-bottom-color:  var(--blue-bg) !important;
+        border-bottom-color:  var(--secondary) !important;
     }
 
     @media (max-width:768px) {
@@ -112,13 +113,13 @@
 
     .preview-card {
         margin-bottom: 20px;
-        background: var(--gray-blue-dark);
-        border: 2px solid var(--gray-blue-border);
+        background: var(--primary-dark);
+        border: 2px solid var(--border);
         border-radius: 0;
         word-break: break-all;
     }
     .preview-card:hover {
-        border-bottom-color: var(--blue-bg);
+        border-bottom-color: var(--secondary);
     }
     p-card.p-element {
         width: auto;

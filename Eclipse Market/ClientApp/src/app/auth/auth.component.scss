@@ -2,7 +2,7 @@
   .p-password,
   .p-inputtext {
     width: 100%;
-    background-color: var(--gray-blue);
+    background-color: var(--primary-medium);
   }
   .p-password {
     padding: 0 !important;
@@ -18,7 +18,7 @@
   }
 
   .register-container {
-    background: var(--gray-blue-dark);
+    background: var(--primary-dark);
     border-radius: 16px;
   }
 
@@ -32,8 +32,9 @@
     padding: 12px;
     font-size: 18px;
 
-    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
-      linear-gradient(to right, var(--border-medium), var(--border-medium))
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--border-hover), var(--border-hover))
         border-box;
     border-radius: 16px;
     border: 3px solid transparent;
@@ -42,12 +43,14 @@
     cursor: pointer;
   }
   .input-container > input:hover {
-    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
-      linear-gradient(to right, var(--blue-bg), darkorchid) border-box;
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--secondary), darkorchid) border-box;
   }
   .input-container > input:focus {
-    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
-      linear-gradient(to right, var(--blue-bg), darkorchid) border-box;
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--secondary), darkorchid) border-box;
     cursor: text;
   }
   .input-container > label {
@@ -60,10 +63,10 @@
     display: block;
   }
   .input-container > input.ng-valid {
-    border-color: #86efac;
+    border-color: var(--success);
   }
   .input-container > input.ng-invalid.ng-dirty {
-    border-color: #fca5a5;
+    border-color: var(--danger);
   }
   .form-input {
     position: relative;
@@ -74,7 +77,7 @@
     width: 42px;
     right: 10px;
     top: 57px;
-    color: #86efac;
+    color: var(--success);
     font-size: larger;
   }
   .img-firstname-lastname-container > img {
@@ -105,8 +108,9 @@
   .image-upload {
     font-size: 2rem;
     margin: 0px 12px;
-    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
-      linear-gradient(to right, var(--border-medium), var(--border-medium))
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--border-hover), var(--border-hover))
         border-box;
     border-radius: 16px;
     border: 3px solid transparent;
@@ -119,8 +123,9 @@
     cursor: pointer;
   }
   .image-wrapper {
-    background: linear-gradient(var(--gray-blue), var(--gray-blue)) padding-box,
-      linear-gradient(to right, var(--border-medium), var(--border-medium))
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--border-hover), var(--border-hover))
         border-box;
     border-radius: 20px;
     border: 3px solid transparent;
@@ -168,11 +173,11 @@
     }
   }
   .regLink a {
-    color: var(--blue-bg);
+    color: var(--secondary);
     font-size: 1.2rem;
     cursor: pointer;
   }
   .regLink a:hover {
-    color: var(--blue-bg);
+    color: var(--secondary);
   }
 }

@@ -1,6 +1,6 @@
 :host ::ng-deep {
     input::placeholder {
-        color: var(--text-light);
+        color: var(--text-primary);
     }
     ::-webkit-scrollbar {
         height: 8px !important;
@@ -9,12 +9,12 @@
         background: var(--blue-gray)
     }
     select option {
-        background: var(--gray-blue);
-        color: var(--text-light);
+        background: var(--primary-medium);
+        color: var(--text-primary);
     }
     select {
-        background: var(--gray-blue);
-        color: var(--text-light);
+        background: var(--primary-medium);
+        color: var(--text-primary);
         border: none;
         padding: 8px;
         border-radius: 5px;
@@ -25,66 +25,66 @@
         margin: 0;
     }
     p-table.p-element td {
-        background: var(--gray-blue-medium); 
-        color: var(--text-light);
+        background: var(--primary-light); 
+        color: var(--text-primary);
         border: none;
 
     }
     p-table.p-element th {
-        background: var(--gray-blue);
-        color: var(--text-light);
-        border-bottom: 2px var(--gray-blue-border) solid;
+        background: var(--primary-medium);
+        color: var(--text-primary);
+        border-bottom: 2px var(--border) solid;
     }
     div.p-datatable-wrapper {
-        border: 2px var(--gray-blue-border) solid;
+        border: 2px var(--border) solid;
     }
     .wrapper {
-        background: var(--gray-blue); 
+        background: var(--primary-medium); 
         padding: 8px;
         border-radius: 5px;
     }
     .p-paginator {
-        border: 2px var(--gray-blue-border) solid;
+        border: 2px var(--border) solid;
         border-top: none;
-        background: var(--gray-blue);
+        background: var(--primary-medium);
     }
     .p-paginator .p-paginator-current,
     .p-paginator .p-paginator-pages .p-paginator-page {
-        color: var(--text-light);
+        color: var(--text-primary);
     }
     .p-datatable .p-datatable-header {
-        background: var(--gray-blue-medium);
+        background: var(--primary-light);
         border: none;
     }
     .button-group button {
-        background-color: var(--blue-bg);
-        border: 2px var(--gray-blue-border) solid;
-        color: var(--text-dark);
+        background-color: var(--secondary);
+        border: 2px var(--border) solid;
+        color: var(--text-secondary);
     }
     .button-group {
         background: transparent;
     }
     .p-toolbar.p-component {
-        background: var(--gray-blue-dark);
+        background: var(--primary-dark);
         border-radius: 0;
-        border: var(--gray-blue-border) 2px solid;
+        border: var(--border) 2px solid;
         border-bottom: none;
     }
     input { 
-        background: var(--gray-blue);
-        color: var(--text-light);
+        background: var(--primary-medium);
+        color: var(--text-primary);
         padding: 12px 14px;
-        border: 2px var(--gray-blue-border) solid;
+        border: 2px var(--border) solid;
     }
     input:focus {
-        background: var(--gray-blue);
-        color: var(--text-light);
+        background: var(--primary-medium);
+        color: var(--text-primary);
     }
     div.p-dialog-header,
     div.p-dialog-content,
     div.p-dialog-footer {
-        background-color: var(--gray-blue-dark);
-        color: var(--text-light);
+        background-color: var(--primary-dark);
+        color: var(--text-primary);
     }
 }
 

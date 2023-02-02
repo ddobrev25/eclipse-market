@@ -1,97 +1,95 @@
 :host ::ng-deep {
-    ::-webkit-scrollbar {
-        height: 8px !important;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: var(--blue-gray)
-    }
-    select option {
-        background: var(--gray-blue);
-        color: var(--text-light);
-    }
-    select {
-        background: var(--gray-blue);
-        color: var(--text-light);
-        border: none;
-        padding: 8px;
-        border-radius: 5px;
-    }
-    td.action-btn button {
-        text-align: center;
-        width: 40px !important;
-        margin: 0;
-    }
-    p-table.p-element td {
-        background: var(--gray-blue-medium); 
-        color: var(--text-light);
-        border: none;
-
-    }
-    p-table.p-element th {
-        background: var(--gray-blue);
-        color: var(--text-light);
-        border-bottom: 2px var(--gray-blue-border) solid;
-    }
-    div.p-datatable-wrapper {
-        border: 2px var(--gray-blue-border) solid;
-    }
-    .wrapper {
-        background: var(--gray-blue);
-        padding: 8px;
-        border-radius: 5px;
-    }
-    .p-paginator {
-        border: 2px var(--gray-blue-border) solid;
-        border-top: none;
-        background: var(--gray-blue);
-    }
-    .p-paginator .p-paginator-current,
-    .p-paginator .p-paginator-pages .p-paginator-page {
-        color: var(--text-light);
-    }
-    .p-datatable .p-datatable-header {
-        background: var(--gray-blue-medium);
-    }
-    .button-group button {
-        background-color: var(--blue-bg);
-        border: 2px var(--gray-blue-border) solid;
-        color: var(--text-dark);
-    }
-    .button-group {
-        background: transparent;
-    }
-    .p-toolbar.p-component {
-        background: var(--gray-blue-dark);
-        border-radius: 0;
-        border: var(--gray-blue-border) 2px solid;
-        border-bottom: none;
-    }
-    input { 
-        color: var(--text-light);
-        padding: 12px 14px;
-        border: 2px var(--gray-blue-border) solid;
-        background: var(--gray-blue);
-    }
-    input:focus {
-        background: var(--gray-blue);
-        color: var(--text-light);
-    }
-    input::placeholder {
-        color: var(--text-light);
-    };
-    div.p-dialog-header,
-    div.p-dialog-content,
-    div.p-dialog-footer {
-        background-color: var(--gray-blue-dark);
-        color: var(--text-light);
-    }
-    input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
-        -webkit-appearance: none !important;
-        margin: 0 !important;
-    }
-    td {
-        width: 33.3% !important;
-    }
+  ::-webkit-scrollbar {
+    height: 8px !important;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--blue-gray);
+  }
+  select option {
+    background: var(--primary-medium);
+    color: var(--text-primary);
+  }
+  select {
+    background: var(--primary-medium);
+    color: var(--text-primary);
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+  }
+  td.action-btn button {
+    text-align: center;
+    width: 40px !important;
+    margin: 0;
+  }
+  p-table.p-element td {
+    background: var(--primary-light);
+    color: var(--text-primary);
+    border: none;
+  }
+  p-table.p-element th {
+    background: var(--primary-medium);
+    color: var(--text-primary);
+    border-bottom: 2px var(--border) solid;
+  }
+  div.p-datatable-wrapper {
+    border: 2px var(--border) solid;
+  }
+  .wrapper {
+    background: var(--primary-medium);
+    padding: 8px;
+    border-radius: 5px;
+  }
+  .p-paginator {
+    border: 2px var(--border) solid;
+    border-top: none;
+    background: var(--primary-medium);
+  }
+  .p-paginator .p-paginator-current,
+  .p-paginator .p-paginator-pages .p-paginator-page {
+    color: var(--text-primary);
+  }
+  .p-datatable .p-datatable-header {
+    background: var(--primary-light);
+  }
+  .button-group button {
+    background-color: var(--secondary);
+    border: 2px var(--border) solid;
+    color: var(--text-secondary);
+  }
+  .button-group {
+    background: transparent;
+  }
+  .p-toolbar.p-component {
+    background: var(--primary-dark);
+    border-radius: 0;
+    border: var(--border) 2px solid;
+    border-bottom: none;
+  }
+  input {
+    color: var(--text-primary);
+    padding: 12px 14px;
+    border: 2px var(--border) solid;
+    background: var(--primary-medium);
+  }
+  input:focus {
+    background: var(--primary-medium);
+    color: var(--text-primary);
+  }
+  input::placeholder {
+    color: var(--text-primary);
+  }
+  div.p-dialog-header,
+  div.p-dialog-content,
+  div.p-dialog-footer {
+    background-color: var(--primary-dark);
+    color: var(--text-primary);
+  }
+  input::-webkit-inner-spin-button,
+  input::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  td {
+    width: 33.3% !important;
+  }
 }
-
-

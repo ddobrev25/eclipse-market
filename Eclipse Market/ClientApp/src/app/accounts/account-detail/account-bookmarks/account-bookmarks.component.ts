@@ -106,7 +106,7 @@ export class AccountBookmarksComponent implements OnInit, OnDestroy {
             const index = this.bookmarkedListings?.findIndex(
               (x) => x.id === listing.id
             );
-            if (index) {
+            if (index !== undefined && index >= 0) {
               this.bookmarkedListings?.splice(index, 1);
               const newData = {
                 bookmarkedListings: this.bookmarkedListings

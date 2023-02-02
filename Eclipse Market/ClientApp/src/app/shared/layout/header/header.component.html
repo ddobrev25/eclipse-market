@@ -4,11 +4,10 @@
       <img 
         [src]="sanitizer.bypassSecurityTrustResourceUrl(logo)" 
         alt="no image"
-        routerLink="/home " 
-        height="90px">
-      <!-- <div class="form-check form-switch">
+        routerLink="/home">
+      <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" (click)="onToggleTheme()">
-      </div> -->
+      </div>
     </div>
 
     <div class="toggle-button" (click)="onToggleNavbar()">
@@ -22,7 +21,7 @@
 
         <li class="nav-tab" routerLink="/account" routerLinkActive="active-nav">
           <i class="pi pi-user"></i>
-          Моят профил
+          <span>Моят профил</span>
         </li>
         <button pButton pRipple label="Добави обява" id="addBtn" class="p-button-primary ms-2" routerLink="listings/create">
         </button>

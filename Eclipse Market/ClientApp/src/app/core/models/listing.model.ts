@@ -61,5 +61,9 @@ export type ListingUpdateRequest = {
   price: number;
   location: string;
   listingCategoryId: number;
+};
+
+export type ListingUpdateImagesRequest = {
+  listingId: number;
   imageBase64Strings: string[];
 };

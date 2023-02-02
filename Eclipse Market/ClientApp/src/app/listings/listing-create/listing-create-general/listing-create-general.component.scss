@@ -1,73 +1,69 @@
 #descTextArea {
-    resize: none;
-    min-height: 24px;
-    overflow:hidden;
-    transition: 0.3s;
-
+  resize: none;
+  min-height: 24px;
+  overflow: hidden;
+  transition: 0.3s;
 }
 #descTextArea:focus {
-    height: 200px;
+  height: 200px;
 }
 h4 {
-    color: var(--text-light);
+  color: var(--text-primary);
 }
 
-
 :host::ng-deep {
-    input.form-control,
-    textarea,
-    textarea:focus,
-    select { 
-        background-color: var(--gray-blue);
-        border: 2px var(--gray-blue-border) solid;
-        color: var(--text-light);
-        font-size: 16px;
-        width: 100%;
-        transition: 0.3s;
+  input.form-control,
+  textarea,
+  textarea:focus,
+  select {
+    background-color: var(--primary-medium);
+    border: 2px var(--border) solid;
+    color: var(--text-primary);
+    font-size: 16px;
+    width: 100%;
+    transition: 0.3s;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+  .form-floating > label {
+    line-height: 8px;
+  }
+  .form-floating > label,
+  .form-floating select {
+    font-size: 20px;
+    // line-height: 8px;
+    color: var(--text-primary);
+    height: auto;
+  }
 
-    }
-    input:-webkit-autofill,
-    input:-webkit-autofill:focus {
-      transition: background-color 600000s 0s, color 600000s 0s;
-    }
-    .form-floating > label {
-        line-height: 8px;
-    }
-    .form-floating > label,
-    .form-floating select {
-        font-size: 20px;
-        // line-height: 8px;
-        color: var(--text-light);
-        height: auto;
-    }
+  #charLeft {
+    color: var(--text-primary);
+    float: right;
+  }
 
-    #charLeft {
-        color: var(--text-light);
-        float: right;
-    }
+  .auction,
+  .listing {
+    height: 80px;
+    background-color: var(--primary-medium);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .auction i,
+  .listing i {
+    font-size: 1.4em;
+  }
 
-    .auction,
-    .listing {
-        height: 80px;
-        background-color: var(--gray-blue);
-        border: 2px solid var(--gray-blue-border);
-        border-radius: 8px;
-        color: var(--text-light);
-        font-size: 18px;
-        cursor: pointer;
-    }
-    .auction i,
-    .listing i {
-        font-size: 1.4em;
-    }
+  .activeOption {
+    border: 3px solid var(--secondary);
+    background: var(--primary-light);
+  }
 
-    .activeOption {
-        border: 3px solid var(--blue-bg);
-        background: var(--gray-blue-medium);
-    }
-
-    .p-tooltip {
-        background-color: var(--gray-blue);
-    }
-
+  .p-tooltip {
+    background-color: var(--primary-medium);
+  }
 }

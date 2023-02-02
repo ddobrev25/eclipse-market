@@ -1,4 +1,7 @@
 :host::ng-deep {
+  .p-button.p-button-danger, .p-buttonset.p-button-danger > .p-button, .p-splitbutton.p-button-danger > .p-button {
+    background-color: var(--danger);
+  }
   .wrapper > img {
     width: 100%;
     aspect-ratio: 1/1;
@@ -8,7 +11,7 @@
   .img-container {
     position: relative;
     border-radius: 15px;
-    border: 2px var(--gray-blue-border) solid;
+    border: 2px var(--border) solid;
   }
   .wrapper {
     position: relative;
@@ -39,25 +42,25 @@
     }
   }
   .container-fluid {
-    background-color: var(--gray-blue-dark);
+    background-color: var(--primary-dark);
     border-radius: 15px;
-    border: 2px var(--gray-blue-border) solid;
+    border: 2px var(--border) solid;
   }
   .general-container {
     border-radius: 15px;
-    border: 2px var(--gray-blue-border) solid;
+    border: 2px var(--border) solid;
   }
   .info-container {
     border-radius: 15px;
-    border: 2px var(--gray-blue-border) solid;
+    border: 2px var(--border) solid;
   }
   .info-container input {
-    background: var(--gray-blue);
+    background: var(--primary-medium);
     padding: 12px 14px;
     pointer-events: none;
-    border: 2px var(--gray-blue-border) solid;
+    border: 2px var(--border) solid;
   }
   input::placeholder {
-    color: var(--text-light);
+    color: var(--text-primary);
   }
 }
