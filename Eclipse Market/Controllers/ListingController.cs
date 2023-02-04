@@ -224,6 +224,26 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
 
         }
+        [HttpGet]
+        public ActionResult<List<ListingGetAllResponse>> Search(string query)
+        {
+            var listings = _dbContext.Listings
+                .Where(x => x.Title.StartsWith(query) || x.Description.Contains(query))
+                .Select(x => new ListingGetAllResponse
+                {
+                    Description = x.Description,
+                    AuthorId = x.AuthorId,
+                    Id = x.Id,
+                    ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title,
+                    Location = x.Location,
+                    Price = x.Price,
+                    TimesBookmarked = x.TimesBookmarked,
+                    Title = x.Title,
+                    Views = x.Views
+                }).ToList();
+
+            return Ok(listings);
+        }
         [HttpPost]
         public ActionResult Add(ListingAddRequest request)
         {
