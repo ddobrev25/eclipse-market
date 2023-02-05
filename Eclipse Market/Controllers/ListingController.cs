@@ -241,7 +241,7 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views
                 }).ToList();
-
+            PopulateListingImages(ref listings);
             return Ok(listings);
         }
         [HttpPost]
