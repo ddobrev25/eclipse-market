@@ -143,7 +143,7 @@ app.UseRouting();
 app.MapHub<ChatHub>("/chatHub");
 
 app.UseCors(builder =>
-builder.WithOrigins("http://localhost:5000")
+builder.WithOrigins("http://192.168.0.104:4200")
 .AllowAnyHeader()
 .AllowCredentials()
 .AllowAnyMethod());

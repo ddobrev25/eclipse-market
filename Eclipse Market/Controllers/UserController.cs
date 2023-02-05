@@ -277,7 +277,7 @@ namespace Eclipse_Market.Controllers
             //if the username is not correct return, there is no way to know which user attempted the login
             if (!_dbContext.Users.Any(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName))
             {
-                return BadRequest("Incorrect credentials");
+                return BadRequest("Incorrect username");
             }
 
             //if a user with the given username already exists try to pull a user object with the password
@@ -307,7 +307,7 @@ namespace Eclipse_Market.Controllers
                 }
 
                 _dbContext.SaveChanges();
-                return BadRequest("Incorrect Credentials");
+                return BadRequest("Incorrect password");
             }
 
             if (user.DateLockedTo > DateTime.UtcNow)
