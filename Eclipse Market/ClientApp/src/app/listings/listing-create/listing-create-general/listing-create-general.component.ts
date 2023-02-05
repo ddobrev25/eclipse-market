@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ListingCategoryGetAllResponse } from 'src/app/core/models/listing-category.model';
 import { ListingCategoryService } from 'src/app/core/services/http/listing-category.service';
+import { UserService } from 'src/app/core/services/http/user.service';
 import { ListingCreateCommunicationService } from 'src/app/core/services/listing-create.service';
+import { UserDataService } from 'src/app/core/services/store/user.data.service';
 
 @Component({
   selector: 'app-listing-create-general',
@@ -48,10 +50,12 @@ export class ListingCreateGeneralComponent implements OnInit {
   constructor(private router: Router,
               private listingComService: ListingCreateCommunicationService,
               private listingCategoryService: ListingCategoryService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private userDataService: UserDataService) { }
 
   ngOnInit() {
     this.fetchCategories();
+    if(!this.userDataService.isLoggedIn) this.router.navigate(['/auth']);
   }
   fetchCategories() {
     this.categorySubs = this.listingCategoryService.getAll().subscribe({
