@@ -20,8 +20,8 @@ import { MessageDataService } from "./store/message.data.service";
 })
 export class MessageSignalrService {
   hubConnection?: signalR.HubConnection;
-  private url = 'https://eclipsemarketapi.azurewebsites.net/chatHub';
-  // private url = 'http://localhost:5001/chatHub';
+  // private url = 'https://eclipsemarketapi.azurewebsites.net/chatHub';
+  private url = 'http://localhost:5001/chatHub';
 
 
 

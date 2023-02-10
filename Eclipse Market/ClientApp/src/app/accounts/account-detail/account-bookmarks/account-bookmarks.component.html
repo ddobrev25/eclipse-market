@@ -10,7 +10,7 @@
           <img
             alt="Card"
             (click)="onPreviewListing(listing.id)"
-            src="../../../../assets/images/not-available.png"
+            [src]="listing.imageBase64Strings[0]"
           />
         </ng-template>
         <ng-template pTemplate="body">

@@ -8,8 +8,8 @@ import { DeleteRequest } from '../../models/user.model';
 })
 export class MsgService {
     private httpWithoutInterceptor: HttpClient;
-    private url = 'https://eclipsemarketapi.azurewebsites.net';
-    // private url = 'http://localhost:5001';
+    // private url = 'https://eclipsemarketapi.azurewebsites.net';
+    private url = 'http://localhost:5001';
 
 
 

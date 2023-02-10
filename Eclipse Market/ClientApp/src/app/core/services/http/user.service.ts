@@ -25,8 +25,8 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
   private httpWithoutInterceptor: HttpClient;
-  private url = 'https://eclipsemarketapi.azurewebsites.net';
-  // private url = 'http://localhost:5001';
+  // private url = 'https://eclipsemarketapi.azurewebsites.net';
+  private url = 'http://localhost:5001';
 
 
 

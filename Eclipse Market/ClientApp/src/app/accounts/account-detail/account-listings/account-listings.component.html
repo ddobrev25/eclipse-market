@@ -9,7 +9,7 @@
         <img
           (click)="onSelectListing(listing.id!)"
           alt="Card"
-          src="../../../../assets/images/not-available.png" />
+          [src]="listing.imageBase64Strings[0]" />
       </ng-template>
       <ng-template pTemplate="body">
         <p>

@@ -1,7 +1,7 @@
 <div class="container-fluid px-0">
   <div class="row mt-4 mx-0 p-3 wrapper">
     <div class="col-sm-3 col-12 p-0 d-flex justify-content-center align-items-center">
-      <img id="profile-img" alt="Card" src="../../../../assets/images/not-available.png" />
+      <img id="profile-img" alt="Card" [src]="userInfo.imageBase64String" />
     </div>
     <div class="col-sm-9 col-12 p-0 d-flex align-items-center">
       <h2>{{ userInfo.firstName + " " + userInfo.lastName }}</h2>
@@ -25,7 +25,7 @@
                 <img
                   id="listing-img"
                   alt="Card"
-                  src="../../../../assets/images/not-available.png" />
+                  [src]="userInfo.listings[0].imageBase64Strings[0]" />
               </div>
             </div>
             <div class="col-lg-6 col-md-5 col-12">

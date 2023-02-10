@@ -41,7 +41,7 @@ namespace Eclipse_Market.Controllers
                 Title = x.Title,
                 Views = x.Views,
             }).ToList();
-            /*PopulateListingImages(ref listings);*/
+            PopulateListingImages(ref listings);
             return Ok(listings);
         }
         [HttpGet]
@@ -74,10 +74,10 @@ namespace Eclipse_Market.Controllers
                 };
 
                 var withoutAuthorListingImages = _dbContext.ListingImages.Where(x => x.ListingId == listingResponse.Id);
-/*                foreach (var listingImage in withoutAuthorListingImages)
+                foreach (var listingImage in withoutAuthorListingImages)
                 {
                     listingResponse.ImageBase64Strings.Add(listingImage.Base64String);
-                }*/
+                }
 
                 listingResponses[i] = listingResponse;
                 i++;
@@ -89,7 +89,7 @@ namespace Eclipse_Market.Controllers
                 FirstName = author.FirstName,
                 LastName = author.LastName,
                 PhoneNumber = author.PhoneNumber,
-                /*ImageBase64String = _dbContext.UserImages.Where(x => x.UserId == author.Id).First().Base64String,*/
+                ImageBase64String = _dbContext.UserImages.Where(x => x.UserId == author.Id).First().Base64String,
                 Listings = listingResponses
             };
             var response = new ListingGetByIdResponse
@@ -104,11 +104,11 @@ namespace Eclipse_Market.Controllers
                 Author = authorResponse,
                 
             };
-/*            var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
+            var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
             foreach (var listingImage in listingImages)
             {
                 response.ImageBase64Strings.Add(listingImage.Base64String);
-            }*/
+            }
 
             return Ok(response);
         }
@@ -175,7 +175,7 @@ namespace Eclipse_Market.Controllers
                     }
                 }
             }
-/*            PopulateListingImages(ref response);*/
+            PopulateListingImages(ref response);
             return Ok(response);
         }
         [HttpGet]
@@ -196,7 +196,7 @@ namespace Eclipse_Market.Controllers
                     Id = x.Id,
                     Views = x.Views
                 }).ToList();
-/*            PopulateListingImages(ref response);*/
+            PopulateListingImages(ref response);
             return Ok(response);
         }
         [HttpGet]
@@ -220,7 +220,7 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views
                 }).ToList();
-/*            PopulateListingImages(ref response);*/
+            PopulateListingImages(ref response);
             return Ok(response);
 
         }
@@ -241,7 +241,7 @@ namespace Eclipse_Market.Controllers
                     Title = x.Title,
                     Views = x.Views
                 }).ToList();
-/*            PopulateListingImages(ref listings);*/
+            PopulateListingImages(ref listings);
             return Ok(listings);
         }
         [HttpPost]
