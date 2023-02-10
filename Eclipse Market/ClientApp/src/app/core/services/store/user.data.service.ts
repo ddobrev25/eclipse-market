@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { BehaviorSubject, Observable } from "rxjs";
 import { User$ } from "../../models/user.model";
 
@@ -6,9 +7,13 @@ import { User$ } from "../../models/user.model";
   providedIn: "root",
 })
 export class UserDataService {
-  isLoggedIn: boolean = false;
+  get isLoggedIn() {
+    const token = localStorage.getItem('token');
+    if(!token) return false;
+    return !this.jwtHelperService.isTokenExpired(token);
+  }
   private user$: BehaviorSubject<User$ | null>;
-  constructor() {
+  constructor(private jwtHelperService: JwtHelperService) {
     this.user$ = new BehaviorSubject<User$ | null>(null);
   }
 

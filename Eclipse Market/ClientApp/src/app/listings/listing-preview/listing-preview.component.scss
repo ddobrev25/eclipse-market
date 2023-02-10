@@ -4,6 +4,7 @@
   color: var(--text-primary);
   border-radius: 8px;
   width: 100%;
+  height: min-content;
   z-index: 0;
 }
 :host::ng-deep {

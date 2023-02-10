@@ -7,7 +7,6 @@ import {
 import * as signalR from "@microsoft/signalr";
 import { create } from "lodash";
 import { MessageService } from "primeng/api";
-import { PenTestService } from "src/app/pen-test-service.service";
 import { Chat, ChatGetByIdResponse } from "../models/chat.model";
 import {
   Chat$,
@@ -21,13 +20,15 @@ import { MessageDataService } from "./store/message.data.service";
 })
 export class MessageSignalrService {
   hubConnection?: signalR.HubConnection;
-  url: string = this.penTest.url + '/chatHub';
+  private url = 'https://eclipsemarketapi.azurewebsites.net/chatHub';
+  // private url = 'http://localhost:5001/chatHub';
+
+
 
   constructor(
     private messageDataService: MessageDataService,
     private messageService: MessageService,
-    private router: Router,
-    private penTest: PenTestService
+    private router: Router
   ) { }
 
   startConnection = () => {
@@ -107,7 +108,7 @@ export class MessageSignalrService {
         key: "br",
         severity: "info",
         detail: message,
-        life: 3000,
+        life: 33000,
       });
     }
   }

@@ -1,16 +1,15 @@
 <div class="container-xl">
   <div class="row">
     <div class="col-12">
-      <div class="input-group my-5">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search"
-          aria-label="Search"
-          aria-describedby="button-addon2" />
-        <button class="btn btn-secondary" type="button" id="button-addon2">
-          Search
-        </button>
+      <div class="searchbar-container my-5">
+        <div class="input-wrapper py-3 px-4 d-flex flex-row-reverse justify-content-center align-items-center">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            class="searchbar-input w-100"
+            placeholder="Търсене..."
+            (keyup.enter)="onSearch($event)"/>
+        </div>
       </div>
     </div>
   </div>
@@ -28,7 +27,7 @@
   <div class="row">
     <div class="col p-0">
       <div class="text-center my-5">
-        <span id="heading">Промо обяви</span>
+        <span id="heading">{{ heading }}</span>
       </div>
       <p-dataView
         [value]="randomListingList!"
@@ -49,7 +48,7 @@
                   id="profile-img"
                   alt="No image"
                   class="img-list"
-                  [src]="listing.imageBase64Strings[0]" />
+                  src="../../assets/images/not-available.png" />
               </div>
             </div>
             <div class="col-lg-6 col-md-5 col-12">
@@ -84,7 +83,7 @@
                   (click)="onSelectListing(listing)"
                   alt="No image"
                   class="img-grid"
-                  [src]="listing.imageBase64Strings[0]" />
+                  src="../../assets/images/not-available.png" />
               </ng-template>
               <ng-template pTemplate="body">
                 <div class="col d-flex flex-column">

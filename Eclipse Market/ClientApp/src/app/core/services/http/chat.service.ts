@@ -5,7 +5,6 @@ import {
   HttpHeaders,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { PenTestService } from "src/app/pen-test-service.service";
 import {
   ChatCreateRequest,
   ChatGetAllByUserIdResponse,
@@ -19,9 +18,11 @@ import { DeleteRequest } from "../../models/user.model";
 })
 export class ChatService {
   private httpWithoutInterceptor: HttpClient;
-  private url = this.penTest.url;
+  private url = 'https://eclipsemarketapi.azurewebsites.net';
+  // private url = 'http://localhost:5001';
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend, private penTest: PenTestService) {
+
+  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 

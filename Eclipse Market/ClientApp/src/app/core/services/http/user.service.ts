@@ -19,17 +19,19 @@ import {
   UserUpdateRequest,
 } from '../../models/user.model';
 import { Observable } from 'rxjs';
-import { PenTestService } from 'src/app/pen-test-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private httpWithoutInterceptor: HttpClient;
-  private url = this.penTest.url;
+  private url = 'https://eclipsemarketapi.azurewebsites.net';
+  // private url = 'http://localhost:5001';
 
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend, private penTest: PenTestService) {
+
+
+  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 

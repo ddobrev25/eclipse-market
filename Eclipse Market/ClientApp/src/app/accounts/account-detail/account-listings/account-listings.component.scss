@@ -141,4 +141,20 @@
     cursor: pointer;
     color: var(--text-light);
   }
+  @media (max-width: 576px) {
+    .img-preview img {
+      height: 150px;
+    }
+    .overlay {
+      height: 150px;
+      margin-top: -150px;
+    }
+    .p-dialog .p-dialog-footer {
+      display: flex;
+      flex-direction: column;
+      button {
+        margin-bottom: 12px;
+      }
+    }
+  }
 }

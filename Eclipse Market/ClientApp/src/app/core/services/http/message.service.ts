@@ -1,6 +1,5 @@
 import { HttpClient, HttpBackend, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { PenTestService } from "src/app/pen-test-service.service";
 import { Message, MessageEditRequest, MessageGetAllByChatIdResponse, MessageSendRequest } from '../../models/message.model';
 import { DeleteRequest } from '../../models/user.model';
 
@@ -9,12 +8,14 @@ import { DeleteRequest } from '../../models/user.model';
 })
 export class MsgService {
     private httpWithoutInterceptor: HttpClient;
-    private url = this.penTest.url;
+    private url = 'https://eclipsemarketapi.azurewebsites.net';
+    // private url = 'http://localhost:5001';
+
+
 
   
     constructor(private http: HttpClient,
-                private httpBackend: HttpBackend,
-                private penTest: PenTestService) { this.httpWithoutInterceptor = new HttpClient(httpBackend) }
+                private httpBackend: HttpBackend) { this.httpWithoutInterceptor = new HttpClient(httpBackend) }
 
     getAllByChatId(id: number) {
         let headers = new HttpHeaders({

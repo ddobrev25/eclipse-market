@@ -5,7 +5,7 @@
         class="img-container"
         (mouseenter)="onShowImageOverlay($event)"
         (mouseleave)="onShowImageOverlay($event)">
-        <img #img id="listing-img" alt="Card" [src]="currentImage" />
+        <img #img id="listing-img" alt="Card" src="../../../assets/images/not-available.png" />
         <div class="img-overlay">
           <span class="d-flex align-items-center justify-content-between h-100">
             <i class="pi pi-chevron-left" (click)="onPreviousImage($event)"></i>
@@ -20,7 +20,7 @@
               <img
                 id="profile-img"
                 alt="Card"
-                [src]="selectedListing?.author?.imageBase64String" />
+                src="../../../assets/images/not-available.png" />
             </div>
             <div
               class="col-lg-4 col-6 d-flex flex-column justify-content-center py-4">

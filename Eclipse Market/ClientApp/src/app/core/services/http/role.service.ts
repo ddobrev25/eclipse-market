@@ -6,16 +6,18 @@ import {
   RoleUpdateRequest,
 } from '../../models/role.model';
 import { DeleteRequest } from '../../models/user.model';
-import { PenTestService } from 'src/app/pen-test-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoleService {
   private httpWithoutInterceptor: HttpClient;
-  private url = this.penTest.url;
+  private url = 'https://eclipsemarketapi.azurewebsites.net';
+  // private url = 'http://localhost:5001';
 
-  constructor(private http: HttpClient, private httpBackend: HttpBackend, private penTest: PenTestService) {
+
+
+  constructor(private http: HttpClient, private httpBackend: HttpBackend) {
     this.httpWithoutInterceptor = new HttpClient(httpBackend);
   }
 

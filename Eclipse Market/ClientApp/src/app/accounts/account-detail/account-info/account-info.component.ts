@@ -103,7 +103,6 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   onLogOut() {
     this.router.navigate(['/home']);
     this.userDataService.setUserData(null);
-    this.userDataService.isLoggedIn = false;
     localStorage.clear();
     this.messageSignalrService.stopConnection();
     this.messageDataService.setChats(null);
