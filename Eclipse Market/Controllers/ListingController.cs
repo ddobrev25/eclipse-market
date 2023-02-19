@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
 using System.Reflection;
 
 namespace Eclipse_Market.Controllers
@@ -113,7 +112,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpGet]
-        public ActionResult<List<ListingGetAllResponse>> GetRecommended(int count, int? listingCategoryId = null)
+        public ActionResult<List<ListingGetAllResponse>> GetRecommended(int count, int? listingCategoryId = null, bool? auctionsOnly = null)
         {
             if(count <= 0)
             {
@@ -175,6 +174,7 @@ namespace Eclipse_Market.Controllers
                     }
                 }
             }
+
             PopulateListingImages(ref response);
             return Ok(response);
         }
@@ -225,24 +225,40 @@ namespace Eclipse_Market.Controllers
 
         }
         [HttpGet]
-        public ActionResult<List<ListingGetAllResponse>> Search(string query)
+        public ActionResult<List<ListingGetAllResponse>> Search(string query, bool? auctionsOnly = null)
         {
             var listings = _dbContext.Listings
-                .Where(x => x.Title.StartsWith(query) || x.Description.Contains(query))
-                .Select(x => new ListingGetAllResponse
-                {
-                    Description = x.Description,
-                    AuthorId = x.AuthorId,
-                    Id = x.Id,
-                    ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title,
-                    Location = x.Location,
-                    Price = x.Price,
-                    TimesBookmarked = x.TimesBookmarked,
-                    Title = x.Title,
-                    Views = x.Views
-                }).ToList();
-            PopulateListingImages(ref listings);
-            return Ok(listings);
+                .Include(x => x.Auction)
+                .Where(x => x.Title.Contains(query) || x.Description.Contains(query));
+
+            if (auctionsOnly == true)
+            {
+                listings = listings
+                    .Include(x => x.Auction)
+                    .Where(x => x.Auction != null);
+            }
+            else if (auctionsOnly == false)
+            {
+                listings = listings
+                    .Include(x => x.Auction)
+                    .Where(x => x.Auction == null);
+            }
+
+            var response = listings.Select(x => new ListingGetAllResponse
+            {
+                Description = x.Description,
+                AuthorId = x.AuthorId,
+                Id = x.Id,
+                ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title,
+                Location = x.Location,
+                Price = x.Price,
+                TimesBookmarked = x.TimesBookmarked,
+                Title = x.Title,
+                Views = x.Views
+            }).ToList();
+
+            PopulateListingImages(ref response);
+            return Ok(response);
         }
         [HttpPost]
         public ActionResult<int> Add(ListingAddRequest request)
