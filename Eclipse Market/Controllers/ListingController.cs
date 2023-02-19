@@ -245,7 +245,7 @@ namespace Eclipse_Market.Controllers
             return Ok(listings);
         }
         [HttpPost]
-        public ActionResult Add(ListingAddRequest request)
+        public ActionResult<int> Add(ListingAddRequest request)
         {
             var userId = _jwtService.GetUserIdFromToken(User);
             if(!_dbContext.Users.Any(x => x.Id == userId))
@@ -284,7 +284,7 @@ namespace Eclipse_Market.Controllers
             }
             _dbContext.ListingImages.AddRange(imagesToAdd);
             _dbContext.SaveChanges();
-            return Ok();
+            return Ok(listingId);
         }
         [HttpPost]
         public ActionResult UpdateImages(ListingUpdateImagesRequest request)
