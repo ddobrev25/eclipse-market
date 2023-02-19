@@ -50,16 +50,16 @@ namespace Eclipse_Market.Controllers
             {
                 return BadRequest("Bid increment percentage is out of the valid range.");
             }
-
             var auctionToCreate = new Auction
             {
                 StartingPrice = request.StartingPrice,
-                BidIncrement = request.StartingPrice * (request.BidIncrementPercentage / 100),
                 BuyoutPrice = request.BuyoutPrice,
                 Listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).First(),
+                BidIncrement = request.StartingPrice * (request.BidIncrementPercentage / 100.0d),
                 ListingId = request.ListingId,
                 ExpireTime = request.ExpireTime,
             };
+
             _dbContext.Auctions.Add(auctionToCreate);
             _dbContext.SaveChanges();
             return Ok();

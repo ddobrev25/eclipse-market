@@ -12,6 +12,5 @@ namespace Eclipse_Market.Models.DB
         public int UserId { get; set; }
         public User User { get; set; }
 
-
     }
 }

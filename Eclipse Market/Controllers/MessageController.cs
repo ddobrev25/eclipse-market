@@ -19,14 +19,14 @@ namespace Eclipse_Market.Controllers
         private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
         private IJwtService _jwtService { get; }
-        private IHubContext<ChatHub> _hubContext;
+        private IHubContext<ChatHub> _chatHubContext;
 
         public MessageController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService, IHubContext<ChatHub> hubContext)
         {
             _dbContext = dbContext;
             Configuration = configuration;
             _jwtService = jwtService;
-            _hubContext = hubContext;
+            _chatHubContext = hubContext;
         }
 
         [HttpGet]
@@ -137,7 +137,7 @@ namespace Eclipse_Market.Controllers
                 .ToList();
 
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToAdd.ChatId).First().Id;
-            await _hubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageAddResponse", newMessage);
+            await _chatHubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageAddResponse", newMessage);
 
             return Ok(newMessage);
         }
@@ -179,7 +179,7 @@ namespace Eclipse_Market.Controllers
             };
 
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToEdit.ChatId).First().Id;
-            await _hubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageEditResponse", editedMessage);
+            await _chatHubContext.Clients.Groups(chatId.ToString()).SendAsync("MessageEditResponse", editedMessage);
 
             return Ok();
         }
@@ -210,7 +210,7 @@ namespace Eclipse_Market.Controllers
                 .ToList();
 
             int chatId = _dbContext.Chats.Where(x => x.Id == messageToDelete.ChatId).First().Id;
-            await _hubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageDeleteResponse", messageToDelete);
+            await _chatHubContext.Clients.GroupExcept(chatId.ToString(), senderConnections).SendAsync("MessageDeleteResponse", messageToDelete);
 
             return Ok();
         }        
