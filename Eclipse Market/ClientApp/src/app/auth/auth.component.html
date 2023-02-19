@@ -15,8 +15,8 @@
           <i class="pi pi-check-square"></i>
           <app-form-errors
             [control]="$any(loginForm).get('userName')"
-            [max]="'50'"
-            [min]="'2'"
+            [maxLength]="'50'"
+            [minLength]="'2'"
             [controlName]="'Потребителско име'"
           ></app-form-errors>
         </div>
@@ -33,8 +33,8 @@
           <i class="pi pi-check-square"></i>
           <app-form-errors
             [control]="$any(loginForm).get('password')"
-            [max]="'50'"
-            [min]="'2'"
+            [maxLength]="'50'"
+            [minLength]="'2'"
             [controlName]="'Парола'"
           ></app-form-errors>
         </div>
@@ -116,8 +116,8 @@
             <i class="pi pi-check-square"></i>
             <app-form-errors
               [control]="$any(registerForm).get('firstName')"
-              [max]="'50'"
-              [min]="'2'"
+              [maxLength]="'50'"
+              [minLength]="'2'"
               [controlName]="'Име'"
             ></app-form-errors>
           </div>
@@ -133,8 +133,8 @@
             <i class="pi pi-check-square"></i>
             <app-form-errors
               [control]="$any(registerForm).get('lastName')"
-              [max]="'50'"
-              [min]="'2'"
+              [maxLength]="'50'"
+              [minLength]="'2'"
               [controlName]="'Фамилия'"
             ></app-form-errors>
           </div>
@@ -154,8 +154,8 @@
           <i class="pi pi-check-square"></i>
           <app-form-errors
             [control]="$any(registerForm).get('userName')"
-            [max]="'50'"
-            [min]="'2'"
+            [maxLength]="'50'"
+            [minLength]="'2'"
             [controlName]="'Потребителско име'"
           ></app-form-errors>
         </div>
@@ -174,8 +174,8 @@
           <i class="pi pi-check-square"></i>
           <app-form-errors
             [control]="$any(registerForm).get('password')"
-            [max]="'50'"
-            [min]="'6'"
+            [maxLength]="'50'"
+            [minLength]="'6'"
             [controlName]="'Парола'"
             [format]="'- 1 главна буква, 1 малко буква, 1 число, 1 символ'"
           ></app-form-errors>
@@ -192,8 +192,8 @@
           <i class="pi pi-check-square"></i>
           <app-form-errors
             [control]="$any(registerForm).get('confirmPassword')"
-            [max]="'50'"
-            [min]="'6'"
+            [maxLength]="'50'"
+            [minLength]="'6'"
             [controlName]="'Потвърди парола'"
             [format]="'- 1 главна буква, 1 малко буква, 1 число, 1 символ'"
           ></app-form-errors>

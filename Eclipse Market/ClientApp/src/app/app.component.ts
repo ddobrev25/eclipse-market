@@ -10,6 +10,7 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 })
 export class AppComponent implements OnInit {
   title = 'EclipseMarket';
+  showNotificationDialog = true;
   public spinnerComponent = SpinnerComponent;
   @ViewChild('sm') ul?: ElementRef;
 

@@ -15,7 +15,10 @@ h4 {
   input.form-control,
   textarea,
   textarea:focus,
-  select {
+  select,
+  .p-inputtext,
+  .p-datepicker,
+  .p-datepicker .p-datepicker-header {
     background-color: var(--primary-medium);
     border: 2px var(--border) solid;
     color: var(--text-primary);
@@ -65,5 +68,18 @@ h4 {
 
   .p-tooltip {
     background-color: var(--primary-medium);
+  }
+
+  .p-calendar {
+    width: 100%;
+  }
+
+  .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month,
+  .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year {
+    color: var(--text-primary);
+  }
+  .p-button {
+    background: var(--secondary);
+    border-color: var(--secondary);
   }
 }

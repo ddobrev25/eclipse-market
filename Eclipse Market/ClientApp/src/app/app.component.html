@@ -1,6 +1,24 @@
 <div class="content">
   <app-header></app-header>
   <main>
+    <p-dialog
+      header="Уважаеми клиенти"
+      [(visible)]="showNotificationDialog"
+      position="top"
+      [modal]="true"
+      [style]="{ width: '80vw' }"
+      [draggable]="false"
+      [resizable]="false">
+      <p>
+        Поради лимити от хостинг доставчика, показът на снимките е спрян!
+        Съжаляваме за неудобството.
+      </p>
+      <ng-template pTemplate="footer">
+          <p>
+            Екипът на Eclipse Market
+          </p>
+      </ng-template>
+    </p-dialog>
     <router-outlet></router-outlet>
   </main>
   <p-toast position="top-center" key="tc"></p-toast>

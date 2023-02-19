@@ -25,6 +25,7 @@ import { InputTextareaModule } from "primeng/inputtextarea";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { ToggleButtonModule } from "primeng/togglebutton";
+import { CalendarModule } from "primeng/calendar";
 
 @NgModule({
   declarations: [FormErrorsComponent, ClaimAccessDirective],
@@ -54,6 +55,7 @@ import { ToggleButtonModule } from "primeng/togglebutton";
     AutoCompleteModule,
     InputSwitchModule,
     ToggleButtonModule,
+    CalendarModule,
   ],
 
   exports: [
@@ -84,6 +86,7 @@ import { ToggleButtonModule } from "primeng/togglebutton";
     AutoCompleteModule,
     InputSwitchModule,
     ToggleButtonModule,
+    CalendarModule,
   ],
 })
 export class SharedModule {}

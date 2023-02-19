@@ -117,7 +117,7 @@ export class ListingService {
   }
 
   add(body: ListingAddRequest) {
-    return this.http.post(`${this.url}/Listing/Add`, body);
+    return this.http.post<number>(`${this.url}/Listing/Add`, body);
   }
 
   update(body: ListingUpdateRequest) {

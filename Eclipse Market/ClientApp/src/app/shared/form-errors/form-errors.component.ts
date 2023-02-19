@@ -9,11 +9,14 @@ import { AbstractControl } from "@angular/forms";
 export class FormErrorsComponent implements OnInit {
   @Input() control!: AbstractControl;
   @Input() controlName!: string;
-  @Input() max: string = "100";
-  @Input() min: string = "3";
-  @Input() format: string = "";
+  @Input() maxLength: string = '';
+  @Input() minLength?: string ;
+  @Input() maxValue?: number;
+  @Input() minValue?: number ;
+  @Input() format?: string;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

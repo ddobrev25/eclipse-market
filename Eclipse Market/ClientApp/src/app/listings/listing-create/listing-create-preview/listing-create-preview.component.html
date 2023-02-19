@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col d-flex justify-content-center">
-            <p-card [header]="listingForm.value.title" styleClass="preview-card">
+            <p-card *ngIf="!isAuction" [header]="listingForm.value.title" styleClass="preview-card">
                 <ng-template pTemplate="header">
                     <img [src]="listingForm.value.imageBase64Strings[0]" alt="Card">
                 </ng-template>
@@ -18,6 +18,27 @@
                             </label>
                             <label class="price-label">
                                 {{ listingForm.value.price }} лв
+                            </label>
+                        </div>
+                </ng-template>
+            </p-card>  
+
+            <p-card *ngIf="isAuction" [header]="auctionForm.value.title" styleClass="preview-card">
+                <ng-template pTemplate="header">
+                    <img [src]="auctionForm.value.imageBase64Strings[0]" alt="Card">
+                </ng-template>
+                <ng-template pTemplate="body">
+                    <p>
+                        {{ auctionForm.value.description }}
+                    </p>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                        <div class="col d-flex flex-column">
+                            <label class="location-label">
+                                град {{ auctionForm.value.location }}
+                            </label>
+                            <label class="price-label">
+                                {{ auctionForm.value.price }} лв
                             </label>
                         </div>
                 </ng-template>
