@@ -28,18 +28,21 @@ namespace Eclipse_Market.Controllers
         [HttpGet]
         public ActionResult<List<ListingGetAllResponse>> GetAll()
         {
-            var listings = _dbContext.Listings.Select(x => new ListingGetAllResponse
-            {
-                Id = x.Id,
-                AuthorId = x.AuthorId,
-                Description = x.Description,
-                ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title,
-                Location = x.Location,
-                Price = x.Price,
-                TimesBookmarked = x.TimesBookmarked,
-                Title = x.Title,
-                Views = x.Views,
-            }).ToList();
+            var listings = _dbContext.Listings
+                .Include(x => x.Auction)
+                .Select(x => new ListingGetAllResponse
+                {
+                    Id = x.Id,
+                    AuthorId = x.AuthorId,
+                    Description = x.Description,
+                    ListingCategory = _dbContext.ListingCategories.Where(y => y.Id == x.ListingCategoryId).First().Title,
+                    Location = x.Location,
+                    Price = x.Price,
+                    TimesBookmarked = x.TimesBookmarked,
+                    Title = x.Title,
+                    Views = x.Views,
+                    AuctionId = x.Auction.Id
+                }).ToList();
             PopulateListingImages(ref listings);
             return Ok(listings);
         }
@@ -101,6 +104,7 @@ namespace Eclipse_Market.Controllers
                 Title = listing.Title,
                 Views = listing.Views,
                 Author = authorResponse,
+                AuctionId = listing.Auction?.Id
                 
             };
             var listingImages = _dbContext.ListingImages.Where(x => x.ListingId == listing.Id);
@@ -194,7 +198,8 @@ namespace Eclipse_Market.Controllers
                     TimesBookmarked = x.TimesBookmarked,
                     Title = x.Title,
                     Id = x.Id,
-                    Views = x.Views
+                    Views = x.Views,
+                    AuctionId = x.Auction.Id
                 }).ToList();
             PopulateListingImages(ref response);
             return Ok(response);
@@ -205,7 +210,7 @@ namespace Eclipse_Market.Controllers
             int id = _jwtService.GetUserIdFromToken(User);
 
             var response = _dbContext.ListingUsers
-                //.Include(x => x.Listing)
+                .Include(x => x.Listing)
                 .Where(x => x.UserId == id)
                 .Select(x => x.Listing)
                 .Select(x => new ListingGetAllResponse
@@ -218,7 +223,8 @@ namespace Eclipse_Market.Controllers
                     Price = x.Price,
                     TimesBookmarked = x.TimesBookmarked,
                     Title = x.Title,
-                    Views = x.Views
+                    Views = x.Views,
+                    AuctionId = x.Auction.Id
                 }).ToList();
             PopulateListingImages(ref response);
             return Ok(response);
@@ -436,6 +442,7 @@ namespace Eclipse_Market.Controllers
                 TimesBookmarked = listing.TimesBookmarked,
                 Title = listing.Title,
                 Views = listing.Views,
+                AuctionId = listing.Auction?.Id
                 //ImageBase64String = listing.ImageBase64String,
             };
         }

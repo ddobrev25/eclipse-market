@@ -17,9 +17,9 @@ namespace Eclipse_Market.Controllers
             Configuration = configuration;
         }
         [HttpGet]
-        public ActionResult<List<AuctionGetAllResponse>> GetAll()
+        public ActionResult<List<AuctionGetResponse>> GetAll()
         {
-            var response = _dbContext.Auctions.Select(x => new AuctionGetAllResponse
+            var response = _dbContext.Auctions.Select(x => new AuctionGetResponse
             {
                 Id = x.Id,
                 StartingPrice = x.StartingPrice,
@@ -37,7 +37,31 @@ namespace Eclipse_Market.Controllers
             }
             return Ok(response);
         }
+        [HttpGet]
+        public ActionResult<AuctionGetResponse> GetById(int id)
+        {
+            if (!_dbContext.Auctions.Any(x => x.Id == id))
+            {
+                return BadRequest(ErrorMessages.InvalidId);
+            }
 
+            var auction = _dbContext.Auctions.Where(x => x.Id == id).First();
+            var response = new AuctionGetResponse
+            {
+                StartingPrice = auction.StartingPrice,
+                BidIncrement = auction.BidIncrement,
+                BuyoutPrice = auction.BuyoutPrice,
+                ExpireTime = auction.ExpireTime.ToString(),
+                Id = auction.Id,
+                ListingId = auction.ListingId,
+                BidIds = _dbContext.Bids
+                    .Where(x => x.AuctionId == auction.Id)
+                    .Select(x => x.Id)
+                    .ToList()
+            };
+
+            return Ok(response);
+        }
         [HttpPost]
         public ActionResult Create(AuctionCreateRequest request)
         {

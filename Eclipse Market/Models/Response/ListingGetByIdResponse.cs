@@ -11,5 +11,7 @@
         public int TimesBookmarked { get; set; }
         public string ListingCategory { get; set; }
         public List<string> ImageBase64Strings { get; set; } = new List<string>();
+        public int? AuctionId { get; set; }
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Eclipse_Market.Models.Response
 {
-    public class AuctionGetAllResponse
+    public class AuctionGetResponse
     {
         public int Id { get; set; }
         public string ExpireTime { get; set; }
