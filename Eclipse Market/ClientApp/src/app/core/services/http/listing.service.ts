@@ -23,9 +23,7 @@ import { DeleteRequest } from "../../models/user.model";
 export class ListingService {
   private httpWithoutInterceptor: HttpClient;
   // private url = 'https://eclipsemarketapi.azurewebsites.net';
-  private url = 'http://localhost:5001';
-
-
+  private url = "http://localhost:5001";
 
   constructor(
     private http: HttpClient,
@@ -41,7 +39,6 @@ export class ListingService {
   getById(id: number) {
     const headers = new HttpHeaders({
       Accept: "application/json",
-      SkipLoader: ``,
     });
     const queryParams = new HttpParams().set("id", id);
     return this.http.get<
@@ -74,21 +71,13 @@ export class ListingService {
     );
   }
   getCurrentListings() {
-    const headers = new HttpHeaders({
-      SkipLoader: ``,
-    });
     return this.http.get<ListingGetAllResponse>(
-      `${this.url}/Listing/GetCurrentByUserId`,
-      { headers: headers }
+      `${this.url}/Listing/GetCurrentByUserId`
     );
   }
   getBookmarkedListings() {
-    const headers = new HttpHeaders({
-      SkipLoader: ``,
-    });
     return this.http.get<ListingGetAllResponse>(
-      `${this.url}/Listing/GetBookmarkedByUserId`,
-      { headers: headers }
+      `${this.url}/Listing/GetBookmarkedByUserId`
     );
   }
 
@@ -121,12 +110,7 @@ export class ListingService {
   }
 
   update(body: ListingUpdateRequest) {
-    const headers = new HttpHeaders({
-      SkipLoader: ``,
-    });
-    return this.http.put(`${this.url}/Listing/Update`, body, {
-      headers: headers,
-    });
+    return this.http.put(`${this.url}/Listing/Update`, body);
   }
 
   updateImages(body: ListingUpdateImagesRequest) {

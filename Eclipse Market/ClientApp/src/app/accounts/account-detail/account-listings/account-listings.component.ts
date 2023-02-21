@@ -1,9 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { FormGroup, FormControl, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ConfirmationService, MessageService } from "primeng/api";
-import { forkJoin, map, Subscription, take } from "rxjs";
-import { ListingPreviewService } from "src/app/core/services/listing-preview.service";
+import { forkJoin, Subscription, take } from "rxjs";
 import { ListingService } from "src/app/core/services/http/listing.service";
 import {
   ListingGetAllResponse,
@@ -54,7 +53,6 @@ export class AccountListingsComponent implements OnInit {
   constructor(
     private userDataService: UserDataService,
     private router: Router,
-    private listingPreviewService: ListingPreviewService,
     private listingService: ListingService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -107,9 +105,8 @@ export class AccountListingsComponent implements OnInit {
   }
 
   onSelectListing(id: number) {
-    this.listingPreviewService.sendListingId(id);
     this.listingSelected = true;
-    this.router.navigate(["/account/listing/preview"]);
+    this.router.navigate(["/listings/preview"], {queryParams: {id: id}});
   }
   onSelectListingForEdit(listingForUpdate: ListingGetByIdResponse) {
     this.listingForUpdate = listingForUpdate;

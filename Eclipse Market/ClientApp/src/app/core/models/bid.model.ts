@@ -3,7 +3,7 @@ export type BidGetAllResponse = {
     amount: number;
     timeCreated: string;
     auctionId: number;
-    userId: number;
+    userName: string;
 }[];
 export type BidCreateRequest = {
     amount: number;

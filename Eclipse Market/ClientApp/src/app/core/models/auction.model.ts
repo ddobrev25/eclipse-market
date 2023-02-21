@@ -1,4 +1,4 @@
-export type AuctionGetAllResponse = {
+export type AuctionGetByIdResponse = {
     id: number;
     expireTime: string;
     startingPrice: number;
@@ -6,7 +6,8 @@ export type AuctionGetAllResponse = {
     buyoutPrice: number;
     listingId: number;
     bidIds: number[];
-}[];
+};
+export type AuctionGetAllResponse = AuctionGetByIdResponse[];
 export type AuctionCreateRequest = {
     listingId: number;
     expireTime: Date;

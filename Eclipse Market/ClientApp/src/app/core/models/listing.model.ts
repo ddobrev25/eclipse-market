@@ -1,3 +1,5 @@
+import { AuctionGetByIdResponse } from '../models/auction.model'
+
 export type ListingGetAllResponse = ListingGetByIdResponse[];
 
 export type ListingGetByIdResponse = {
@@ -11,6 +13,8 @@ export type ListingGetByIdResponse = {
   timesBookmarked: number;
   listingCategory: string;
   imageBase64Strings: string[];
+  auctionId: number;
+  auction?: AuctionGetByIdResponse;
 };
 
 export type ListingGetByIdWithAuthorResponse = {
@@ -41,6 +45,8 @@ export type ListingGetByIdWithAuthorResponse = {
   timesBookmarked: number;
   listingCategory: string;
   imageBase64Strings: string[];
+  auctionId: number;
+  auction?: AuctionGetByIdResponse;
 };
 
 export type ListingGetRecommendedResponse = ListingGetAllResponse;

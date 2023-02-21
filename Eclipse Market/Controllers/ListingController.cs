@@ -49,7 +49,7 @@ namespace Eclipse_Market.Controllers
         [HttpGet]
         public ActionResult<ListingGetByIdResponse> GetById(int id)
         {
-            var listing = _dbContext.Listings.Where(x => x.Id == id).FirstOrDefault();
+            var listing = _dbContext.Listings.Include(x => x.Auction).Where(x => x.Id == id).FirstOrDefault();
 
             if (listing == null)
             {

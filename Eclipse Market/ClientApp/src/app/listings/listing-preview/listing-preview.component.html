@@ -13,6 +13,21 @@
           </span>
         </div>
       </div>
+
+      <div *ngIf="isAuction" class="bid-container p-3 mt-4">
+        <span class="heading mb-3">Наддавания <span class="numberOfBids p-1">{{ 1 + 1 }}</span></span>
+        <div *ngFor="let bid of auctionBids">
+          <div class="bid-wrapper d-flex justify-content-between p-3">
+            <span>
+              <i class="fa fa-gavel"></i>
+              {{ bid.userName }}
+            </span>
+            <span>{{ bid.timeCreated | date:'medium' }}</span>
+            <span>{{ bid.amount }}лв</span>
+          </div>
+        </div>
+      </div>
+
       <div class="author-card mb-3">
         <div class="container-fluid">
           <div class="row">
@@ -76,9 +91,7 @@
         </div>
       </div>
 
-      <div 
-        *ngIf="!isAuthor"
-        class="message-container mt-4 p-3">
+      <div *ngIf="!isAuthor" class="message-container mt-4 p-3">
         <div class="form-floating">
           <textarea
             type="text"
@@ -102,6 +115,30 @@
             label="Изпрати съобщение"
             class="p-button-success w-100"
             (click)="onSendMessage()"></button>
+        </div>
+      </div>
+
+      <div *ngIf="isAuction" class="message-container mt-4 p-3">
+        <div class="d-flex justify-content-between my-2 headings">
+          <label for="bid">Вашата оферта</label>
+          <label for="bid">
+            Минимална стойност: {{ minBid | number }}лв
+          </label>
+        </div>
+        <input
+          #bidInput
+          type="number"
+          name="bid"
+          class="form-control"
+          formControlName="bidIncrementPercentage" />
+        <div class="send-btn mt-5">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Потвърди"
+            class="p-button-primary w-100"
+            (click)="onPlaceBid()"></button>
         </div>
       </div>
     </div>

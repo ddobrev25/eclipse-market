@@ -71,7 +71,7 @@
   .category span {
     color: var(--text-inactive);
     font-size: 18px;
-    border-bottom: 2px solid var(--blue-bg);
+    border-bottom: 2px solid var(--secondary);
   }
   .title span {
     font-size: 28px;
@@ -83,7 +83,7 @@
     display: block;
   }
   .price {
-    border-bottom: 2px solid var(--blue-bg);
+    border-bottom: 2px solid var(--secondary);
   }
   .description {
     word-break: break-all;
@@ -130,4 +130,43 @@
   .bookmarked {
     color: var(--danger);
   }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  input.form-control {
+    background-color: var(--primary-dark);
+    color: var(--text-primary);
+    outline: none !important;
+    border: 2px var(--border) solid;
+
+  }
+  .headings,
+  .bid-container {
+    font-size: 1.1rem;
+  }
+
+  .bid-container {
+    background-color: var(--primary-medium);
+    border: 2px var(--border) solid;
+    border-radius: 8px;
+  }
+  .bid-wrapper {
+    border-top: 2px var(--border) solid;
+  }
+
+  .heading {
+    font-size: 1.3rem;
+    display: block;
+  }
+  .numberOfBids {
+    background-color: var(--secondary);
+    border-radius: 6px;
+  }
+
 }
