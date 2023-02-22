@@ -1,36 +1,58 @@
 ﻿using Eclipse_Market.Models.DB;
 using FluentEmail.Core;
 using FluentEmail.Smtp;
+using System.Net;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Eclipse_Market.Services
 {
     public class EmailService : IEmailService
     {
-        public async Task<bool> SendRegistartionEmail(string senderEmail, User userToRecieve)
+        private IConfiguration _configuration;
+        public EmailService(IConfiguration configuration)
         {
-            var sender = new SmtpSender(() => new SmtpClient("localhost")
+            _configuration = configuration;
+        }
+
+        public async Task<bool> SendRegistrationEmail(string receiverAddress)
+        {
+            string subject = "Регистрация в Eclipse Market";
+            string body = "asdfogjotirjgropijgtorh";
+
+            try
             {
-                EnableSsl = false,
-                DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory,
-                PickupDirectoryLocation = @$"C:\Users\{Environment.UserName}\Desktop",
-            });
+                await SendMail(receiverAddress, subject, body);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
-            StringBuilder template = new();
-            template.AppendLine("Welcome @Model.UserName!");
-            template.AppendLine("<p> Your registration in Eclipse Market was successful.");
 
-            Email.DefaultSender = sender;
+        private async Task SendMail(string receiverAddress, string subject, string body)
+        {
+            string senderAddress = _configuration["Email:Address"];
+            string senderPassword = _configuration["Email:Password"];
 
-            var email = await Email
-                .From(senderEmail)
-                .To(userToRecieve.Email)
-                .Subject("Eclipse Market")
-                .UsingTemplate(template.ToString(), new {UserName = userToRecieve.UserName})
-                .SendAsync();
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress(senderAddress);
+            message.Subject = subject;
+            message.To.Add(new MailAddress(receiverAddress));
+            message.Body = body;
+            //message.IsBodyHtml = true;
 
-            return email.Successful;
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential(senderAddress, senderPassword),
+                EnableSsl = true
+            };
+
+            await smtpClient.SendMailAsync(message);
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Eclipse_Market.Services
 {
     public interface IEmailService
     {
-        Task<bool> SendRegistartionEmail(string senderEmail, User userToRecieve);
+        Task<bool> SendRegistrationEmail(string receiverAddress);
     }
 }
