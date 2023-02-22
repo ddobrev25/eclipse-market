@@ -267,14 +267,14 @@ namespace Eclipse_Market.Controllers
                 UserId = addedUser.Id
             };
             _dbContext.UserImages.Add(image);
-/*            _emailService.SendRegistartionEmail("givanov@eclipse.com", userToAdd);*/
             _dbContext.SaveChanges();
+
+            _emailService.SendRegistrationEmail(userToAdd.Email);
             return Ok();
         }
         [HttpPost]
         public ActionResult<UserLoginResponse> Login(UserLoginRequest request)
         {
-            _emailService.SendRegistrationEmail("test.com");
             //if the username is not correct return, there is no way to know which user attempted the login
             if (!_dbContext.Users.Any(x => EF.Functions.Collate(x.UserName, "SQL_Latin1_General_CP1_CS_AS") == request.UserName))
             {

@@ -21,12 +21,12 @@ namespace Eclipse_Market.Controllers
         private IJwtService _jwtService { get; }
         private IHubContext<ChatHub> _chatHubContext;
 
-        public MessageController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService, IHubContext<ChatHub> hubContext)
+        public MessageController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService, IHubContext<ChatHub> chathubContext)
         {
             _dbContext = dbContext;
             Configuration = configuration;
             _jwtService = jwtService;
-            _chatHubContext = hubContext;
+            _chatHubContext = chathubContext;
         }
 
         [HttpGet]

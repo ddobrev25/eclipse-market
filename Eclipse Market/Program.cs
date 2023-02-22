@@ -141,6 +141,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.MapHub<ChatHub>("/chatHub");
+app.MapHub<AuctionHub>("/auctionHub");
 
 app.UseCors(builder =>
 builder.WithOrigins("http://localhost:5000")

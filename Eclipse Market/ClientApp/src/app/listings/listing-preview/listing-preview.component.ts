@@ -34,6 +34,7 @@ import { BidService } from "src/app/core/services/http/bid.service";
 import { BidCreateRequest, BidGetAllResponse } from "src/app/core/models/bid.model";
 import { AuctionService } from "src/app/core/services/http/auction.service";
 import { AuctionGetByIdResponse } from "src/app/core/models/auction.model";
+import * as signalR from "@microsoft/signalr";
 
 @Component({
   selector: "app-listing-preview",
@@ -41,6 +42,7 @@ import { AuctionGetByIdResponse } from "src/app/core/models/auction.model";
   styleUrls: ["./listing-preview.component.scss"],
 })
 export class ListingPreviewComponent implements OnInit {
+  hubConnection?: signalR.HubConnection;
   @ViewChild("img") imgEl?: ElementRef;
   @ViewChild("bookmark") bookmark?: ElementRef;
   @ViewChild('bidInput') bidInput?: ElementRef<HTMLInputElement>;
@@ -86,6 +88,26 @@ export class ListingPreviewComponent implements OnInit {
     private bidService: BidService,
     private auctionService: AuctionService
   ) {}
+  private url = 'http://localhost:5001/auctionHub';
+  startConnection = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const jwt = token !== null ? JSON.parse(token) : "";
+
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl(this.url, {
+        accessTokenFactory: () => jwt,
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
+      .build();
+
+    this.hubConnection.start().catch((err: any) => console.log(err));
+  };
+
+  stopConnection = () => {
+    this.hubConnection?.stop();
+  }
 
   ngOnInit(): void {
     this.fetchQueryParams();
