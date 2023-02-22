@@ -37,7 +37,7 @@ namespace Eclipse_Market.Controllers
                     AuctionId = x.AuctionId,
                     Id = x.Id,
                     TimeCreated = x.TimeCreated.ToString(),
-                    UserName = x.User.FirstName
+                    UserName = x.User.UserName
                 }).ToList();
 
             return Ok(bids);
