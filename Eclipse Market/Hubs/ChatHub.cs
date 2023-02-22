@@ -12,7 +12,6 @@ using Eclipse_Market.Models.Request;
 namespace Eclipse_Market.Hubs
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-
     public class ChatHub : Hub
     {
         private EclipseMarketDbContext _dbContext;
@@ -23,7 +22,7 @@ namespace Eclipse_Market.Hubs
         public async override Task OnConnectedAsync()
         {
             await AddUserToGroups();
-            MapUserToConnection();
+            await MapUserToConnection();
             await base.OnConnectedAsync();
         }
         
@@ -43,7 +42,7 @@ namespace Eclipse_Market.Hubs
             _dbContext.SaveChanges();
             return base.OnDisconnectedAsync(exception);
         }
-        private void MapUserToConnection()
+        private async Task MapUserToConnection()
         {
             if(!_dbContext.Users.Any(x => x.Id == GetUserId()))
             {
@@ -57,7 +56,7 @@ namespace Eclipse_Market.Hubs
                 UserId = GetUserId(),
                 User = _dbContext.Users.Where(x => x.Id == GetUserId()).First()
             });
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
         private async Task AddUserToGroups()
         {
