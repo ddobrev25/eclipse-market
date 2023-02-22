@@ -1,8 +1,10 @@
-﻿using Eclipse_Market.Models.DB;
+﻿using Eclipse_Market.Hubs;
+using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eclipse_Market.Controllers
@@ -14,15 +16,17 @@ namespace Eclipse_Market.Controllers
         private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
         private IJwtService _jwtService;
-        public BidController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService)
+        private IHubContext<AuctionHub> _hubContext;
+        public BidController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService, IHubContext<AuctionHub> hubContext)
         {
             _dbContext = dbContext;
             Configuration = configuration;
             _jwtService = jwtService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
-        public ActionResult<List<BidGetAllResponse>> GetAllByAuction(int auctionId)
+        public ActionResult<List<BidGetResponse>> GetAllByAuction(int auctionId)
         {
             if (!_dbContext.Auctions.Any(x => x.Id == auctionId))
             {
@@ -31,7 +35,7 @@ namespace Eclipse_Market.Controllers
 
             var bids = _dbContext.Bids
                 .Where(x => x.AuctionId == auctionId)
-                .Select(x => new BidGetAllResponse
+                .Select(x => new BidGetResponse
                 {
                     Amount = x.Amount,
                     AuctionId = x.AuctionId,
@@ -44,7 +48,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(BidCreateRequest request)
+        public async Task<ActionResult> Create(BidCreateRequest request)
         {
             if(!_dbContext.Auctions.Any(x => x.Id == request.AuctionId))
             {
@@ -81,6 +85,19 @@ namespace Eclipse_Market.Controllers
 
             _dbContext.Bids.Add(bidToAdd);
             _dbContext.SaveChanges();
+
+            var newBid = new BidGetResponse
+            {
+                Id = bidToAdd.Id,
+                Amount = bidToAdd.Amount,
+                AuctionId = bidToAdd.AuctionId,
+                TimeCreated = bidToAdd.TimeCreated.ToString(),
+                UserName = _dbContext.Users.Where(x => x.Id == bidToAdd.UserId).First().UserName
+            };
+
+
+            await _hubContext.Clients.Group(request.AuctionId.ToString()).SendAsync("BidCreateResponse", newBid);
+
             return Ok();
         }
     }

@@ -31,7 +31,10 @@ import { UserDataService } from "src/app/core/services/store/user.data.service";
 import { UserListingsService } from "src/app/core/services/user-listings.service";
 import * as _ from "lodash";
 import { BidService } from "src/app/core/services/http/bid.service";
-import { BidCreateRequest, BidGetAllResponse } from "src/app/core/models/bid.model";
+import {
+  BidCreateRequest,
+  BidGetAllResponse,
+} from "src/app/core/models/bid.model";
 import { AuctionService } from "src/app/core/services/http/auction.service";
 import { AuctionGetByIdResponse } from "src/app/core/models/auction.model";
 import * as signalR from "@microsoft/signalr";
@@ -45,7 +48,7 @@ export class ListingPreviewComponent implements OnInit {
   hubConnection?: signalR.HubConnection;
   @ViewChild("img") imgEl?: ElementRef;
   @ViewChild("bookmark") bookmark?: ElementRef;
-  @ViewChild('bidInput') bidInput?: ElementRef<HTMLInputElement>;
+  @ViewChild("bidInput") bidInput?: ElementRef<HTMLInputElement>;
 
   isAuction: boolean = false;
   auctionBids?: BidGetAllResponse;
@@ -88,18 +91,23 @@ export class ListingPreviewComponent implements OnInit {
     private bidService: BidService,
     private auctionService: AuctionService
   ) {}
-  private url = 'http://localhost:5001/auctionHub';
+  private url = "http://localhost:5001/auctionHub";
   startConnection = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
     const jwt = token !== null ? JSON.parse(token) : "";
 
+    let auctionId = this.selectedListing?.auctionId
+      ? this.selectedListing?.auctionId
+      : "";
+
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(this.url, {
+      .withUrl(`${this.url}?auctionId=${auctionId}`, {
         accessTokenFactory: () => jwt,
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })
+      .withAutomaticReconnect()
       .build();
 
     this.hubConnection.start().catch((err: any) => console.log(err));
@@ -107,7 +115,7 @@ export class ListingPreviewComponent implements OnInit {
 
   stopConnection = () => {
     this.hubConnection?.stop();
-  }
+  };
 
   ngOnInit(): void {
     this.fetchQueryParams();
@@ -153,8 +161,17 @@ export class ListingPreviewComponent implements OnInit {
                 }) => {
                   if (this.selectedListing)
                     this.selectedListing.auction = resp.auction;
+                  this.startConnection();
+
                   this.auctionBids = resp.bids;
-                  this.minBid = _.last(resp.bids)!.amount + resp.auction.bidIncrement + 0.01
+                  this.minBid =
+                    _.last(resp.bids)!.amount +
+                    resp.auction.bidIncrement +
+                    0.01;
+
+                  this.hubConnection?.on("BidCreateResponse", (resp: any) => {
+                    console.log(resp);
+                  });
                 },
               });
           }
@@ -353,22 +370,25 @@ export class ListingPreviewComponent implements OnInit {
   }
 
   onPlaceBid() {
-    if(!this.selectedListing || !this.bidInput) return;
+    if (!this.selectedListing || !this.bidInput) return;
     const body: BidCreateRequest = {
       amount: +this.bidInput?.nativeElement.value,
-      auctionId: this.selectedListing?.auctionId
-    }
-    this.bidService.create(body).pipe(take(1)).subscribe({
-      complete: () => {
-        this.messageService.add({
-          key: "tc",
-          severity: "success",
-          detail: "Успешно наддадохте за обявата!",
-          life: 3000,
-        });
-      },
-      error: err => console.log(err)
-    })
+      auctionId: this.selectedListing?.auctionId,
+    };
+    this.bidService
+      .create(body)
+      .pipe(take(1))
+      .subscribe({
+        complete: () => {
+          this.messageService.add({
+            key: "tc",
+            severity: "success",
+            detail: "Успешно наддадохте за обявата!",
+            life: 3000,
+          });
+        },
+        error: (err) => console.log(err),
+      });
   }
 
   ngOnDestroy() {
@@ -377,5 +397,7 @@ export class ListingPreviewComponent implements OnInit {
     this.sendMessageSubs?.unsubscribe();
     this.incrementViewsSubs?.unsubscribe();
     this.listingCategorySubs?.unsubscribe();
+
+    this.hubConnection?.off("BidCreateResponse");
   }
 }
