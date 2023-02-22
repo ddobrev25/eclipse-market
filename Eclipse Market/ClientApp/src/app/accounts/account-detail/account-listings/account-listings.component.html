@@ -11,7 +11,7 @@
           alt="Card"
           [src]="listing.imageBase64Strings[0]" />
       </ng-template>
-      <ng-template pTemplate="body">
+      <ng-template pTemplate="body" class="d-flex">
         <p>
           {{ listing.description }}
         </p>
@@ -51,7 +51,7 @@
   [(visible)]="listingUpdateDialog"
   [modal]="true"
   styleClass="p-fluid"
-  [style]="{width: '60vw'}"
+  [style]="{ width: '60vw' }"
   [draggable]="false">
   <ng-template pTemplate="header">
     <div class="d-flex flex-column">

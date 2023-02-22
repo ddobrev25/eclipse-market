@@ -1,17 +1,13 @@
 import { Injectable } from "@angular/core";
 import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
   Router,
 } from "@angular/router";
 import * as signalR from "@microsoft/signalr";
-import { create } from "lodash";
 import { MessageService } from "primeng/api";
 import { Chat, ChatGetByIdResponse } from "../models/chat.model";
 import {
   Chat$,
-  Message,
-  MessageGetAllByChatIdResponse,
+  Message
 } from "../models/message.model";
 import { MessageDataService } from "./store/message.data.service";
 

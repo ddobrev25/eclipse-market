@@ -26,9 +26,11 @@ import { AutoCompleteModule } from "primeng/autocomplete";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { ToggleButtonModule } from "primeng/togglebutton";
 import { CalendarModule } from "primeng/calendar";
+import { LengthPipe } from "../core/pipes/length.pipe";
+import { TreeSelectModule } from "primeng/treeselect";
 
 @NgModule({
-  declarations: [FormErrorsComponent, ClaimAccessDirective],
+  declarations: [FormErrorsComponent, ClaimAccessDirective, LengthPipe],
   imports: [
     CommonModule,
     InputTextModule,
@@ -56,6 +58,7 @@ import { CalendarModule } from "primeng/calendar";
     InputSwitchModule,
     ToggleButtonModule,
     CalendarModule,
+    TreeSelectModule,
   ],
 
   exports: [
@@ -87,6 +90,8 @@ import { CalendarModule } from "primeng/calendar";
     InputSwitchModule,
     ToggleButtonModule,
     CalendarModule,
+    LengthPipe,
+    TreeSelectModule,
   ],
 })
 export class SharedModule {}

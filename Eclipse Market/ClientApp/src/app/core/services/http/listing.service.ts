@@ -81,8 +81,14 @@ export class ListingService {
     );
   }
 
-  search(body: string) {
-    let queryParams = new HttpParams().set("query", body);
+  search(body: string, auctionsOnly: boolean | null) {
+    let queryParams;
+    const queryParamsObj = {
+      query: body,
+      auctionsOnly: auctionsOnly === null ? '' : auctionsOnly,
+    };
+    queryParams = new HttpParams({ fromObject: queryParamsObj });
+
     return this.http.get<ListingGetAllResponse>(`${this.url}/Listing/Search`, {
       params: queryParams,
     });

@@ -78,15 +78,23 @@
       background: var(--primary-dark);
     }
     i {
-        font-size: 2rem;
+      font-size: 2rem;
     }
     input {
-        font-size: 1.5rem;
+      font-size: 1.5rem;
       height: 3rem;
       border: none;
       background: transparent;
       outline: none;
     }
+  }
+
+  .p-treeselect:not(.p-disabled).p-focus {
+    box-shadow: none;
+    border-color: transparent;
+  }
+  .p-treeselect {
+    border: none;
   }
 
   @media (max-width: 768px) {
