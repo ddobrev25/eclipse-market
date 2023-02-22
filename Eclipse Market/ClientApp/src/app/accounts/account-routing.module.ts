@@ -3,7 +3,6 @@ import { RouterModule, Routes } from "@angular/router";
 import { AccountBookmarksComponent } from "./account-detail/account-bookmarks/account-bookmarks.component";
 import { AccountDetailComponent } from "./account-detail/account-detail.component";
 import { AccountInfoComponent } from "./account-detail/account-info/account-info.component";
-import { AccountListingPreviewComponent } from "./account-detail/account-listings/account-listing-preview/account-listing-preview.component";
 import { AccountListingsComponent } from "./account-detail/account-listings/account-listings.component";
 import { AccountMessagesComponent } from "./account-detail/account-messages/account-messages.component";
 import { AccountSettingsComponent } from "./account-detail/account-settings/account-settings.component";
@@ -21,9 +20,6 @@ const routes: Routes = [
         { path: 'messages', component: AccountMessagesComponent },
         { path: 'edit', component: AccountSettingsComponent },
         { path: 'listings', component: AccountListingsComponent, canActivate: [
-            // AccountListingsGuardService
-        ] },
-        { path: 'listing/preview', component: AccountListingPreviewComponent, canActivate: [
             // AccountListingsGuardService
         ] },
         { path: 'bookmarks', component: AccountBookmarksComponent },

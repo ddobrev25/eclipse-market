@@ -1,7 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MessageService } from "primeng/api";
-import { map, of, Subscription, switchMap, take } from "rxjs";
+import {
+  forkJoin,
+  map,
+  of,
+  ReplaySubject,
+  Subscription,
+  switchMap,
+  take,
+  takeUntil,
+} from "rxjs";
 import { ChatCreateRequest } from "src/app/core/models/chat.model";
 import {
   ListingGetAllResponse,
@@ -20,6 +29,11 @@ import { UserService } from "src/app/core/services/http/user.service";
 import { MessageDataService } from "src/app/core/services/store/message.data.service";
 import { UserDataService } from "src/app/core/services/store/user.data.service";
 import { UserListingsService } from "src/app/core/services/user-listings.service";
+import * as _ from "lodash";
+import { BidService } from "src/app/core/services/http/bid.service";
+import { BidCreateRequest, BidGetAllResponse } from "src/app/core/models/bid.model";
+import { AuctionService } from "src/app/core/services/http/auction.service";
+import { AuctionGetByIdResponse } from "src/app/core/models/auction.model";
 
 @Component({
   selector: "app-listing-preview",
@@ -29,6 +43,11 @@ import { UserListingsService } from "src/app/core/services/user-listings.service
 export class ListingPreviewComponent implements OnInit {
   @ViewChild("img") imgEl?: ElementRef;
   @ViewChild("bookmark") bookmark?: ElementRef;
+  @ViewChild('bidInput') bidInput?: ElementRef<HTMLInputElement>;
+
+  isAuction: boolean = false;
+  auctionBids?: BidGetAllResponse;
+  minBid?: number;
 
   currentImage?: string;
   selectedListingImages: string[] = [];
@@ -46,6 +65,8 @@ export class ListingPreviewComponent implements OnInit {
   bookmarkedListingGetSubs?: Subscription;
   bookmarkedListingFetchSubs?: Subscription;
 
+  destroy$: ReplaySubject<void> = new ReplaySubject<void>(1);
+
   remainingCharacters: number = 200;
   textAreaValue: string = "";
 
@@ -61,7 +82,9 @@ export class ListingPreviewComponent implements OnInit {
     private msgService: MsgService,
     private userService: UserService,
     private userDataService: UserDataService,
-    private messageDataService: MessageDataService
+    private messageDataService: MessageDataService,
+    private bidService: BidService,
+    private auctionService: AuctionService
   ) {}
 
   ngOnInit(): void {
@@ -80,19 +103,39 @@ export class ListingPreviewComponent implements OnInit {
   }
 
   fetchListingInfo() {
-    this.listingSubs = this.listingService
+    this.listingService
       .getById(this.selectedListingId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (
           resp: ListingGetByIdWithAuthorResponse | ListingGetByIdResponse
         ) => {
           if ("authorId" in resp) return;
+          this.checkForAuthor(resp);
           this.checkIfListingIsBookmarked();
           this.selectedListing = resp;
           this.selectedListingImages = resp.imageBase64Strings;
           this.currentImage = resp.imageBase64Strings[0];
           this.incrementViews(this.selectedListingId);
-          this.checkForAuthor(resp);
+          if (resp.auctionId) {
+            this.isAuction = true;
+            forkJoin({
+              auction: this.auctionService.getById(resp.auctionId),
+              bids: this.bidService.getAllByAuction(resp.auctionId),
+            })
+              .pipe(takeUntil(this.destroy$))
+              .subscribe({
+                next: (resp: {
+                  auction: AuctionGetByIdResponse;
+                  bids: BidGetAllResponse;
+                }) => {
+                  if (this.selectedListing)
+                    this.selectedListing.auction = resp.auction;
+                  this.auctionBids = resp.bids;
+                  this.minBid = _.last(resp.bids)!.amount + resp.auction.bidIncrement + 0.01
+                },
+              });
+          }
         },
         error: (err) => console.log(err),
       });
@@ -285,6 +328,25 @@ export class ListingPreviewComponent implements OnInit {
           this.userDataService.setUserData(newData);
         },
       });
+  }
+
+  onPlaceBid() {
+    if(!this.selectedListing || !this.bidInput) return;
+    const body: BidCreateRequest = {
+      amount: +this.bidInput?.nativeElement.value,
+      auctionId: this.selectedListing?.auctionId
+    }
+    this.bidService.create(body).pipe(take(1)).subscribe({
+      complete: () => {
+        this.messageService.add({
+          key: "tc",
+          severity: "success",
+          detail: "Успешно наддадохте за обявата!",
+          life: 3000,
+        });
+      },
+      error: err => console.log(err)
+    })
   }
 
   ngOnDestroy() {

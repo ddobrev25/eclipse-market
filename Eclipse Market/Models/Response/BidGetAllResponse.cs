@@ -6,6 +6,6 @@
         public double Amount { get; set; }
         public string TimeCreated { get; set; }
         public int AuctionId { get; set; }
-        public int UserId { get; set; }
+        public string UserName { get; set; }
     }
 }

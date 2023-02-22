@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -20,6 +20,7 @@ import { UserDataService } from "src/app/core/services/store/user.data.service";
   styleUrls: ["./listing-create-general.component.scss"],
 })
 export class ListingCreateGeneralComponent implements OnInit {
+
   categorySubs?: Subscription;
   listingCategories?: ListingCategoryGetAllResponse = [];
   remainingCharacters: number = 800;
@@ -82,7 +83,7 @@ export class ListingCreateGeneralComponent implements OnInit {
   ngOnInit() {
     this.fetchCategories();
     if (!this.userDataService.isLoggedIn) this.router.navigate(["/auth"]);
-  }
+    }
   fetchCategories() {
     this.categorySubs = this.listingCategoryService.getAll().subscribe({
       next: (resp: ListingCategoryGetAllResponse) => {

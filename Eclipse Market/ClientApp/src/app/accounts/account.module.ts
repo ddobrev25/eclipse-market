@@ -4,7 +4,6 @@ import { SharedModule } from '../shared/shared.module';
 import { AccountBookmarksComponent } from './account-detail/account-bookmarks/account-bookmarks.component';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
 import { AccountInfoComponent } from './account-detail/account-info/account-info.component';
-import { AccountListingPreviewComponent } from './account-detail/account-listings/account-listing-preview/account-listing-preview.component';
 import { AccountListingsComponent } from './account-detail/account-listings/account-listings.component';
 import { AccountMessagesComponent } from './account-detail/account-messages/account-messages.component';
 import { AccountSettingsComponent } from './account-detail/account-settings/account-settings.component';
@@ -24,7 +23,6 @@ import { AdminRolesComponent } from './admin-panel/admin-roles/admin-roles.compo
     AdminPanelComponent,
     AdminManageComponent,
     AdminRolesComponent,
-    AccountListingPreviewComponent,
     AdminListingCategoriesComponent,
     AccountBookmarksComponent,
     AccountBookmarksComponent,
@@ -41,7 +39,6 @@ import { AdminRolesComponent } from './admin-panel/admin-roles/admin-roles.compo
     AdminPanelComponent,
     AdminManageComponent,
     AdminRolesComponent,
-    AccountListingPreviewComponent,
     AdminListingCategoriesComponent,
     AccountBookmarksComponent,
   ],
