@@ -393,6 +393,8 @@ namespace Eclipse_Market.Controllers
                 user.IsEmailVerified = true;
                 _dbContext.SaveChanges();
 
+                _validationTokenService.Invalidate(validationToken);
+
                 return Ok("Verified");
             }
             return BadRequest("VerificationFailed");

@@ -17,9 +17,20 @@ namespace Eclipse_Market.Services
             {
                 UserId = userId,
                 Token = guid,
-                ExpireTime = DateTime.UtcNow.AddMinutes(2),
                 Type = type
             };
+
+            switch (type)
+            {
+                case ValidationTokenType.EmailVerify:
+                    validationToken.ExpireTime = DateTime.UtcNow.AddMonths(1);
+                    break;
+                case ValidationTokenType.ChangePassword:
+                    validationToken.ExpireTime = DateTime.UtcNow.AddMinutes(2);
+                    break;
+                default:
+                    break;
+            }
 
             _dbContext.ValidationTokens.Add(validationToken);
             _dbContext.SaveChanges();
