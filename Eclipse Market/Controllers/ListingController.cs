@@ -26,8 +26,14 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingGet")]
         public ActionResult<List<ListingGetAllResponse>> GetAll()
         {
+            if(_jwtService.GetUserRoleNameFromToken(User) != "admin")
+            {
+                return Forbid();
+            }
+
             var listings = _dbContext.Listings
                 .Include(x => x.Auction)
                 .Select(x => new ListingGetAllResponse
@@ -47,6 +53,7 @@ namespace Eclipse_Market.Controllers
             return Ok(listings);
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingGet")]
         public ActionResult<ListingGetByIdResponse> GetById(int id)
         {
             var listing = _dbContext.Listings.Include(x => x.Auction).Where(x => x.Id == id).FirstOrDefault();
@@ -183,6 +190,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingGet")]
         public ActionResult<List<ListingGetAllResponse>> GetCurrentByUserId()
         {
             int id = _jwtService.GetUserIdFromToken(User);
@@ -205,6 +213,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingGet")]
         public ActionResult<ListingGetAllResponse> GetBookmarkedByUserId()
         {
             int id = _jwtService.GetUserIdFromToken(User);
@@ -267,6 +276,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingAdd")]
         public ActionResult<int> Add(ListingAddRequest request)
         {
             var userId = _jwtService.GetUserIdFromToken(User);
@@ -309,6 +319,7 @@ namespace Eclipse_Market.Controllers
             return Ok(listingId);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingUpdate")]
         public ActionResult UpdateImages(ListingUpdateImagesRequest request)
         {
             var listing = _dbContext.Listings.Where(x => x.Id == request.ListingId).FirstOrDefault();
@@ -316,6 +327,11 @@ namespace Eclipse_Market.Controllers
             if (listing == null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            if(_jwtService.GetUserIdFromToken(User) != listing.AuthorId)
+            {
+                return Forbid();
             }
 
             int listingId = listing.Id;
@@ -386,10 +402,10 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingUpdate")]
         public ActionResult<int> IncrementViews(int id)
         {
             var listingForIncrement = _dbContext.Listings
-                //.Include(x => x.AuthorId)
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 

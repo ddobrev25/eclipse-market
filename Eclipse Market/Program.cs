@@ -59,6 +59,8 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("ListingGet", policy =>
         policy.RequireClaim("RoleClaim", "ListingGetClaim"));
+    options.AddPolicy("ListingAdd", policy =>
+        policy.RequireClaim("RoleClaim", "ListingAddClaim"));
     options.AddPolicy("ListingUpdate", policy =>
         policy.RequireClaim("RoleClaim", "ListingUpdateClaim"));
     options.AddPolicy("ListingDelete", policy =>
@@ -81,6 +83,13 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("RoleClaim", "ListingCategoryUpdateClaim"));
     options.AddPolicy("ListingCategoryDelete", policy =>
         policy.RequireClaim("RoleClaim", "ListingCategoryDeleteClaim"));
+
+    options.AddPolicy("AuctionGet", policy =>
+        policy.RequireClaim("RoleClaim", "AuctionGetClaim"));
+    options.AddPolicy("AuctionAdd", policy =>
+        policy.RequireClaim("RoleClaim", "AuctionAddClaim"));
+    options.AddPolicy("AuctionDelete", policy =>
+        policy.RequireClaim("RoleClaim", "AuctionDeleteClaim"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

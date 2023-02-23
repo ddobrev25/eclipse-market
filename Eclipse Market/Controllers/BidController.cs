@@ -63,6 +63,11 @@ namespace Eclipse_Market.Controllers
                 .Where(x => x.Id == request.AuctionId)
                 .First();
 
+            if(auction.ExpireTime >= DateTime.UtcNow)
+            {
+                return BadRequest("Auction has expired");
+            }
+
             if(bids.Count == 0 && request.Amount < auction.StartingPrice + auction.BidIncrement)
             {
                 return BadRequest("Amount value must be higher than the starting price plus the bid increment value.");

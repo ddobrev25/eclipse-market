@@ -1,6 +1,9 @@
 ﻿using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
+using Eclipse_Market.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eclipse_Market.Controllers
@@ -10,15 +13,23 @@ namespace Eclipse_Market.Controllers
     public class AuctionController : ControllerBase
     {
         private EclipseMarketDbContext _dbContext;
+        private IJwtService _jwtService;
         public IConfiguration Configuration { get; }
-        public AuctionController(EclipseMarketDbContext dbContext, IConfiguration configuration)
+        public AuctionController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService)
         {
             _dbContext = dbContext;
             Configuration = configuration;
+            _jwtService = jwtService;
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AuctionGet")]
         public ActionResult<List<AuctionGetResponse>> GetAll()
         {
+            if(_jwtService.GetUserRoleNameFromToken(User) != "admin")
+            {
+                return Forbid();
+            }
+
             var response = _dbContext.Auctions.Select(x => new AuctionGetResponse
             {
                 Id = x.Id,
@@ -38,6 +49,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AuctionGet")]
         public ActionResult<AuctionGetResponse> GetById(int id)
         {
             if (!_dbContext.Auctions.Any(x => x.Id == id))
@@ -63,6 +75,8 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AuctionAdd")]
+
         public ActionResult Create(AuctionCreateRequest request)
         {
             if (!_dbContext.Listings.Any(x => x.Id == request.ListingId))
@@ -89,13 +103,23 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AuctionDelete")]
         public ActionResult Delete(int id)
         {
+
             var auctionToRemove = _dbContext.Auctions.Where(x => x.Id == id).FirstOrDefault();
 
             if (auctionToRemove is null)
             {
                 return BadRequest(ErrorMessages.InvalidId);
+            }
+
+            var auctionListing = _dbContext.Listings.Where(x => x.Id == auctionToRemove.ListingId).First();
+
+            if (_jwtService.GetUserRoleNameFromToken(User) != "admin" 
+                || _jwtService.GetUserIdFromToken(User) != auctionListing.AuthorId)
+            {
+                return Forbid();
             }
 
             _dbContext.Auctions.Remove(auctionToRemove);

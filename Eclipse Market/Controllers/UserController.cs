@@ -128,84 +128,6 @@ namespace Eclipse_Market.Controllers
             };
             return Ok(response);
         }
-        /*[HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
-        public ActionResult<UserGetByIdFullResponse> GetByIdFull(int? id = null)
-        {
-            if(id == null)
-            {
-                id = _jwtService.GetUserIdFromToken(User);
-            }
-
-            if (!(_jwtService.GetUserIdFromToken(User) == id || _jwtService.GetUserRoleNameFromToken(User) == "admin"))
-            {
-                return Forbid();
-            }
-            //Find the user in the database with the given id
-            var user = _dbContext.Users
-                .Include(x => x.BookmarkedListings)
-                .Include(x => x.CurrentListings)
-                .Include(x => x.Messages)
-                .Include(x => x.Role)
-                .Where(x => x.Id == id).FirstOrDefault();
-
-            if (user == null)
-            {
-                return BadRequest(ErrorMessages.InvalidId);
-            }
-
-            //Setting up the response object
-            UserGetByIdFullResponse response = new UserGetByIdFullResponse()
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Password = user.Password,
-                PhoneNumber = user.PhoneNumber,
-                UserName = user.UserName,
-                RoleName = user.Role.Name,
-                DateTimeCreated = user.DateCreated.ToLongDateString(),
-            };
-            response.BookmarkedListings = _dbContext.ListingUsers
-                .Where(x => x.UserId == user.Id)
-                .Select(x => new ListingGetAllResponse()
-                {
-                    Id = x.ListingId,
-                    AuthorId = x.Listing.AuthorId,
-                    Description = x.Listing.Description,
-                    Location = x.Listing.Location,
-                    Price = x.Listing.Price,
-                    TimesBookmarked = x.Listing.TimesBookmarked,
-                    Title = x.Listing.Title,
-                    Views = x.Listing.Views,
-                });
-            response.CurrentListings = _dbContext.Listings
-                .Where(x => x.AuthorId == user.Id)
-                .Select(x => new ListingGetAllResponse()
-                {
-                    Id = x.Id,
-                    AuthorId = x.AuthorId,
-                    Description = x.Description,
-                    Location = x.Location,
-                    Price = x.Price,
-                    TimesBookmarked = x.TimesBookmarked,
-                    Title = x.Title,
-                    Views = x.Views,
-                });
-*//*            response.Messages = _dbContext.Messages
-               .Where(x => x.RecieverId == user.Id)
-               .Select(x => new MessageGetAllResponse
-               {
-                   Id = x.Id,
-                   SenderId = x.SenderId,
-                   RecieverId = x.RecieverId,
-                   ListingId = x.ListingId,
-                   Body = x.Body,
-                   Title = x.Title
-               });*//*
-            return Ok(response);
-        }*/
         [HttpPost]
         public ActionResult Register(UserRegisterRequest request)
         {
@@ -341,6 +263,7 @@ namespace Eclipse_Market.Controllers
             return Ok(response);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingUpdate")]
         public ActionResult BookmarkListing(UserBookmarkListingRequest request)
         {
             if(!_dbContext.Listings.Any(x => x.Id == request.ListingId))
@@ -501,6 +424,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
         public ActionResult UpdateImage(UserImageUpdateRequest request)
         {
             var userId = _jwtService.GetUserIdFromToken(User);
@@ -553,6 +477,7 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingUpdate")]
         public ActionResult UnbookmarkListing(UserBookmarkListingRequest request)
         {
             if (!_dbContext.Listings.Any(x => x.Id == request.ListingId))
@@ -646,20 +571,26 @@ namespace Eclipse_Market.Controllers
                 Id = adminRoleId,
                 Name = "admin"
             };
-            List<string> adminClaims = new List<string>();       
-            adminClaims.Add("UserGetClaim");
-            adminClaims.Add("UserUpdateClaim");
-            adminClaims.Add("UserDeleteClaim");
-            adminClaims.Add("ListingGetClaim");
-            adminClaims.Add("ListingUpdateClaim");
-            adminClaims.Add("ListingDeleteClaim");
-            adminClaims.Add("RoleGetClaim");
-            adminClaims.Add("RoleAddClaim");
-            adminClaims.Add("RoleUpdateClaim");
-            adminClaims.Add("RoleDeleteClaim");
-            adminClaims.Add("ListingCategoryGetClaim");
-            adminClaims.Add("ListingCategoryAddClaim");
-            adminClaims.Add("ListingCategoryDeleteClaim");
+            List<string> adminClaims = new List<string>
+            {
+                "UserGetClaim",
+                "UserUpdateClaim",
+                "UserDeleteClaim",
+                "ListingGetClaim",
+                "ListingAddClaim",
+                "ListingUpdateClaim",
+                "ListingDeleteClaim",
+                "RoleGetClaim",
+                "RoleAddClaim",
+                "RoleUpdateClaim",
+                "RoleDeleteClaim",
+                "ListingCategoryGetClaim",
+                "ListingCategoryAddClaim",
+                "ListingCategoryDeleteClaim",
+                "AuctionGetClaim",
+                "AuctionAddClaim",
+                "AuctionDeleteClaim",
+            };
 
             List<Models.DB.Claim> roleClaims = new List<Models.DB.Claim>();
             foreach (var adminClaim in adminClaims)
