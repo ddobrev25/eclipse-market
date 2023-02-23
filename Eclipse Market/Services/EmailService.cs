@@ -16,10 +16,10 @@ namespace Eclipse_Market.Services
             _configuration = configuration;
         }
 
-        public async Task<bool> SendRegistrationEmail(string receiverAddress)
+        public async Task<bool> SendRegistrationEmail(string receiverAddress, Guid validationToken)
         {
             string subject = "Регистрация в Eclipse Market";
-            string body = "asdfogjotirjgropijgtorh";
+            string body = $"Моля потвърдете вашия имейл със следния токен: {validationToken}";
 
             try
             {

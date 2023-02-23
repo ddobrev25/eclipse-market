@@ -10,7 +10,7 @@ namespace Eclipse_Market.Services
             _dbContext = dbContext;
         }
 
-        public Guid Generate(int userId)
+        public Guid Generate(int userId, ValidationTokenType type)
         {
             Guid guid = Guid.NewGuid();
             var validationToken = new ValidationToken
@@ -18,6 +18,7 @@ namespace Eclipse_Market.Services
                 UserId = userId,
                 Token = guid,
                 ExpireTime = DateTime.UtcNow.AddMinutes(2),
+                Type = type
             };
 
             _dbContext.ValidationTokens.Add(validationToken);
@@ -41,7 +42,7 @@ namespace Eclipse_Market.Services
             _dbContext.SaveChanges();
         }
 
-        public bool IsValid(Guid token, int userId)
+        public bool IsValid(Guid token, int userId, ValidationTokenType type)
         {
             var tokenToValidate = _dbContext.ValidationTokens
                 .Where(x => x.Token == token)
@@ -52,7 +53,12 @@ namespace Eclipse_Market.Services
                 return false;
             }
 
-            if(tokenToValidate.UserId != userId)
+            if (tokenToValidate.Type != type)
+            {
+                return false;
+            }
+
+            if (tokenToValidate.UserId != userId)
             {
                 return false;
             }

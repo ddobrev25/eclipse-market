@@ -23,13 +23,15 @@ namespace Eclipse_Market.Controllers
         private EclipseMarketDbContext _dbContext;
         private IEmailService _emailService;
         private IJwtService _jwtService;
+        private IValidationTokenService _validationTokenService;
         public IConfiguration Configuration { get; }
-        public UserController(EclipseMarketDbContext dbContext, IConfiguration configuration, IEmailService emailService, IJwtService jwtService)
+        public UserController(EclipseMarketDbContext dbContext, IConfiguration configuration, IEmailService emailService, IJwtService jwtService, IValidationTokenService validationTokenService)
         {
             _dbContext = dbContext;
             Configuration = configuration;
             _emailService = emailService;
             _jwtService = jwtService;
+            _validationTokenService = validationTokenService;
         }
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserGet")]
@@ -269,7 +271,10 @@ namespace Eclipse_Market.Controllers
             _dbContext.UserImages.Add(image);
             _dbContext.SaveChanges();
 
-            _emailService.SendRegistrationEmail(userToAdd.Email);
+            Guid emailValidationToken = _validationTokenService.Generate(userToAdd.Id, ValidationTokenType.EmailVerify);
+
+            _emailService.SendRegistrationEmail(userToAdd.Email, emailValidationToken);
+
             return Ok();
         }
         [HttpPost]
@@ -366,11 +371,32 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-/*        [HttpPost]
+        [HttpPost]
         public ActionResult VerifyToken(string token)
         {
+            string separator = "::";
 
-        }*/
+            int userId = _jwtService.GetUserIdFromToken(User);
+
+            string type = token.Split(separator)[0];
+            Guid validationToken = Guid.Parse(token.Split(separator)[1]);
+
+
+            if(type == "email_verify")
+            {
+                if (!_validationTokenService.IsValid(validationToken, userId, ValidationTokenType.EmailVerify))
+                {
+                    return BadRequest("Verification failed");
+                }
+
+                var user = _dbContext.Users.Where(x => x.Id == userId).First();
+                user.IsEmailVerified = true;
+                _dbContext.SaveChanges();
+
+                return Ok("Verified");
+            }
+            return BadRequest("VerificationFailed");
+        }
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
