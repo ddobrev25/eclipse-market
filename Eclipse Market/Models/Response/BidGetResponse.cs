@@ -1,6 +1,6 @@
 ﻿namespace Eclipse_Market.Models.Response
 {
-    public class BidGetAllResponse
+    public class BidGetResponse
     {
         public int Id { get; set; }
         public double Amount { get; set; }

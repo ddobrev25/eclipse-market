@@ -1,4 +1,3 @@
-
 <div class="container-xl">
   <div class="row">
     <div class="col-12">
@@ -6,11 +5,16 @@
         <div
           class="input-wrapper py-3 px-4 d-flex flex-row-reverse justify-content-center align-items-center">
           <i class="pi pi-search"></i>
+
           <input
             type="text"
             class="searchbar-input w-100"
             placeholder="Търсене..."
             (keyup.enter)="onSearch($event)" />
+          <p-treeSelect
+            [(ngModel)]="selectedNode"
+            [options]="nodes"
+            placeholder="Изберете тип обява"></p-treeSelect>
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ import { ErrorInterceptor } from './core/interceptors/error-handler.interceptor'
     FooterComponent,
     AuthComponent,
     SpinnerComponent,
-    ErrorPageComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,

@@ -23,7 +23,20 @@ export class HomeComponent implements OnInit {
   randomListingGetSubs?: Subscription;
   randomListingByCategoryGetSubs?: Subscription;
 
-  heading: string = 'Промо Обяви';
+  heading: string = "Промо Обяви";
+
+  nodes: any[] = [
+    {
+      label: "Всичко",
+    },
+    {
+      label: "Търгове",
+    },
+    {
+      label: "Обяви",
+    },
+  ];
+  selectedNode: any;
 
   constructor(
     private listingCategoryService: ListingCategoryService,
@@ -59,7 +72,7 @@ export class HomeComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (resp: ListingGetRecommendedResponse) => {
-          this.heading = 'Резултати от търсенето'
+          this.heading = "Резултати от търсенето";
           this.randomListingList = resp;
         },
         error: (err) => console.log(err),
@@ -80,18 +93,39 @@ export class HomeComponent implements OnInit {
       });
   }
   onSearch(e: any) {
+    let auctionsOnly = null;
+    if (this.selectedNode)
+      switch (this.selectedNode.label) {
+        case "Всичко": {
+          auctionsOnly = null;
+          break;
+        }
+        case "Търгове": {
+          auctionsOnly = true;
+          break;
+        }
+        case "Обяви": {
+          auctionsOnly = false;
+          break;
+        }
+        default: {
+          auctionsOnly = null;
+          break;
+        }
+      }
     const query = e.target.value;
     this.listingService
-      .search(query)
+      .search(query, auctionsOnly)
       .pipe(take(1))
       .subscribe({
         next: (resp: ListingGetAllResponse) => {
           console.log(resp);
           this.randomListingList = resp;
-          this.heading = 'Резултати от търсенето'
+          this.heading = "Резултати от търсенето";
         },
         error: (err) => console.log(err),
       });
+    console.log(this.selectedNode, auctionsOnly);
   }
 
   onSelectListing(listingForPreview: ListingGetByIdResponse) {
@@ -99,5 +133,4 @@ export class HomeComponent implements OnInit {
       queryParams: { id: listingForPreview.id },
     });
   }
-
 }
