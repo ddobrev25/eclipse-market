@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import {
   forkJoin,
+  interval,
   map,
+  Observable,
   of,
   ReplaySubject,
   Subscription,
@@ -32,12 +34,14 @@ import { UserListingsService } from "src/app/core/services/user-listings.service
 import * as _ from "lodash";
 import { BidService } from "src/app/core/services/http/bid.service";
 import {
+  Bid$,
   BidCreateRequest,
   BidGetAllResponse,
 } from "src/app/core/models/bid.model";
 import { AuctionService } from "src/app/core/services/http/auction.service";
 import { AuctionGetByIdResponse } from "src/app/core/models/auction.model";
-import * as signalR from "@microsoft/signalr";
+import { AuctionSignalrService } from "src/app/core/services/auction.signalr.service";
+import { AuctionDataService } from "src/app/core/services/store/auction.data.service";
 
 @Component({
   selector: "app-listing-preview",
@@ -45,14 +49,17 @@ import * as signalR from "@microsoft/signalr";
   styleUrls: ["./listing-preview.component.scss"],
 })
 export class ListingPreviewComponent implements OnInit {
-  hubConnection?: signalR.HubConnection;
   @ViewChild("img") imgEl?: ElementRef;
   @ViewChild("bookmark") bookmark?: ElementRef;
   @ViewChild("bidInput") bidInput?: ElementRef<HTMLInputElement>;
 
   isAuction: boolean = false;
+  isAuctionExpired = false;
   auctionBids?: BidGetAllResponse;
   minBid?: number;
+
+  bid$: Observable<Bid$> = new Observable<Bid$>();
+  remainingTime: any;
 
   currentImage?: string;
   selectedListingImages: string[] = [];
@@ -75,6 +82,8 @@ export class ListingPreviewComponent implements OnInit {
   remainingCharacters: number = 200;
   textAreaValue: string = "";
 
+
+
   isAuthor: boolean = false;
 
   constructor(
@@ -89,33 +98,10 @@ export class ListingPreviewComponent implements OnInit {
     private userDataService: UserDataService,
     private messageDataService: MessageDataService,
     private bidService: BidService,
-    private auctionService: AuctionService
+    private auctionService: AuctionService,
+    private auctionSignalrService: AuctionSignalrService,
+    private auctionDataService: AuctionDataService
   ) {}
-  private url = "http://localhost:5001/auctionHub";
-  startConnection = () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    const jwt = token !== null ? JSON.parse(token) : "";
-
-    let auctionId = this.selectedListing?.auctionId
-      ? this.selectedListing?.auctionId
-      : "";
-
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.url}?auctionId=${auctionId}`, {
-        accessTokenFactory: () => jwt,
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,
-      })
-      .withAutomaticReconnect()
-      .build();
-
-    this.hubConnection.start().catch((err: any) => console.log(err));
-  };
-
-  stopConnection = () => {
-    this.hubConnection?.stop();
-  };
 
   ngOnInit(): void {
     this.fetchQueryParams();
@@ -161,17 +147,24 @@ export class ListingPreviewComponent implements OnInit {
                 }) => {
                   if (this.selectedListing)
                     this.selectedListing.auction = resp.auction;
-                  this.startConnection();
-
-                  this.auctionBids = resp.bids;
+                  if (this.selectedListing?.auctionId)
+                    this.auctionSignalrService.startConnection(
+                      this.selectedListing?.auctionId
+                    );
+                  this.setCountDown(resp.auction.expireTime);
+                  this.bid$ = this.auctionDataService.auctionBids;
+                  this.auctionDataService.setBids(resp.bids);
                   this.minBid =
                     _.last(resp.bids)!.amount +
                     resp.auction.bidIncrement +
                     0.01;
-
-                  this.hubConnection?.on("BidCreateResponse", (resp: any) => {
-                    console.log(resp);
-                  });
+                  this.auctionSignalrService.bidCreateListener();
+                  this.bid$.pipe(takeUntil(this.destroy$)).subscribe({
+                    next: (resp: Bid$) => {
+                      if(resp)
+                      this.minBid = resp[0].amount + this.selectedListing!.auction!.bidIncrement;
+                    }
+                  })
                 },
               });
           }
@@ -179,6 +172,24 @@ export class ListingPreviewComponent implements OnInit {
         error: (err) => console.log(err),
       });
   }
+
+  setCountDown(expireTimeString: string) {
+    const expireTime = new Date(expireTimeString).getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const distance = expireTime - now;
+      if(!distance) {
+        this.remainingTime = 'Аукциона е изтекъл';
+        this.isAuctionExpired = true;
+        return;
+      }
+      const days = Math.floor(distance/(1000*60*60*24));
+      const hours = Math.floor((distance%(1000*60*60*24)) / (1000*60*60));
+      const minutes = Math.floor((distance%(1000*60*60)) / (1000*60));
+      const seconds = Math.floor((distance%(1000*60)) / (1000));
+      this.remainingTime = `${days} дни, ${hours} часа, ${minutes} минути, ${seconds} секунди`
+    })
+  } 
 
   checkForAuthor(listing: ListingGetByIdWithAuthorResponse) {
     this.userDataService.userData
@@ -398,6 +409,6 @@ export class ListingPreviewComponent implements OnInit {
     this.incrementViewsSubs?.unsubscribe();
     this.listingCategorySubs?.unsubscribe();
 
-    this.hubConnection?.off("BidCreateResponse");
+    this.auctionSignalrService.stopConnection();
   }
 }

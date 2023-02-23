@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
   }
   onGetRecommendedByCategoryId(categoryId: number) {
     this.listingService
-      .getRecommendedByCategory(4, categoryId)
+      .getRecommendedByCategory(3, categoryId)
       .pipe(take(1))
       .subscribe({
         next: (resp: ListingGetRecommendedResponse) => {
@@ -114,6 +114,7 @@ export class HomeComponent implements OnInit {
         }
       }
     const query = e.target.value;
+    if(!query) return;
     this.listingService
       .search(query, auctionsOnly)
       .pipe(take(1))
