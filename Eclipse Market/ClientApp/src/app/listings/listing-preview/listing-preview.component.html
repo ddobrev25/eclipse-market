@@ -17,11 +17,11 @@
       <div *ngIf="isAuction" class="bid-container p-3 mt-4">
         <span class="heading mb-3">
           Наддавания
-          <span class="numberOfBids p-1">{{ auctionBids | Count }}</span>
+          <span class="numberOfBids p-1">{{ bid$ | async | Count }}</span>
         </span>
         <div class="bid-list">
           <div
-            *ngFor="let bid of auctionBids"
+            *ngFor="let bid of bid$ | async"
             class="bid-wrapper d-flex justify-content-between p-3">
             <span>
               <i class="fa fa-gavel"></i>

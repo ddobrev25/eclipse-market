@@ -38,6 +38,7 @@ export class MessageSignalrService {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })
+      .withAutomaticReconnect()
       .build();
 
     this.hubConnection.start().catch((err: any) => console.log(err));
