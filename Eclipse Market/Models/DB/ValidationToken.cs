@@ -8,5 +8,6 @@ namespace Eclipse_Market.Models.DB
         public Guid Token { get; set; }
         public int UserId { get; set; }
         public DateTime ExpireTime { get; set; }
+        public ValidationTokenType Type { get; set; }
     }
 }

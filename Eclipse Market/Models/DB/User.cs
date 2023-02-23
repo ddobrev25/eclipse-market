@@ -34,6 +34,7 @@ namespace Eclipse_Market.Models.DB
         public List<ChatHubConnection> ChatConnections { get; set; }
 
         public List<Bid> Bids { get; set; }
+        public bool IsEmailVerified { get; set; }
 
     }
 }

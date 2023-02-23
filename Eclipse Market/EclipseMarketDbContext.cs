@@ -74,10 +74,10 @@ namespace Eclipse_Market
                 .HasForeignKey(uc => uc.ChatId);
 
 
-/*            modelBuilder.Entity<Image>()
-                .HasOne(i => i.Listing)
-                .WithOne(ad => ad.)
-                .HasForeignKey<StudentAddress>(ad => ad.AddressOfStudentId);*/
+            //ValidationTokenType enum conversion
+            modelBuilder.Entity<ValidationToken>()
+                .Property(vt => vt.Type)
+                .HasConversion<int>();
         }
     }
 

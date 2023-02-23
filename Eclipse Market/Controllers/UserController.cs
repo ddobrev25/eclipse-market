@@ -366,6 +366,12 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
+/*        [HttpPost]
+        public ActionResult VerifyToken(string token)
+        {
+
+        }*/
+
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "UserUpdate")]
         public ActionResult Update(UserUpdateRequest request)
