@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import {
   forkJoin,
+  interval,
   map,
   Observable,
   of,
@@ -53,10 +54,12 @@ export class ListingPreviewComponent implements OnInit {
   @ViewChild("bidInput") bidInput?: ElementRef<HTMLInputElement>;
 
   isAuction: boolean = false;
+  isAuctionExpired = false;
   auctionBids?: BidGetAllResponse;
   minBid?: number;
 
   bid$: Observable<Bid$> = new Observable<Bid$>();
+  remainingTime: any;
 
   currentImage?: string;
   selectedListingImages: string[] = [];
@@ -78,6 +81,8 @@ export class ListingPreviewComponent implements OnInit {
 
   remainingCharacters: number = 200;
   textAreaValue: string = "";
+
+
 
   isAuthor: boolean = false;
 
@@ -146,6 +151,7 @@ export class ListingPreviewComponent implements OnInit {
                     this.auctionSignalrService.startConnection(
                       this.selectedListing?.auctionId
                     );
+                  this.setCountDown(resp.auction.expireTime);
                   this.bid$ = this.auctionDataService.auctionBids;
                   this.auctionDataService.setBids(resp.bids);
                   this.minBid =
@@ -166,6 +172,24 @@ export class ListingPreviewComponent implements OnInit {
         error: (err) => console.log(err),
       });
   }
+
+  setCountDown(expireTimeString: string) {
+    const expireTime = new Date(expireTimeString).getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const distance = expireTime - now;
+      if(!distance) {
+        this.remainingTime = 'Аукциона е изтекъл';
+        this.isAuctionExpired = true;
+        return;
+      }
+      const days = Math.floor(distance/(1000*60*60*24));
+      const hours = Math.floor((distance%(1000*60*60*24)) / (1000*60*60));
+      const minutes = Math.floor((distance%(1000*60*60)) / (1000*60));
+      const seconds = Math.floor((distance%(1000*60)) / (1000));
+      this.remainingTime = `${days} дни, ${hours} часа, ${minutes} минути, ${seconds} секунди`
+    })
+  } 
 
   checkForAuthor(listing: ListingGetByIdWithAuthorResponse) {
     this.userDataService.userData
