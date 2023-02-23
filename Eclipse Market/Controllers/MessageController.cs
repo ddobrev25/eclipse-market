@@ -4,6 +4,8 @@ using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient.Server;
@@ -30,6 +32,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "MessageGet")]
         public ActionResult<MessageGetAllByChatIdResponse> GetAllByChatId(int id)
         {
             int userId = _jwtService.GetUserIdFromToken(User);
@@ -44,7 +47,8 @@ namespace Eclipse_Market.Controllers
                 .Where(x => x.Id == id)
                 .First();
 
-            if(!chat.Participants.Select(x => x.UserId).Contains(userId))
+            if(!chat.Participants.Select(x => x.UserId).Contains(userId) 
+                && _jwtService.GetUserRoleNameFromToken(User) != "admin")
             {
                 return Forbid();
             }
@@ -82,6 +86,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "MessageAdd")]
         public async Task<ActionResult<MessageGetAllResponse>> Send(MessageSendRequest request)
         {
 
@@ -142,6 +147,7 @@ namespace Eclipse_Market.Controllers
             return Ok(newMessage);
         }
         [HttpPut]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "MessageUpdate")]
         public async Task<ActionResult> Edit(MessageEditRequest request)
         {
             var messageToEdit = _dbContext.Messages.FirstOrDefault(x => x.Id == request.Id);
@@ -185,6 +191,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "MessageDelete")]
         public async Task<ActionResult> Delete(int? id)
         {
             var messageToDelete = _dbContext.Messages.FirstOrDefault(x => x.Id == id);
@@ -194,7 +201,8 @@ namespace Eclipse_Market.Controllers
                 return BadRequest(ErrorMessages.InvalidId);
             }
 
-            if (_jwtService.GetUserIdFromToken(User) != messageToDelete.SenderId)
+            if (_jwtService.GetUserIdFromToken(User) != messageToDelete.SenderId
+                && _jwtService.GetUserRoleNameFromToken(User) != "admin")
             {
                 return Forbid();
             }

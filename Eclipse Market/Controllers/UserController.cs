@@ -587,9 +587,18 @@ namespace Eclipse_Market.Controllers
                 "ListingCategoryGetClaim",
                 "ListingCategoryAddClaim",
                 "ListingCategoryDeleteClaim",
+                "ChatGetClaim",
+                "ChatAddClaim",
+                "ChatDeleteClaim",
+                "MessageGetClaim",
+                "MessageAddClaim",
+                "MessageUpdateClaim",
+                "MessageDeleteClaim",
                 "AuctionGetClaim",
                 "AuctionAddClaim",
                 "AuctionDeleteClaim",
+                "BidGetClaim",
+                "BidAddClaim",
             };
 
             List<Models.DB.Claim> roleClaims = new List<Models.DB.Claim>();

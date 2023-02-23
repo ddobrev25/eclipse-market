@@ -3,6 +3,8 @@ using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -17,20 +19,26 @@ namespace Eclipse_Market.Controllers
     {
         private EclipseMarketDbContext _dbContext;
         public IConfiguration Configuration { get; }
-        public IJwtService JwtService { get; set; }
+        private IJwtService _jwtService;
         private IHubContext<ChatHub> _chatHubContext;
         public ChatController(EclipseMarketDbContext dbContext, IConfiguration configuration, IJwtService jwtService, IHubContext<ChatHub> chatHubContext)
         {
             _dbContext = dbContext;
             Configuration = configuration;
-            JwtService = jwtService;
+            _jwtService = jwtService;
             _chatHubContext = chatHubContext;
         }
 
-
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ChatGet")]
+
         public ActionResult<List<ChatGetAllResponse>> GetAll()
         {
+            if(_jwtService.GetUserRoleNameFromToken(User) != "admin")
+            {
+                return Forbid();
+            }
+
             var chats = _dbContext.Chats
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
@@ -56,9 +64,10 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ChatGet")]
         public ActionResult<List<ChatGetAllByUserIdResponse>> GetAllByUserId()
         {
-            int userId = JwtService.GetUserIdFromToken(User);
+            int userId = _jwtService.GetUserIdFromToken(User);
 
             var chatsResponse = _dbContext.Chats
                 .Include(x => x.Participants)
@@ -81,12 +90,23 @@ namespace Eclipse_Market.Controllers
                     .Select(x => x.Id);
             }
 
+            if(!chatsResponse.Any(x => x.ParticipantIds.Contains(userId)))
+            {
+                return Forbid();
+            }
+
             return Ok(chatsResponse);
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ChatGet")]
         public ActionResult<ChatGetByIdResponse> GetById(int? id)
         {
+            if(_jwtService.GetUserRoleNameFromToken(User) != "admin")
+            {
+                return Forbid();
+            }
+
             var chat = _dbContext.Chats
                 .Include(_ => _.Participants)
                 .Include(_ => _.Messages)
@@ -110,9 +130,11 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ChatAdd")]
+
         public async Task<ActionResult<int>> Create(ChatCreateRequest request)
         {
-            var sender = _dbContext.Users.First(x => x.Id == JwtService.GetUserIdFromToken(User));
+            var sender = _dbContext.Users.First(x => x.Id == _jwtService.GetUserIdFromToken(User));
 
             var listingOfSender = _dbContext.Listings
                 .Include(x => x.AuthorId)
@@ -130,9 +152,11 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("A user can not start a chat with themself.");
             }
 
-            List<UserChat> participants = new List<UserChat>();
-            participants.Add(new UserChat { UserId = sender.Id, User = sender });
-            participants.Add(new UserChat { UserId = receiver.Id, User = receiver });
+            List<UserChat> participants = new List<UserChat>
+            {
+                new UserChat { UserId = sender.Id, User = sender },
+                new UserChat { UserId = receiver.Id, User = receiver }
+            };
 
             var chatParticipantGroups = _dbContext.Chats.Select(x => x.Participants).ToList();
 
@@ -219,6 +243,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ChatDelete")]
         public ActionResult Delete(int? id)
         {
             var chat = _dbContext.Chats.FirstOrDefault(x => x.Id == id);

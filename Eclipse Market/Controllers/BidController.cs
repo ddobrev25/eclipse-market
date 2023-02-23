@@ -3,6 +3,8 @@ using Eclipse_Market.Models.DB;
 using Eclipse_Market.Models.Request;
 using Eclipse_Market.Models.Response;
 using Eclipse_Market.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,7 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "BidGet")]
         public ActionResult<List<BidGetResponse>> GetAllByAuction(int auctionId)
         {
             if (!_dbContext.Auctions.Any(x => x.Id == auctionId))
@@ -48,6 +51,8 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "BidAdd")]
+
         public async Task<ActionResult> Create(BidCreateRequest request)
         {
             if(!_dbContext.Auctions.Any(x => x.Id == request.AuctionId))
@@ -65,7 +70,7 @@ namespace Eclipse_Market.Controllers
 
             if(auction.ExpireTime >= DateTime.UtcNow)
             {
-                return BadRequest("Auction has expired");
+                return BadRequest("Auction has expired.");
             }
 
             if(bids.Count == 0 && request.Amount < auction.StartingPrice + auction.BidIncrement)

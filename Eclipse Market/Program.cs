@@ -50,6 +50,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 builder.Services.AddAuthorization(options =>
 {
+    //User policies and claims
     options.AddPolicy("UserGet", policy =>
         policy.RequireClaim("RoleClaim", "UserGetClaim"));
     options.AddPolicy("UserUpdate", policy =>
@@ -57,6 +58,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserDelete", policy =>
         policy.RequireClaim("RoleClaim", "UserDeleteClaim"));
 
+    //Listing policies and claims
     options.AddPolicy("ListingGet", policy =>
         policy.RequireClaim("RoleClaim", "ListingGetClaim"));
     options.AddPolicy("ListingAdd", policy =>
@@ -66,6 +68,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ListingDelete", policy =>
         policy.RequireClaim("RoleClaim", "ListingDeleteClaim"));
 
+    //Role policies and claims
     options.AddPolicy("RoleGet", policy =>
         policy.RequireClaim("RoleClaim", "RoleGetClaim"));
     options.AddPolicy("RoleAdd", policy =>
@@ -75,6 +78,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RoleDelete", policy =>
         policy.RequireClaim("RoleClaim", "RoleDeleteClaim"));
 
+    //Listing category policies and claims
     options.AddPolicy("ListingCategoryGet", policy =>
         policy.RequireClaim("RoleClaim", "ListingCategoryGetClaim"));
     options.AddPolicy("ListingCategoryAdd", policy =>
@@ -84,12 +88,37 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ListingCategoryDelete", policy =>
         policy.RequireClaim("RoleClaim", "ListingCategoryDeleteClaim"));
 
+    //Chat policies and claims
+    options.AddPolicy("ChatGet", policy =>
+        policy.RequireClaim("RoleClaim", "ChatGetClaim"));
+    options.AddPolicy("ChatAdd", policy =>
+        policy.RequireClaim("RoleClaim", "ChatAddClaim"));
+    options.AddPolicy("ChatDelete", policy =>
+        policy.RequireClaim("RoleClaim", "ChatDeleteClaim"));
+
+    //Message policies and claims
+    options.AddPolicy("MessageGet", policy =>
+        policy.RequireClaim("RoleClaim", "MessageGetClaim"));
+    options.AddPolicy("MessageAdd", policy =>
+        policy.RequireClaim("RoleClaim", "MessageAddClaim"));
+    options.AddPolicy("MessageUpdate", policy =>
+        policy.RequireClaim("RoleClaim", "MessageUpdateClaim"));
+    options.AddPolicy("MessageDelete", policy =>
+        policy.RequireClaim("RoleClaim", "MessageDeleteClaim"));
+
+    //Auction policies and claims
     options.AddPolicy("AuctionGet", policy =>
         policy.RequireClaim("RoleClaim", "AuctionGetClaim"));
     options.AddPolicy("AuctionAdd", policy =>
         policy.RequireClaim("RoleClaim", "AuctionAddClaim"));
     options.AddPolicy("AuctionDelete", policy =>
         policy.RequireClaim("RoleClaim", "AuctionDeleteClaim"));
+
+    //Bid policies and claims
+    options.AddPolicy("BidGet", policy =>
+        policy.RequireClaim("RoleClaim", "BidGetClaim"));
+    options.AddPolicy("BidAdd", policy =>
+        policy.RequireClaim("RoleClaim", "BidAddClaim"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
