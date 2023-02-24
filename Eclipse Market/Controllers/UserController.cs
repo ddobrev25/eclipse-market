@@ -128,6 +128,32 @@ namespace Eclipse_Market.Controllers
             };
             return Ok(response);
         }
+        [HttpGet]
+        public ActionResult VerifyToken(string token, int id)
+        {
+            string separator = "::";
+
+            string type = token.Split(separator)[0];
+            Guid validationToken = Guid.Parse(token.Split(separator)[1]);
+
+
+            if (type == "email_verify")
+            {
+                if (!_validationTokenService.IsValid(validationToken, id, ValidationTokenType.EmailVerify))
+                {
+                    return BadRequest("Verification failed");
+                }
+
+                var user = _dbContext.Users.Where(x => x.Id == id).First();
+                user.IsEmailVerified = true;
+                _dbContext.SaveChanges();
+
+                _validationTokenService.Invalidate(validationToken);
+
+                return Redirect("http://localhost:5000/auth");
+            }
+            return BadRequest("Verification Failed");
+        }
         [HttpPost]
         public ActionResult Register(UserRegisterRequest request)
         {
@@ -293,32 +319,6 @@ namespace Eclipse_Market.Controllers
             listing.TimesBookmarked++;
             _dbContext.SaveChanges();
             return Ok();
-        }
-        [HttpGet]
-        public ActionResult VerifyToken(string token, int id)
-        {
-            string separator = "::";
-
-            string type = token.Split(separator)[0];
-            Guid validationToken = Guid.Parse(token.Split(separator)[1]);
-
-
-            if(type == "email_verify")
-            {
-                if (!_validationTokenService.IsValid(validationToken, id, ValidationTokenType.EmailVerify))
-                {
-                    return BadRequest("Verification failed");
-                }
-
-                var user = _dbContext.Users.Where(x => x.Id == id).First();
-                user.IsEmailVerified = true;
-                _dbContext.SaveChanges();
-
-                _validationTokenService.Invalidate(validationToken);
-
-                return Redirect("http://localhost:5000/auth");
-            }
-            return BadRequest("Verification Failed");
         }
 
         [HttpPut]
