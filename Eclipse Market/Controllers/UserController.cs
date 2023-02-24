@@ -316,9 +316,9 @@ namespace Eclipse_Market.Controllers
 
                 _validationTokenService.Invalidate(validationToken);
 
-                return Ok("Verified");
+                return Redirect("http://localhost:5000/auth");
             }
-            return BadRequest("VerificationFailed");
+            return BadRequest("Verification Failed");
         }
 
         [HttpPut]

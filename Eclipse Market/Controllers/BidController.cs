@@ -80,12 +80,18 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("User can not bid their own auction.");
             }
 
-            if(bids.Count == 0 && request.Amount < auction.StartingPrice + auction.BidIncrement)
+            if (request.Amount >= auction.BuyoutPrice)
+            {
+                auction.ExpireTime = DateTime.UtcNow;
+            }
+
+            if (bids.Count == 0 && request.Amount < auction.StartingPrice + auction.BidIncrement)
             {
                 return BadRequest("Amount value must be higher than the starting price plus the bid increment value.");
             }
 
-            if(bids.Count > 0 && bids.Select(x => x.Amount).Max() + auction.BidIncrement > request.Amount)
+            var highestBid = bids.Select(x => x.Amount).Max();
+            if (bids.Count > 0 && request.Amount < highestBid + auction.BidIncrement && auction.ExpireTime <= DateTime.UtcNow)
             {
                 return BadRequest("Amount value must be higher than the previous bid price plus the bid increment value.");
             }
