@@ -68,9 +68,16 @@ namespace Eclipse_Market.Controllers
                 .Where(x => x.Id == request.AuctionId)
                 .First();
 
-            if(auction.ExpireTime >= DateTime.UtcNow)
+            if(auction.ExpireTime <= DateTime.UtcNow)
             {
                 return BadRequest("Auction has expired.");
+            }
+
+            var auctionListing = _dbContext.Listings.Where(x => x.Id == auction.ListingId).First();
+
+            if(auctionListing.AuthorId == _jwtService.GetUserIdFromToken(User))
+            {
+                return BadRequest("User can not bid their own auction.");
             }
 
             if(bids.Count == 0 && request.Amount < auction.StartingPrice + auction.BidIncrement)

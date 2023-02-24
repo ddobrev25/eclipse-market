@@ -195,7 +195,7 @@ namespace Eclipse_Market.Controllers
 
             Guid emailValidationToken = _validationTokenService.Generate(userToAdd.Id, ValidationTokenType.EmailVerify);
 
-            _emailService.SendRegistrationEmail(userToAdd.Email, emailValidationToken);
+            _emailService.SendConfirmationEmail(userToAdd.Email, emailValidationToken);
 
             return Ok();
         }

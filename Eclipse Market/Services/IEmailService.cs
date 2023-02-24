@@ -4,6 +4,7 @@ namespace Eclipse_Market.Services
 {
     public interface IEmailService
     {
-        Task<bool> SendRegistrationEmail(string receiverAddress, Guid validationToken);
+        Task<bool> SendEmailFromTemplate(EmailType template, string receiverAddress);
+        Task<bool> SendConfirmationEmail(string receiverEmail, Guid validationToken);
     }
 }
