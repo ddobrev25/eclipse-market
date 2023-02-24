@@ -74,7 +74,7 @@ namespace Eclipse_Market.Services
                 return false;
             }
 
-            if(tokenToValidate.ExpireTime >= DateTime.UtcNow) 
+            if(tokenToValidate.ExpireTime <= DateTime.UtcNow) 
             { 
                 return false;
             }

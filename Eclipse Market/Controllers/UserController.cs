@@ -294,7 +294,7 @@ namespace Eclipse_Market.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
-        [HttpPost]
+        [HttpGet]
         public ActionResult VerifyToken(string token, int id)
         {
             string separator = "::";
