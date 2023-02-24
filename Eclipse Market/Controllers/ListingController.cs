@@ -26,7 +26,6 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingGet")]
         public ActionResult<List<ListingGetAllResponse>> GetAll()
         {
             if(_jwtService.GetUserRoleNameFromToken(User) != "admin")
@@ -53,7 +52,6 @@ namespace Eclipse_Market.Controllers
             return Ok(listings);
         }
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingGet")]
         public ActionResult<ListingGetByIdResponse> GetById(int id)
         {
             var listing = _dbContext.Listings.Include(x => x.Auction).Where(x => x.Id == id).FirstOrDefault();

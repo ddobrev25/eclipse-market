@@ -7,7 +7,7 @@ import {
   FormArray,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { ReplaySubject, Subscription, takeUntil } from "rxjs";
+import { ReplaySubject, takeUntil } from "rxjs";
 import { Auction$ } from "src/app/core/models/auction.model";
 import { ListingAddRequest } from "src/app/core/models/listing.model";
 import { AuctionCreateService } from "src/app/core/services/auction-create.service";
@@ -64,7 +64,7 @@ export class ListingCreateGalleryComponent implements OnInit {
       Validators.maxLength(800),
       Validators.minLength(80),
     ]),
-    price: this.fb.control("", [Validators.required]),
+    price: this.fb.control(0),
     location: this.fb.control("", [Validators.required]),
     listingCategoryId: this.fb.control("", [Validators.required]),
     imageBase64Strings: this.fb.array([""], [Validators.required]),

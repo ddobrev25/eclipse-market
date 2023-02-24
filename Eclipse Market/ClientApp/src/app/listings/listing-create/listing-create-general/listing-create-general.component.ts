@@ -1,7 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   FormGroup,
-  FormControl,
   Validators,
   FormBuilder,
 } from "@angular/forms";
@@ -10,7 +9,6 @@ import { Subscription } from "rxjs";
 import { ListingCategoryGetAllResponse } from "src/app/core/models/listing-category.model";
 import { AuctionCreateService } from "src/app/core/services/auction-create.service";
 import { ListingCategoryService } from "src/app/core/services/http/listing-category.service";
-import { UserService } from "src/app/core/services/http/user.service";
 import { ListingCreateCommunicationService } from "src/app/core/services/listing-create.service";
 import { UserDataService } from "src/app/core/services/store/user.data.service";
 
@@ -27,6 +25,7 @@ export class ListingCreateGeneralComponent implements OnInit {
   textAreaValue: string = "";
 
   auctionMode: boolean = false;
+  minDate = new Date();
 
   createListingForm: FormGroup = this.fb.group({
     title: this.fb.control("", [

@@ -170,6 +170,7 @@
             formControlName="expireTime"
             [showTime]="true"
             [showSeconds]="true"
+            [minDate]="minDate"
             [showIcon]="true"></p-calendar>
           <app-form-errors
             [control]="$any(createAuctionForm).get('expireTime')"

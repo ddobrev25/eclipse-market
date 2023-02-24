@@ -20,7 +20,6 @@ namespace Eclipse_Market.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryGet")]
         public ActionResult<List<ListingCategoryGetAllResponse>> GetAll()
         {
             var listingCategories = _dbContext.ListingCategories.Select(x => new ListingCategoryGetAllResponse
@@ -31,7 +30,6 @@ namespace Eclipse_Market.Controllers
             return Ok(listingCategories);
         }
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "ListingCategoryGet")]
         public ActionResult<ListingCategoryGetByIdResponse> GetById(int id)
         {
             if (!_dbContext.ListingCategories.Any(x => x.Id == id))

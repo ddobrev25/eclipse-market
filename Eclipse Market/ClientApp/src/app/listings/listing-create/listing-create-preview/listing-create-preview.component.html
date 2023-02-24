@@ -37,7 +37,7 @@
                             <label class="location-label">
                                 град {{ auctionForm.value.location }}
                             </label>
-                            <label class="price-label">
+                            <label class="price-label" *ngIf="!isAuction">
                                 {{ auctionForm.value.price }} лв
                             </label>
                         </div>

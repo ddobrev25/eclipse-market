@@ -95,6 +95,16 @@
   }
   .p-treeselect {
     border: none;
+    background-color: var(--primary-dark);
+    color: var(--text-primary);
+  }
+  .p-tree {
+    background-color: var(--primary-dark);
+    color: var(--text-primary);
+  }
+  .p-treeselect .p-treeselect-label.p-placeholder,
+  input::placeholder {
+    color: var(--text-primary);
   }
 
   @media (max-width: 768px) {
