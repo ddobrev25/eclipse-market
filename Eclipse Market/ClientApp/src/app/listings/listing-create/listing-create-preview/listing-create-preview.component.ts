@@ -8,7 +8,7 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MessageService } from "primeng/api";
-import { concatMap, EMPTY, of, ReplaySubject, takeUntil } from "rxjs";
+import { concatMap, EMPTY, ReplaySubject, takeUntil } from "rxjs";
 import { ListingCreateCommunicationService } from "src/app/core/services/listing-create.service";
 import { ListingService } from "src/app/core/services/http/listing.service";
 import { ListingAddRequest } from "src/app/core/models/listing.model";
@@ -68,7 +68,7 @@ export class ListingCreatePreviewComponent implements OnInit {
       Validators.min(5),
       Validators.max(15),
     ]),
-    buyOutPrice: this.fb.control("", [Validators.required]),
+    buyoutPrice: this.fb.control("", [Validators.required]),
   });
 
   constructor(
@@ -175,7 +175,6 @@ export class ListingCreatePreviewComponent implements OnInit {
               buyoutPrice: resp.buyoutPrice,
             });
             this.setImages(resp.imageBase64Strings);
-            console.log(this.auctionForm.value);
           },
         });
     }

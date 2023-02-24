@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import {
+  BehaviorSubject,
   forkJoin,
   interval,
   map,
@@ -60,6 +61,7 @@ export class ListingPreviewComponent implements OnInit {
 
   bid$: Observable<Bid$> = new Observable<Bid$>();
   remainingTime: any;
+  bidCount: number = 0;
 
   currentImage?: string;
   selectedListingImages: string[] = [];
@@ -81,8 +83,6 @@ export class ListingPreviewComponent implements OnInit {
 
   remainingCharacters: number = 200;
   textAreaValue: string = "";
-
-
 
   isAuthor: boolean = false;
 
@@ -149,22 +149,34 @@ export class ListingPreviewComponent implements OnInit {
                     this.selectedListing.auction = resp.auction;
                   if (this.selectedListing?.auctionId)
                     this.auctionSignalrService.startConnection(
-                      this.selectedListing?.auctionId
+                      this.selectedListing.auctionId
                     );
                   this.setCountDown(resp.auction.expireTime);
+                  this.auctionSignalrService.bidCreateListener();
+                  this.auctionSignalrService.auctionClosedListener();
                   this.bid$ = this.auctionDataService.auctionBids;
                   this.auctionDataService.setBids(resp.bids);
-                  this.minBid =
-                    _.last(resp.bids)!.amount +
-                    resp.auction.bidIncrement +
-                    0.01;
-                  this.auctionSignalrService.bidCreateListener();
+                  if (resp.bids.length) {
+                    this.minBid =
+                      _.last(resp.bids)!.amount +
+                      resp.auction.bidIncrement +
+                      0.01;
+                  } else {
+                    this.minBid =
+                      resp.auction.startingPrice +
+                      resp.auction.bidIncrement +
+                      0.01;
+                  }
                   this.bid$.pipe(takeUntil(this.destroy$)).subscribe({
                     next: (resp: Bid$) => {
-                      if(resp)
-                      this.minBid = resp[0].amount + this.selectedListing!.auction!.bidIncrement;
-                    }
-                  })
+                      if (resp) {
+                        this.minBid =
+                          resp[0].amount +
+                          this.selectedListing!.auction!.bidIncrement;
+                        this.bidCount = resp.length;
+                      }
+                    },
+                  });
                 },
               });
           }
@@ -178,18 +190,20 @@ export class ListingPreviewComponent implements OnInit {
     setInterval(() => {
       const now = new Date().getTime();
       const distance = expireTime - now;
-      if(!distance) {
-        this.remainingTime = 'Аукциона е изтекъл';
-        this.isAuctionExpired = true;
+      if (this.auctionDataService.isAuctionExpired) {
+        this.remainingTime = "Аукциона е изтекъл";
+        this.isAuctionExpired = this.auctionDataService.auctionExpired;
         return;
       }
-      const days = Math.floor(distance/(1000*60*60*24));
-      const hours = Math.floor((distance%(1000*60*60*24)) / (1000*60*60));
-      const minutes = Math.floor((distance%(1000*60*60)) / (1000*60));
-      const seconds = Math.floor((distance%(1000*60)) / (1000));
-      this.remainingTime = `${days} дни, ${hours} часа, ${minutes} минути, ${seconds} секунди`
-    })
-  } 
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      this.remainingTime = `${days} дни, ${hours} часа, ${minutes} минути, ${seconds} секунди`;
+    });
+  }
 
   checkForAuthor(listing: ListingGetByIdWithAuthorResponse) {
     this.userDataService.userData

@@ -38,6 +38,7 @@ namespace Eclipse_Market.Controllers
 
             var bids = _dbContext.Bids
                 .Where(x => x.AuctionId == auctionId)
+                .OrderByDescending(x => x.TimeCreated)
                 .Select(x => new BidGetResponse
                 {
                     Amount = x.Amount,
@@ -83,6 +84,8 @@ namespace Eclipse_Market.Controllers
             if (request.Amount >= auction.BuyoutPrice)
             {
                 auction.ExpireTime = DateTime.UtcNow;
+                await _hubContext.Clients.Group(request.AuctionId.ToString()).SendAsync("AuctionClosedResponse", true);
+
             }
 
             if (bids.Count == 0 && request.Amount < auction.StartingPrice + auction.BidIncrement)
@@ -90,7 +93,7 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("Amount value must be higher than the starting price plus the bid increment value.");
             }
 
-            var highestBid = bids.Select(x => x.Amount).Max();
+            var highestBid = bids.Select(x => x.Amount).DefaultIfEmpty().Max();
             if (bids.Count > 0 && request.Amount < highestBid + auction.BidIncrement && auction.ExpireTime <= DateTime.UtcNow)
             {
                 return BadRequest("Amount value must be higher than the previous bid price plus the bid increment value.");

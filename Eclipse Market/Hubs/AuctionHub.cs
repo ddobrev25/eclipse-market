@@ -40,7 +40,7 @@ namespace Eclipse_Market.Hubs
 
         private async Task AddUserToGroup()
         {
-            var auctionId = Context.GetHttpContext().Request.Query["token"];
+            var auctionId = Context.GetHttpContext().Request.Query["auctionId"];
 
             await Groups.AddToGroupAsync(GetConnectionId(), auctionId.ToString());
 

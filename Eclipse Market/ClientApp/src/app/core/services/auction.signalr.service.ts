@@ -39,4 +39,9 @@ export class AuctionSignalrService {
       this.auctionDataService.addBid(resp);
     });
   }
+  auctionClosedListener() {
+    this.hubConnection?.on("AuctionClosedResponse", (resp: boolean) => {
+      this.auctionDataService.isAuctionExpired = resp;
+    });
+  }
 }

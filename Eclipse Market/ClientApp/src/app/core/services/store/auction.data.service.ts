@@ -7,9 +7,14 @@ import { Bid, Bid$, BidGetAllResponse } from "../../models/bid.model";
 })
 export class AuctionDataService {
   private bid$: BehaviorSubject<Bid$ | null>;
+  isAuctionExpired: boolean = false;
 
   constructor() {
     this.bid$ = new BehaviorSubject<Bid$ | null>(null);
+  }
+
+  get auctionExpired() {
+    return this.isAuctionExpired;
   }
 
   get auctionBids() {
