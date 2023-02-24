@@ -195,7 +195,7 @@ namespace Eclipse_Market.Controllers
 
             Guid emailValidationToken = _validationTokenService.Generate(userToAdd.Id, ValidationTokenType.EmailVerify);
 
-            _emailService.SendConfirmationEmail(userToAdd.Email, emailValidationToken);
+            _emailService.SendConfirmationEmail(userToAdd.Email, emailValidationToken, userToAdd.Id);
 
             return Ok();
         }
@@ -295,11 +295,9 @@ namespace Eclipse_Market.Controllers
             return Ok();
         }
         [HttpPost]
-        public ActionResult VerifyToken(string token)
+        public ActionResult VerifyToken(string token, int id)
         {
             string separator = "::";
-
-            int userId = _jwtService.GetUserIdFromToken(User);
 
             string type = token.Split(separator)[0];
             Guid validationToken = Guid.Parse(token.Split(separator)[1]);
@@ -307,12 +305,12 @@ namespace Eclipse_Market.Controllers
 
             if(type == "email_verify")
             {
-                if (!_validationTokenService.IsValid(validationToken, userId, ValidationTokenType.EmailVerify))
+                if (!_validationTokenService.IsValid(validationToken, id, ValidationTokenType.EmailVerify))
                 {
                     return BadRequest("Verification failed");
                 }
 
-                var user = _dbContext.Users.Where(x => x.Id == userId).First();
+                var user = _dbContext.Users.Where(x => x.Id == id).First();
                 user.IsEmailVerified = true;
                 _dbContext.SaveChanges();
 
