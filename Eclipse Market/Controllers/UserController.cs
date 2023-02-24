@@ -269,6 +269,11 @@ namespace Eclipse_Market.Controllers
                 return BadRequest("Too many login attempts. Please try again later.");
             }
 
+            if (!user.IsEmailVerified)
+            {
+                return BadRequest("Please verify your email address");
+            }
+
             var token = CreateJwtToken(user);
 
             var claims = _dbContext.RoleClaims
