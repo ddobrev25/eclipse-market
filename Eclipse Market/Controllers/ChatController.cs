@@ -77,8 +77,7 @@ namespace Eclipse_Market.Controllers
                 {
                     Id = x.Id,
                     TimeStarted = x.TimeStarted.ToString(),
-                    TopicListingTitle = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().Title,
-                    //TopicListingImageBase64String = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().PrimaryImageBase64String,
+                    TopicListingTitle = _dbContext.Listings.Where(y => y.Id == x.TopicListingId).First().Title
                 }).ToList();
             foreach (var chat in chatsResponse)
             {
@@ -88,9 +87,14 @@ namespace Eclipse_Market.Controllers
                 chat.MessageIds = _dbContext.Messages
                     .Where(x => x.ChatId == chat.Id)
                     .Select(x => x.Id);
-            }
+                foreach (var participantId in chat.ParticipantIds)
+                {
+                    chat.ParticipantUserNames.Add(_dbContext.Users.Where(z => z.Id == participantId).FirstOrDefault().UserName);
+                }
+        };
 
-            if(!chatsResponse.Any(x => x.ParticipantIds.Contains(userId)))
+
+            if (!chatsResponse.Any(x => x.ParticipantIds.Contains(userId)))
             {
                 return Forbid();
             }

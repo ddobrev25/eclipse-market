@@ -183,11 +183,12 @@ app.MapHub<ChatHub>("/chatHub");
 app.MapHub<AuctionHub>("/auctionHub");
 
 app.UseCors(builder =>
-builder.WithOrigins("http://localhost:5000")
+/*builder.WithOrigins("http://localhost:5000")*/
+builder.AllowAnyOrigin()
 /*builder.WithOrigins("https://eclipse-market.eu")*/
 
 .AllowAnyHeader()
-.AllowCredentials()
+/*.AllowCredentials()*/
 .AllowAnyMethod());
 
 

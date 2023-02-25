@@ -34,6 +34,8 @@ h4 {
     line-height: 8px;
   }
   .form-floating > label,
+  input::placeholder,
+
   .form-floating select {
     font-size: 20px;
     // line-height: 8px;
@@ -81,5 +83,9 @@ h4 {
   .p-button {
     background: var(--secondary);
     border-color: var(--secondary);
+  }
+  .form-floating>.form-control-plaintext~label, .form-floating>.form-control:focus~label, .form-floating>.form-control:not(:placeholder-shown)~label, .form-floating>.form-select~label {
+    opacity: 1;
+    transform: none;
   }
 }

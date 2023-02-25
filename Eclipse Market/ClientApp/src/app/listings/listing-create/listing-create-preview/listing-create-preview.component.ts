@@ -18,6 +18,7 @@ import {
   AuctionCreateRequest,
 } from "src/app/core/models/auction.model";
 import { AuctionService } from "src/app/core/services/http/auction.service";
+import { UserDataService } from "src/app/core/services/store/user.data.service";
 
 @Component({
   selector: "app-listing-create-preview",
@@ -78,7 +79,8 @@ export class ListingCreatePreviewComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private auctionCreateService: AuctionCreateService,
-    private auctionService: AuctionService
+    private auctionService: AuctionService,
+    private userDataServuce: UserDataService
   ) {}
 
   ngOnInit(): void {

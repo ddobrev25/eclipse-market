@@ -190,6 +190,7 @@ export class ListingPreviewComponent implements OnInit {
     setInterval(() => {
       const now = new Date().getTime();
       const distance = expireTime - now;
+      console.log(this.isAuctionExpired)
       if(distance < 0) this.auctionDataService.isAuctionExpired = true;
       if (this.auctionDataService.isAuctionExpired) {
         this.remainingTime = "Аукциона е изтекъл";
