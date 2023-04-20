@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/font-awesome/scss/font-awesome.scss";
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap");
+* {
+  font-family: "Rubik", sans-serif;
+  color: var(--text-primary);
+}
+
+body {
+  --text-primary: #eeedf0;
+  --text-secondary: #1c2127;
+  --text-inactive: #adadad;
+  --text-dark: #1c2127;
+  --text-light: #eeedf0;
+  --danger: #fca5a5;
+  --success: #86efac;
+
+  --primary-light: #0d1d35;
+  --primary-medium: #071426;
+  --primary-dark: #040d19;
+  --secondary: #93c5fd;
+
+  --header-bg: #040d19;
+  --navtab-hover: #071426;
+  --border: #0b213f;
+  --border-hover: #455474;
+  --background-hover: #173250;
+}
+body.light-theme {
+  --text-primary: #1c1d1e;
+  --text-secondary: #495057;
+  --text-inactive: #adadad;
+  --text-dark: #1c2127;
+  --text-light: #eeedf0;
+  --danger: #ef4444;
+  --success: #1ea97c;
+
+  --primary-light: #fff;
+  --primary-medium: #eff3f8;
+  --primary-dark: #fff;
+  --secondary: #3b82f6;
+
+  --header-bg: #173250;
+  --navtab-hover: #0b213f;
+  --border: #aed2fc;
+  --border-hover: #455474;
+  --background-hover: #173250;
+}
+.p-toast-detail {
+  color: var(--text-dark) !important;
+}

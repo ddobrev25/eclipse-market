@@ -1,0 +1,31 @@
+<div class="row">
+    <div
+      class="col-12 col-lg-6 col-xxl-4 d-flex justify-content-center mt-4"
+      *ngFor="let listing of bookmarkedListings"
+    >
+      <p-card [header]="listing.title" styleClass="preview-card">
+        <ng-template pTemplate="header">
+          <i #bookmark class="pi pi-bookmark-fill bookmarked" (click)="onBookmarkListing($event, listing)"></i>
+
+          <img
+            alt="Card"
+            (click)="onPreviewListing(listing.id)"
+            [src]="listing.imageBase64Strings[0]"
+          />
+        </ng-template>
+        <ng-template pTemplate="body">
+          <p>
+            {{ listing.description }}
+          </p>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <div class="d-flex justify-content-between">
+            <div class="col d-flex flex-column">
+              <label class="location-label"> град {{ listing.location }} </label>
+              <label class="price-label"> {{ listing.price }} лв </label>
+            </div>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+  </div>

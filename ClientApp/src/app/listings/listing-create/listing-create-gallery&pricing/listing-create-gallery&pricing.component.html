@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="isAuction ? createAuctionForm : createListingForm">
+        <div class="d-flex flex-column align-items-center my-4">
+          <h3>Добавете снимки</h3>
+          <div class="form-group add-image-container">
+            <input
+              id="file-upload"
+              type="file"
+              accept="image/png, image/jpeg"
+              class="form-control"
+              multiple=""
+              class="imgInput"
+              hidden
+              (change)="getBase64($event)" />
+            <label
+              for="file-upload"
+              class="custom-file-upload d-flex justify-content-center">
+              <i class="pi pi-plus"></i>
+            </label>
+          </div>
+
+          <div class="row images-container w-100">
+            <div
+              *ngFor="let img of images"
+              (mouseenter)="onMouseOver($event)"
+              (mouseleave)="onMouseOver($event)"
+              class="col-4 img-preview p-2">
+              <img [src]="img" alt="no image" />
+              <div class="overlay p-2">
+                <i class="pi pi-times" (click)="onRemoveImage(img)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-floating mb-2"
+          *ngIf="!isAuction">
+          <input
+            type="number"
+            #priceInput
+            name="price"
+            placeholder="Цена"
+            class="form-control"
+            id="priceInput"
+            formControlName="price" />
+          <label for="price">Цена</label>
+          <app-form-errors
+            [control]="
+              $any(isAuction ? createAuctionForm : createListingForm).get(
+                'price'
+              )
+            "
+            [controlName]="'Цена'"></app-form-errors>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div
+      class="col d-flex justify-content-between flex-wrap flex-sm-nowrap"
+      id="buttons">
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Назад"
+        class="p-button-primary p-2 my-sm-4 my-0"
+        (click)="previousPage()"></button>
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Напред"
+        [disabled]="!(isAuction ? createAuctionForm : createListingForm).valid"
+        class="p-button-primary p-2 my-sm-4 my-0"
+        (click)="nextPage()"></button>
+    </div>
+  </div>
+</div>

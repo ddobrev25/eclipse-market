@@ -1,0 +1,69 @@
+:host::ng-deep {
+  .form-check-input:checked {
+    background-color: var(--secondary);
+    border-color: var(--border);
+  }
+  input.form-control {
+    background-color: var(--primary-medium);
+    border: 2px var(--border) solid;
+    color: var(--text-primary);
+  }
+  #priceInput::-webkit-inner-spin-button,
+  #priceInput::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+
+  .form-floating label {
+    color: var(--text-primary);
+  }
+
+  .form-check-label {
+    color: var(--text-inactive);
+  }
+
+  .add-image-container {
+    height: 120px;
+    width: 120px;
+    background-color: transparent;
+  }
+  .add-image-container > label {
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-medium);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .add-image-container i {
+    font-size: 4rem;
+  }
+  .img-preview img {
+    width: 100%;
+    height: 200px;
+    z-index: -1;
+  }
+  .overlay {
+    width: 100%;
+    height: 200px;
+    margin-top: -200px;
+    position: relative;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.74);
+  }
+  .visible {
+    display: block;
+  }
+  .overlay > i {
+    float: right;
+    cursor: pointer;
+    color: var(--text-light);
+  }
+}

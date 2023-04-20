@@ -1,0 +1,21 @@
+<div *ngIf="!control.valid && (control.dirty || control.touched)">
+  <div *ngIf="control.errors?.['required']">
+    Полето {{ controlName }} е задължително!
+  </div>
+  <div *ngIf="control.errors?.['maxlength']">
+    Полето {{ controlName }} трябва да бъде по-малко от {{ maxLength }} знака!
+  </div>
+  <div *ngIf="control.errors?.['minlength']">
+    Полето {{ controlName }} трябва да бъде повече от {{ minLength }} знака!
+  </div>
+  <div *ngIf="control.errors?.['pattern']">
+    Полето {{ controlName }} трябва да бъде в правилния формат {{ format }}
+  </div>
+  <div *ngIf="control.errors?.['min']">
+    Полето {{ controlName }} трябва да бъде поне {{ minValue }}
+  </div>
+  <div *ngIf="control.errors?.['max']">
+    Полето {{ controlName }} трябва да бъде под {{ maxValue }}
+  </div>
+  <div *ngIf="control.errors?.['notmatched']">Паролите не съвпадат</div>
+</div>

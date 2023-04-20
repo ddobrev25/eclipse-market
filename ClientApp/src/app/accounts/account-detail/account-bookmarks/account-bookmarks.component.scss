@@ -1,0 +1,90 @@
+:host::ng-deep {
+  .preview-card {
+    max-height: 500px;
+    margin-bottom: 20px;
+    background: var(--primary-dark);
+    border: 2px solid var(--border);
+    border-radius: 0;
+    word-break: break-all;
+    transition: 0.2s;
+  }
+  .preview-card:hover {
+    border-bottom-color: var(--secondary);
+  }
+  p-card.p-element {
+    width: 100%;
+    max-width: 481px;
+  }
+  .p-card-header {
+    position: relative;
+  }
+  .p-card-header img {
+    width: 100%;
+    aspect-ratio: 2/1;
+    padding: 12px;
+    cursor: pointer;
+  }
+  .location-label {
+    color: var(--text-inactive);
+  }
+  p-card.p-element p,
+  .p-card .p-card-title,
+  .p-card .p-card-footer {
+    margin: 0;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  .location-label,
+  .price-label {
+    white-space: nowrap;
+    overflow: hidden;
+    word-break: break-all;
+    text-overflow: ellipsis;
+  }
+  .p-card .p-card-title,
+  .p-card .p-card-content,
+  .p-card-body {
+    white-space: nowrap;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  i {
+    cursor: pointer;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  textarea,
+  textarea:focus,
+  input {
+    background-color: var(--primary-medium);
+    color: var(--text-primary);
+    width: 100%;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-inactive);
+  }
+  #charLeft {
+    color: var(--text-primary);
+    float: right;
+  }
+  .p-card-header > i {
+    font-size: 3rem;
+    position: absolute;
+    top: -6px;
+    left: calc(100% - 60px);
+    cursor: pointer;
+  }
+  .bookmarked {
+    color: var(--danger);
+  }
+}

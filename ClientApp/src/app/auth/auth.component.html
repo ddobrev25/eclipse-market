@@ -1,0 +1,258 @@
+<div class="bg py-5" *ngIf="!registerMode">
+  <div class="register-container container">
+    <h2 class="text-center pt-4">Влезте в профила си</h2>
+    <form [formGroup]="loginForm" class="p-sm-5 p-0" (ngSubmit)="onLogIn()">
+      <div class="username-container d-flex">
+        <div class="input-container d-flex flex-column w-100">
+          <label>Потребителско име</label>
+          <input
+            formControlName="userName"
+            type="text"
+            class="form-input"
+            #focusableUserName
+            (keyup.enter)="focusablePassword.focus()"
+          />
+          <i class="pi pi-check-square"></i>
+          <app-form-errors
+            [control]="$any(loginForm).get('userName')"
+            [maxLength]="'50'"
+            [minLength]="'2'"
+            [controlName]="'Потребителско име'"
+          ></app-form-errors>
+        </div>
+      </div>
+      <div class="password-container">
+        <div class="input-container d-flex flex-column w-100">
+          <label>Парола</label>
+          <input
+            type="password"
+            class="form-input"
+            formControlName="password"
+            #focusablePassword
+          />
+          <i class="pi pi-check-square"></i>
+          <app-form-errors
+            [control]="$any(loginForm).get('password')"
+            [maxLength]="'50'"
+            [minLength]="'2'"
+            [controlName]="'Парола'"
+          ></app-form-errors>
+        </div>
+      </div>
+      <div class="btn-container d-flex flex-column align-items-center">
+        <button
+          type="submit"
+          pButton
+          pRipple
+          label="Потвърди"
+          class="p-button-success mt-4 p-1 w-50 loginBtn"
+          [disabled]="!loginForm.valid"
+        ></button>
+        <h6 class="regLink my-3">
+          Нямате профил?, регистрирайте се <a (click)="registerToggle()">тук</a>
+        </h6>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="bg py-5" *ngIf="registerMode">
+  <div class="register-container container">
+    <h2 class="text-center pt-4">Създайте нов акаунт</h2>
+    <form
+      [formGroup]="registerForm"
+      class="p-sm-5 p-0"
+      (ngSubmit)="onRegister()"
+    >
+      <div class="img-firstname-lastname-container d-flex">
+        <div *ngIf="avatar" class="image-wrapper w-75">
+          <input
+            id="file-upload"
+            type="file"
+            accept="image/png, image/jpeg"
+            class="form-control"
+            multiple=""
+            class="imgInput"
+            hidden
+            (change)="onUploadImage($event)"
+          />
+          <label for="file-upload">
+            <img [src]="avatar" alt="not found" />
+          </label>
+        </div>
+
+        <div
+          *ngIf="!avatar"
+          class="image-upload h-100 w-75 d-flex justify-content-center align-items-center flex-column"
+        >
+          <input
+            id="file-upload"
+            type="file"
+            accept="image/png, image/jpeg"
+            class="form-control"
+            multiple=""
+            class="imgInput"
+            hidden
+            (change)="onUploadImage($event)"
+          />
+          <label
+            for="file-upload"
+            class="d-flex flex-column justify-content-center align-items-center h-100"
+          >
+            <i class="pi pi-camera"></i>
+            <span class="text-center">Качете снимка</span>
+          </label>
+        </div>
+
+        <div class="d-flex flex-column w-100 h-100 align-items-between">
+          <div class="input-container d-flex flex-column w-100 mt-xxl-3">
+            <label>Име</label>
+            <input
+              formControlName="firstName"
+              type="text"
+              class="form-input"
+              (keyup.enter)="focusableLastName.focus()"
+              #focusableFirstName
+            />
+            <i class="pi pi-check-square"></i>
+            <app-form-errors
+              [control]="$any(registerForm).get('firstName')"
+              [maxLength]="'50'"
+              [minLength]="'2'"
+              [controlName]="'Име'"
+            ></app-form-errors>
+          </div>
+          <div class="input-container d-flex flex-column w-100 mt-xxl-4">
+            <label>Фамилия</label>
+            <input
+              formControlName="lastName"
+              type="text"
+              class="form-input"
+              (keyup.enter)="focusableUserName.focus()"
+              #focusableLastName
+            />
+            <i class="pi pi-check-square"></i>
+            <app-form-errors
+              [control]="$any(registerForm).get('lastName')"
+              [maxLength]="'50'"
+              [minLength]="'2'"
+              [controlName]="'Фамилия'"
+            ></app-form-errors>
+          </div>
+        </div>
+      </div>
+
+      <div class="username-container d-flex">
+        <div class="input-container d-flex flex-column w-100">
+          <label>Потребителско име</label>
+          <input
+            formControlName="userName"
+            type="text"
+            class="form-input"
+            #focusableUserName
+            (keyup.enter)="focusablePassword.focus()"
+          />
+          <i class="pi pi-check-square"></i>
+          <app-form-errors
+            [control]="$any(registerForm).get('userName')"
+            [maxLength]="'50'"
+            [minLength]="'2'"
+            [controlName]="'Потребителско име'"
+          ></app-form-errors>
+        </div>
+      </div>
+
+      <div class="password-container">
+        <div class="input-container d-flex flex-column w-100">
+          <label>Парола</label>
+          <input
+            type="password"
+            class="form-input"
+            formControlName="password"
+            (keyup.enter)="focusableConfirmPassword.focus()"
+            #focusablePassword
+          />
+          <i class="pi pi-check-square"></i>
+          <app-form-errors
+            [control]="$any(registerForm).get('password')"
+            [maxLength]="'50'"
+            [minLength]="'6'"
+            [controlName]="'Парола'"
+            [format]="'- 1 главна буква, 1 малко буква, 1 число, 1 символ'"
+          ></app-form-errors>
+        </div>
+        <div class="input-container d-flex flex-column w-100">
+          <label>Потвърди парола</label>
+          <input
+            type="password"
+            class="form-input"
+            formControlName="confirmPassword"
+            (keyup.enter)="focusableEmail.focus()"
+            #focusableConfirmPassword
+          />
+          <i class="pi pi-check-square"></i>
+          <app-form-errors
+            [control]="$any(registerForm).get('confirmPassword')"
+            [maxLength]="'50'"
+            [minLength]="'6'"
+            [controlName]="'Потвърди парола'"
+            [format]="'- 1 главна буква, 1 малко буква, 1 число, 1 символ'"
+          ></app-form-errors>
+        </div>
+      </div>
+
+      <div class="email-phone-container d-flex">
+        <div class="input-container d-flex flex-column w-100">
+          <label>Имейл адрес</label>
+          <input
+            type="email"
+            class="form-input"
+            formControlName="email"
+            placeholder="example@eclipsemarket.com"
+            (keyup.enter)="focusablePhone.focus()"
+            #focusableEmail
+          />
+          <i class="pi pi-check-square"></i>
+          <app-form-errors
+            [control]="$any(registerForm).get('email')"
+            [controlName]="'Имейл адрес'"
+          ></app-form-errors>
+        </div>
+        <div class="input-container d-flex flex-column w-100">
+          <label>Телефонен номер</label>
+          <input
+            type="text"
+            class="form-input"
+            formControlName="phoneNumber"
+            #focusablePhone
+            (keyup.enter)="focusableSubmitButton.focus()"
+          />
+          <i class="pi pi-check-square"></i>
+          <app-form-errors
+            [control]="$any(registerForm).get('phoneNumber')"
+            [controlName]="'Телефонен номер'"
+          ></app-form-errors>
+        </div>
+      </div>
+
+      <div class="btn-container d-flex justify-content-around">
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Назад"
+          class="p-button-primary mt-3 p-2 w-25"
+          (click)="registerToggle()"
+        ></button>
+        <button
+          #focusableSubmitButton
+          type="submit"
+          pButton
+          pRipple
+          label="Потвърди"
+          class="p-button-success mt-3 p-2 w-25"
+          [disabled]="!registerForm.valid"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>

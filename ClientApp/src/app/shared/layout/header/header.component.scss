@@ -1,0 +1,120 @@
+:host::ng-deep {
+  .nav-tab,
+  .nav-tab > span {
+    list-style: none;
+    padding: 16px;
+    cursor: pointer;
+    color: var(--text-light);
+  }
+  .nav-tab i {
+    color: var(--text-light);
+  }
+  .nav-tab:hover {
+    background-color: var(--navtab-hover);
+  }
+  .nav-tabs {
+    border: none;
+    font-weight: 700;
+    font-size: 20px;
+  }
+  .nav-tabs > ul {
+    height: 100%;
+    li {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .active-nav {
+    border-top: 2px solid var(--secondary);
+    color: var(--secondary);
+  }
+  .active-nav i,
+  .active-nav span {
+    color: var(--secondary);
+  }
+  .logo {
+    cursor: pointer;
+    font-size: 24px;
+  }
+  .navbar-container {
+    background: var(--header-bg);
+    color: var(--text-light);
+    min-height: 60px;
+    height: auto;
+  }
+  #addBtn {
+    margin: 4px 0;
+    font-size: 20px;
+    background: var(--secondary);
+    border-color: var(--secondary);
+  }
+  .p-button-label {
+    color: var(--text-light);
+  }
+
+  .toggle-button {
+    position: absolute;
+    top: 1.25rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+  }
+  .logo > img {
+    height: 80px;
+  }
+  .pi-sun:before {
+    color: var(--text-light);
+  }
+
+  .toggle-button .bar {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+  }
+  .p-togglebutton.p-button {
+    background: var(--secondary);
+    border-color: var(--secondary);
+
+  }
+  @media (max-width: 780px) {
+    .toggle-button {
+      display: flex;
+    }
+    .nav-tabs {
+      display: none !important;
+      flex-direction: column !important;
+      width: 100%;
+    }
+    .nav-tabs.active {
+      display: flex !important;
+    }
+    .logo {
+      margin-top: 11px;
+    }
+    .container-xl {
+      flex-direction: column;
+      align-items: flex-start !important;
+    }
+    .nav-tabs ul {
+      flex-direction: column !important;
+    }
+    .nav-tabs ul:hover {
+      text-align: center !important;
+    }
+    li.nav-tab {
+      padding: 8px !important;
+    }
+    .active-nav {
+      border: 2px solid var(--secondary);
+    }
+    #addBtn {
+      margin: 10px 0 !important;
+    }
+  }
+}

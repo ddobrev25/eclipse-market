@@ -1,0 +1,54 @@
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+                <div class="col p-0">
+                        <form 
+                        [formGroup]="updateForm"
+                        class="p-0 form">
+                        <div class="d-flex justify-content-center">
+                                <h4>Смяна на паролата</h4>        
+                        </div>
+                        <div class="info-container">
+                                <label for="currentPassword" class="my-1 ps-3">Стара парола</label>
+                                <input type="password"
+                                        name="currentPassword"
+                                        class="form-control mb-4"
+                                        formControlName="currentPassword">
+                                <app-form-errors [control]="$any(updateForm).get('currentPassword')" 
+                                [maxLength]="'50'" [minLength]="'6'"
+                                [controlName]="'Стара парола'"></app-form-errors>
+                                <label for="newPassword" class="my-1 ps-3">Нова парола</label>
+                                <input type="password"
+                                        name="confirmPassword"
+                                        class="form-control mb-4"
+                                        formControlName="newPassword">
+                                <span *ngIf="updateForm.errors?.['notmatched'] && updateForm.touched" class="text-danger">Паролите не съвпадат</span>
+                                <app-form-errors [control]="$any(updateForm).get('newPassword')" 
+                                [maxLength]="'50'" [minLength]="'6'"
+                                [controlName]="'Нова парола'"></app-form-errors>
+                                <div class="d-flex justify-content-between flex-sm-nowrap flex-wrap mt-5 actionButtons">
+                                        <button 
+                                                pButton 
+                                                pRipple
+                                                type="button"
+                                                label="Запази промените" 
+                                                class="p-button-primary ms-sm-2"
+                                                (click)="onEditUser()" 
+                                                [disabled]="!updateForm.valid">
+                                        </button>
+                                        <button 
+                                                pButton 
+                                                pRipple
+                                                type="button"
+                                                label="Изтриване на акаунт" 
+                                                class="p-button-danger ms-sm-2"
+                                                (click)="onDeleteUser()">
+                                        </button>
+                                </div>
+                        </div>  
+                        </form>
+                        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+                </div>
+        </div>
+    </div>
+</div>

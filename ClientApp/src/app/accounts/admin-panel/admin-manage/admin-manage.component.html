@@ -1,0 +1,114 @@
+<p-toast></p-toast>
+<p-table 
+        #at 
+        [value]="users!" 
+        responsiveLayout="scroll" 
+        [resizableColumns]="true" 
+        columnResizeMode="fit"
+        [paginator]="true" 
+        [rows]="10"
+        [showCurrentPageReport]="true" 
+        [globalFilterFields]="['firstName', 'lastName', 'userName', 'email', 'phoneNumber', 'role']">
+    <ng-template pTemplate="caption">
+        <div style="text-align: leftt">        
+            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input #searchInput pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Търсене" />
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pColumn="firstName">Име</th>
+            <th pColumn="lastName">Фамилия</th>
+            <th pColumn="userName">Потребителско име</th>
+            <th pColumn="email">Имейл</th>
+            <th pColumn="phoneNumber">Телефон</th>
+            <th pColumn="role">Роля</th>
+            <th pColumn="action">Действия</th>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+        <tr>
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.userName}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.phoneNumber}}</td>
+            <td>{{user.roleName}}</td>
+            <td class="action-btn d-flex flex-nowrap">
+                <button class="btn btn-success" (click)="onSelectAccount(user)"><i class="pi pi-pencil"></i></button>
+                <button class="btn btn-danger ms-2" (click)="onDeleteUser(user)"><i class="pi pi-trash"></i></button>
+            </td>
+        </tr>
+
+    </ng-template>
+</p-table>
+
+
+<p-dialog 
+        (onHide)="resetEditForm()"
+        [(visible)]="accountDialog" 
+        [style]="{width: '600px'}" 
+        [modal]="true" 
+        styleClass="p-fluid" 
+        [draggable]="false">
+    <ng-template pTemplate="header">
+        <h4>Редакция на профил</h4>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <form [formGroup]="editForm">
+            <label for="firstName" >Име</label>
+            <input type="text"
+                    name="firstName"
+                    class="form-control"
+                    formControlName="firstName"
+                    [placeholder]="accountForEdit?.firstName">
+            <label for="lastName" >Фамилия</label>
+            <input type="text"
+                    name="lastName"
+                    class="form-control"
+                    formControlName="lastName"
+                    [placeholder]="accountForEdit?.lastName">
+            <label for="userName" >Потребителско име</label>
+            <input type="text"
+                    name="userName"
+                    class="form-control"
+                    formControlName="userName"
+                    [placeholder]="accountForEdit?.userName">
+            <label for="email" >Имейл адрес</label>
+            <input type="email"
+                    name="email"
+                    class="form-control"
+                    formControlName="email"
+                    [placeholder]="accountForEdit?.email">
+            <label for="password" >Парола</label>
+            <input type="password"
+                    name="password"
+                    class="form-control"
+                    formControlName="password"
+                    [placeholder]="accountForEdit?.password">
+            <label for="email" >Телефонен номер</label>
+            <input type="text"
+                    name="phoneNumber"
+                    class="form-control"
+                    formControlName="phoneNumber"
+                    [placeholder]="accountForEdit?.phoneNumber">
+            <label for="roles">Роля</label>
+            <select class="form-select" formControlName="role">
+                <option value="" disabled selected>{{ accountForEdit?.roleName }}</option>
+                <option 
+                    *ngFor="let role of roleList" 
+                    [value]="role.id">
+                    {{role.name}}
+                </option>
+            </select>
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Назад" icon="pi pi-times" (click)="onDiscard()"></button>
+        <button pButton pRipple label="Запази" icon="pi pi-check" (click)="onEditAccount()"></button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

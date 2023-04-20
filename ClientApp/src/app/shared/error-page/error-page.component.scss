@@ -1,0 +1,14 @@
+.container-fluid {
+    min-height: 900px;
+    background: rgb(255, 255, 255);
+    h1 {
+        color: var(--text-secondary);
+    }
+    p {
+        color: var(--text-inactive);
+    }
+
+}
+#error-label {
+    font-size: 220px;
+}

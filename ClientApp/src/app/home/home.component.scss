@@ -1,0 +1,215 @@
+.container-xl {
+  min-height: 1000px;
+  color: var(--text-primary);
+}
+:host::ng-deep {
+  .p-dataview .p-dataview-header,
+  .p-dataview .p-dataview-content {
+    background-color: transparent;
+  }
+  .p-selectbutton .p-button {
+    background-color: var(--primary-dark);
+    border-color: var(--border);
+  }
+  .category-container {
+    cursor: pointer;
+  }
+  .p-chip {
+    padding: 4px 6px;
+    background: var(--primary-dark);
+    border: 2px solid var(--border);
+    transition: 0.2s;
+  }
+  .p-chip:hover {
+    border-color: var(--secondary);
+  }
+  #heading {
+    border-bottom: 2px solid var(--border);
+    transition: 0.2s ease-in-out;
+    font-size: 32px;
+  }
+  #heading:hover {
+    cursor: default;
+    border-bottom: 2px solid var(--secondary);
+  }
+  #profile-img {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+  }
+  .location {
+    color: var(--text-inactive);
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .title {
+    font-weight: 600;
+    font-size: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .price {
+    font-size: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .views {
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wrapper-container {
+    background: var(--primary-dark);
+    transition: 0.2s;
+    border: 2px solid var(--border) !important;
+  }
+  .wrapper-container:hover {
+    border-bottom-color: var(--secondary) !important;
+  }
+  .searchbar-container {
+    .input-wrapper {
+      border-radius: 50px;
+      background: var(--primary-dark);
+    }
+    i {
+      font-size: 2rem;
+    }
+    input {
+      font-size: 1.5rem;
+      height: 3rem;
+      border: none;
+      background: transparent;
+      outline: none;
+    }
+  }
+
+  .p-treeselect:not(.p-disabled).p-focus {
+    box-shadow: none;
+    border-color: transparent;
+  }
+  .p-treeselect {
+    border: none;
+    background-color: var(--primary-dark);
+    color: var(--text-primary);
+  }
+  .p-tree {
+    background-color: var(--primary-dark);
+    color: var(--text-primary);
+  }
+  .p-treeselect .p-treeselect-label.p-placeholder,
+  input::placeholder {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 768px) {
+    #profile-img {
+      width: 392px;
+      max-width: none;
+    }
+    .img-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .wrapper-container {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 30px;
+      width: 90%;
+    }
+    .price {
+      margin: 8px 0;
+    }
+    .price-container {
+      margin: 0 !important;
+    }
+    .preview-card {
+      max-height: none !important;
+    }
+  }
+  @media (max-width: 492px) {
+    #profile-img {
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .p-dataview .p-dataview-header {
+    border: none;
+  }
+
+  .preview-card {
+    margin-bottom: 20px;
+    background: var(--primary-dark);
+    border: 2px solid var(--border);
+    border-radius: 0;
+    word-break: break-all;
+  }
+  .preview-card:hover {
+    border-bottom-color: var(--secondary);
+  }
+  p-card.p-element {
+    width: auto;
+    max-width: 481px;
+  }
+  .p-card-header img.img-list {
+    height: auto;
+    padding: 16px;
+    cursor: pointer;
+  }
+  .p-card-header img.img-grid {
+    width: 100%;
+    aspect-ratio: 1/1;
+    padding: 16px;
+    cursor: pointer;
+  }
+  .p-card-body {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .p-card .p-card-title,
+  .p-card .p-card-content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .location-label {
+    color: var(--text-inactive);
+  }
+  .location-label,
+  .price-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .p-card-footer {
+    padding: 0;
+  }
+  p-card.p-element p,
+  .p-card .p-card-title,
+  .p-card .p-card-footer {
+    overflow: hidden;
+    word-break: break-all;
+  }
+  .p-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -0.5rem;
+    margin-left: -0.5rem;
+    margin-top: -0.5rem;
+  }
+  @media screen and (min-width: 768px) {
+    .md_col-4 {
+      flex: 0 0 auto;
+      width: 33.3%;
+    }
+  }
+}

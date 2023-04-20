@@ -1,0 +1,85 @@
+:host ::ng-deep {
+    .p-paginator {
+        border: 2px var(--border) solid;
+        border-top: none;
+        background: var(--primary-medium);
+    }
+    .p-paginator .p-paginator-current,
+    .p-paginator .p-paginator-pages .p-paginator-page {
+        color: var(--text-primary);
+    }
+    .p-datatable .p-datatable-header {
+        background: var(--primary-light);
+        border: none;
+    }
+    .p-inputtext.p-component.p-element {
+        border: 2px var(--border) solid;
+        background: var(--primary-medium); 
+    }
+    option {
+        color: var(--text-primary)
+    }
+    input,
+    .p-inputtext.p-component.p-element,
+    select { 
+        background-color: var(--primary-medium);
+        padding: 12px 14px;
+        border: 2px var(--border) solid;
+        color: var(--text-primary);
+
+    }
+    .p-datatable .p-datatable-thead > tr > th,
+    input::placeholder {
+        color: var(--text-primary);
+    }
+    input:focus {
+        background: var(--primary-medium);
+        color: var(--text-primary);
+    }
+    p-table.p-element tr:nth-child(even) {
+        background: var(--primary-medium); 
+    }
+    p-table.p-element tr:nth-child(odd) {
+        background: var(--primary-light); 
+    }
+    p-table.p-element tr {
+    border: 2px var(--border) solid;
+    }
+    p-table.p-element th {
+        background: var(--primary-medium);
+    }
+    td.action-btn button {
+        text-align: center;
+        width: 40px !important;
+        margin: 0;
+    }
+
+    .p-dialog {
+        border: var(--border) 2px solid;
+        color: var(--text-primary);
+    }
+    .p-button {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    div.p-dialog-header,
+    div.p-dialog-content,
+    div.p-dialog-footer {
+        background-color: var(--primary-dark);
+    }
+    button.p-ripple.p-element.p-button {
+        background-color: var(--secondary);
+    }
+    ::-webkit-scrollbar {
+        height: 8px !important;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--blue-gray)
+    }
+    .p-paginator {
+        border: 2px var(--border) solid;
+        border-top: none;
+    }
+}
+

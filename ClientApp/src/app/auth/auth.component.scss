@@ -1,0 +1,187 @@
+:host::ng-deep {
+  .p-password,
+  .p-inputtext {
+    width: 100%;
+    background-color: var(--primary-medium);
+  }
+  .p-password {
+    padding: 0 !important;
+  }
+
+  .bg {
+    min-height: 1400px;
+    background: no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .register-container {
+    background: var(--primary-dark);
+    border-radius: 16px;
+    margin-top: -200px !important;
+  }
+
+  .input-container {
+    padding: 0px 12px;
+    position: relative;
+    margin: 12px 0px;
+  }
+  .input-container > input {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--border-hover), var(--border-hover))
+        border-box;
+    border-radius: 16px;
+    border: 3px solid transparent;
+
+    outline: none;
+    cursor: pointer;
+  }
+  .input-container > input:hover {
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--secondary), darkorchid) border-box;
+  }
+  .input-container > input:focus {
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--secondary), darkorchid) border-box;
+    cursor: text;
+  }
+  .input-container > label {
+    padding-left: 8px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    font-size: 18px;
+  }
+  .input-container > input.ng-valid ~ i {
+    display: block;
+  }
+  .input-container > input.ng-valid {
+    border-color: var(--success);
+  }
+  .input-container > input.ng-invalid.ng-dirty {
+    border-color: var(--danger);
+  }
+  .form-input {
+    position: relative;
+  }
+  .pi-check-square {
+    display: none;
+    position: absolute;
+    width: 42px;
+    right: 10px;
+    top: 57px;
+    color: var(--success);
+    font-size: larger;
+  }
+  .img-firstname-lastname-container > img {
+    box-sizing: content-box;
+    padding: 0px 12px;
+    width: 20%;
+    aspect-ratio: 1/1 !important;
+  }
+  .btn-container {
+    padding: 0px 12px;
+    button {
+      font-size: 1.3rem;
+      border-radius: 16px;
+    }
+  }
+  @media (max-width: 576px) {
+    .img-firstname-lastname-container {
+      flex-direction: column;
+      align-items: center;
+      img {
+        width: 50%;
+      }
+    }
+    .email-phone-container {
+      flex-direction: column;
+    }
+  }
+  .image-upload {
+    font-size: 2rem;
+    margin: 0px 12px;
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--border-hover), var(--border-hover))
+        border-box;
+    border-radius: 16px;
+    border: 3px solid transparent;
+    max-width: 25%;
+    height: auto;
+    aspect-ratio: 1/1;
+  }
+  .image-upload i {
+    font-size: 4rem;
+    cursor: pointer;
+  }
+  .image-wrapper {
+    background: linear-gradient(var(--primary-medium), var(--primary-medium))
+        padding-box,
+      linear-gradient(to right, var(--border-hover), var(--border-hover))
+        border-box;
+    border-radius: 20px;
+    border: 3px solid transparent;
+    margin: 0px 12px;
+    max-width: 25%;
+    height: 100%;
+    aspect-ratio: 1/1;
+  }
+  .image-wrapper > label > img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 996px) {
+    .img-firstname-lastname-container {
+      flex-direction: column;
+      align-items: center;
+      .image-upload {
+        max-width: 50%;
+      }
+      .image-wrapper {
+        max-width: 50%;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .btn-container {
+      button {
+        font-size: 1rem;
+      }
+    }
+    .btn-container > button.loginBtn {
+      width: 100% !important;
+    }
+  }
+  @media (max-width: 576px) {
+    .btn-container {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      button {
+        width: 100% !important;
+      }
+    }
+  }
+  .regLink a {
+    color: var(--secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .regLink a:hover {
+    color: var(--secondary);
+  }
+}

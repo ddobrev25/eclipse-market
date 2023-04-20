@@ -1,0 +1,164 @@
+:host::ng-deep {
+  .container-fluid {
+    color: var(--text-primary);
+  }
+  #descTextArea {
+    resize: none;
+    min-height: 200px;
+    overflow: hidden;
+    border: 1px solid #0b213f;
+    border-radius: 6px;
+  }
+  .preview-card {
+    margin-bottom: 20px;
+    background: var(--primary-dark);
+    border: 2px solid var(--border);
+    border-radius: 0;
+    word-break: break-all;
+  }
+  .preview-card:hover {
+    border-bottom-color: var(--secondary);
+  }
+  p-card.p-element {
+    width: 100%;
+    max-width: 481px;
+  }
+  .p-card-header img {
+    aspect-ratio: 1/1;
+    padding: 18px;
+    cursor: pointer;
+  }
+  .location-label {
+    color: var(--text-inactive);
+  }
+  p-card.p-element p,
+  .p-card .p-card-title,
+  .p-card .p-card-footer {
+    margin: 0;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  .location-label,
+  .price-label {
+    white-space: nowrap;
+    overflow: hidden;
+    word-break: break-all;
+    text-overflow: ellipsis;
+  }
+  .p-card .p-card-title,
+  .p-card .p-card-content,
+  .p-card-body {
+    white-space: nowrap;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  i {
+    cursor: pointer;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  textarea,
+  textarea:focus,
+  input {
+    background-color: var(--primary-medium);
+    color: var(--text-primary);
+    width: 100%;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-inactive);
+  }
+  #charLeft {
+    color: var(--text-primary);
+    float: right;
+  }
+  .p-dialog,
+  .p-dialog .p-dialog-header,
+  .p-dialog .p-dialog-content,
+  .p-dialog .p-dialog-footer {
+    background-color: var(--primary-dark);
+  }
+
+  .p-card-header > i {
+    font-size: 3rem;
+    position: relative;
+    top: -6px;
+    left: calc(100% - 50px);
+    cursor: pointer;
+  }
+  .bookmarked {
+    color: var(--danger);
+  }
+  .p-card-header {
+    width: 100%;
+    position: relative;
+  }
+  .add-image-container {
+    height: 120px;
+    width: 120px;
+    background-color: transparent;
+  }
+  .add-image-container > label {
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-medium);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .add-image-container i {
+    font-size: 4rem;
+  }
+  .img-preview img {
+    height: 300px;
+    aspect-ratio: 1/1;
+    z-index: -1;
+  }
+  .overlay {
+    height: 300px;
+    aspect-ratio: 1/1;
+    margin-top: -300px;
+    position: relative;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.74);
+  }
+  .visible {
+    display: block;
+  }
+  .overlay > i {
+    float: right;
+    cursor: pointer;
+    color: var(--text-light);
+  }
+
+
+
+  @media (max-width: 576px) {
+    .img-preview img {
+      height: 150px;
+    }
+    .overlay {
+      height: 150px;
+      margin-top: -150px;
+    }
+    .p-dialog .p-dialog-footer {
+      display: flex;
+      flex-direction: column;
+      button {
+        margin-bottom: 12px;
+      }
+    }
+  }
+}

@@ -1,0 +1,164 @@
+<div class="container-xl py-4 mx-auto my-5" id="main-container">
+  <div class="row">
+    <div class="col-md-7 col-12 my-4 p-0 px-4">
+      <div
+        class="img-container"
+        (mouseenter)="onShowImageOverlay($event)"
+        (mouseleave)="onShowImageOverlay($event)">
+        <img #img id="listing-img" alt="Card" [src]="currentImage" />
+        <div class="img-overlay">
+          <span class="d-flex align-items-center justify-content-between h-100">
+            <i class="pi pi-chevron-left" (click)="onPreviousImage($event)"></i>
+            <i class="pi pi-chevron-right" (click)="onNextImage($event)"></i>
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="isAuction" class="bid-container p-3 mt-4">
+        <div class="d-flex justify-content-between align-items-center my-3">
+          <span class="heading ">
+            Наддавания
+            <span class="numberOfBids p-1">{{ bidCount }}</span>
+          </span>
+          <div
+            *ngIf="isAuction && !isAuctionExpired"
+            class="d-flex flex-column align-items-end align-items-center">
+            <span>Оставащо време</span>
+            <span>
+              {{ remainingTime }}
+            </span>
+          </div>
+
+          <div *ngIf="isAuction && isAuctionExpired"
+            class="d-flex align-items-center justify-content-center">
+            <div class="auction-closed">Аукциона е приключил</div>
+          </div>
+        </div>
+        <div class="bid-list">
+          <div
+            *ngFor="let bid of bid$ | async"
+            class="bid-wrapper d-flex justify-content-between p-3">
+            <span>
+              <i class="fa fa-gavel"></i>
+              {{ bid.userName }}
+            </span>
+            <span>{{ bid.timeCreated | date : "medium" }}</span>
+            <span>{{ bid.amount }}лв</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="author-card mb-3">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-3 col-6 ps-0">
+              <img
+                id="profile-img"
+                alt="Card"
+                [src]="selectedListing?.author?.imageBase64String" />
+            </div>
+            <div
+              class="col-lg-4 col-6 d-flex flex-column justify-content-center py-4">
+              <span>
+                <i class="pi pi-user"></i>
+                {{ selectedListing?.author?.firstName }}
+                {{ selectedListing?.author?.lastName }}
+              </span>
+              <span>
+                <i class="pi pi-phone"></i>
+                {{ selectedListing?.author?.phoneNumber }}
+              </span>
+            </div>
+            <div
+              class="col-lg-5 col-12 d-flex align-items-center justify-content-center mb-lg-0 mb-3">
+              <button
+                pButton
+                pRipple
+                type="button"
+                label="Виж другите обяви на този потребител"
+                class="p-button-primary"
+                (click)="onLoadUserListings()"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5 col-12 my-4 p-0 pe-md-4 px-md-0 px-4">
+      <div class="info-container w-100 p-3 d-flex flex-column">
+        <div class="category d-flex justify-content-between align-items-center">
+          <span>{{ selectedListing?.listingCategory }}</span>
+          <i
+            #bookmark
+            class="pi pi-bookmark"
+            (click)="onBookmarkListing($event)"></i>
+        </div>
+        <div class="title pt-1">
+          <span>{{ selectedListing?.title }}</span>
+        </div>
+        <div class="description pt-3">
+          <p>
+            {{ selectedListing?.description }}
+          </p>
+        </div>
+
+        <div class="footer d-flex justify-content-end mt-auto mb-2">
+          <div class="price p-0 d-flex flex-column">
+            <span>Цена: {{ selectedListing?.price }} лв</span>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mt-auto">
+          <span class="views">Преглеждания: {{ selectedListing?.views }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="!isAuthor" class="message-container mt-4 p-3">
+        <div class="form-floating">
+          <textarea
+            type="text"
+            [(ngModel)]="textAreaValue"
+            (ngModelChange)="valueChange(textAreaValue)"
+            id="messageTextArea"
+            name="message"
+            maxlength="200"
+            placeholder="Съобщение"
+            class="form-control"></textarea>
+          <span id="charLeft">
+            Остават ви {{ remainingCharacters }} символа
+          </span>
+          <label for="message">Напиши съобщение</label>
+        </div>
+        <div class="send-btn mt-5">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Изпрати съобщение"
+            class="p-button-success w-100"
+            (click)="onSendMessage()"></button>
+        </div>
+      </div>
+
+      <div
+        *ngIf="isAuction && !isAuctionExpired"
+        class="message-container mt-4 p-3">
+        <div class="d-flex justify-content-between align-items-end my-2 headings">
+          <label for="bid">Вашата оферта</label>
+          <div class="d-flex flex-column align-items-end justify-content-center">
+            <span>Изкупна цена: {{ this.selectedListing?.auction?.buyoutPrice }}</span>
+            <label for="bid">Минимална стойност: {{ minBid | number }}лв</label>
+          </div>
+        </div>
+        <input #bidInput type="number" name="bid" class="form-control" />
+        <div class="send-btn mt-5">
+          <button
+            pButton
+            pRipple
+            type="button"
+            label="Потвърди"
+            class="p-button-primary w-100"
+            (click)="onPlaceBid()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
