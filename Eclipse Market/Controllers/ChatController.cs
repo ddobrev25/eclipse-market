@@ -87,10 +87,6 @@ namespace Eclipse_Market.Controllers
                 chat.MessageIds = _dbContext.Messages
                     .Where(x => x.ChatId == chat.Id)
                     .Select(x => x.Id);
-                foreach (var participantId in chat.ParticipantIds)
-                {
-                    chat.ParticipantUserNames.Add(_dbContext.Users.Where(z => z.Id == participantId).FirstOrDefault().UserName);
-                }
         };
 
 
